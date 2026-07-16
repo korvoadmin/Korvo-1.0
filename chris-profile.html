@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chris Custom Installations | Project A</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #070b14;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(7, 11, 20, 0.94);
+            border-bottom: 1px solid #1e293b;
+            backdrop-filter: blur(14px);
+        }
+
+        nav {
+            max-width: 1180px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 27px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #22c55e;
+        }
+
+        .back-link {
+            color: #cbd5e1;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        .profile-hero {
+            padding: 70px 24px 45px;
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(37, 99, 235, 0.32),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 80% 65%,
+                    rgba(34, 197, 94, 0.13),
+                    transparent 35%
+                ),
+                #070b14;
+        }
+
+        .profile-shell {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .profile-header-card {
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #273449;
+            border-radius: 22px;
+            padding: 34px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 26px;
+            box-shadow: 0 22px 55px rgba(0, 0, 0, 0.38);
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            border: 4px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 38px;
+            font-weight: 900;
+        }
+
+        .profile-main h1 {
+            font-size: 34px;
+            line-height: 1.15;
+            margin-bottom: 5px;
+        }
+
+        .service-title {
+            color: #94a3b8;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .rating {
+            color: #fbbf24;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .rating span,
+        .location {
+            color: #cbd5e1;
+        }
+
+        .badges {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .badge {
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+            color: #bfdbfe;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-actions {
+            min-width: 190px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            border: none;
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .primary-button {
+            background: #22c55e;
+        }
+
+        .primary-button:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background: #2563eb;
+        }
+
+        .secondary-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 24px 80px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .stack {
+            display: grid;
+            gap: 24px;
+            align-content: start;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #273449;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+        }
+
+        .card h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card p {
+            color: #cbd5e1;
+        }
+
+        .services-list {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .services-list li {
+            padding: 13px 15px;
+            background: #0f172a;
+            border: 1px solid #273449;
+            border-radius: 10px;
+            color: #e2e8f0;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .gallery-item {
+            min-height: 175px;
+            padding: 18px;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            background:
+                linear-gradient(
+                    rgba(15, 23, 42, 0.2),
+                    rgba(15, 23, 42, 0.72)
+                ),
+                linear-gradient(135deg, #1d4ed8, #0f172a);
+            border: 1px solid #334155;
+            border-radius: 14px;
+            color: #bfdbfe;
+            font-weight: 800;
+            transition: 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            border-color: #60a5fa;
+        }
+
+        .review {
+            padding: 18px 0;
+            border-bottom: 1px solid #273449;
+        }
+
+        .review:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .review-stars {
+            color: #fbbf24;
+            margin-bottom: 7px;
+        }
+
+        .review-name {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .quick-facts {
+            list-style: none;
+            display: grid;
+            gap: 14px;
+        }
+
+        .quick-facts li {
+            padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            border-bottom: 1px solid #273449;
+        }
+
+        .quick-facts li:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .fact-label {
+            color: #94a3b8;
+        }
+
+        .fact-value {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .availability {
+            display: grid;
+            gap: 11px;
+        }
+
+        .availability-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            color: #cbd5e1;
+        }
+
+        .available {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .map-placeholder {
+            min-height: 210px;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            border-radius: 14px;
+            border: 1px solid #334155;
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(37, 99, 235, 0.24),
+                    transparent 55%
+                ),
+                #0f172a;
+        }
+
+        .map-placeholder div {
+            color: #cbd5e1;
+        }
+
+        .map-icon {
+            display: block;
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            padding: 28px 20px;
+            background: #03060c;
+            border-top: 1px solid #1e293b;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .quote-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2, 6, 12, 0.84);
+            backdrop-filter: blur(8px);
+        }
+
+        .quote-modal.open {
+            display: flex;
+        }
+
+        .quote-modal-content {
+            position: relative;
+            width: min(760px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 34px;
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #334155;
+            border-radius: 20px;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .quote-modal-content h2 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .form-intro {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            border: none;
+            background: transparent;
+            color: #cbd5e1;
+            font-size: 35px;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            color: #e2e8f0;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 14px;
+            outline: none;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.14);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #64748b;
+        }
+
+        .form-group small {
+            color: #94a3b8;
+        }
+
+        .submit-quote-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #22c55e;
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .submit-quote-button:hover {
+            background: #16a34a;
+        }
+
+        .quote-success {
+            display: none;
+            padding: 25px 5px 5px;
+            text-align: center;
+        }
+
+        .quote-success.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 16px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid #22c55e;
+            color: #4ade80;
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .quote-success h3 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .quote-success p {
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+
+        .quote-success button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        @media (max-width: 850px) {
+            .profile-header-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .profile-photo {
+                margin: auto;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+
+            .profile-actions {
+                width: 100%;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quote-modal-content {
+                padding: 28px 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            nav {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .profile-hero {
+                padding: 45px 16px 28px;
+            }
+
+            .profile-header-card {
+                padding: 25px 18px;
+            }
+
+            .profile-main h1 {
+                font-size: 28px;
+            }
+
+            main {
+                padding: 24px 16px 60px;
+            }
+
+            .card {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+    </head>
+
+<body>
+
+<header>
+    <nav>
+        <div class="logo">Project <span>A</span></div>
+
+        <a href="index.html" class="back-link">
+            ← Back to Professionals
+        </a>
+    </nav>
+</header>
+
+<section class="profile-hero">
+    <div class="profile-shell">
+
+        <div class="profile-header-card">
+
+            <div class="profile-photo">CC</div>
+
+            <div class="profile-main">
+                <h1>Chris Custom Installations</h1>
+
+                <p class="service-title">
+                    Drapery, Shade & Window Treatment Installation
+                </p>
+
+                <p class="rating">
+                    ★★★★★ <span>5.0 · Sample profile</span>
+                </p>
+
+                <p class="location">
+                    📍 Atlanta, Georgia
+                </p>
+
+                <div class="badges">
+                    <span class="badge">✓ 4+ Years Experience</span>
+                    <span class="badge">✓ Local Professional</span>
+                    <span class="badge">✓ English & Spanish</span>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button
+                    class="primary-button"
+                    type="button"
+                    onclick="openQuoteForm()"
+                >
+                    Request Quote
+                </button>
+
+                <button
+                    class="secondary-button"
+                    type="button"
+                    onclick="showMessage('Messaging will be connected later.')"
+                >
+                    Message
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<main>
+
+    <div class="profile-grid">
+
+        <div class="stack">
+
+            <section class="card">
+                <h2>About</h2>
+
+                <p>
+                    Professional installer with more than four years of experience
+                    working with luxury drapery, curtain rods, blinds, shutters and
+                    motorized shade systems throughout the Atlanta area.
+                </p>
+            </section>
+
+            <section class="card">
+                <h2>Services</h2>
+
+                <ul class="services-list">
+                    <li>✓ Drapery installation and dressing</li>
+                    <li>✓ Curtain rod and traverse rod installation</li>
+                    <li>✓ Motorized shade installation and programming</li>
+                    <li>✓ Blinds and shutters</li>
+                    <li>✓ Existing installation adjustments and repairs</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>Portfolio</h2>
+
+                <div class="gallery">
+                    <div class="gallery-item">
+                        Living Room Drapery
+                    </div>
+
+                    <div class="gallery-item">
+                        Motorized Shades
+                    </div>
+
+                    <div class="gallery-item">
+                        Custom Rod Installation
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Customer Reviews</h2>
+
+                <div class="review">
+                    <div class="review-stars">★★★★★</div>
+
+                    <p>
+                        Chris was professional, careful and made our curtains look perfect.
+                    </p>
+
+                    <div class="review-name">
+                        — Sample review
+                    </div>
+                </div>
+
+                <div class="review">
+                    <div class="review-stars">★★★★★</div>
+
+                    <p>
+                        Great communication and excellent attention to detail.
+                    </p>
+
+                    <div class="review-name">
+                        — Sample review
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <aside class="stack">
+
+            <section class="card">
+                <h2>Quick Facts</h2>
+
+                <ul class="quick-facts">
+                    <li>
+                        <span class="fact-label">Experience</span>
+                        <span class="fact-value">4+ years</span>
+                    </li>
+
+                    <li>
+                        <span class="fact-label">Service area</span>
+                        <span class="fact-value">Metro Atlanta</span>
+                    </li>
+
+                    <li>
+                        <span class="fact-label">Response time</span>
+                        <span class="fact-value">Usually within 1 hour</span>
+                    </li>
+
+                    <li>
+                        <span class="fact-label">Languages</span>
+                        <span class="fact-value">English & Spanish</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>Availability</h2>
+
+                <div class="availability">
+
+                    <div class="availability-row">
+                        <span>Monday–Friday</span>
+                        <span class="available">Available</span>
+                    </div>
+
+                    <div class="availability-row">
+                        <span>Saturday</span>
+                        <span class="available">By request</span>
+                    </div>
+
+                    <div class="availability-row">
+                        <span>Sunday</span>
+                        <span>Unavailable</span>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Service Area</h2>
+
+                <div class="map-placeholder">
+                    <div>
+                        <span class="map-icon">📍</span>
+                        Metro Atlanta, Georgia
+                    </div>
+                </div>
+            </section>
+
+        </aside>
+
+    </div>
+
+</main>
+
+<footer>
+    <p>© 2026 Project A. Built in Atlanta, Georgia.</p>
+</footer>
+
+<div class="quote-modal" id="quoteModal">
+
+    <div class="quote-modal-content">
+
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeQuoteForm()"
+            aria-label="Close quote form"
+        >
+            ×
+        </button>
+
+        <h2>Request a Quote</h2>
+
+        <p class="form-intro">
+            Tell Chris about your project and preferred date.
+        </p>
+
+        <form id="quoteForm" onsubmit="submitQuote(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="customerName">Full Name</label>
+
+                    <input
+                        id="customerName"
+                        name="customerName"
+                        type="text"
+                        placeholder="Your name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number</label>
+
+                    <input
+                        id="customerPhone"
+                        name="customerPhone"
+                        type="tel"
+                        placeholder="(404) 555-0123"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="customerEmail">Email</label>
+
+                    <input
+                        id="customerEmail"
+                        name="customerEmail"
+                        type="email"
+                        placeholder="you@example.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceNeeded">Service Needed</label>
+
+                    <select
+                        id="serviceNeeded"
+                        name="serviceNeeded"
+                        required
+                    >
+                        <option value="">Choose a service</option>
+                        <option>Drapery Installation</option>
+                        <option>Curtain Rod Installation</option>
+                        <option>Motorized Shades</option>
+                        <option>Blinds or Shutters</option>
+                        <option>Repair or Adjustment</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preferredDate">Preferred Date</label>
+
+                    <input
+                        id="preferredDate"
+                        name="preferredDate"
+                        type="date"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="projectLocation">Project ZIP Code</label>
+
+                    <input
+                        id="projectLocation"
+                        name="projectLocation"
+                        type="text"
+                        inputmode="numeric"
+                        maxlength="10"
+                        placeholder="30319"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="jobDescription">Describe the Job</label>
+
+                <textarea
+                    id="jobDescription"
+                    name="jobDescription"
+                    rows="5"
+                    placeholder="Tell us what needs to be installed, repaired or adjusted..."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="jobPhotos">Add Photos</label>
+
+                <input
+                    id="jobPhotos"
+                    name="jobPhotos"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                >
+
+                <small>
+                    Photos are selected only for this demo and are not uploaded yet.
+                </small>
+            </div>
+
+            <button
+                class="submit-quote-button"
+                type="submit"
+            >
+                Send Quote Request
+            </button>
+
+        </form>
+
+        <div class="quote-success" id="quoteSuccess">
+
+            <div class="success-icon">✓</div>
+
+            <h3>Quote request created!</h3>
+
+            <p>
+                This demo is working. Later, we can connect it to email
+                or a database so Chris receives the request.
+            </p>
+
+            <button
+                type="button"
+                onclick="closeQuoteForm()"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function showMessage(message) {
+        alert(message);
+    }
+
+    function openQuoteForm() {
+        const modal = document.getElementById("quoteModal");
+
+        modal.classList.add("open");
+        document.body.classList.add("modal-open");
+    }
+
+    function closeQuoteForm() {
+        const modal = document.getElementById("quoteModal");
+        const form = document.getElementById("quoteForm");
+        const successMessage = document.getElementById("quoteSuccess");
+
+        modal.classList.remove("open");
+        document.body.classList.remove("modal-open");
+
+        form.style.display = "block";
+        successMessage.classList.remove("show");
+    }
+
+    function submitQuote(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("quoteForm");
+        const successMessage = document.getElementById("quoteSuccess");
+
+        form.style.display = "none";
+        successMessage.classList.add("show");
+        form.reset();
+    }
+
+    window.addEventListener("click", function(event) {
+        const modal = document.getElementById("quoteModal");
+
+        if (event.target === modal) {
+            closeQuoteForm();
+        }
+    });
+
+    window.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            closeQuoteForm();
+        }
+    });
+</script>
+
+</body>
+</html>
