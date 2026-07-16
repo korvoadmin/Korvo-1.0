@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project A | Local Professionals</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #070b14;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(7, 11, 20, 0.92);
+            border-bottom: 1px solid #1e293b;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(14px);
+        }
+
+        nav {
+            max-width: 1180px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: #60a5fa;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #22c55e;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-button {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 9px;
+        }
+
+        .hero {
+            min-height: 650px;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            padding: 100px 24px;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.35), transparent 35%),
+                radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.16), transparent 35%),
+                #070b14;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+            color: #93c5fd;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            line-height: 1.05;
+            letter-spacing: -3px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            color: #60a5fa;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0 auto 36px;
+            color: #cbd5e1;
+            font-size: 20px;
+        }
+
+        .search-box {
+            max-width: 760px;
+            margin: auto;
+            padding: 9px;
+            display: flex;
+            gap: 10px;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid #334155;
+            border-radius: 14px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 16px;
+            font-size: 17px;
+        }
+
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-box button {
+            border: none;
+            background: #22c55e;
+            color: white;
+            padding: 15px 28px;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #16a34a;
+        }
+
+        section {
+            padding: 85px 24px;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-heading h2 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .section-heading p {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+
+        .stats {
+            margin-top: -45px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid #334155;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat {
+            text-align: center;
+            padding: 30px;
+            border-right: 1px solid #334155;
+        }
+
+        .stat:last-child {
+            border-right: none;
+        }
+
+        .stat h3 {
+            color: #60a5fa;
+            font-size: 32px;
+        }
+
+        .stat p {
+            color: #94a3b8;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .category-card {
+            background: linear-gradient(145deg, #111827, #0f172a);
+            border: 1px solid #273449;
+            padding: 30px 22px;
+            border-radius: 16px;
+            text-align: center;
+            transition: 0.25s;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-7px);
+            border-color: #3b82f6;
+            box-shadow: 0 16px 35px rgba(37, 99, 235, 0.15);
+        }
+
+        .category-icon {
+            font-size: 42px;
+            margin-bottom: 14px;
+        }
+
+        .category-card h3 {
+            font-size: 18px;
+        }
+
+        .featured-section {
+            background: #090f1c;
+        }
+
+        .professionals {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .professional-card {
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #273449;
+            border-radius: 18px;
+            padding: 28px;
+            transition: 0.25s;
+        }
+
+        .professional-card:hover {
+            transform: translateY(-7px);
+            border-color: #3b82f6;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .profile-photo {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .professional-card h3 {
+            font-size: 21px;
+            margin-bottom: 4px;
+        }
+
+        .service-name,
+        .location {
+            color: #94a3b8;
+        }
+
+        .rating {
+            color: #fbbf24;
+            font-weight: 800;
+            margin: 12px 0 8px;
+        }
+
+        .rating span {
+            color: #e2e8f0;
+        }
+
+        .profile-button {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: 800;
+        }
+
+        .profile-button:hover {
+            background: #1d4ed8;
+        }
+
+        .how-it-works {
+            background: #070b14;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .step {
+            background: #0f172a;
+            border: 1px solid #273449;
+            padding: 34px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #2563eb;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+            font-weight: 900;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #94a3b8;
+        }
+
+        .cta {
+            text-align: center;
+            background:
+                linear-gradient(rgba(7, 11, 20, 0.75), rgba(7, 11, 20, 0.75)),
+                linear-gradient(135deg, #1d4ed8, #0f172a);
+        }
+
+        .cta h2 {
+            font-size: 42px;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            color: #cbd5e1;
+            font-size: 18px;
+            margin-bottom: 28px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .primary-button,
+        .secondary-button {
+            border: none;
+            padding: 14px 25px;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .primary-button {
+            background: #22c55e;
+            color: white;
+        }
+
+        .secondary-button {
+            background: white;
+            color: #0f172a;
+        }
+
+        footer {
+            background: #03060c;
+            border-top: 1px solid #1e293b;
+            color: #64748b;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 47px;
+            }
+
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .professionals,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links a:not(.nav-button) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                padding: 80px 18px;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+                letter-spacing: -1px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box button {
+                width: 100%;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat {
+                border-right: none;
+                border-bottom: 1px solid #334155;
+            }
+
+            .stat:last-child {
+                border-bottom: none;
+            }
+
+            .section-heading h2,
+            .cta h2 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <div class="logo">Project <span>A</span></div>
+
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#professionals">Professionals</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#join" class="nav-button">Join Project A</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="hero-content">
+
+            <div class="badge">
+                Built for local businesses and skilled professionals
+            </div>
+
+            <h1>
+                Find the right local <span>professional</span> for any job
+            </h1>
+
+            <p>
+                Discover cleaners, installers, handymen, landscapers,
+                photographers, detailers and other trusted professionals
+                serving your area.
+            </p>
+
+            <div class="search-box">
+                <input
+                    id="serviceSearch"
+                    type="text"
+                    placeholder="What service do you need?"
+                >
+
+                <button onclick="searchServices()">
+                    Search
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+
+            <div class="stats-grid">
+
+                <div class="stat">
+                    <h3>Local</h3>
+                    <p>Professionals near you</p>
+                </div>
+
+                <div class="stat">
+                    <h3>Direct</h3>
+                    <p>Connect without bidding wars</p>
+                </div>
+
+                <div class="stat">
+                    <h3>Simple</h3>
+                    <p>Find help without the hassle</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+
+            <div class="section-heading">
+                <h2>Popular Services</h2>
+                <p>Explore professionals ready to help with your next project.</p>
+            </div>
+
+            <div class="categories">
+
+                <div class="category-card">
+                    <div class="category-icon">🧹</div>
+                    <h3>Cleaning</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">💦</div>
+                    <h3>Pressure Washing</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🪟</div>
+                    <h3>Drapery Installation</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🔨</div>
+                    <h3>Handyman</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🌱</div>
+                    <h3>Lawn Care</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🚗</div>
+                    <h3>Mobile Detailing</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">📸</div>
+                    <h3>Photography</h3>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">📦</div>
+                    <h3>Moving Help</h3>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-section" id="professionals">
+        <div class="container">
+
+            <div class="section-heading">
+                <h2>Featured Local Professionals</h2>
+                <p>Discover skilled professionals serving the Atlanta area.</p>
+            </div>
+
+            <div class="professionals">
+
+                <div class="professional-card">
+                    <div class="profile-photo">CC</div>
+
+                    <h3>Chris Custom Installations</h3>
+                    <p class="service-name">Drapery & Shade Installation</p>
+                    <p class="rating">★★★★★ <span>5.0</span></p>
+                    <p class="location">📍 Atlanta, Georgia</p>
+
+                    <a href="chris-profile.html" class="profile-button">
+                        View Profile
+                    </a>
+                </div>
+
+                <div class="professional-card">
+                    <div class="profile-photo">PC</div>
+
+                    <h3>Prestige Cleaning</h3>
+                    <p class="service-name">Home & Estate Cleaning</p>
+                    <p class="rating">★★★★★ <span>4.9</span></p>
+                    <p class="location">📍 Chamblee, Georgia</p>
+
+                    <a
+                        href="#"
+                        class="profile-button"
+                        onclick="showMessage('This profile is coming soon!')"
+                    >
+                        View Profile
+                    </a>
+                </div>
+
+                <div class="professional-card">
+                    <div class="profile-photo">AP</div>
+
+                    <h3>Atlanta Pro Wash</h3>
+                    <p class="service-name">Pressure Washing</p>
+                    <p class="rating">★★★★★ <span>4.8</span></p>
+                    <p class="location">📍 Atlanta, Georgia</p>
+
+                    <a
+                        href="#"
+                        class="profile-button"
+                        onclick="showMessage('This profile is coming soon!')"
+                    >
+                        View Profile
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+
+            <div class="section-heading">
+                <h2>How Project A Works</h2>
+                <p>A simpler way to hire local help.</p>
+            </div>
+
+            <div class="steps">
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Choose a service</h3>
+                    <p>Tell us what kind of work you need completed.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Browse professionals</h3>
+                    <p>Compare profiles, experience, locations and ratings.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Make a connection</h3>
+                    <p>Choose the professional who is right for your project.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="join">
+        <div class="container">
+
+            <h2>Ready to get started?</h2>
+
+            <p>
+                Find trusted local help or create a professional profile
+                and grow your business.
+            </p>
+
+            <div class="button-group">
+
+                <button
+                    class="primary-button"
+                    onclick="showMessage('Customer signup is coming next!')"
+                >
+                    Find a Professional
+                </button>
+
+                <button
+                    class="secondary-button"
+                    onclick="showMessage('Professional signup is coming next!')"
+                >
+                    Become a Professional
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 Project A. Built in Atlanta, Georgia.</p>
+</footer>
+
+<script>
+    function searchServices() {
+        const searchInput = document.getElementById("serviceSearch");
+        const service = searchInput.value.trim();
+
+        if (service === "") {
+            alert("Please enter the service you need.");
+            return;
+        }
+
+        alert("Searching Project A for: " + service);
+    }
+
+    function showMessage(message) {
+        alert(message);
+    }
+</script>
+
+</body>
+</html>
