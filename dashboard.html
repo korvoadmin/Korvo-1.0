@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contractor Dashboard | Project A</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #070b14;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(7, 11, 20, 0.95);
+            border-bottom: 1px solid #1e293b;
+            backdrop-filter: blur(12px);
+        }
+
+        nav {
+            max-width: 1180px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: #60a5fa;
+        }
+
+        .logo span {
+            color: #22c55e;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 8px 12px;
+            border-radius: 999px;
+        }
+
+        .mini-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .dashboard-hero {
+            padding: 65px 24px 35px;
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(37, 99, 235, 0.28),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 85% 65%,
+                    rgba(34, 197, 94, 0.12),
+                    transparent 35%
+                ),
+                #070b14;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-hero h1 {
+            font-size: 48px;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-hero p {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+
+        main {
+            padding: 30px 24px 80px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #273449;
+            border-radius: 16px;
+            padding: 24px;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #3b82f6;
+        }
+
+        .stat-card span {
+            display: block;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .stat-card strong {
+            display: block;
+            color: #60a5fa;
+            font-size: 34px;
+        }
+
+        .stat-card small {
+            color: #4ade80;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .stack {
+            display: grid;
+            gap: 24px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #273449;
+            border-radius: 18px;
+            padding: 26px;
+        }
+
+        .card h2 {
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+
+        .quote-list,
+        .message-list,
+        .job-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .quote-item,
+        .message-item,
+        .job-item {
+            background: #0f172a;
+            border: 1px solid #273449;
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .item-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .item-top h3 {
+            font-size: 17px;
+        }
+
+        .item-meta {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .status.new {
+            color: #bfdbfe;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+        }
+
+        .status.booked {
+            color: #86efac;
+            background: rgba(34, 197, 94, 0.13);
+            border: 1px solid rgba(74, 222, 128, 0.35);
+        }
+
+        .status.pending {
+            color: #fde68a;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .button {
+            border: none;
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .button.primary {
+            background: #22c55e;
+            color: white;
+        }
+
+        .button.secondary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .button.ghost {
+            background: transparent;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+        }
+
+        .profile-strength {
+            margin-top: 16px;
+        }
+
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 9px;
+        }
+
+        .progress-row span {
+            color: #94a3b8;
+        }
+
+        .progress-row strong {
+            color: #86efac;
+        }
+
+        .progress-bar {
+            height: 14px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #0f172a;
+            border: 1px solid #334155;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            width: 86%;
+            background: linear-gradient(90deg, #2563eb, #22c55e);
+        }
+
+        .check-list {
+            list-style: none;
+            display: grid;
+            gap: 11px;
+            margin-top: 18px;
+        }
+
+        .check-list .complete {
+            color: #86efac;
+        }
+
+        .check-list .pending {
+            color: #cbd5e1;
+        }
+
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .availability-grid label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: #0f172a;
+            border: 1px solid #273449;
+            border-radius: 10px;
+            padding: 11px;
+        }
+
+        .availability-grid input {
+            accent-color: #22c55e;
+        }
+
+        .price-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .price-row {
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .price-row label {
+            color: #cbd5e1;
+        }
+
+        .price-row input {
+            width: 100%;
+            background: #0f172a;
+            color: white;
+            border: 1px solid #334155;
+            border-radius: 9px;
+            padding: 10px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quick-action {
+            background: #0f172a;
+            border: 1px solid #273449;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-3px);
+            border-color: #60a5fa;
+        }
+
+        .quick-action span {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            background: #03060c;
+            border-top: 1px solid #1e293b;
+            color: #64748b;
+            text-align: center;
+            padding: 28px 20px;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2, 6, 12, 0.86);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-panel {
+            position: relative;
+            width: min(650px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: linear-gradient(145deg, #111827, #0b1220);
+            border: 1px solid #334155;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            border: none;
+            background: transparent;
+            color: #cbd5e1;
+            font-size: 34px;
+            cursor: pointer;
+        }
+
+        .form {
+            display: grid;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .form label {
+            display: grid;
+            gap: 7px;
+            color: #e2e8f0;
+            font-weight: 700;
+        }
+
+        .form input,
+        .form select,
+        .form textarea {
+            width: 100%;
+            background: #0f172a;
+            color: white;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 13px;
+            outline: none;
+        }
+
+        @media (max-width: 950px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .nav-links a:not(.profile-pill) {
+                display: none;
+            }
+
+            .dashboard-hero h1 {
+                font-size: 36px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .availability-grid,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .price-row {
+                grid-template-columns: 1fr;
+            }
+
+            .item-top {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">
+            Project <span>A</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="chris-profile.html">View Profile</a>
+
+            <div class="profile-pill">
+                <div class="mini-avatar">CC</div>
+                <span>Chris</span>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="dashboard-hero">
+    <div class="container">
+        <div class="eyebrow">Contractor Dashboard Demo</div>
+
+        <h1>Welcome back, Chris</h1>
+
+        <p>
+            Manage your quotes, messages, availability and professional profile.
+        </p>
+    </div>
+</section>
+
+<main>
+    <div class="container">
+
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <span>New Quote Requests</span>
+                <strong>3</strong>
+                <small>+2 this week</small>
+            </article>
+
+            <article class="stat-card">
+                <span>Unread Messages</span>
+                <strong>7</strong>
+                <small>Needs attention</small>
+            </article>
+
+            <article class="stat-card">
+                <span>Profile Views</span>
+                <strong>126</strong>
+                <small>+18%</small>
+            </article>
+
+            <article class="stat-card">
+                <span>Saved by Customers</span>
+                <strong>14</strong>
+                <small>Sample data</small>
+            </article>
+
+        </section>
+
+        <div class="dashboard-grid">
+
+            <div class="stack">
+
+                <section class="card">
+                    <h2>New Quote Requests</h2>
+
+                    <p class="card-subtitle">
+                        Review sample customer requests and respond with a quote.
+                    </p>
+
+                    <div class="quote-list">
+
+                        <article class="quote-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>Motorized Shade Installation</h3>
+
+                                    <p class="item-meta">
+                                        Atlanta · Preferred Saturday
+                                    </p>
+                                </div>
+
+                                <span class="status new">New</span>
+                            </div>
+
+                            <p>
+                                Install two customer-provided motorized shades
+                                in a living room.
+                            </p>
+
+                            <div class="item-actions">
+                                <button
+                                    class="button primary"
+                                    onclick="openQuoteResponse('Motorized Shade Installation')"
+                                >
+                                    Send Quote
+                                </button>
+
+                                <button
+                                    class="button ghost"
+                                    onclick="alert('Customer photos would appear here.')"
+                                >
+                                    View Photos
+                                </button>
+                            </div>
+                        </article>
+
+                        <article class="quote-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>Living Room Drapery</h3>
+
+                                    <p class="item-meta">
+                                        Brookhaven · Preferred Monday
+                                    </p>
+                                </div>
+
+                                <span class="status pending">Reviewing</span>
+                            </div>
+
+                            <p>
+                                Install one traverse rod and dress two drapery panels.
+                            </p>
+
+                            <div class="item-actions">
+                                <button
+                                    class="button primary"
+                                    onclick="openQuoteResponse('Living Room Drapery')"
+                                >
+                                    Send Quote
+                                </button>
+
+                                <button
+                                    class="button ghost"
+                                    onclick="alert('Customer photos would appear here.')"
+                                >
+                                    View Photos
+                                </button>
+                            </div>
+                        </article>
+
+                        <article class="quote-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>Curtain Rod Adjustment</h3>
+
+                                    <p class="item-meta">
+                                        Chamblee · Flexible date
+                                    </p>
+                                </div>
+
+                                <span class="status new">New</span>
+                            </div>
+
+                            <p>
+                                Existing curtain rod needs to be raised and centered.
+                            </p>
+
+                            <div class="item-actions">
+                                <button
+                                    class="button primary"
+                                    onclick="openQuoteResponse('Curtain Rod Adjustment')"
+                                >
+                                    Send Quote
+                                </button>
+
+                                <button
+                                    class="button ghost"
+                                    onclick="alert('Customer photos would appear here.')"
+                                >
+                                    View Photos
+                                </button>
+                            </div>
+                        </article>
+
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Upcoming Jobs</h2>
+
+                    <p class="card-subtitle">
+                        Sample bookings for the week.
+                    </p>
+
+                    <div class="job-list">
+
+                        <article class="job-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>Custom Rod Installation</h3>
+
+                                    <p class="item-meta">
+                                        Monday · 10:00 AM · Atlanta
+                                    </p>
+                                </div>
+
+                                <span class="status booked">Booked</span>
+                            </div>
+                        </article>
+
+                        <article class="job-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>Motorized Shade Programming</h3>
+
+                                    <p class="item-meta">
+                                        Wednesday · 2:30 PM · Buckhead
+                                    </p>
+                                </div>
+
+                                <span class="status booked">Booked</span>
+                            </div>
+                        </article>
+
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Recent Messages</h2>
+
+                    <p class="card-subtitle">
+                        Front-end sample messages.
+                    </p>
+
+                    <div class="message-list">
+
+                        <article class="message-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>Sarah M.</h3>
+
+                                    <p class="item-meta">
+                                        12 minutes ago
+                                    </p>
+                                </div>
+
+                                <span class="status new">Unread</span>
+                            </div>
+
+                            <p>
+                                Hi, are you available this Saturday morning?
+                            </p>
+
+                            <div class="item-actions">
+                                <button
+                                    class="button secondary"
+                                    onclick="alert('Messaging requires a backend.')"
+                                >
+                                    Reply
+                                </button>
+                            </div>
+                        </article>
+
+                        <article class="message-item">
+                            <div class="item-top">
+                                <div>
+                                    <h3>David P.</h3>
+
+                                    <p class="item-meta">
+                                        Yesterday
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p>
+                                Can you also program the remote after installation?
+                            </p>
+
+                            <div class="item-actions">
+                                <button
+                                    class="button secondary"
+                                    onclick="alert('Messaging requires a backend.')"
+                                >
+                                    Reply
+                                </button>
+                            </div>
+                        </article>
+
+                    </div>
+                </section>
+
+            </div>
+
+            <aside class="stack">
+
+                <section class="card">
+                    <h2>Profile Strength</h2>
+
+                    <p class="card-subtitle">
+                        Finish your profile to build more customer trust.
+                    </p>
+
+                    <div class="profile-strength">
+                        <div class="progress-row">
+                            <span>Profile completion</span>
+                            <strong>86%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <ul class="check-list">
+                        <li class="complete">✓ Phone verified</li>
+                        <li class="complete">✓ Email verified</li>
+                        <li class="complete">✓ Services added</li>
+                        <li class="complete">✓ Experience added</li>
+                        <li class="pending">○ Identity verification pending</li>
+                        <li class="pending">○ Insurance document pending</li>
+                    </ul>
+                </section>
+
+                <section class="card">
+                    <h2>Availability</h2>
+
+                    <p class="card-subtitle">
+                        Choose the days customers can request.
+                    </p>
+
+                    <div class="availability-grid">
+                        <label><input type="checkbox" checked> Monday</label>
+                        <label><input type="checkbox" checked> Tuesday</label>
+                        <label><input type="checkbox" checked> Wednesday</label>
+                        <label><input type="checkbox" checked> Thursday</label>
+                        <label><input type="checkbox" checked> Friday</label>
+                        <label><input type="checkbox" checked> Saturday</label>
+                        <label><input type="checkbox"> Sunday</label>
+                    </div>
+
+                    <button
+                        class="button primary"
+                        style="margin-top: 16px;"
+                        onclick="alert('Availability saved in the demo.')"
+                    >
+                        Save Availability
+                    </button>
+                </section>
+
+                <section class="card">
+                    <h2>Starting Prices</h2>
+
+                    <p class="card-subtitle">
+                        Show customers a general starting point.
+                    </p>
+
+                    <div class="price-list">
+
+                        <div class="price-row">
+                            <label>Drapery Installation</label>
+                            <input type="number" value="150">
+                        </div>
+
+                        <div class="price-row">
+                            <label>Curtain Rods</label>
+                            <input type="number" value="95">
+                        </div>
+
+                        <div class="price-row">
+                            <label>Motorized Shades</label>
+                            <input type="number" value="225">
+                        </div>
+
+                        <div class="price-row">
+                            <label>Repairs</label>
+                            <input type="number" value="85">
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="button secondary"
+                        style="margin-top: 16px;"
+                        onclick="alert('Pricing saved in the demo.')"
+                    >
+                        Save Prices
+                    </button>
+                </section>
+
+                <section class="card">
+                    <h2>Quick Actions</h2>
+
+                    <div class="quick-actions">
+
+                        <a href="chris-profile.html" class="quick-action">
+                            <span>👤</span>
+                            View Profile
+                        </a>
+
+                        <div
+                            class="quick-action"
+                            onclick="alert('Portfolio editor coming next.')"
+                        >
+                            <span>📸</span>
+                            Add Photos
+                        </div>
+
+                        <div
+                            class="quick-action"
+                            onclick="alert('Review manager coming later.')"
+                        >
+                            <span>⭐</span>
+                            Reviews
+                        </div>
+
+                        <div
+                            class="quick-action"
+                            onclick="alert('Account settings coming later.')"
+                        >
+                            <span>⚙️</span>
+                            Settings
+                        </div>
+
+                    </div>
+                </section>
+
+            </aside>
+
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 Project A. Contractor dashboard demo.</p>
+</footer>
+
+<div class="modal" id="quoteResponseModal">
+
+    <div class="modal-panel">
+
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeQuoteResponse()"
+        >
+            ×
+        </button>
+
+        <h2 id="quoteResponseTitle">
+            Send Quote
+        </h2>
+
+        <p style="color: #94a3b8;">
+            This is a demo. The response will not be delivered yet.
+        </p>
+
+        <form
+            class="form"
+            onsubmit="submitQuoteResponse(event)"
+        >
+            <label>
+                Quote Amount
+                <input
+                    type="number"
+                    min="0"
+                    placeholder="250"
+                    required
+                >
+            </label>
+
+            <label>
+                Estimated Duration
+                <select required>
+                    <option value="">Choose an estimate</option>
+                    <option>1–2 hours</option>
+                    <option>2–4 hours</option>
+                    <option>Half day</option>
+                    <option>Full day</option>
+                </select>
+            </label>
+
+            <label>
+                Message to Customer
+                <textarea
+                    rows="6"
+                    placeholder="Hi, thank you for reaching out..."
+                    required
+                ></textarea>
+            </label>
+
+            <button class="button primary" type="submit">
+                Save Quote Response
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    function openQuoteResponse(jobTitle) {
+        const modal = document.getElementById("quoteResponseModal");
+        const title = document.getElementById("quoteResponseTitle");
+
+        title.textContent = "Send Quote — " + jobTitle;
+        modal.classList.add("open");
+    }
+
+    function closeQuoteResponse() {
+        const modal = document.getElementById("quoteResponseModal");
+        modal.classList.remove("open");
+    }
+
+    function submitQuoteResponse(event) {
+        event.preventDefault();
+
+        alert(
+            "Quote response saved in the demo. A backend is required to deliver it."
+        );
+
+        event.target.reset();
+        closeQuoteResponse();
+    }
+
+    window.addEventListener("click", function(event) {
+        const modal = document.getElementById("quoteResponseModal");
+
+        if (event.target === modal) {
+            closeQuoteResponse();
+        }
+    });
+
+    window.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            closeQuoteResponse();
+        }
+    });
+</script>
+
+</body>
+</html>
