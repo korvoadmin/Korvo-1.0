@@ -8,6 +8,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="description"
+        content="Learn why Korvo exists and how we plan to support local professionals, contractors, and customers."
+    >
+
     <title>Our Mission | Korvo</title>
 
     <style>
@@ -24,15 +29,13 @@
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
-            background:
-                radial-gradient(
-                    circle at top right,
-                    rgba(38, 208, 206, 0.16),
-                    transparent 35%
-                ),
-                #070b14;
+            background: #070b14;
             color: #f8fafc;
-            line-height: 1.6;
+            line-height: 1.7;
+        }
+
+        body.menu-open {
+            overflow: hidden;
         }
 
         a {
@@ -40,18 +43,63 @@
             text-decoration: none;
         }
 
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
         .container {
-            width: min(1120px, 92%);
+            width: min(1160px, 92%);
             margin: 0 auto;
         }
+
+        .section-label {
+            margin-bottom: 12px;
+            color: #60a5fa;
+            font-size: 0.84rem;
+            font-weight: 900;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+        }
+
+        .section-heading {
+            max-width: 760px;
+            margin-bottom: 42px;
+        }
+
+        .section-heading.center {
+            margin-right: auto;
+            margin-left: auto;
+            text-align: center;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 16px;
+            font-size: clamp(2.1rem, 5vw, 3.5rem);
+            line-height: 1.08;
+            letter-spacing: -1.7px;
+        }
+
+        .section-heading p:last-child {
+            color: #aeb8c7;
+            font-size: 1.07rem;
+        }
+
+        section {
+            padding: 95px 0;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
 
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(7, 11, 20, 0.9);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            background: rgba(7, 11, 20, 0.93);
+            backdrop-filter: blur(16px);
         }
 
         nav {
@@ -63,83 +111,126 @@
         }
 
         .logo {
-            font-size: 1.55rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -1px;
         }
 
         .logo span {
-            color: #26d0ce;
+            color: #60a5fa;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 23px;
             list-style: none;
         }
 
         .nav-links a {
             color: #cbd5e1;
-            font-weight: 600;
-            transition: 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 800;
+            transition:
+                color 0.2s ease,
+                background 0.2s ease,
+                transform 0.2s ease;
         }
 
         .nav-links a:hover,
         .nav-links a.active {
-            color: #26d0ce;
+            color: #ffffff;
         }
 
         .nav-button {
             padding: 11px 18px;
-            border-radius: 999px;
-            background: #26d0ce;
-            color: #031011 !important;
-            font-weight: 800 !important;
+            border-radius: 10px;
+            background: #2563eb;
+            color: #ffffff !important;
         }
 
+        .nav-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .menu-button {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 1.35rem;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
         .hero {
-            min-height: 72vh;
+            min-height: 790px;
             display: grid;
             place-items: center;
+            padding: 120px 0 110px;
             text-align: center;
-            padding: 100px 0 70px;
+            background:
+                radial-gradient(
+                    circle at 18% 20%,
+                    rgba(37, 99, 235, 0.4),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 82% 72%,
+                    rgba(34, 197, 94, 0.18),
+                    transparent 32%
+                ),
+                #070b14;
         }
 
         .hero-content {
-            max-width: 850px;
+            max-width: 980px;
         }
 
         .eyebrow {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 8px 14px;
-            border: 1px solid rgba(38, 208, 206, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 8px 16px;
+            border: 1px solid rgba(96, 165, 250, 0.38);
             border-radius: 999px;
-            background: rgba(38, 208, 206, 0.08);
-            color: #67e8e5;
-            font-size: 0.88rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
+            background: rgba(37, 99, 235, 0.14);
+            color: #bfdbfe;
+            font-size: 0.86rem;
+            font-weight: 900;
+            letter-spacing: 1.45px;
             text-transform: uppercase;
         }
 
-        h1 {
-            margin-bottom: 24px;
-            font-size: clamp(2.8rem, 8vw, 5.8rem);
-            line-height: 1;
-            letter-spacing: -3px;
+        .eyebrow::before {
+            content: "✦";
+            color: #4ade80;
         }
 
-        h1 span {
-            color: #26d0ce;
+        .hero h1 {
+            margin-bottom: 26px;
+            font-size: clamp(3.2rem, 9vw, 6.6rem);
+            line-height: 0.98;
+            letter-spacing: -4px;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: #60a5fa;
         }
 
         .hero-description {
-            max-width: 720px;
-            margin: 0 auto 34px;
-            color: #b8c2d1;
-            font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+            max-width: 790px;
+            margin: 0 auto 38px;
+            color: #cbd5e1;
+            font-size: clamp(1.08rem, 2.4vw, 1.34rem);
         }
 
         .hero-buttons {
@@ -150,410 +241,1627 @@
         }
 
         .button {
+            min-height: 51px;
+            padding: 0 23px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 50px;
-            padding: 0 22px;
-            border-radius: 12px;
-            font-weight: 800;
-            transition: transform 0.2s ease, opacity 0.2s ease;
+            border-radius: 11px;
+            font-weight: 900;
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease,
+                opacity 0.2s ease;
         }
 
         .button:hover {
             transform: translateY(-2px);
-            opacity: 0.92;
         }
 
         .button-primary {
-            background: #26d0ce;
-            color: #031011;
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .button-primary:hover {
+            background: #1d4ed8;
         }
 
         .button-secondary {
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            background: rgba(255, 255, 255, 0.04);
-            color: #f8fafc;
+            border: 1px solid #334155;
+            background: rgba(15, 23, 42, 0.7);
+            color: #ffffff;
         }
 
-        section {
-            padding: 85px 0;
+        .button-secondary:hover {
+            background: #0f172a;
         }
 
-        .section-heading {
-            max-width: 700px;
-            margin-bottom: 40px;
+        .hero-note {
+            margin-top: 30px;
+            color: #7f8da3;
+            font-size: 0.93rem;
         }
 
-        .section-heading p {
-            margin-bottom: 10px;
-            color: #26d0ce;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+        /* =========================
+           WHY KORVO EXISTS
+        ========================= */
+
+        .why-section {
+            background: #090f1c;
+            border-top: 1px solid rgba(148, 163, 184, 0.08);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
         }
 
-        .section-heading h2 {
-            font-size: clamp(2rem, 5vw, 3.3rem);
-            line-height: 1.1;
-        }
-
-        .mission-grid {
+        .why-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
+            grid-template-columns: 0.9fr 1.1fr;
+            align-items: start;
+            gap: 60px;
         }
 
-        .mission-card {
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.035);
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+        .why-title {
+            position: sticky;
+            top: 115px;
         }
 
-        .mission-card-number {
-            width: 44px;
-            height: 44px;
-            margin-bottom: 22px;
-            display: grid;
-            place-items: center;
-            border-radius: 12px;
-            background: rgba(38, 208, 206, 0.13);
-            color: #67e8e5;
-            font-weight: 900;
-        }
-
-        .mission-card h3 {
-            margin-bottom: 12px;
-            font-size: 1.3rem;
-        }
-
-        .mission-card p {
-            color: #aeb8c7;
-        }
-
-        .story-section {
-            background: rgba(255, 255, 255, 0.025);
-            border-top: 1px solid rgba(255, 255, 255, 0.07);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        }
-
-        .story-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .story-copy h2 {
-            margin-bottom: 20px;
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            line-height: 1.1;
-        }
-
-        .story-copy p {
+        .why-title h2 {
             margin-bottom: 18px;
-            color: #b7c0cd;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            line-height: 1.06;
+            letter-spacing: -2px;
+        }
+
+        .why-title p {
+            color: #94a3b8;
+            font-size: 1.08rem;
+        }
+
+        .story-lines {
+            display: grid;
+            gap: 18px;
+        }
+
+        .story-line {
+            padding: 24px 26px;
+            border: 1px solid #273449;
+            border-radius: 17px;
+            background: rgba(15, 23, 42, 0.72);
+            color: #cbd5e1;
             font-size: 1.04rem;
         }
 
-        .promise-box {
-            padding: 38px;
+        .story-line strong {
+            color: #ffffff;
+        }
+
+        .story-line.highlight {
+            border-color: rgba(96, 165, 250, 0.34);
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(37, 99, 235, 0.2),
+                    rgba(15, 23, 42, 0.78)
+                );
+            color: #e2e8f0;
+        }
+
+        /* =========================
+           CONTRACTOR SECTION
+        ========================= */
+
+        .contractor-section {
+            background:
+                radial-gradient(
+                    circle at 88% 25%,
+                    rgba(37, 99, 235, 0.16),
+                    transparent 30%
+                ),
+                #070b14;
+        }
+
+        .contractor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 52px;
+        }
+
+        .contractor-copy h2 {
+            margin-bottom: 20px;
+            font-size: clamp(2.2rem, 5vw, 3.7rem);
+            line-height: 1.08;
+            letter-spacing: -1.8px;
+        }
+
+        .contractor-copy > p {
+            margin-bottom: 18px;
+            color: #aeb8c7;
+            font-size: 1.05rem;
+        }
+
+        .contractor-copy strong {
+            color: #ffffff;
+        }
+
+        .contractor-card {
+            padding: 36px;
+            border: 1px solid rgba(96, 165, 250, 0.28);
             border-radius: 24px;
             background:
                 linear-gradient(
                     145deg,
-                    rgba(38, 208, 206, 0.18),
-                    rgba(255, 255, 255, 0.03)
+                    rgba(37, 99, 235, 0.18),
+                    rgba(15, 23, 42, 0.86)
                 );
-            border: 1px solid rgba(38, 208, 206, 0.25);
+            box-shadow: 0 24px 55px rgba(0, 0, 0, 0.32);
         }
 
-        .promise-box h3 {
-            margin-bottom: 16px;
-            color: #67e8e5;
-            font-size: 1.6rem;
+        .contractor-card h3 {
+            margin-bottom: 20px;
+            color: #93c5fd;
+            font-size: 1.5rem;
         }
 
-        .promise-list {
+        .goal-list {
+            display: grid;
+            gap: 14px;
             list-style: none;
         }
 
-        .promise-list li {
+        .goal-list li {
             display: flex;
+            align-items: flex-start;
             gap: 12px;
-            margin-bottom: 14px;
             color: #d7dee8;
         }
 
-        .promise-list li::before {
+        .goal-list li::before {
             content: "✓";
-            color: #26d0ce;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.14);
+            color: #4ade80;
             font-weight: 900;
         }
 
-        .cta {
-            text-align: center;
+
+                /* =========================
+           BUILT FOR CUSTOMERS
+        ========================= */
+
+        .customer-section {
+            background: #090f1c;
+            border-top: 1px solid rgba(148,163,184,.08);
+            border-bottom: 1px solid rgba(148,163,184,.08);
         }
 
-        .cta-box {
-            padding: 55px 28px;
-            border-radius: 26px;
-            background: #26d0ce;
-            color: #031011;
+        .customer-grid {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:55px;
+            align-items:center;
         }
 
-        .cta-box h2 {
-            margin-bottom: 14px;
-            font-size: clamp(2rem, 5vw, 3.4rem);
+        .customer-copy h2{
+            font-size:clamp(2.2rem,5vw,3.7rem);
+            margin-bottom:20px;
+            line-height:1.08;
+            letter-spacing:-2px;
         }
 
-        .cta-box p {
-            max-width: 650px;
-            margin: 0 auto 25px;
-            font-size: 1.1rem;
+        .customer-copy p{
+            color:#b6c2d1;
+            margin-bottom:18px;
+            font-size:1.05rem;
         }
 
-        .cta-box .button {
-            background: #07111b;
-            color: white;
+        .customer-box{
+            background:rgba(255,255,255,.04);
+            border:1px solid rgba(255,255,255,.08);
+            border-radius:22px;
+            padding:36px;
         }
 
-        footer {
-            padding: 28px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            color: #8d98a8;
-            text-align: center;
+        .customer-box h3{
+            color:#60a5fa;
+            margin-bottom:20px;
+            font-size:1.45rem;
         }
 
-        @media (max-width: 850px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mission-grid,
-            .story-grid {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                letter-spacing: -2px;
-            }
+        .customer-list{
+            list-style:none;
+            display:grid;
+            gap:14px;
         }
 
-        @media (max-width: 520px) {
-            nav {
-                min-height: 68px;
-            }
-
-            .hero {
-                padding-top: 75px;
-            }
-
-            section {
-                padding: 65px 0;
-            }
-
-            .mission-card,
-            .promise-box {
-                padding: 24px;
-            }
+        .customer-list li{
+            display:flex;
+            gap:12px;
+            color:#d8e1eb;
         }
+
+        .customer-list li::before{
+            content:"✓";
+            color:#4ade80;
+            font-weight:900;
+        }
+
+        /* =========================
+           FOUNDER LETTER
+        ========================= */
+
+        .founder{
+            background:
+            radial-gradient(
+                circle at top right,
+                rgba(37,99,235,.18),
+                transparent 35%
+            ),
+            #070b14;
+        }
+
+        .letter{
+            max-width:900px;
+            margin:auto;
+            background:rgba(255,255,255,.04);
+            border:1px solid rgba(255,255,255,.08);
+            border-radius:28px;
+            padding:60px;
+            box-shadow:0 30px 70px rgba(0,0,0,.35);
+        }
+
+        .letter small{
+            color:#60a5fa;
+            font-weight:800;
+            letter-spacing:2px;
+            text-transform:uppercase;
+        }
+
+        .letter h2{
+            margin:16px 0 28px;
+            font-size:clamp(2.2rem,5vw,3.6rem);
+            letter-spacing:-2px;
+        }
+
+        .letter p{
+            color:#c9d3df;
+            margin-bottom:22px;
+            font-size:1.08rem;
+        }
+
+        .signature{
+            margin-top:50px;
+        }
+
+        .signature-name{
+            font-size:2rem;
+            color:#60a5fa;
+            font-weight:900;
+            font-family:cursive;
+        }
+
+        .signature-title{
+            color:#94a3b8;
+            font-size:1rem;
+            margin-top:6px;
+        }
+
+        /* =========================
+           CORE VALUES
+        ========================= */
+
+        .values{
+            background:#090f1c;
+        }
+
+        .values-grid{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:24px;
+        }
+
+        .value-card{
+            background:#111827;
+            border:1px solid #273449;
+            border-radius:20px;
+            padding:34px;
+            transition:.25s;
+        }
+
+        .value-card:hover{
+            transform:translateY(-8px);
+            border-color:#3b82f6;
+        }
+
+        .value-icon{
+            font-size:42px;
+            margin-bottom:16px;
+        }
+
+        .value-card h3{
+            margin-bottom:12px;
+            font-size:1.35rem;
+        }
+
+        .value-card p{
+            color:#aeb8c7;
+        }
+
     </style>
 </head>
 
 <body>
-    <header>
-        <nav class="container">
-            <a class="logo" href="index.html">
+
+<header>
+
+<div class="container">
+
+<nav>
+
+<a href="index.html" class="logo">
+Korvo<span>.</span>
+</a>
+<button
+    class="menu-button"
+    type="button"
+    aria-label="Open navigation menu"
+    aria-expanded="false"
+>
+    ☰
+</button>
+<ul class="nav-links">
+
+<li><a href="index.html">Home</a></li>
+
+<li><a class="active" href="mission.html">
+Our Mission
+</a></li>
+
+<li><a href="dashboard.html">Dashboard</a></li>
+
+<li><a href="chris-profile.html">Profiles</a></li>
+
+<li>
+
+<a href="index.html" class="nav-button">
+Find a Professional
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</header>
+
+<main>
+
+<section class="hero">
+
+<div class="container hero-content">
+
+<div class="eyebrow">
+
+Building Opportunity Every Day
+
+</div>
+
+<h1>
+
+Building Opportunity
+
+<span>
+
+One Professional at a Time.
+
+</span>
+
+</h1>
+
+<p class="hero-description">
+
+Korvo exists to connect hardworking local professionals with customers who need trusted services while creating opportunities built on honesty, transparency, and community.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="#founder" class="button button-primary">
+
+Read Our Story
+
+</a>
+
+<a href="#vision" class="button button-secondary">
+
+Our Vision
+
+</a>
+
+</div>
+
+<p class="hero-note">
+
+Every great company begins with one simple idea.
+
+</p>
+
+</div>
+
+</section>
+
+<section class="why-section">
+
+<div class="container why-grid">
+
+<div class="why-title">
+
+<p class="section-label">
+
+WHY WE EXIST
+
+</p>
+
+<h2>
+
+Helping Good People Find One Another.
+
+</h2>
+
+<p>
+
+Technology should make finding work easier—not harder.
+
+</p>
+
+</div>
+
+<div class="story-lines">
+
+<div class="story-line">
+
+Every day thousands of talented contractors, cleaners, installers, landscapers, painters, movers, electricians, photographers and skilled professionals wake up ready to work.
+
+</div>
+
+<div class="story-line">
+
+Many spend almost as much time searching for work as they do actually completing jobs.
+
+</div>
+
+<div class="story-line">
+
+Meanwhile, homeowners often spend hours trying to determine who they can trust with their home.
+
+</div>
+
+<div class="story-line highlight">
+
+Korvo exists to connect those two people through trust, transparency, opportunity and community.
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="contractor-section">
+
+<div class="container contractor-grid">
+
+<div class="contractor-copy">
+
+<p class="section-label">
+
+FOR LOCAL CONTRACTORS
+
+</p>
+
+<h2>
+
+Our Goal Is To Help Local Professionals Grow.
+
+</h2>
+
+<p>
+
+Korvo isn't being built just to create another marketplace.
+
+<strong>
+
+We're building a platform that gives hardworking people more opportunities.
+
+</strong>
+
+</p>
+
+<p>
+
+Whether you're just getting started or you've been in business for years, we want Korvo to become a place where your reputation, experience and hard work help you earn more opportunities.
+
+</p>
+
+</div>
+
+<div class="contractor-card">
+
+<h3>
+
+We want Korvo to help professionals...
+
+</h3>
+
+<ul class="goal-list">
+
+<li>Find consistent local work</li>
+
+<li>Build trusted reputations</li>
+
+<li>Showcase experience and skills</li>
+
+<li>Grow their business</li>
+
+<li>Earn trust through verification</li>
+
+<li>Spend less time searching and more time working</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="customer-section">
+
+    <div class="container customer-grid">
+
+        <div class="customer-copy">
+
+            <p class="section-label">
+                FOR CUSTOMERS
+            </p>
+
+            <h2>
+                Hiring someone should never feel like taking a gamble.
+            </h2>
+
+            <p>
+                Whether you're hiring someone to clean your home, install
+                custom drapery, pressure wash your driveway, assemble
+                furniture, or complete a major renovation, you deserve
+                confidence before they ever arrive.
+            </p>
+
+            <p>
+                That's why Korvo is being built around transparency.
+                We want customers to see real experience, trusted reviews,
+                verification badges, and detailed professional profiles
+                before making a decision.
+            </p>
+
+            <p>
+                We believe trust should be earned before the first message
+                is ever sent.
+            </p>
+
+        </div>
+
+        <div class="customer-box">
+
+            <h3>
+                Customers deserve...
+            </h3>
+
+            <ul class="customer-list">
+
+                <li>
+                    Verified professional profiles
+                </li>
+
+                <li>
+                    Honest customer reviews
+                </li>
+
+                <li>
+                    Clear experience and qualifications
+                </li>
+
+                <li>
+                    Safe communication
+                </li>
+
+                <li>
+                    A simple hiring experience
+                </li>
+
+                <li>
+                    Confidence in every decision
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="founder" id="founder">
+
+    <div class="container">
+
+        <div class="letter">
+
+            <small>
+                A MESSAGE FROM THE FOUNDER
+            </small>
+
+            <h2>
+                Why I Started Korvo
+            </h2>
+
+            <p>
+
+                Hello,
+
+            </p>
+
+            <p>
+
+                My name is Chris, and I created Korvo because I believe
+                hardworking people deserve opportunities.
+
+            </p>
+
+            <p>
+
+                Throughout my life I've met talented contractors,
+                cleaners, installers, landscapers, painters,
+                photographers, movers and many other skilled
+                professionals who genuinely love what they do.
+
+            </p>
+
+            <p>
+
+                The problem isn't their talent.
+
+                The problem is finding consistent opportunities to
+                showcase it.
+
+            </p>
+
+            <p>
+
+                I've also watched homeowners spend hours trying to find
+                someone they can trust inside their home.
+
+                I kept asking myself...
+
+                <strong>
+
+                    Why should finding work—or finding someone to
+                    hire—be this difficult?
+
+                </strong>
+
+            </p>
+
+            <p>
+
+                Korvo isn't being built to become just another app.
+
+                My goal is to build something that genuinely improves
+                people's lives.
+
+            </p>
+
+            <p>
+
+                I hope Korvo becomes a place where small businesses grow,
+                reputations matter, honesty is rewarded, and trust always
+                comes before transactions.
+
+            </p>
+
+            <p>
+
+                We're still at the beginning of this journey, but our
+                mission will always stay the same.
+
+            </p>
+
+            <p>
+
+                Help local professionals succeed.
+
+                Help customers hire with confidence.
+
+                Build something our communities are proud of.
+
+            </p>
+
+            <div class="signature">
+
+                <div class="signature-name">
+
+                    — Chris
+
+                </div>
+
+                <div class="signature-title">
+
+                    Founder of Korvo
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="values">
+
+    <div class="container">
+
+        <div class="section-heading center">
+
+            <p class="section-label">
+
+                OUR VALUES
+
+            </p>
+
+            <h2>
+
+                The principles behind everything we build.
+
+            </h2>
+
+            <p>
+
+                These values guide every decision we make at Korvo.
+
+            </p>
+
+        </div>
+
+        <div class="values-grid">
+
+            <article class="value-card">
+
+                <div class="value-icon">
+                    🛡️
+                </div>
+
+                <h3>
+                    Trust
+                </h3>
+
+                <p>
+                    Every connection should begin with honesty and
+                    transparency.
+                </p>
+
+            </article>
+
+            <article class="value-card">
+
+                <div class="value-icon">
+                    🤝
+                </div>
+
+                <h3>
+                    Integrity
+                </h3>
+
+                <p>
+                    We believe doing the right thing builds stronger
+                    communities.
+                </p>
+
+            </article>
+
+            <article class="value-card">
+
+                <div class="value-icon">
+                    ⭐
+                </div>
+
+                <h3>
+                    Excellence
+                </h3>
+
+                <p>
+                    Professionals deserve a platform that rewards quality
+                    work.
+                </p>
+
+            </article>
+
+            <article class="value-card">
+
+                <div class="value-icon">
+                    🏡
+                </div>
+
+                <h3>
+                    Community
+                </h3>
+
+                <p>
+                    Supporting local businesses strengthens every
+                    neighborhood.
+                </p>
+
+            </article>
+
+            <article class="value-card">
+
+                <div class="value-icon">
+                    🚀
+                </div>
+
+                <h3>
+                    Opportunity
+                </h3>
+
+                <p>
+                    Every hardworking professional deserves the chance to
+                    grow.
+                </p>
+
+            </article>
+
+            <article class="value-card">
+
+                <div class="value-icon">
+                    💡
+                </div>
+
+                <h3>
+                    Innovation
+                </h3>
+
+                <p>
+                    Technology should make life easier, not more
+                    complicated.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="vision-section" id="vision">
+
+    <div class="container">
+
+        <div class="section-heading center">
+
+            <p class="section-label">
+                OUR VISION
+            </p>
+
+            <h2>
+                Starting local. Thinking bigger.
+            </h2>
+
+            <p>
+                Korvo is beginning with a focused mission: help local
+                professionals and customers build stronger connections
+                in the communities we know best.
+            </p>
+
+        </div>
+
+        <div class="vision-timeline">
+
+            <article class="vision-step">
+
+                <div class="vision-marker">
+                    01
+                </div>
+
+                <div class="vision-content">
+
+                    <p class="vision-label">
+                        TODAY
+                    </p>
+
+                    <h3>
+                        Build Korvo in Atlanta
+                    </h3>
+
+                    <p>
+                        Create a strong local marketplace where
+                        professionals can build trusted profiles and
+                        customers can discover reliable help.
+                    </p>
+
+                </div>
+
+            </article>
+
+            <article class="vision-step">
+
+                <div class="vision-marker">
+                    02
+                </div>
+
+                <div class="vision-content">
+
+                    <p class="vision-label">
+                        NEXT
+                    </p>
+
+                    <h3>
+                        Expand throughout Georgia
+                    </h3>
+
+                    <p>
+                        Bring the Korvo experience to more cities while
+                        keeping the platform focused on local
+                        relationships and community trust.
+                    </p>
+
+                </div>
+
+            </article>
+
+            <article class="vision-step">
+
+                <div class="vision-marker">
+                    03
+                </div>
+
+                <div class="vision-content">
+
+                    <p class="vision-label">
+                        THE FUTURE
+                    </p>
+
+                    <h3>
+                        Serve communities across America
+                    </h3>
+
+                    <p>
+                        Grow into a nationwide platform that helps
+                        hardworking professionals find opportunities and
+                        helps customers hire with confidence.
+                    </p>
+
+                </div>
+
+            </article>
+
+            <article class="vision-step">
+
+                <div class="vision-marker">
+                    04
+                </div>
+
+                <div class="vision-content">
+
+                    <p class="vision-label">
+                        OUR LONG-TERM GOAL
+                    </p>
+
+                    <h3>
+                        Become the most trusted local service marketplace
+                    </h3>
+
+                    <p>
+                        Build a company known for fairness, transparency,
+                        innovation, and creating real opportunities for
+                        people who want to work.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="impact-section">
+
+    <div class="container">
+
+        <div class="section-heading center">
+
+            <p class="section-label">
+                THE IMPACT WE WANT TO CREATE
+            </p>
+
+            <h2>
+                More than jobs. More than bookings.
+            </h2>
+
+            <p>
+                Our goal is to create meaningful connections that help
+                professionals grow, support families, and strengthen
+                local communities.
+            </p>
+
+        </div>
+
+        <div class="impact-grid">
+
+            <article class="impact-card">
+
+                <p class="impact-number">
+                    Thousands
+                </p>
+
+                <h3>
+                    of professionals supported
+                </h3>
+
+                <p>
+                    Helping skilled workers showcase their experience,
+                    reach new customers, and create more consistent
+                    opportunities.
+                </p>
+
+            </article>
+
+            <article class="impact-card">
+
+                <p class="impact-number">
+                    Millions
+                </p>
+
+                <h3>
+                    of trusted connections
+                </h3>
+
+                <p>
+                    Making it easier for customers and local
+                    professionals to find one another with confidence.
+                </p>
+
+            </article>
+
+            <article class="impact-card">
+
+                <p class="impact-number">
+                    One Mission
+                </p>
+
+                <h3>
+                    helping good people succeed
+                </h3>
+
+                <p>
+                    Keeping opportunity, fairness, trust, and community
+                    at the center of everything Korvo becomes.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="final-message">
+
+    <div class="container">
+
+        <div class="final-message-box">
+
+            <p class="section-label">
+                WELCOME TO KORVO
+            </p>
+
+            <blockquote>
+                “Every opportunity begins with a single connection.”
+            </blockquote>
+
+            <p class="final-message-copy">
+                Whether you are searching for your next customer or your
+                next trusted professional, we hope Korvo becomes the
+                place where that connection begins.
+            </p>
+
+            <div class="final-buttons">
+
+                <a
+                    href="index.html#professionals"
+                    class="button button-primary"
+                >
+                    Find a Professional
+                </a>
+
+                <a
+                    href="index.html#join"
+                    class="button button-secondary"
+                >
+                    Join as a Professional
+                </a>
+
+            </div>
+
+            <p class="thank-you">
+                Thank you for believing in Korvo.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+
+    <div class="container footer-content">
+
+        <div>
+
+            <a href="index.html" class="footer-logo">
                 Korvo<span>.</span>
             </a>
 
-            <ul class="nav-links">
-                <li>
-                    <a href="index.html">Home</a>
-                </li>
-
-                <li>
-                    <a class="active" href="mission.html">
-                        Our Mission
-                    </a>
-                </li>
-
-                <li>
-                    <a href="dashboard.html">Dashboard</a>
-                </li>
-
-                <li>
-                    <a href="chris-profile.html">Profiles</a>
-                </li>
-
-                <li>
-                    <a class="nav-button" href="index.html">
-                        Find a Professional
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section class="hero">
-            <div class="container hero-content">
-                <p class="eyebrow">
-                    Why Korvo exists
-                </p>
-
-                <h1>
-                    Local work built on
-                    <span>trust.</span>
-                </h1>
-
-                <p class="hero-description">
-                    Korvo connects customers with skilled local
-                    professionals while creating a marketplace that is
-                    fair, transparent, secure, and easy to use.
-                </p>
-
-                <div class="hero-buttons">
-                    <a class="button button-primary" href="index.html">
-                        Explore Korvo
-                    </a>
-
-                    <a class="button button-secondary" href="#values">
-                        View Our Values
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section id="values">
-            <div class="container">
-                <div class="section-heading">
-                    <p>Our values</p>
-
-                    <h2>
-                        A better marketplace for customers and professionals
-                    </h2>
-                </div>
-
-                <div class="mission-grid">
-                    <article class="mission-card">
-                        <div class="mission-card-number">01</div>
-
-                        <h3>Build real trust</h3>
-
-                        <p>
-                            Profiles, reviews, verification tools, and
-                            secure communication help customers make more
-                            confident decisions.
-                        </p>
-                    </article>
-
-                    <article class="mission-card">
-                        <div class="mission-card-number">02</div>
-
-                        <h3>Support local professionals</h3>
-
-                        <p>
-                            Skilled workers deserve a fair place to build
-                            their reputation, find opportunities, and grow
-                            their business.
-                        </p>
-                    </article>
-
-                    <article class="mission-card">
-                        <div class="mission-card-number">03</div>
-
-                        <h3>Keep things simple</h3>
-
-                        <p>
-                            Finding help should not feel confusing. Korvo
-                            is designed to make searching, messaging, and
-                            booking straightforward.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="story-section">
-            <div class="container story-grid">
-                <div class="story-copy">
-                    <h2>
-                        Created for everyday people who need reliable help
-                    </h2>
-
-                    <p>
-                        Too many service platforms make customers feel
-                        overwhelmed and leave professionals paying high
-                        fees without guaranteed results.
-                    </p>
-
-                    <p>
-                        Korvo's goal is to create a more balanced
-                        marketplace—one where customers can find trusted
-                        help and professionals can build lasting local
-                        businesses.
-                    </p>
-                </div>
-
-                <div class="promise-box">
-                    <h3>The Korvo promise</h3>
-
-                    <ul class="promise-list">
-                        <li>
-                            Clear professional profiles and qualifications
-                        </li>
-
-                        <li>
-                            Verification and trust features
-                        </li>
-
-                        <li>
-                            Simple in-platform communication
-                        </li>
-
-                        <li>
-                            Fair opportunities for local professionals
-                        </li>
-
-                        <li>
-                            A safer and more transparent experience
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="cta">
-            <div class="container">
-                <div class="cta-box">
-                    <h2>
-                        Help us build a better local marketplace.
-                    </h2>
-
-                    <p>
-                        Whether you need a service or provide one, Korvo is
-                        being designed to help you connect with confidence.
-                    </p>
-
-                    <a class="button" href="index.html">
-                        Return to Home
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
             <p>
-                © 2026 Korvo. Connecting local professionals with
-                customers.
+                Building opportunity through trust, transparency, and
+                community.
             </p>
+
         </div>
-    </footer>
+
+        <div class="footer-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="mission.html">
+                Our Mission
+            </a>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="chris-profile.html">
+                Featured Profile
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <p>
+            © 2026 Korvo. Built in Atlanta, Georgia.
+        </p>
+
+        <p>
+            Helping local professionals grow.
+        </p>
+
+    </div>
+
+</footer>
+
+<style>
+    /* =========================
+       VISION TIMELINE
+    ========================= */
+
+    .vision-section {
+        background:
+            radial-gradient(
+                circle at 15% 20%,
+                rgba(37, 99, 235, 0.14),
+                transparent 30%
+            ),
+            #070b14;
+    }
+
+    .vision-timeline {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        gap: 24px;
+    }
+
+    .vision-timeline::before {
+        content: "";
+        position: absolute;
+        top: 22px;
+        bottom: 22px;
+        left: 27px;
+        width: 2px;
+        background: linear-gradient(
+            #2563eb,
+            #22c55e
+        );
+    }
+
+    .vision-step {
+        position: relative;
+        display: grid;
+        grid-template-columns: 56px 1fr;
+        gap: 22px;
+    }
+
+    .vision-marker {
+        position: relative;
+        z-index: 2;
+        width: 56px;
+        height: 56px;
+        display: grid;
+        place-items: center;
+        border: 3px solid #070b14;
+        border-radius: 50%;
+        background: #2563eb;
+        color: #ffffff;
+        font-size: 0.84rem;
+        font-weight: 900;
+        box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.35);
+    }
+
+    .vision-content {
+        padding: 26px 28px;
+        border: 1px solid #273449;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.82);
+    }
+
+    .vision-label {
+        margin-bottom: 6px;
+        color: #60a5fa;
+        font-size: 0.75rem;
+        font-weight: 900;
+        letter-spacing: 1.4px;
+    }
+
+    .vision-content h3 {
+        margin-bottom: 9px;
+        font-size: 1.35rem;
+    }
+
+    .vision-content p:last-child {
+        color: #aeb8c7;
+    }
+
+    /* =========================
+       IMPACT SECTION
+    ========================= */
+
+    .impact-section {
+        background: #090f1c;
+        border-top: 1px solid rgba(148, 163, 184, 0.08);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    }
+
+    .impact-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .impact-card {
+        padding: 34px;
+        border: 1px solid #273449;
+        border-radius: 20px;
+        background: #111827;
+        text-align: center;
+    }
+
+    .impact-number {
+        margin-bottom: 13px;
+        color: #60a5fa;
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .impact-card h3 {
+        margin-bottom: 13px;
+        font-size: 1.2rem;
+        text-transform: capitalize;
+    }
+
+    .impact-card p:last-child {
+        color: #aeb8c7;
+    }
+
+    /* =========================
+       FINAL MESSAGE
+    ========================= */
+
+    .final-message {
+        text-align: center;
+        background:
+            radial-gradient(
+                circle at center,
+                rgba(37, 99, 235, 0.24),
+                transparent 42%
+            ),
+            #050810;
+    }
+
+    .final-message-box {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 75px 45px;
+        border: 1px solid rgba(96, 165, 250, 0.24);
+        border-radius: 30px;
+        background: rgba(15, 23, 42, 0.74);
+        box-shadow: 0 35px 75px rgba(0, 0, 0, 0.38);
+    }
+
+    .final-message blockquote {
+        margin: 18px auto 24px;
+        max-width: 850px;
+        font-size: clamp(2.4rem, 7vw, 5.3rem);
+        font-weight: 900;
+        line-height: 1.02;
+        letter-spacing: -3px;
+    }
+
+    .final-message-copy {
+        max-width: 710px;
+        margin: 0 auto 30px;
+        color: #b8c4d3;
+        font-size: 1.1rem;
+    }
+
+    .final-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .thank-you {
+        margin-top: 30px;
+        color: #94a3b8;
+        font-weight: 700;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+        padding: 42px 0 24px;
+        border-top: 1px solid #1e293b;
+        background: #03060c;
+        color: #7f8da3;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 35px;
+        padding-bottom: 30px;
+    }
+
+    .footer-content > div:first-child {
+        max-width: 430px;
+    }
+
+    .footer-logo {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #ffffff;
+        font-size: 1.55rem;
+        font-weight: 900;
+    }
+
+    .footer-logo span {
+        color: #60a5fa;
+    }
+
+    .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 18px;
+    }
+
+    .footer-links a {
+        color: #94a3b8;
+        font-weight: 800;
+    }
+
+    .footer-links a:hover {
+        color: #ffffff;
+    }
+
+    .footer-bottom {
+        padding-top: 22px;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        border-top: 1px solid #172033;
+        font-size: 0.9rem;
+    }
+
+    /* =========================
+       RESPONSIVE DESIGN
+    ========================= */
+
+    @media (max-width: 900px) {
+        .menu-button {
+            display: grid;
+            place-items: center;
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 76px;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            display: none;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            border-bottom: 1px solid #334155;
+            background: #070b14;
+        }
+
+        .nav-links.open {
+            display: flex;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .why-grid,
+        .contractor-grid,
+        .customer-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .why-title {
+            position: static;
+        }
+
+        .values-grid,
+        .impact-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .footer-content,
+        .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .footer-links {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 620px) {
+        section {
+            padding: 70px 0;
+        }
+
+        .hero {
+            min-height: auto;
+            padding: 90px 0;
+        }
+
+        .hero h1 {
+            letter-spacing: -2px;
+        }
+
+        .letter {
+            padding: 32px 24px;
+        }
+
+        .contractor-card,
+        .customer-box,
+        .value-card,
+        .impact-card {
+            padding: 25px;
+        }
+
+        .final-message-box {
+            padding: 48px 22px;
+        }
+
+        .final-message blockquote {
+            letter-spacing: -1.7px;
+        }
+
+        .vision-step {
+            grid-template-columns: 46px 1fr;
+            gap: 15px;
+        }
+
+        .vision-marker {
+            width: 46px;
+            height: 46px;
+        }
+
+        .vision-timeline::before {
+            left: 22px;
+        }
+
+        .vision-content {
+            padding: 22px;
+        }
+    }
+</style>
+
+<script>
+    const menuButton = document.querySelector(".menu-button");
+    const navLinks = document.querySelector(".nav-links");
+
+    if (menuButton && navLinks) {
+        menuButton.addEventListener("click", function () {
+            const menuIsOpen = navLinks.classList.toggle("open");
+
+            document.body.classList.toggle(
+                "menu-open",
+                menuIsOpen
+            );
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(menuIsOpen)
+            );
+
+            menuButton.textContent = menuIsOpen ? "✕" : "☰";
+        });
+
+        navLinks
+            .querySelectorAll("a")
+            .forEach(function (link) {
+                link.addEventListener("click", function () {
+                    navLinks.classList.remove("open");
+                    document.body.classList.remove("menu-open");
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuButton.textContent = "☰";
+                });
+            });
+    }
+</script>
+
 </body>
 </html>
