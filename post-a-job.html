@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Post a local service job on Korvo and connect with trusted professionals."
+  />
+
+  <title>Post a Job | Korvo</title>
+
+  <!-- Main stylesheet for this page -->
+  <link rel="stylesheet" href="post-a-job.css" />
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER / NAVIGATION
+  ========================== -->
+  <header class="site-header">
+    <div class="nav-container">
+
+      <a href="index.html" class="logo" aria-label="Korvo homepage">
+        <span class="logo-mark">K</span>
+        <span class="logo-text">Korvo</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#professionals">Professionals</a>
+        <a href="about.html">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="post-a-job.html" class="nav-button active">
+          Post a Job
+        </a>
+      </div>
+
+      <button
+        class="mobile-menu-button"
+        id="mobileMenuButton"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+
+    <nav
+      class="mobile-nav"
+      id="mobileNav"
+      aria-label="Mobile navigation"
+    >
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#professionals">Professionals</a>
+      <a href="about.html">About</a>
+      <a href="login.html">Log In</a>
+    </nav>
+  </header>
+
+
+  <!-- =========================
+       HERO SECTION
+  ========================== -->
+  <section class="job-hero">
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
+
+    <div class="hero-content">
+      <span class="eyebrow">LOCAL HELP MADE SIMPLE</span>
+
+      <h1>
+        Tell us what you need.
+        <span>Korvo helps you find the right professional.</span>
+      </h1>
+
+      <p>
+        Describe your project, choose your budget and preferred date,
+        and receive interest from trusted local service professionals.
+      </p>
+
+      <div class="hero-trust-row">
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          No obligation to hire
+        </div>
+
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          Local professionals
+        </div>
+
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          Secure in-app communication
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================
+       MAIN JOB FORM
+  ========================== -->
+  <main class="page-main">
+
+    <section class="form-section">
+
+      <!-- Progress indicator -->
+      <div class="progress-wrapper">
+
+        <div class="progress-header">
+          <p id="progressText">Step 1 of 5</p>
+          <span id="progressPercent">20% complete</span>
+        </div>
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            id="progressFill"
+            style="width: 20%;"
+          ></div>
+        </div>
+
+        <div class="step-indicators">
+
+          <div class="step-indicator active" data-indicator="1">
+            <span>1</span>
+            <p>Service</p>
+          </div>
+
+          <div class="step-line"></div>
+
+          <div class="step-indicator" data-indicator="2">
+            <span>2</span>
+            <p>Details</p>
+          </div>
+
+          <div class="step-line"></div>
+
+          <div class="step-indicator" data-indicator="3">
+            <span>3</span>
+            <p>Schedule</p>
+          </div>
+
+          <div class="step-line"></div>
+
+          <div class="step-indicator" data-indicator="4">
+            <span>4</span>
+            <p>Contact</p>
+          </div>
+
+          <div class="step-line"></div>
+
+          <div class="step-indicator" data-indicator="5">
+            <span>5</span>
+            <p>Review</p>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- Job form -->
+      <form id="jobForm" novalidate>
+
+        <!-- =========================
+             STEP 1: SERVICE
+        ========================== -->
+        <section class="form-step active" data-step="1">
+
+          <div class="step-heading">
+            <span class="step-label">STEP 1</span>
+            <h2>What service do you need?</h2>
+            <p>
+              Select the category that best matches your project.
+            </p>
+          </div>
+
+          <div class="field-group">
+            <label for="serviceSearch">
+              Search services
+            </label>
+
+            <div class="input-with-icon">
+              <span class="input-icon">⌕</span>
+
+              <input
+                type="search"
+                id="serviceSearch"
+                name="serviceSearch"
+                placeholder="Search cleaning, handyman, painting..."
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div
+            class="service-grid"
+            id="serviceGrid"
+            role="radiogroup"
+            aria-label="Choose a service"
+          >
+
+            <label class="service-card" data-service-name="Cleaning">
+              <input
+                type="radio"
+                name="service"
+                value="Cleaning"
+                required
+              />
+
+              <span class="service-icon">🧹</span>
+
+              <span class="service-information">
+                <strong>Cleaning</strong>
+                <small>Homes, offices and deep cleaning</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Handyman">
+              <input
+                type="radio"
+                name="service"
+                value="Handyman"
+              />
+
+              <span class="service-icon">🛠️</span>
+
+              <span class="service-information">
+                <strong>Handyman</strong>
+                <small>Repairs, mounting and maintenance</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Drapery Installation">
+              <input
+                type="radio"
+                name="service"
+                value="Drapery Installation"
+              />
+
+              <span class="service-icon">🪟</span>
+
+              <span class="service-information">
+                <strong>Drapery Installation</strong>
+                <small>Rods, curtains, shades and blinds</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Painting">
+              <input
+                type="radio"
+                name="service"
+                value="Painting"
+              />
+
+              <span class="service-icon">🎨</span>
+
+              <span class="service-information">
+                <strong>Painting</strong>
+                <small>Interior and exterior painting</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Plumbing">
+              <input
+                type="radio"
+                name="service"
+                value="Plumbing"
+              />
+
+              <span class="service-icon">🔧</span>
+
+              <span class="service-information">
+                <strong>Plumbing</strong>
+                <small>Leaks, fixtures and installations</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Electrical">
+              <input
+                type="radio"
+                name="service"
+                value="Electrical"
+              />
+
+              <span class="service-icon">⚡</span>
+
+              <span class="service-information">
+                <strong>Electrical</strong>
+                <small>Lighting, outlets and electrical work</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Lawn Care">
+              <input
+                type="radio"
+                name="service"
+                value="Lawn Care"
+              />
+
+              <span class="service-icon">🌿</span>
+
+              <span class="service-information">
+                <strong>Lawn Care</strong>
+                <small>Mowing, trimming and yard cleanup</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Pressure Washing">
+              <input
+                type="radio"
+                name="service"
+                value="Pressure Washing"
+              />
+
+              <span class="service-icon">💦</span>
+
+              <span class="service-information">
+                <strong>Pressure Washing</strong>
+                <small>Driveways, siding, decks and patios</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Moving">
+              <input
+                type="radio"
+                name="service"
+                value="Moving"
+              />
+
+              <span class="service-icon">📦</span>
+
+              <span class="service-information">
+                <strong>Moving</strong>
+                <small>Loading, unloading and furniture moving</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Furniture Assembly">
+              <input
+                type="radio"
+                name="service"
+                value="Furniture Assembly"
+              />
+
+              <span class="service-icon">🪑</span>
+
+              <span class="service-information">
+                <strong>Furniture Assembly</strong>
+                <small>Beds, tables, cabinets and shelving</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Mobile Detailing">
+              <input
+                type="radio"
+                name="service"
+                value="Mobile Detailing"
+              />
+
+              <span class="service-icon">🚗</span>
+
+              <span class="service-information">
+                <strong>Mobile Detailing</strong>
+                <small>Interior and exterior vehicle detailing</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+
+            <label class="service-card" data-service-name="Other Service">
+              <input
+                type="radio"
+                name="service"
+                value="Other Service"
+              />
+
+              <span class="service-icon">➕</span>
+
+              <span class="service-information">
+                <strong>Other Service</strong>
+                <small>Tell us about a different type of job</small>
+              </span>
+
+              <span class="selection-check">✓</span>
+            </label>
+
+          </div>
+
+          <p class="field-error" id="serviceError">
+            Please select a service before continuing.
+          </p>
+
+        </section>
+
+
+        <!-- =========================
+             STEP 2: PROJECT DETAILS
+        ========================== -->
+        <section class="form-step" data-step="2">
+
+          <div class="step-heading">
+            <span class="step-label">STEP 2</span>
+            <h2>Tell us about your project</h2>
+            <p>
+              Good details help professionals understand the work
+              and provide better responses.
+            </p>
+          </div>
+
+          <div class="field-group">
+            <label for="jobTitle">
+              Job title
+              <span class="required-mark">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="jobTitle"
+              name="jobTitle"
+              maxlength="80"
+              placeholder="Example: Install curtain rods in living room"
+              required
+            />
+
+            <div class="field-footer">
+              <small>
+                Write a short title that clearly describes the job.
+              </small>
+
+              <span id="jobTitleCount">0 / 80</span>
+            </div>
+
+            <p class="field-error" id="jobTitleError">
+              Please enter a job title.
+            </p>
+          </div>
+
+
+          <div class="field-group">
+            <label for="jobDescription">
+              Project description
+              <span class="required-mark">*</span>
+            </label>
+
+            <textarea
+              id="jobDescription"
+              name="jobDescription"
+              rows="7"
+              maxlength="1200"
+              placeholder="Describe what needs to be done, how large the project is, whether materials are already available, and any important details..."
+              required
+            ></textarea>
+
+            <div class="field-footer">
+              <small>
+                Do not include private contact information.
+              </small>
+
+              <span id="descriptionCount">0 / 1200</span>
+            </div>
+
+            <p class="field-error" id="descriptionError">
+              Please provide more information about your project.
+            </p>
+          </div>
+
+
+          <div class="two-column-grid">
+
+            <div class="field-group">
+              <label for="propertyType">
+                Property type
+              </label>
+
+              <select id="propertyType" name="propertyType">
+                <option value="">Select property type</option>
+                <option value="House">House</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Condo">Condo</option>
+                <option value="Townhome">Townhome</option>
+                <option value="Office">Office</option>
+                <option value="Retail Space">Retail space</option>
+                <option value="Commercial Property">
+                  Commercial property
+                </option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+
+            <div class="field-group">
+              <label for="jobSize">
+                Project size
+              </label>
+
+              <select id="jobSize" name="jobSize">
+                <option value="">Select project size</option>
+                <option value="Small">
+                  Small — less than 2 hours
+                </option>
+                <option value="Medium">
+                  Medium — several hours
+                </option>
+                <option value="Large">
+                  Large — one or more days
+                </option>
+                <option value="Not Sure">
+                  Not sure yet
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+
+          <div class="field-group">
+            <label>
+              Project photos
+              <span class="optional-label">Optional</span>
+            </label>
+
+            <div class="upload-area" id="uploadArea">
+
+              <input
+                type="file"
+                id="projectPhotos"
+                name="projectPhotos"
+                accept="image/png, image/jpeg, image/webp"
+                multiple
+                hidden
+              />
+
+              <button
+                type="button"
+                class="upload-button"
+                id="uploadButton"
+              >
+                <span class="upload-icon">↥</span>
+                <strong>Add project photos</strong>
+                <small>
+                  PNG, JPG or WEBP — up to 5 photos
+                </small>
+              </button>
+
+            </div>
+
+            <div
+              class="image-preview-grid"
+              id="imagePreviewGrid"
+            ></div>
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             STEP 3: LOCATION / DATE
+        ========================== -->
+        <section class="form-step" data-step="3">
+
+          <div class="step-heading">
+            <span class="step-label">STEP 3</span>
+            <h2>Where and when is the job?</h2>
+            <p>
+              Your exact address stays private until you decide
+              to share it with a professional.
+            </p>
+          </div>
+
+          <div class="two-column-grid">
+
+            <div class="field-group">
+              <label for="city">
+                City
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="city"
+                name="city"
+                placeholder="Atlanta"
+                autocomplete="address-level2"
+                required
+              />
+
+              <p class="field-error" id="cityError">
+                Please enter your city.
+              </p>
+            </div>
+
+
+            <div class="field-group">
+              <label for="zipCode">
+                ZIP code
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="zipCode"
+                name="zipCode"
+                inputmode="numeric"
+                maxlength="5"
+                pattern="[0-9]{5}"
+                placeholder="30309"
+                autocomplete="postal-code"
+                required
+              />
+
+              <p class="field-error" id="zipError">
+                Please enter a valid 5-digit ZIP code.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="field-group">
+            <label>
+              When do you need the work completed?
+              <span class="required-mark">*</span>
+            </label>
+
+            <div class="option-card-grid">
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="timeframe"
+                  value="As soon as possible"
+                  required
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>As soon as possible</strong>
+                  <small>I am ready to hire now</small>
+                </span>
+              </label>
+
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="timeframe"
+                  value="Within one week"
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>Within one week</strong>
+                  <small>I need help fairly soon</small>
+                </span>
+              </label>
+
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="timeframe"
+                  value="Within one month"
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>Within one month</strong>
+                  <small>My schedule is flexible</small>
+                </span>
+              </label>
+
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="timeframe"
+                  value="Specific date"
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>Specific date</strong>
+                  <small>I have a date in mind</small>
+                </span>
+              </label>
+
+            </div>
+
+            <p class="field-error" id="timeframeError">
+              Please choose a project timeframe.
+            </p>
+          </div>
+
+
+          <div
+            class="field-group hidden-field"
+            id="preferredDateGroup"
+          >
+            <label for="preferredDate">
+              Preferred date
+            </label>
+
+            <input
+              type="date"
+              id="preferredDate"
+              name="preferredDate"
+            />
+          </div>
+
+
+          <div class="field-group">
+            <label for="budget">
+              Estimated budget
+              <span class="required-mark">*</span>
+            </label>
+
+            <select id="budget" name="budget" required>
+              <option value="">Select a budget range</option>
+              <option value="Under $100">Under $100</option>
+              <option value="$100 – $249">$100 – $249</option>
+              <option value="$250 – $499">$250 – $499</option>
+              <option value="$500 – $999">$500 – $999</option>
+              <option value="$1,000 – $2,499">
+                $1,000 – $2,499
+              </option>
+              <option value="$2,500 – $4,999">
+                $2,500 – $4,999
+              </option>
+              <option value="$5,000 or more">
+                $5,000 or more
+              </option>
+              <option value="Need professional estimate">
+                I need a professional estimate
+              </option>
+            </select>
+
+            <p class="field-error" id="budgetError">
+              Please select an estimated budget.
+            </p>
+          </div>
+
+
+          <label class="checkbox-card">
+            <input
+              type="checkbox"
+              id="materialsProvided"
+              name="materialsProvided"
+            />
+
+            <span class="custom-checkbox">✓</span>
+
+            <span>
+              <strong>I already have some or all materials</strong>
+              <small>
+                Examples: paint, curtain rods, fixtures or hardware
+              </small>
+            </span>
+          </label>
+
+        </section>
+
+
+        <!-- =========================
+             STEP 4: CONTACT
+        ========================== -->
+        <section class="form-step" data-step="4">
+
+          <div class="step-heading">
+            <span class="step-label">STEP 4</span>
+            <h2>How can Korvo reach you?</h2>
+            <p>
+              Your contact information will not be publicly shown
+              on the job listing.
+            </p>
+          </div>
+
+          <div class="two-column-grid">
+
+            <div class="field-group">
+              <label for="firstName">
+                First name
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                autocomplete="given-name"
+                placeholder="First name"
+                required
+              />
+
+              <p class="field-error" id="firstNameError">
+                Please enter your first name.
+              </p>
+            </div>
+
+
+            <div class="field-group">
+              <label for="lastName">
+                Last name
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                autocomplete="family-name"
+                placeholder="Last name"
+                required
+              />
+
+              <p class="field-error" id="lastNameError">
+                Please enter your last name.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="field-group">
+            <label for="email">
+              Email address
+              <span class="required-mark">*</span>
+            </label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+
+            <p class="field-error" id="emailError">
+              Please enter a valid email address.
+            </p>
+          </div>
+
+
+          <div class="field-group">
+            <label for="phone">
+              Phone number
+              <span class="required-mark">*</span>
+            </label>
+
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              autocomplete="tel"
+              placeholder="(404) 555-0123"
+              required
+            />
+
+            <p class="field-error" id="phoneError">
+              Please enter a valid phone number.
+            </p>
+          </div>
+
+
+          <div class="field-group">
+            <label>
+              Preferred communication method
+            </label>
+
+            <div class="option-card-grid contact-options">
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="contactPreference"
+                  value="Korvo messages"
+                  checked
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>Korvo messages</strong>
+                  <small>Keep communication inside Korvo</small>
+                </span>
+              </label>
+
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="contactPreference"
+                  value="Text message"
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>Text message</strong>
+                  <small>Receive updates by text</small>
+                </span>
+              </label>
+
+
+              <label class="option-card">
+                <input
+                  type="radio"
+                  name="contactPreference"
+                  value="Email"
+                />
+
+                <span class="option-radio"></span>
+
+                <span>
+                  <strong>Email</strong>
+                  <small>Receive updates by email</small>
+                </span>
+              </label>
+
+            </div>
+          </div>
+
+
+          <label class="checkbox-card agreement-card">
+            <input
+              type="checkbox"
+              id="termsAgreement"
+              name="termsAgreement"
+              required
+            />
+
+            <span class="custom-checkbox">✓</span>
+
+            <span>
+              <strong>I agree to Korvo’s terms and privacy policy</strong>
+              <small>
+                I understand that this demo does not process real
+                payments or professional bookings.
+              </small>
+            </span>
+          </label>
+
+          <p class="field-error" id="termsError">
+            You must agree before continuing.
+          </p>
+
+        </section>
+
+
+        <!-- =========================
+             STEP 5: REVIEW
+        ========================== -->
+        <section class="form-step" data-step="5">
+
+          <div class="step-heading">
+            <span class="step-label">STEP 5</span>
+            <h2>Review your job post</h2>
+            <p>
+              Make sure everything looks correct before posting.
+            </p>
+          </div>
+
+          <div class="review-container">
+
+            <article class="review-card">
+              <div class="review-card-header">
+                <h3>Service and project</h3>
+
+                <button
+                  type="button"
+                  class="edit-step-button"
+                  data-edit-step="1"
+                >
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-list">
+                <div class="review-row">
+                  <span>Service</span>
+                  <strong id="reviewService">Not selected</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Job title</span>
+                  <strong id="reviewJobTitle">Not provided</strong>
+                </div>
+
+                <div class="review-row full-review-row">
+                  <span>Description</span>
+                  <p id="reviewDescription">Not provided</p>
+                </div>
+
+                <div class="review-row">
+                  <span>Property</span>
+                  <strong id="reviewProperty">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Project size</span>
+                  <strong id="reviewSize">Not provided</strong>
+                </div>
+              </div>
+            </article>
+
+
+            <article class="review-card">
+              <div class="review-card-header">
+                <h3>Location and schedule</h3>
+
+                <button
+                  type="button"
+                  class="edit-step-button"
+                  data-edit-step="3"
+                >
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-list">
+                <div class="review-row">
+                  <span>Location</span>
+                  <strong id="reviewLocation">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Timeframe</span>
+                  <strong id="reviewTimeframe">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Budget</span>
+                  <strong id="reviewBudget">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Materials</span>
+                  <strong id="reviewMaterials">Not provided</strong>
+                </div>
+              </div>
+            </article>
+
+
+            <article class="review-card">
+              <div class="review-card-header">
+                <h3>Contact information</h3>
+
+                <button
+                  type="button"
+                  class="edit-step-button"
+                  data-edit-step="4"
+                >
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-list">
+                <div class="review-row">
+                  <span>Name</span>
+                  <strong id="reviewName">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Email</span>
+                  <strong id="reviewEmail">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Phone</span>
+                  <strong id="reviewPhone">Not provided</strong>
+                </div>
+
+                <div class="review-row">
+                  <span>Preferred contact</span>
+                  <strong id="reviewContactPreference">
+                    Korvo messages
+                  </strong>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+
+          <div class="posting-notice">
+            <span class="posting-notice-icon">🛡️</span>
+
+            <div>
+              <strong>Your information is protected</strong>
+
+              <p>
+                Your phone number, email and exact address will not
+                appear publicly on the job listing.
+              </p>
+            </div>
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             FORM NAVIGATION BUTTONS
+        ========================== -->
+        <div class="form-navigation">
+
+          <button
+            type="button"
+            class="secondary-button hidden-button"
+            id="backButton"
+          >
+            ← Back
+          </button>
+
+          <button
+            type="button"
+            class="primary-button"
+            id="nextButton"
+          >
+            Continue →
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button submit-button hidden-button"
+            id="submitButton"
+          >
+            Post My Job
+          </button>
+
+        </div>
+
+      </form>
+    </section>
+
+
+    <!-- =========================
+         SIDE INFORMATION
+    ========================== -->
+    <aside class="information-sidebar">
+
+      <article class="sidebar-card">
+        <span class="sidebar-icon">💬</span>
+
+        <h3>What happens next?</h3>
+
+        <ol class="sidebar-steps">
+          <li>
+            <span>1</span>
+            <p>
+              Your job is added to your Korvo dashboard.
+            </p>
+          </li>
+
+          <li>
+            <span>2</span>
+            <p>
+              Matching local professionals can express interest.
+            </p>
+          </li>
+
+          <li>
+            <span>3</span>
+            <p>
+              You compare profiles, reviews and verification badges.
+            </p>
+          </li>
+
+          <li>
+            <span>4</span>
+            <p>
+              You choose who you want to message or hire.
+            </p>
+          </li>
+        </ol>
+      </article>
+
+
+      <article class="sidebar-card">
+        <span class="sidebar-icon">🔒</span>
+
+        <h3>Your privacy matters</h3>
+
+        <p>
+          Korvo is designed to keep communication inside the platform
+          and reduce the need to publicly share personal information.
+        </p>
+
+        <ul class="sidebar-check-list">
+          <li>Private contact information</li>
+          <li>In-app communication</li>
+          <li>Professional verification badges</li>
+          <li>No obligation to hire</li>
+        </ul>
+      </article>
+
+
+      <article class="sidebar-card support-card">
+        <span class="sidebar-icon">?</span>
+
+        <h3>Need help posting?</h3>
+
+        <p>
+          Korvo support can help you choose the right service category
+          and describe your project.
+        </p>
+
+        <a href="contact.html" class="sidebar-link">
+          Contact Korvo Support →
+        </a>
+      </article>
+
+    </aside>
+
+  </main>
+
+
+  <!-- =========================
+       SUCCESS MODAL
+  ========================== -->
+  <div
+    class="success-modal"
+    id="successModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="successTitle"
+    aria-hidden="true"
+  >
+    <div class="success-modal-overlay"></div>
+
+    <div class="success-modal-content">
+
+      <div class="success-checkmark">✓</div>
+
+      <span class="success-label">JOB POSTED</span>
+
+      <h2 id="successTitle">
+        Your project is now on Korvo.
+      </h2>
+
+      <p>
+        Your job has been saved to this browser as a working demo.
+        Matching professionals would normally be notified next.
+      </p>
+
+      <div class="success-job-number">
+        <span>Job reference</span>
+        <strong id="jobReference">KORVO-000000</strong>
+      </div>
+
+      <div class="success-actions">
+        <a href="dashboard.html" class="primary-button">
+          View My Dashboard
+        </a>
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="postAnotherButton"
+        >
+          Post Another Job
+        </button>
+      </div>
+
+      <a href="index.html" class="return-home-link">
+        Return to Korvo home
+      </a>
+
+    </div>
+  </div>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="site-footer">
+
+    <div class="footer-container">
+
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">K</span>
+          <span class="logo-text">Korvo</span>
+        </a>
+
+        <p>
+          Connecting local customers with professionals who are
+          ready to work.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <div>
+          <h4>Customers</h4>
+          <a href="post-a-job.html">Post a Job</a>
+          <a href="index.html#professionals">
+            Find Professionals
+          </a>
+          <a href="dashboard.html">Customer Dashboard</a>
+        </div>
+
+        <div>
+          <h4>Professionals</h4>
+          <a href="join.html">Join Korvo</a>
+          <a href="verification.html">Verification Center</a>
+          <a href="professional-dashboard.html">
+            Professional Dashboard
+          </a>
+        </div>
+
+        <div>
+          <h4>Company</h4>
+          <a href="about.html">About Korvo</a>
+          <a href="contact.html">Contact</a>
+          <a href="#">Safety</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        © <span id="currentYear"></span> Korvo. All rights reserved.
+      </p>
+
+      <div>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+
+  </footer>
+
+
+  <!-- JavaScript for the multi-step form -->
+  <script src="post-a-job.js"></script>
+
+</body>
+</html>
