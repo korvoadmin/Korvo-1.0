@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Browse trusted local professionals on Korvo."
+  />
+
+  <title>Browse Professionals | Korvo</title>
+
+  <link rel="stylesheet" href="browse.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="logo" aria-label="Korvo home">
+        Korvo<span>.</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="browse.html" class="active">Browse Pros</a>
+        <a href="post-a-job.html">Post a Job</a>
+        <a href="mission.html">Our Mission</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="dashboard.html" class="login-link">Dashboard</a>
+        <a href="post-a-job.html" class="primary-button small-button">
+          Get Started
+        </a>
+
+        <button
+          type="button"
+          class="mobile-menu-button"
+          id="mobileMenuButton"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <nav
+      class="mobile-nav"
+      id="mobileNav"
+      aria-label="Mobile navigation"
+    >
+      <a href="index.html">Home</a>
+      <a href="browse.html">Browse Pros</a>
+      <a href="post-a-job.html">Post a Job</a>
+      <a href="mission.html">Our Mission</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="browse-hero">
+      <div class="hero-content">
+        <p class="eyebrow">Trusted local talent</p>
+
+        <h1>Find the right professional for your next project</h1>
+
+        <p class="hero-description">
+          Compare verified professionals, explore their services and request
+          a quote directly through Korvo.
+        </p>
+
+        <form class="hero-search" id="heroSearchForm">
+          <div class="search-field">
+            <label for="heroService">What service do you need?</label>
+
+            <input
+              type="search"
+              id="heroService"
+              placeholder="Example: motorized shades"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="search-field location-field">
+            <label for="heroLocation">Location</label>
+
+            <input
+              type="text"
+              id="heroLocation"
+              placeholder="Atlanta, GA"
+              autocomplete="off"
+            />
+          </div>
+
+          <button type="submit" class="primary-button search-button">
+            Search Professionals
+          </button>
+        </form>
+
+        <div class="popular-searches">
+          <span>Popular:</span>
+
+          <button type="button" class="popular-chip">
+            Window Treatments
+          </button>
+
+          <button type="button" class="popular-chip">
+            House Cleaning
+          </button>
+
+          <button type="button" class="popular-chip">
+            Landscaping
+          </button>
+
+          <button type="button" class="popular-chip">
+            Handyman
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketplace -->
+    <section class="marketplace-section">
+      <div class="marketplace-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters-panel" id="filtersPanel">
+          <div class="filters-heading">
+            <div>
+              <p class="section-label">Refine results</p>
+              <h2>Filters</h2>
+            </div>
+
+            <button type="button" class="clear-button" id="clearFilters">
+              Clear
+            </button>
+          </div>
+
+          <div class="filter-group">
+            <label for="serviceFilter">Service</label>
+
+            <select id="serviceFilter">
+              <option value="all">All services</option>
+              <option value="window-treatments">
+                Window Treatments
+              </option>
+              <option value="cleaning">House Cleaning</option>
+              <option value="landscaping">Landscaping</option>
+              <option value="handyman">Handyman</option>
+              <option value="painting">Painting</option>
+              <option value="electrical">Electrical</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="locationFilter">Location</label>
+
+            <input
+              type="text"
+              id="locationFilter"
+              placeholder="City or ZIP code"
+            />
+          </div>
+
+          <div class="filter-group">
+            <label for="ratingFilter">Minimum rating</label>
+
+            <select id="ratingFilter">
+              <option value="0">Any rating</option>
+              <option value="4">4.0 and above</option>
+              <option value="4.5">4.5 and above</option>
+              <option value="4.8">4.8 and above</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <p class="filter-title">Trust and experience</p>
+
+            <label class="checkbox-option">
+              <input type="checkbox" id="verifiedFilter" />
+              <span>Verified professionals only</span>
+            </label>
+
+            <label class="checkbox-option">
+              <input type="checkbox" id="backgroundFilter" />
+              <span>Background checked</span>
+            </label>
+
+            <label class="checkbox-option">
+              <input type="checkbox" id="availableFilter" />
+              <span>Available this week</span>
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <label for="priceFilter">Maximum starting price</label>
+
+            <select id="priceFilter">
+              <option value="9999">Any price</option>
+              <option value="50">$50 or less</option>
+              <option value="75">$75 or less</option>
+              <option value="100">$100 or less</option>
+              <option value="150">$150 or less</option>
+            </select>
+          </div>
+        </aside>
+
+        <!-- Results -->
+        <div class="results-area">
+          <div class="results-toolbar">
+            <div>
+              <p class="section-label">Local professionals</p>
+
+              <h2>
+                <span id="resultsCount">6</span>
+                professionals available
+              </h2>
+            </div>
+
+            <div class="toolbar-actions">
+              <button
+                type="button"
+                class="filter-toggle"
+                id="filterToggle"
+              >
+                Filters
+              </button>
+
+              <label class="sort-control">
+                <span>Sort by</span>
+
+                <select id="sortFilter">
+                  <option value="recommended">Recommended</option>
+                  <option value="rating-high">
+                    Highest rated
+                  </option>
+                  <option value="reviews-high">
+                    Most reviews
+                  </option>
+                  <option value="price-low">
+                    Lowest starting price
+                  </option>
+                  <option value="experience-high">
+                    Most experienced
+                  </option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="active-filters" id="activeFilters"></div>
+
+          <div
+            class="professionals-grid"
+            id="professionalsGrid"
+            aria-live="polite"
+          ></div>
+
+          <div class="empty-state hidden" id="emptyState">
+            <div class="empty-icon">⌕</div>
+
+            <h3>No professionals found</h3>
+
+            <p>
+              Try changing your search terms or removing some filters.
+            </p>
+
+            <button
+              type="button"
+              class="primary-button"
+              id="emptyClearButton"
+            >
+              Clear All Filters
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="professional-cta">
+      <div class="cta-content">
+        <div>
+          <p class="eyebrow light-eyebrow">Grow your business</p>
+
+          <h2>Are you a local professional?</h2>
+
+          <p>
+            Build your profile, connect with customers and grow your
+            reputation through Korvo.
+          </p>
+        </div>
+
+        <a href="dashboard.html" class="secondary-button">
+          Join as a Professional
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <a href="index.html" class="logo footer-logo">
+          Korvo<span>.</span>
+        </a>
+
+        <p>
+          Connecting local customers with trusted professionals.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="browse.html">Browse Professionals</a>
+        <a href="post-a-job.html">Post a Job</a>
+        <a href="mission.html">Our Mission</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; <span id="currentYear"></span> Korvo. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="browse.js"></script>
+</body>
+</html>
