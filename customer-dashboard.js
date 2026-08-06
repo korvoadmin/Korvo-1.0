@@ -715,6 +715,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const budget =
       job.budget ||
       "Budget not specified";
+      const timeframe =
+  job.timeframe ||
+  "Flexible";
+
+const reference =
+  job.reference ||
+  job.jobReference ||
+  "KRV-000000";
+
+const customer =
+  job.customerName ||
+  "Customer";
 
     const submittedAt =
       job.submittedAt ||
@@ -752,11 +764,24 @@ document.addEventListener("DOMContentLoaded", () => {
         </p>
 
         <div class="job-footer">
-          <span>Budget: ${budget}</span>
-          <span>0 quotes received</span>
-        </div>
 
-      </div>
+    <span>
+        💰 ${budget}
+    </span>
+
+    <span>
+        📅 ${timeframe}
+    </span>
+
+    <span>
+        🆔 ${reference}
+    </span>
+
+</div>
+
+<p class="job-customer">
+    Posted by ${customer}
+</p>
 
       <div class="job-actions">
 
