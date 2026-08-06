@@ -551,12 +551,16 @@ function createProfessionalCard(professional) {
       </a>
 
       <a
-        href="post-a-job.html"
-        class="quote-button"
-        data-professional="${professional.name}"
-      >
-        Request Quote
-      </a>
+  href="${
+    professional.profilePage !== "#"
+      ? `${professional.profilePage}?quote=open`
+      : "post-a-job.html"
+  }"
+  class="quote-button"
+  data-professional="${professional.name}"
+>
+  Request Quote
+</a>
     </div>
   `;
 
