@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Korvo professional dashboard for finding local jobs and submitting quotes."
+  />
+
+  <title>Professional Dashboard | Korvo</title>
+
+  <link
+    rel="stylesheet"
+    href="professional-dashboard.css"
+  />
+</head>
+
+<body>
+  <!-- =========================
+       Header
+       ========================= -->
+
+  <header class="site-header">
+    <div class="header-container">
+      <a
+        href="index.html"
+        class="logo"
+        aria-label="Korvo home"
+      >
+        Korvo
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html">Home</a>
+
+        <a href="browse.html">
+          Browse Professionals
+        </a>
+
+        <a
+          href="professional-dashboard.html"
+          class="active"
+        >
+          Professional Dashboard
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button
+          type="button"
+          class="notification-button"
+          id="notificationButton"
+          aria-label="View notifications"
+        >
+          🔔
+
+          <span
+            class="notification-count"
+            id="notificationCount"
+          >
+            0
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="profile-button"
+          id="professionalProfileButton"
+          aria-expanded="false"
+        >
+          <span class="profile-avatar">
+            CC
+          </span>
+
+          <span class="profile-name">
+            Chris Customs
+          </span>
+
+          <span class="profile-arrow">
+            ▾
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="mobile-menu-button"
+          id="mobileMenuButton"
+          aria-label="Open navigation"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+
+      <div
+        class="profile-menu hidden"
+        id="professionalMenu"
+      >
+        <a href="profile.html">
+          View Public Profile
+        </a>
+
+        <button
+          type="button"
+          id="accountSettingsButton"
+        >
+          Account Settings
+        </button>
+
+        <button
+          type="button"
+          id="logoutButton"
+        >
+          Log Out
+        </button>
+      </div>
+    </div>
+
+    <nav
+      class="mobile-nav"
+      id="mobileNav"
+    >
+      <a href="index.html">Home</a>
+
+      <a href="browse.html">
+        Browse Professionals
+      </a>
+
+      <a href="professional-dashboard.html">
+        Professional Dashboard
+      </a>
+    </nav>
+  </header>
+
+  <!-- =========================
+       Main Content
+       ========================= -->
+
+  <main class="dashboard-page">
+    <div class="dashboard-container">
+      <!-- Welcome Area -->
+
+      <section class="welcome-section">
+        <div>
+          <p class="eyebrow">
+            PROFESSIONAL DASHBOARD
+          </p>
+
+          <h1>
+            Welcome back, Chris
+          </h1>
+
+          <p class="welcome-description">
+            Find new customer projects, submit quotes,
+            and grow your business through Korvo.
+          </p>
+        </div>
+
+        <a
+          href="profile.html"
+          class="primary-button"
+        >
+          View My Profile
+        </a>
+      </section>
+
+      <!-- Dashboard Statistics -->
+
+      <section
+        class="stats-grid"
+        aria-label="Professional statistics"
+      >
+        <article class="stat-card">
+          <div class="stat-icon">
+            💼
+          </div>
+
+          <div>
+            <p class="stat-label">
+              Available Jobs
+            </p>
+
+            <p
+              class="stat-value"
+              id="availableJobsCount"
+            >
+              0
+            </p>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">
+            📄
+          </div>
+
+          <div>
+            <p class="stat-label">
+              Quotes Submitted
+            </p>
+
+            <p
+              class="stat-value"
+              id="submittedQuotesCount"
+            >
+              0
+            </p>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">
+            ✅
+          </div>
+
+          <div>
+            <p class="stat-label">
+              Jobs Won
+            </p>
+
+            <p
+              class="stat-value"
+              id="jobsWonCount"
+            >
+              0
+            </p>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">
+            ⭐
+          </div>
+
+          <div>
+            <p class="stat-label">
+              Rating
+            </p>
+
+            <p class="stat-value">
+              4.9
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <!-- Main Dashboard Layout -->
+
+      <div class="dashboard-layout">
+        <!-- Left Column -->
+
+        <div class="dashboard-main">
+          <section class="dashboard-card">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">
+                  LOCAL OPPORTUNITIES
+                </p>
+
+                <h2>
+                  Available Customer Jobs
+                </h2>
+
+                <p>
+                  Jobs posted by customers will appear
+                  here automatically.
+                </p>
+              </div>
+
+              <div class="filter-controls">
+                <label
+                  for="serviceFilter"
+                  class="sr-only"
+                >
+                  Filter jobs by service
+                </label>
+
+                <select id="serviceFilter">
+                  <option value="all">
+                    All Services
+                  </option>
+
+                  <option value="cleaning">
+                    Cleaning
+                  </option>
+
+                  <option value="painting">
+                    Painting
+                  </option>
+
+                  <option value="electrical">
+                    Electrical
+                  </option>
+
+                  <option value="landscaping">
+                    Landscaping
+                  </option>
+
+                  <option value="moving">
+                    Moving
+                  </option>
+
+                  <option value="window treatments">
+                    Window Treatments
+                  </option>
+
+                  <option value="other">
+                    Other Services
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div
+              class="jobs-list"
+              id="availableJobsList"
+            >
+              <!-- Jobs will be inserted here by JavaScript -->
+
+              <div
+                class="empty-state"
+                id="jobsEmptyState"
+              >
+                <div class="empty-state-icon">
+                  🛠️
+                </div>
+
+                <h3>
+                  No customer jobs yet
+                </h3>
+
+                <p>
+                  Post a test job from the customer
+                  side and it will appear here.
+                </p>
+
+                <a
+                  href="post-a-job.html"
+                  class="secondary-button"
+                >
+                  Post a Test Job
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Submitted Quotes -->
+
+          <section class="dashboard-card">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">
+                  YOUR ACTIVITY
+                </p>
+
+                <h2>
+                  Submitted Quotes
+                </h2>
+
+                <p>
+                  Track the quotes you have sent to
+                  Korvo customers.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="quotes-list"
+              id="submittedQuotesList"
+            >
+              <div
+                class="empty-state compact"
+                id="quotesEmptyState"
+              >
+                <div class="empty-state-icon">
+                  📄
+                </div>
+
+                <h3>
+                  No quotes submitted
+                </h3>
+
+                <p>
+                  Your submitted quotes will appear here.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+
+        <aside class="dashboard-sidebar">
+          <!-- Profile Completion -->
+
+          <section class="sidebar-card">
+            <div class="sidebar-card-header">
+              <h2>
+                Profile Strength
+              </h2>
+
+              <span class="completion-percentage">
+                80%
+              </span>
+            </div>
+
+            <div
+              class="progress-track"
+              aria-label="Profile completion: 80 percent"
+            >
+              <div
+                class="progress-bar"
+                style="width: 80%;"
+              ></div>
+            </div>
+
+            <p>
+              Complete your profile to build more
+              customer trust and receive more work.
+            </p>
+
+            <ul class="profile-checklist">
+              <li class="completed">
+                ✓ Business information
+              </li>
+
+              <li class="completed">
+                ✓ Service categories
+              </li>
+
+              <li class="completed">
+                ✓ Profile description
+              </li>
+
+              <li>
+                Add project photos
+              </li>
+
+              <li>
+                Complete background verification
+              </li>
+            </ul>
+
+            <a
+              href="profile.html"
+              class="full-width-button"
+            >
+              Complete Profile
+            </a>
+          </section>
+
+          <!-- Quick Actions -->
+
+          <section class="sidebar-card">
+            <h2>
+              Quick Actions
+            </h2>
+
+            <div class="quick-actions">
+              <a
+                href="profile.html"
+                class="quick-action"
+              >
+                <span class="quick-action-icon">
+                  👤
+                </span>
+
+                <span>
+                  Edit Professional Profile
+                </span>
+              </a>
+
+              <button
+                type="button"
+                class="quick-action"
+                id="messagesButton"
+              >
+                <span class="quick-action-icon">
+                  💬
+                </span>
+
+                <span>
+                  Open Messages
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="quick-action"
+                id="availabilityButton"
+              >
+                <span class="quick-action-icon">
+                  📅
+                </span>
+
+                <span>
+                  Update Availability
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="quick-action"
+                id="servicesButton"
+              >
+                <span class="quick-action-icon">
+                  🧰
+                </span>
+
+                <span>
+                  Manage Services
+                </span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Notifications -->
+
+          <section
+            class="sidebar-card"
+            id="notificationsSection"
+          >
+            <div class="sidebar-card-header">
+              <h2>
+                Notifications
+              </h2>
+
+              <button
+                type="button"
+                class="text-button"
+                id="markAllReadButton"
+              >
+                Mark all read
+              </button>
+            </div>
+
+            <div
+              class="notifications-list"
+              id="notificationsList"
+            >
+              <article class="notification-item unread">
+                <span class="notification-icon">
+                  💼
+                </span>
+
+                <div>
+                  <p>
+                    New customer jobs will appear here.
+                  </p>
+
+                  <span>
+                    Just now
+                  </span>
+                </div>
+
+                <span class="unread-dot"></span>
+              </article>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================
+       Quote Modal
+       ========================= -->
+
+  <div
+    class="modal-overlay hidden"
+    id="quoteModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="quoteModalTitle"
+  >
+    <div class="modal-card">
+      <button
+        type="button"
+        class="modal-close-button"
+        id="closeQuoteModalButton"
+        aria-label="Close quote form"
+      >
+        ×
+      </button>
+
+      <div class="modal-header">
+        <p class="eyebrow">
+          SUBMIT A QUOTE
+        </p>
+
+        <h2 id="quoteModalTitle">
+          Send a Quote
+        </h2>
+
+        <p>
+          Enter your price and message for
+          <strong id="selectedJobTitle">
+            this customer project
+          </strong>.
+        </p>
+      </div>
+
+      <form id="quoteForm">
+        <input
+          type="hidden"
+          id="selectedJobReference"
+        />
+
+        <div class="form-group">
+          <label for="quoteAmount">
+            Quote Amount
+          </label>
+
+          <div class="money-input">
+            <span>$</span>
+
+            <input
+              type="number"
+              id="quoteAmount"
+              min="1"
+              step="1"
+              placeholder="500"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="quoteTimeframe">
+            Estimated Completion Time
+          </label>
+
+          <select
+            id="quoteTimeframe"
+            required
+          >
+            <option value="">
+              Select a timeframe
+            </option>
+
+            <option value="Same day">
+              Same day
+            </option>
+
+            <option value="1–2 days">
+              1–2 days
+            </option>
+
+            <option value="3–5 days">
+              3–5 days
+            </option>
+
+            <option value="1 week">
+              1 week
+            </option>
+
+            <option value="2–4 weeks">
+              2–4 weeks
+            </option>
+
+            <option value="Custom schedule">
+              Custom schedule
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="quoteMessage">
+            Message to Customer
+          </label>
+
+          <textarea
+            id="quoteMessage"
+            rows="5"
+            maxlength="800"
+            placeholder="Explain what is included in your quote, your experience, and when you are available."
+            required
+          ></textarea>
+
+          <div class="character-counter">
+            <span id="quoteMessageCount">
+              0
+            </span>
+            / 800
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="secondary-button"
+            id="cancelQuoteButton"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+          >
+            Submit Quote
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================
+       Footer
+       ========================= -->
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <a
+          href="index.html"
+          class="footer-logo"
+        >
+          Korvo
+        </a>
+
+        <p>
+          Connecting trusted local professionals
+          with customers who need work completed.
+        </p>
+      </div>
+
+      <p>
+        © <span id="currentYear"></span> Korvo.
+        All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="professional-dashboard.js"></script>
+</body>
+</html>
