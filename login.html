@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Log in to your Korvo account."
+  >
+
+  <title>Log In | Korvo</title>
+
+  <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="header-container">
+
+      <a href="index.html" class="logo" aria-label="Korvo home">
+        Korvo<span>.</span>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse Professionals</a>
+        <a href="post-a-job.html">Post a Job</a>
+        <a href="mission.html">Our Mission</a>
+      </nav>
+
+      <a href="signup.html" class="header-button">
+        Create Account
+      </a>
+
+    </div>
+  </header>
+
+
+  <main class="auth-page">
+
+    <section class="auth-visual">
+
+      <div class="visual-content">
+
+        <p class="eyebrow">
+          Welcome back
+        </p>
+
+        <h1>
+          Your next project starts with
+          <span>the right connection.</span>
+        </h1>
+
+        <p class="visual-description">
+          Log in to manage your jobs, compare quotes, save professionals
+          and stay connected through Korvo.
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+
+            <div>
+              <strong>Manage your projects</strong>
+              <p>Track active jobs and completed work.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+
+            <div>
+              <strong>Compare professional quotes</strong>
+              <p>Review pricing, availability and profiles.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+
+            <div>
+              <strong>Keep communication organized</strong>
+              <p>Access messages and project updates in one place.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="auth-form-section">
+
+      <div class="auth-card">
+
+        <div class="auth-heading">
+
+          <p class="eyebrow">
+            Account access
+          </p>
+
+          <h2>Log in to Korvo</h2>
+
+          <p>
+            Enter your email address and password to continue.
+          </p>
+
+        </div>
+
+
+        <form id="loginForm">
+
+          <div class="form-group">
+
+            <label for="loginEmail">
+              Email address
+            </label>
+
+            <input
+              type="email"
+              id="loginEmail"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            >
+
+            <p class="field-error" id="emailError">
+              Enter a valid email address.
+            </p>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <div class="label-row">
+              <label for="loginPassword">
+                Password
+              </label>
+
+              <a href="forgot-password.html">
+                Forgot password?
+              </a>
+            </div>
+
+            <div class="password-field">
+
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="password-toggle"
+                id="passwordToggle"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+            <p class="field-error" id="passwordError">
+              Password must contain at least 6 characters.
+            </p>
+
+          </div>
+
+
+          <label class="remember-option">
+
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+            >
+
+            <span>Remember me on this device</span>
+
+          </label>
+
+
+          <button
+            type="submit"
+            class="primary-button full-button"
+          >
+            Log In
+          </button>
+
+        </form>
+
+
+        <div class="auth-divider">
+          <span>Demo accounts</span>
+        </div>
+
+
+        <div class="demo-buttons">
+
+          <button
+            type="button"
+            class="demo-button"
+            id="customerDemoButton"
+          >
+            <span>👤</span>
+
+            <div>
+              <strong>Customer Demo</strong>
+              <small>Open the customer dashboard</small>
+            </div>
+          </button>
+
+
+          <button
+            type="button"
+            class="demo-button"
+            id="professionalDemoButton"
+          >
+            <span>🛠️</span>
+
+            <div>
+              <strong>Professional Demo</strong>
+              <small>Open the contractor dashboard</small>
+            </div>
+          </button>
+
+        </div>
+
+
+        <p class="auth-switch">
+          Do not have a Korvo account?
+          <a href="signup.html">Create an account</a>
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer class="site-footer">
+
+    <div class="footer-container">
+
+      <a href="index.html" class="logo">
+        Korvo<span>.</span>
+      </a>
+
+      <p>
+        Connecting local customers with trusted professionals.
+      </p>
+
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="contact.html">Support</a>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <script src="auth.js"></script>
+
+</body>
+</html>
