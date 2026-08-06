@@ -210,6 +210,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     projectDateInput.min = `${year}-${month}-${day}`;
   }
+const pageParameters = new URLSearchParams(window.location.search);
+
+if (pageParameters.get("quote") === "open") {
+  openQuoteModal();
+}
 
   loadSavedProfessional();
 });
