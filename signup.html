@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Create a Korvo customer or professional account."
+  >
+
+  <title>Create Account | Korvo</title>
+
+  <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="header-container">
+
+      <a href="index.html" class="logo" aria-label="Korvo home">
+        Korvo<span>.</span>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse Professionals</a>
+        <a href="post-a-job.html">Post a Job</a>
+        <a href="mission.html">Our Mission</a>
+      </nav>
+
+      <a href="login.html" class="header-button">
+        Log In
+      </a>
+
+    </div>
+  </header>
+
+
+  <main class="auth-page">
+
+    <section class="auth-visual">
+
+      <div class="visual-content">
+
+        <p class="eyebrow">
+          Join Korvo
+        </p>
+
+        <h1>
+          One platform.
+          <span>Two ways to get things done.</span>
+        </h1>
+
+        <p class="visual-description">
+          Create a customer account to find trusted professionals, or
+          join as a professional to connect with local customers.
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+
+            <div>
+              <strong>Customers can post projects</strong>
+              <p>
+                Describe the work, compare quotes and manage everything
+                from one dashboard.
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+
+            <div>
+              <strong>Professionals can grow their business</strong>
+              <p>
+                Build a profile, receive opportunities and manage
+                customer requests.
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+
+            <div>
+              <strong>Trust stays at the center</strong>
+              <p>
+                Profiles, reviews and verification tools help users
+                make informed decisions.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="auth-form-section">
+
+      <div class="auth-card">
+
+        <div class="auth-heading">
+
+          <p class="eyebrow">
+            Get started
+          </p>
+
+          <h2>Create your Korvo account</h2>
+
+          <p>
+            Choose your account type and enter your information.
+          </p>
+
+        </div>
+
+
+        <form id="signupForm">
+
+          <div class="account-type-options">
+
+            <label class="account-type-card">
+
+              <input
+                type="radio"
+                name="accountType"
+                value="customer"
+                checked
+              >
+
+              <strong>👤 I need a professional</strong>
+
+              <small>
+                Post projects, compare quotes and hire local help.
+              </small>
+
+            </label>
+
+
+            <label class="account-type-card">
+
+              <input
+                type="radio"
+                name="accountType"
+                value="professional"
+              >
+
+              <strong>🛠️ I am a professional</strong>
+
+              <small>
+                Build your profile and connect with customers.
+              </small>
+
+            </label>
+
+          </div>
+
+
+          <div class="two-column-grid">
+
+            <div class="form-group">
+
+              <label for="signupFirstName">
+                First name
+              </label>
+
+              <input
+                type="text"
+                id="signupFirstName"
+                name="firstName"
+                placeholder="First name"
+                autocomplete="given-name"
+                required
+              >
+
+              <p class="field-error">
+                Enter your first name.
+              </p>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="signupLastName">
+                Last name
+              </label>
+
+              <input
+                type="text"
+                id="signupLastName"
+                name="lastName"
+                placeholder="Last name"
+                autocomplete="family-name"
+                required
+              >
+
+              <p class="field-error">
+                Enter your last name.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="signupEmail">
+              Email address
+            </label>
+
+            <input
+              type="email"
+              id="signupEmail"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            >
+
+            <p class="field-error">
+              Enter a valid email address.
+            </p>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="signupPhone">
+              Phone number
+            </label>
+
+            <input
+              type="tel"
+              id="signupPhone"
+              name="phone"
+              placeholder="(404) 555-0123"
+              autocomplete="tel"
+              required
+            >
+
+            <p class="field-error">
+              Enter a valid phone number.
+            </p>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="signupPassword">
+              Password
+            </label>
+
+            <div class="password-field">
+
+              <input
+                type="password"
+                id="signupPassword"
+                name="password"
+                placeholder="Create a password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="password-toggle"
+                id="signupPasswordToggle"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+            <p class="field-error">
+              Password must contain at least 6 characters.
+            </p>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="confirmPassword">
+              Confirm password
+            </label>
+
+            <div class="password-field">
+
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Enter your password again"
+                autocomplete="new-password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="password-toggle"
+                id="confirmPasswordToggle"
+                aria-label="Show confirmed password"
+              >
+                Show
+              </button>
+
+            </div>
+
+            <p class="field-error">
+              Your passwords must match.
+            </p>
+
+          </div>
+
+
+          <label class="terms-option">
+
+            <input
+              type="checkbox"
+              id="signupTerms"
+              name="terms"
+              required
+            >
+
+            <span>
+              I agree to Korvo’s
+              <a href="#">Terms of Service</a>
+              and
+              <a href="#">Privacy Policy</a>.
+            </span>
+
+          </label>
+
+
+          <button
+            type="submit"
+            class="primary-button full-button"
+          >
+            Create Account
+          </button>
+
+        </form>
+
+
+        <p class="auth-switch">
+          Already have a Korvo account?
+          <a href="login.html">Log in</a>
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer class="site-footer">
+
+    <div class="footer-container">
+
+      <a href="index.html" class="logo">
+        Korvo<span>.</span>
+      </a>
+
+      <p>
+        Connecting local customers with trusted professionals.
+      </p>
+
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="contact.html">Support</a>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <script src="auth.js"></script>
+
+</body>
+</html>
