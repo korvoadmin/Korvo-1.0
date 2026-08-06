@@ -339,10 +339,7 @@ function createProfessionalCard(professional) {
     )
     .join("");
 
-  const profileLink =
-    professional.profilePage === "#"
-      ? `href="#" data-coming-soon="true"`
-      : `href="${professional.profilePage}"`;
+  const profileLink = `href="chris-profile.html"`;
 
   card.innerHTML = `
     <div class="avatar-wrap">
