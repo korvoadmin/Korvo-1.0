@@ -1,11 +1,16 @@
 "use strict";
 
 /*
-  Temporary professional data.
+  Korvo Browse Professionals
 
-  Later, this information will come from Firebase,
-  Supabase or another Korvo database.
+  Temporary professional data.
+  Later, this information can come from Firebase,
+  Supabase, or another Korvo database.
 */
+
+/* =========================
+   Professional Data
+   ========================= */
 
 const professionals = [
   {
@@ -26,23 +31,30 @@ const professionals = [
     available: true,
     featured: true,
     online: true,
+
+    /* Chris has a completed profile page */
     profilePage: "chris-profile.html",
+
     description:
       "Professional installation of drapery, blinds, shutters, motorized shades and custom window treatment systems.",
+
     services: [
       "Motorized Shades",
       "Drapery",
       "Blinds",
       "Shutters"
     ],
+
     trustBadges: [
       "Identity Verified",
       "Background Checked",
       "Experienced"
     ],
-    avatarStart: "#7557ff",
-    avatarEnd: "#4225bd"
+
+    avatarStart: "#237ed6",
+    avatarEnd: "#20b978"
   },
+
   {
     id: 2,
     name: "Prestige Estate Cleaning",
@@ -61,22 +73,29 @@ const professionals = [
     available: true,
     featured: false,
     online: true,
+
+    /* Profile has not been built yet */
     profilePage: "#",
+
     description:
       "Detailed cleaning services for homes, estates and luxury properties throughout the Atlanta area.",
+
     services: [
       "Deep Cleaning",
       "Standard Cleaning",
       "Move-In Cleaning",
       "Laundry"
     ],
+
     trustBadges: [
       "Identity Verified",
       "Background Checked"
     ],
+
     avatarStart: "#0f9d80",
     avatarEnd: "#08644f"
   },
+
   {
     id: 3,
     name: "Greenline Outdoor Solutions",
@@ -95,22 +114,28 @@ const professionals = [
     available: true,
     featured: false,
     online: false,
+
     profilePage: "#",
+
     description:
       "Reliable lawn maintenance, landscape improvements and seasonal outdoor property services.",
+
     services: [
       "Lawn Care",
       "Mulching",
       "Cleanup",
       "Landscaping"
     ],
+
     trustBadges: [
       "Identity Verified",
       "Top Rated"
     ],
+
     avatarStart: "#42a65a",
     avatarEnd: "#246a33"
   },
+
   {
     id: 4,
     name: "Metro Home Repair",
@@ -129,23 +154,29 @@ const professionals = [
     available: false,
     featured: false,
     online: false,
+
     profilePage: "#",
+
     description:
       "General home repairs, furniture assembly, fixture installation and property maintenance.",
+
     services: [
       "Home Repairs",
       "Assembly",
       "Mounting",
       "Fixtures"
     ],
+
     trustBadges: [
       "Identity Verified",
       "Background Checked",
       "10 Years Experience"
     ],
+
     avatarStart: "#db7c31",
     avatarEnd: "#9a4114"
   },
+
   {
     id: 5,
     name: "Northside Premier Painting",
@@ -164,21 +195,27 @@ const professionals = [
     available: true,
     featured: false,
     online: true,
+
     profilePage: "#",
+
     description:
       "Clean, professional painting for residential interiors, exteriors and home improvement projects.",
+
     services: [
       "Interior Painting",
       "Exterior Painting",
       "Trim",
       "Touch-Ups"
     ],
+
     trustBadges: [
       "7 Years Experience"
     ],
+
     avatarStart: "#4278c7",
     avatarEnd: "#22477e"
   },
+
   {
     id: 6,
     name: "BrightPath Electrical",
@@ -197,47 +234,81 @@ const professionals = [
     available: false,
     featured: true,
     online: false,
+
     profilePage: "#",
+
     description:
       "Residential electrical troubleshooting, lighting installation, outlets and smart-home upgrades.",
+
     services: [
       "Lighting",
       "Outlets",
       "Troubleshooting",
       "Smart Home"
     ],
+
     trustBadges: [
       "Identity Verified",
       "Background Checked",
       "Licensed"
     ],
+
     avatarStart: "#e7a915",
     avatarEnd: "#a16e00"
   }
 ];
 
-/* Page Elements */
+/* =========================
+   Page Elements
+   ========================= */
 
 const professionalsGrid = document.getElementById(
   "professionalsGrid"
 );
 
-const resultsCount = document.getElementById("resultsCount");
-const emptyState = document.getElementById("emptyState");
-const activeFilters = document.getElementById("activeFilters");
+const resultsCount = document.getElementById(
+  "resultsCount"
+);
+
+const emptyState = document.getElementById(
+  "emptyState"
+);
+
+const activeFilters = document.getElementById(
+  "activeFilters"
+);
 
 const heroSearchForm = document.getElementById(
   "heroSearchForm"
 );
 
-const heroService = document.getElementById("heroService");
-const heroLocation = document.getElementById("heroLocation");
+const heroService = document.getElementById(
+  "heroService"
+);
 
-const serviceFilter = document.getElementById("serviceFilter");
-const locationFilter = document.getElementById("locationFilter");
-const ratingFilter = document.getElementById("ratingFilter");
-const priceFilter = document.getElementById("priceFilter");
-const sortFilter = document.getElementById("sortFilter");
+const heroLocation = document.getElementById(
+  "heroLocation"
+);
+
+const serviceFilter = document.getElementById(
+  "serviceFilter"
+);
+
+const locationFilter = document.getElementById(
+  "locationFilter"
+);
+
+const ratingFilter = document.getElementById(
+  "ratingFilter"
+);
+
+const priceFilter = document.getElementById(
+  "priceFilter"
+);
+
+const sortFilter = document.getElementById(
+  "sortFilter"
+);
 
 const verifiedFilter = document.getElementById(
   "verifiedFilter"
@@ -259,28 +330,47 @@ const emptyClearButton = document.getElementById(
   "emptyClearButton"
 );
 
-const filterToggle = document.getElementById("filterToggle");
-const filtersPanel = document.getElementById("filtersPanel");
+const filterToggle = document.getElementById(
+  "filterToggle"
+);
+
+const filtersPanel = document.getElementById(
+  "filtersPanel"
+);
 
 const mobileMenuButton = document.getElementById(
   "mobileMenuButton"
 );
 
-const mobileNav = document.getElementById("mobileNav");
+const mobileNav = document.getElementById(
+  "mobileNav"
+);
 
-/* Utility Functions */
+const currentYear = document.getElementById(
+  "currentYear"
+);
+
+/* =========================
+   Utility Functions
+   ========================= */
 
 function normalizeText(value) {
-  return value.toLowerCase().trim();
+  return String(value || "")
+    .toLowerCase()
+    .trim();
 }
 
 function createStarDisplay(rating) {
   const roundedRating = Math.round(rating);
-  return "★".repeat(roundedRating) + "☆".repeat(5 - roundedRating);
+
+  return (
+    "★".repeat(roundedRating) +
+    "☆".repeat(5 - roundedRating)
+  );
 }
 
 function formatServiceName(service) {
-  const names = {
+  const serviceNames = {
     "window-treatments": "Window Treatments",
     cleaning: "House Cleaning",
     landscaping: "Landscaping",
@@ -289,10 +379,12 @@ function formatServiceName(service) {
     electrical: "Electrical"
   };
 
-  return names[service] || service;
+  return serviceNames[service] || service;
 }
 
-/* Card Creation */
+/* =========================
+   Professional Card Creation
+   ========================= */
 
 function createProfessionalCard(professional) {
   const card = document.createElement("article");
@@ -300,6 +392,8 @@ function createProfessionalCard(professional) {
   card.className = professional.featured
     ? "professional-card featured-card"
     : "professional-card";
+
+  card.dataset.professionalId = String(professional.id);
 
   const verifiedBadge = professional.verified
     ? `
@@ -326,7 +420,9 @@ function createProfessionalCard(professional) {
   const serviceTags = professional.services
     .map(
       (service) => `
-        <span class="service-tag">${service}</span>
+        <span class="service-tag">
+          ${service}
+        </span>
       `
     )
     .join("");
@@ -334,12 +430,24 @@ function createProfessionalCard(professional) {
   const trustBadges = professional.trustBadges
     .map(
       (badge) => `
-        <span class="trust-badge">${badge}</span>
+        <span class="trust-badge">
+          ${badge}
+        </span>
       `
     )
     .join("");
 
-  const profileLink = `href="chris-profile.html"`;
+  /*
+    Chris has a real profile page.
+
+    Other professionals use "#" until their
+    profile pages are created.
+  */
+
+  const profileLink =
+    professional.profilePage === "#"
+      ? `href="#" data-coming-soon="true"`
+      : `href="${professional.profilePage}"`;
 
   card.innerHTML = `
     <div class="avatar-wrap">
@@ -386,7 +494,9 @@ function createProfessionalCard(professional) {
             (${professional.reviews} reviews)
           </span>
 
-          <span class="dot-divider">•</span>
+          <span class="dot-divider">
+            •
+          </span>
 
           <span class="location-text">
             ${professional.city}, ${professional.state}
@@ -411,11 +521,17 @@ function createProfessionalCard(professional) {
 
     <div class="professional-side">
       <div class="pricing-block">
-        <p class="starting-label">Starting at</p>
+        <p class="starting-label">
+          Starting at
+        </p>
 
-        <p class="price">$${professional.price}</p>
+        <p class="price">
+          $${professional.price}
+        </p>
 
-        <p class="price-unit">${professional.priceUnit}</p>
+        <p class="price-unit">
+          ${professional.priceUnit}
+        </p>
 
         <p class="availability">
           ${
@@ -426,7 +542,11 @@ function createProfessionalCard(professional) {
         </p>
       </div>
 
-      <a class="profile-button" ${profileLink}>
+      <a
+        class="profile-button"
+        ${profileLink}
+        data-professional="${professional.name}"
+      >
         View Profile
       </a>
 
@@ -443,131 +563,179 @@ function createProfessionalCard(professional) {
   return card;
 }
 
-/* Filtering */
+/* =========================
+   Filtering
+   ========================= */
 
 function getFilteredProfessionals() {
   const selectedService = serviceFilter.value;
-  const selectedLocation = normalizeText(locationFilter.value);
-  const selectedRating = Number(ratingFilter.value);
-  const selectedPrice = Number(priceFilter.value);
-  const searchText = normalizeText(heroService.value);
 
-  let filtered = professionals.filter((professional) => {
-    const searchableText = normalizeText(
-      [
-        professional.name,
-        professional.category,
-        professional.description,
-        professional.city,
-        professional.state,
-        ...professional.services
-      ].join(" ")
-    );
+  const selectedLocation = normalizeText(
+    locationFilter.value
+  );
 
-    const matchesSearch =
-      !searchText || searchableText.includes(searchText);
+  const selectedRating = Number(
+    ratingFilter.value
+  );
 
-    const matchesService =
-      selectedService === "all" ||
-      professional.service === selectedService;
+  const selectedPrice = Number(
+    priceFilter.value
+  );
 
-    const professionalLocation = normalizeText(
-      `${professional.city} ${professional.state}`
-    );
+  const searchText = normalizeText(
+    heroService.value
+  );
 
-    const matchesLocation =
-      !selectedLocation ||
-      professionalLocation.includes(selectedLocation);
+  let filteredProfessionals = professionals.filter(
+    (professional) => {
+      const searchableText = normalizeText(
+        [
+          professional.name,
+          professional.category,
+          professional.description,
+          professional.city,
+          professional.state,
+          ...professional.services
+        ].join(" ")
+      );
 
-    const matchesRating =
-      professional.rating >= selectedRating;
+      const matchesSearch =
+        !searchText ||
+        searchableText.includes(searchText);
 
-    const matchesPrice =
-      professional.price <= selectedPrice;
+      const matchesService =
+        selectedService === "all" ||
+        professional.service === selectedService;
 
-    const matchesVerified =
-      !verifiedFilter.checked || professional.verified;
+      const professionalLocation = normalizeText(
+        `${professional.city} ${professional.state}`
+      );
 
-    const matchesBackground =
-      !backgroundFilter.checked ||
-      professional.backgroundChecked;
+      const matchesLocation =
+        !selectedLocation ||
+        professionalLocation.includes(selectedLocation);
 
-    const matchesAvailability =
-      !availableFilter.checked || professional.available;
+      const matchesRating =
+        professional.rating >= selectedRating;
 
-    return (
-      matchesSearch &&
-      matchesService &&
-      matchesLocation &&
-      matchesRating &&
-      matchesPrice &&
-      matchesVerified &&
-      matchesBackground &&
-      matchesAvailability
-    );
-  });
+      const matchesPrice =
+        professional.price <= selectedPrice;
 
-  filtered = sortProfessionals(filtered);
+      const matchesVerified =
+        !verifiedFilter.checked ||
+        professional.verified;
 
-  return filtered;
+      const matchesBackground =
+        !backgroundFilter.checked ||
+        professional.backgroundChecked;
+
+      const matchesAvailability =
+        !availableFilter.checked ||
+        professional.available;
+
+      return (
+        matchesSearch &&
+        matchesService &&
+        matchesLocation &&
+        matchesRating &&
+        matchesPrice &&
+        matchesVerified &&
+        matchesBackground &&
+        matchesAvailability
+      );
+    }
+  );
+
+  filteredProfessionals = sortProfessionals(
+    filteredProfessionals
+  );
+
+  return filteredProfessionals;
 }
 
+/* =========================
+   Sorting
+   ========================= */
+
 function sortProfessionals(list) {
-  const sorted = [...list];
+  const sortedProfessionals = [...list];
 
   switch (sortFilter.value) {
     case "rating-high":
-      sorted.sort((a, b) => b.rating - a.rating);
+      sortedProfessionals.sort(
+        (a, b) => b.rating - a.rating
+      );
       break;
 
     case "reviews-high":
-      sorted.sort((a, b) => b.reviews - a.reviews);
+      sortedProfessionals.sort(
+        (a, b) => b.reviews - a.reviews
+      );
       break;
 
     case "price-low":
-      sorted.sort((a, b) => a.price - b.price);
+      sortedProfessionals.sort(
+        (a, b) => a.price - b.price
+      );
       break;
 
     case "experience-high":
-      sorted.sort((a, b) => b.experience - a.experience);
+      sortedProfessionals.sort(
+        (a, b) => b.experience - a.experience
+      );
       break;
 
     default:
-      sorted.sort((a, b) => {
+      sortedProfessionals.sort((a, b) => {
         if (a.featured !== b.featured) {
-          return Number(b.featured) - Number(a.featured);
+          return (
+            Number(b.featured) -
+            Number(a.featured)
+          );
         }
 
         return b.rating - a.rating;
       });
   }
 
-  return sorted;
+  return sortedProfessionals;
 }
 
-/* Active Filters */
+/* =========================
+   Active Filter Labels
+   ========================= */
 
 function updateActiveFilters() {
   const filters = [];
 
   if (heroService.value.trim()) {
-    filters.push(`Search: ${heroService.value.trim()}`);
+    filters.push(
+      `Search: ${heroService.value.trim()}`
+    );
   }
 
   if (serviceFilter.value !== "all") {
-    filters.push(formatServiceName(serviceFilter.value));
+    filters.push(
+      formatServiceName(serviceFilter.value)
+    );
   }
 
   if (locationFilter.value.trim()) {
-    filters.push(`Location: ${locationFilter.value.trim()}`);
+    filters.push(
+      `Location: ${locationFilter.value.trim()}`
+    );
   }
 
   if (Number(ratingFilter.value) > 0) {
-    filters.push(`${ratingFilter.value}+ rating`);
+    filters.push(
+      `${ratingFilter.value}+ rating`
+    );
   }
 
   if (Number(priceFilter.value) < 9999) {
-    filters.push(`Up to $${priceFilter.value}`);
+    filters.push(
+      `Up to $${priceFilter.value}`
+    );
   }
 
   if (verifiedFilter.checked) {
@@ -593,36 +761,50 @@ function updateActiveFilters() {
     .join("");
 }
 
-/* Render */
+/* =========================
+   Render Professionals
+   ========================= */
 
 function renderProfessionals() {
-  const filteredProfessionals = getFilteredProfessionals();
+  const filteredProfessionals =
+    getFilteredProfessionals();
 
   professionalsGrid.innerHTML = "";
 
-  filteredProfessionals.forEach((professional) => {
-    professionalsGrid.appendChild(
-      createProfessionalCard(professional)
-    );
-  });
+  filteredProfessionals.forEach(
+    (professional) => {
+      const professionalCard =
+        createProfessionalCard(professional);
 
-  resultsCount.textContent = filteredProfessionals.length;
+      professionalsGrid.appendChild(
+        professionalCard
+      );
+    }
+  );
+
+  resultsCount.textContent =
+    filteredProfessionals.length;
+
+  const hasNoResults =
+    filteredProfessionals.length === 0;
 
   emptyState.classList.toggle(
     "hidden",
-    filteredProfessionals.length !== 0
+    !hasNoResults
   );
 
   professionalsGrid.classList.toggle(
     "hidden",
-    filteredProfessionals.length === 0
+    hasNoResults
   );
 
   updateActiveFilters();
   attachCardEvents();
 }
 
-/* Clear Filters */
+/* =========================
+   Clear Filters
+   ========================= */
 
 function clearAllFilters() {
   heroService.value = "";
@@ -641,80 +823,118 @@ function clearAllFilters() {
   renderProfessionals();
 }
 
-/* Card Button Events */
+/* =========================
+   Card Events
+   ========================= */
 
 function attachCardEvents() {
-  const comingSoonLinks = document.querySelectorAll(
-    '[data-coming-soon="true"]'
-  );
+  const comingSoonLinks =
+    document.querySelectorAll(
+      '[data-coming-soon="true"]'
+    );
 
   comingSoonLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
 
+      const professionalName =
+        link.dataset.professional ||
+        "This professional";
+
       alert(
-        "This professional profile is being built. Chris Custom Installations already has a working profile page."
+        `${professionalName}'s full profile is coming soon. Chris Custom Installations already has a working profile page.`
       );
     });
   });
 
-  const quoteButtons = document.querySelectorAll(
-    ".quote-button"
-  );
+  const quoteButtons =
+    document.querySelectorAll(".quote-button");
 
   quoteButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const professionalName =
         button.dataset.professional || "";
 
-      localStorage.setItem(
-        "korvoSelectedProfessional",
-        professionalName
-      );
+      try {
+        localStorage.setItem(
+          "korvoSelectedProfessional",
+          professionalName
+        );
+      } catch (error) {
+        console.error(
+          "Unable to save selected professional:",
+          error
+        );
+      }
     });
   });
 }
 
-/* Search Form */
+/* =========================
+   Hero Search Form
+   ========================= */
 
-heroSearchForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+heroSearchForm.addEventListener(
+  "submit",
+  (event) => {
+    event.preventDefault();
 
-  locationFilter.value = heroLocation.value.trim();
-
-  renderProfessionals();
-
-  document
-    .querySelector(".marketplace-section")
-    .scrollIntoView({ behavior: "smooth" });
-});
-
-/* Popular Search Buttons */
-
-document.querySelectorAll(".popular-chip").forEach((button) => {
-  button.addEventListener("click", () => {
-    const serviceName = button.textContent.trim();
-
-    heroService.value = serviceName;
-
-    const serviceMap = {
-      "Window Treatments": "window-treatments",
-      "House Cleaning": "cleaning",
-      Landscaping: "landscaping",
-      Handyman: "handyman"
-    };
-
-    serviceFilter.value = serviceMap[serviceName] || "all";
+    locationFilter.value =
+      heroLocation.value.trim();
 
     renderProfessionals();
 
     document
       .querySelector(".marketplace-section")
-      .scrollIntoView({ behavior: "smooth" });
-  });
-});
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+  }
+);
 
-/* Filter Events */
+/* =========================
+   Popular Search Buttons
+   ========================= */
+
+document
+  .querySelectorAll(".popular-chip")
+  .forEach((button) => {
+    button.addEventListener("click", () => {
+      const serviceName =
+        button.textContent.trim();
+
+      heroService.value = serviceName;
+
+      const serviceMap = {
+        "Window Treatments":
+          "window-treatments",
+
+        "House Cleaning":
+          "cleaning",
+
+        Landscaping:
+          "landscaping",
+
+        Handyman:
+          "handyman"
+      };
+
+      serviceFilter.value =
+        serviceMap[serviceName] || "all";
+
+      renderProfessionals();
+
+      document
+        .querySelector(".marketplace-section")
+        .scrollIntoView({
+          behavior: "smooth"
+        });
+    });
+  });
+
+/* =========================
+   Filter Events
+   ========================= */
 
 [
   serviceFilter,
@@ -725,11 +945,21 @@ document.querySelectorAll(".popular-chip").forEach((button) => {
   backgroundFilter,
   availableFilter
 ].forEach((element) => {
-  element.addEventListener("change", renderProfessionals);
+  element.addEventListener(
+    "change",
+    renderProfessionals
+  );
 });
 
-locationFilter.addEventListener("input", renderProfessionals);
-heroService.addEventListener("input", renderProfessionals);
+locationFilter.addEventListener(
+  "input",
+  renderProfessionals
+);
+
+heroService.addEventListener(
+  "input",
+  renderProfessionals
+);
 
 clearFiltersButton.addEventListener(
   "click",
@@ -741,38 +971,69 @@ emptyClearButton.addEventListener(
   clearAllFilters
 );
 
-/* Mobile Filter Panel */
+/* =========================
+   Mobile Filter Panel
+   ========================= */
 
 filterToggle.addEventListener("click", () => {
   filtersPanel.classList.toggle("open");
 
-  const isOpen = filtersPanel.classList.contains("open");
+  const isOpen =
+    filtersPanel.classList.contains("open");
 
   filterToggle.textContent = isOpen
     ? "Close Filters"
     : "Filters";
 });
 
-/* Mobile Navigation */
+/* =========================
+   Mobile Navigation
+   ========================= */
 
-mobileMenuButton.addEventListener("click", () => {
-  mobileNav.classList.toggle("open");
+mobileMenuButton.addEventListener(
+  "click",
+  () => {
+    mobileNav.classList.toggle("open");
 
-  const isOpen = mobileNav.classList.contains("open");
+    const isOpen =
+      mobileNav.classList.contains("open");
 
-  mobileMenuButton.setAttribute(
-    "aria-expanded",
-    String(isOpen)
-  );
+    mobileMenuButton.setAttribute(
+      "aria-expanded",
+      String(isOpen)
+    );
 
-  mobileMenuButton.textContent = isOpen ? "×" : "☰";
-});
+    mobileMenuButton.textContent =
+      isOpen ? "×" : "☰";
+  }
+);
 
-/* Footer Year */
+mobileNav
+  .querySelectorAll("a")
+  .forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileNav.classList.remove("open");
 
-document.getElementById("currentYear").textContent =
-  new Date().getFullYear();
+      mobileMenuButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
 
-/* Initial Page Load */
+      mobileMenuButton.textContent = "☰";
+    });
+  });
+
+/* =========================
+   Footer Year
+   ========================= */
+
+if (currentYear) {
+  currentYear.textContent =
+    new Date().getFullYear();
+}
+
+/* =========================
+   Initial Page Load
+   ========================= */
 
 renderProfessionals();
