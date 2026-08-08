@@ -1,207 +1,512 @@
-/* ========================================
-   KORVO POST-A-JOB PAGE
-======================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
-  const jobForm = document.getElementById("jobForm");
-  const formSteps = document.querySelectorAll(".form-step");
-  const stepIndicators = document.querySelectorAll(".step-indicator");
+  /* =====================================================
+     KORVO — POST A JOB
+     Complete JavaScript
+     ===================================================== */
 
-  const nextButton = document.getElementById("nextButton");
-  const backButton = document.getElementById("backButton");
-  const submitButton = document.getElementById("submitButton");
-
-  const progressText = document.getElementById("progressText");
-  const progressPercent = document.getElementById("progressPercent");
-  const progressFill = document.getElementById("progressFill");
-
-  const mobileMenuButton = document.getElementById(
-    "mobileMenuButton"
-  );
-
-  const mobileNav = document.getElementById("mobileNav");
-
-  const serviceSearch = document.getElementById("serviceSearch");
-  const serviceCards = document.querySelectorAll(".service-card");
-  const serviceInputs = document.querySelectorAll(
-    'input[name="service"]'
-  );
-
-  const jobTitle = document.getElementById("jobTitle");
-  const jobDescription = document.getElementById(
-    "jobDescription"
-  );
-
-  const jobTitleCount = document.getElementById(
-    "jobTitleCount"
-  );
-
-  const descriptionCount = document.getElementById(
-    "descriptionCount"
-  );
-
-  const uploadArea = document.getElementById("uploadArea");
-  const uploadButton = document.getElementById("uploadButton");
-  const projectPhotos = document.getElementById(
-    "projectPhotos"
-  );
-
-  const imagePreviewGrid = document.getElementById(
-    "imagePreviewGrid"
-  );
-
-  const preferredDateGroup = document.getElementById(
-    "preferredDateGroup"
-  );
-
-  const preferredDate = document.getElementById(
-    "preferredDate"
-  );
-
-  const timeframeInputs = document.querySelectorAll(
-    'input[name="timeframe"]'
-  );
-
-  const successModal = document.getElementById(
-    "successModal"
-  );
-
-  const jobReference = document.getElementById(
-    "jobReference"
-  );
-
-  const postAnotherButton = document.getElementById(
-    "postAnotherButton"
-  );
-
-  const currentYear = document.getElementById(
-    "currentYear"
-  );
+  const STORAGE_KEY = "korvoCustomerJobs";
 
   let currentStep = 1;
-  let selectedPhotoFiles = [];
+  const totalSteps = 5;
+  let selectedPhotos = [];
 
-  const totalSteps = formSteps.length;
+  /* =====================================================
+     ELEMENTS
+     ===================================================== */
+
+  const jobForm = document.getElementById("jobForm");
+
+  const formSteps =
+    document.querySelectorAll(".form-step");
+
+  const nextButton =
+    document.getElementById("nextButton");
+
+  const backButton =
+    document.getElementById("backButton");
+
+  const submitButton =
+    document.getElementById("submitButton");
+
+  const progressText =
+    document.getElementById("progressText");
+
+  const progressPercent =
+    document.getElementById("progressPercent");
+
+  const progressFill =
+    document.getElementById("progressFill");
+
+  const stepIndicators =
+    document.querySelectorAll(".step-indicator");
 
 
-  /* ========================================
-     CURRENT YEAR
-  ======================================== */
+  /* =====================================================
+     HEADER / MOBILE MENU
+     ===================================================== */
 
-  if (currentYear) {
-    currentYear.textContent = new Date().getFullYear();
-  }
+  const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
 
-
-  /* ========================================
-     MOBILE MENU
-  ======================================== */
+  const mobileNav =
+    document.getElementById("mobileNav");
 
   if (mobileMenuButton && mobileNav) {
     mobileMenuButton.addEventListener("click", () => {
-      const isOpen = mobileNav.classList.toggle("open");
+      mobileNav.classList.toggle("open");
+
+      const isOpen =
+        mobileNav.classList.contains("open");
 
       mobileMenuButton.setAttribute(
         "aria-expanded",
         String(isOpen)
       );
     });
+  }
 
-    mobileNav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        mobileNav.classList.remove("open");
 
-        mobileMenuButton.setAttribute(
-          "aria-expanded",
-          "false"
-        );
+  /* =====================================================
+     CURRENT YEAR
+     ===================================================== */
+
+  const currentYear =
+    document.getElementById("currentYear");
+
+  if (currentYear) {
+    currentYear.textContent =
+      new Date().getFullYear();
+  }
+
+
+  /* =====================================================
+     SERVICE SEARCH
+     ===================================================== */
+
+  const serviceSearch =
+    document.getElementById("serviceSearch");
+
+  const serviceCards =
+    document.querySelectorAll(".service-card");
+
+  if (serviceSearch) {
+    serviceSearch.addEventListener("input", () => {
+      const searchValue =
+        serviceSearch.value
+          .trim()
+          .toLowerCase();
+
+      serviceCards.forEach((card) => {
+        const serviceName =
+          card.dataset.serviceName
+            ?.toLowerCase() || "";
+
+        const matches =
+          serviceName.includes(searchValue);
+
+        card.style.display =
+          matches ? "" : "none";
       });
     });
   }
 
 
-  /* ========================================
-     SET MINIMUM PROJECT DATE
-  ======================================== */
+  /* =====================================================
+     SERVICE CARD SELECTION
+     ===================================================== */
 
-  if (preferredDate) {
-    const today = new Date();
-    const year = today.getFullYear();
+  const serviceRadios =
+    document.querySelectorAll(
+      'input[name="service"]'
+    );
 
-    const month = String(
-      today.getMonth() + 1
-    ).padStart(2, "0");
+  serviceRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      serviceCards.forEach((card) => {
+        card.classList.remove("selected");
+      });
 
-    const day = String(
-      today.getDate()
-    ).padStart(2, "0");
+      const selectedCard =
+        radio.closest(".service-card");
 
-    preferredDate.min = `${year}-${month}-${day}`;
+      if (selectedCard) {
+        selectedCard.classList.add("selected");
+      }
+
+      hideError("serviceError");
+    });
+  });
+
+
+  /* =====================================================
+     OPTION CARD SELECTION
+     ===================================================== */
+
+  const optionRadios =
+    document.querySelectorAll(
+      ".option-card input[type='radio']"
+    );
+
+  optionRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      const name = radio.name;
+
+      document
+        .querySelectorAll(
+          `.option-card input[name="${name}"]`
+        )
+        .forEach((item) => {
+          const card =
+            item.closest(".option-card");
+
+          if (card) {
+            card.classList.toggle(
+              "selected",
+              item.checked
+            );
+          }
+        });
+    });
+  });
+
+
+  /* =====================================================
+     CHARACTER COUNTERS
+     ===================================================== */
+
+  const jobTitle =
+    document.getElementById("jobTitle");
+
+  const jobTitleCount =
+    document.getElementById("jobTitleCount");
+
+  const jobDescription =
+    document.getElementById("jobDescription");
+
+  const descriptionCount =
+    document.getElementById("descriptionCount");
+
+
+  if (jobTitle && jobTitleCount) {
+    jobTitle.addEventListener("input", () => {
+      jobTitleCount.textContent =
+        `${jobTitle.value.length} / 80`;
+
+      hideError("jobTitleError");
+    });
   }
 
 
-  /* ========================================
-     FORM STEP DISPLAY
-  ======================================== */
+  if (jobDescription && descriptionCount) {
+    jobDescription.addEventListener(
+      "input",
+      () => {
+        descriptionCount.textContent =
+          `${jobDescription.value.length} / 1200`;
 
-  function showStep(stepNumber) {
-    currentStep = stepNumber;
+        hideError("descriptionError");
+      }
+    );
+  }
 
-    formSteps.forEach((step) => {
-      const stepValue = Number(step.dataset.step);
 
-      step.classList.toggle(
+  /* =====================================================
+     SPECIFIC DATE
+     ===================================================== */
+
+  const timeframeRadios =
+    document.querySelectorAll(
+      'input[name="timeframe"]'
+    );
+
+  const preferredDateGroup =
+    document.getElementById(
+      "preferredDateGroup"
+    );
+
+  const preferredDate =
+    document.getElementById("preferredDate");
+
+
+  timeframeRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      hideError("timeframeError");
+
+      if (
+        radio.checked &&
+        radio.value === "Specific date"
+      ) {
+        preferredDateGroup?.classList.remove(
+          "hidden-field"
+        );
+
+        if (preferredDate) {
+          preferredDate.required = true;
+        }
+      } else if (radio.checked) {
+        preferredDateGroup?.classList.add(
+          "hidden-field"
+        );
+
+        if (preferredDate) {
+          preferredDate.required = false;
+          preferredDate.value = "";
+        }
+      }
+    });
+  });
+
+
+  /* =====================================================
+     PREVENT PAST DATES
+     ===================================================== */
+
+  if (preferredDate) {
+    const today =
+      new Date().toISOString().split("T")[0];
+
+    preferredDate.min = today;
+  }
+
+
+  /* =====================================================
+     PHOTO UPLOAD
+     ===================================================== */
+
+  const projectPhotos =
+    document.getElementById("projectPhotos");
+
+  const uploadButton =
+    document.getElementById("uploadButton");
+
+  const imagePreviewGrid =
+    document.getElementById(
+      "imagePreviewGrid"
+    );
+
+
+  if (uploadButton && projectPhotos) {
+    uploadButton.addEventListener("click", () => {
+      projectPhotos.click();
+    });
+  }
+
+
+  if (projectPhotos) {
+    projectPhotos.addEventListener(
+      "change",
+      (event) => {
+        const files =
+          Array.from(event.target.files);
+
+        const validFiles =
+          files.filter((file) => {
+            return [
+              "image/jpeg",
+              "image/png",
+              "image/webp"
+            ].includes(file.type);
+          });
+
+        selectedPhotos = validFiles.slice(0, 5);
+
+        renderPhotoPreviews();
+      }
+    );
+  }
+
+
+  function renderPhotoPreviews() {
+    if (!imagePreviewGrid) return;
+
+    imagePreviewGrid.innerHTML = "";
+
+    selectedPhotos.forEach(
+      (file, index) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          const preview =
+            document.createElement("div");
+
+          preview.className =
+            "image-preview";
+
+          preview.innerHTML = `
+            <img
+              src="${event.target.result}"
+              alt="Project photo ${index + 1}"
+            >
+
+            <button
+              type="button"
+              class="remove-photo-button"
+              data-index="${index}"
+              aria-label="Remove photo"
+            >
+              ×
+            </button>
+          `;
+
+          imagePreviewGrid.appendChild(
+            preview
+          );
+
+          const removeButton =
+            preview.querySelector(
+              ".remove-photo-button"
+            );
+
+          removeButton.addEventListener(
+            "click",
+            () => {
+              removePhoto(index);
+            }
+          );
+        };
+
+        reader.readAsDataURL(file);
+      }
+    );
+  }
+
+
+  function removePhoto(index) {
+    selectedPhotos.splice(index, 1);
+
+    renderPhotoPreviews();
+  }
+
+
+  /* =====================================================
+     FORM NAVIGATION
+     ===================================================== */
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => {
+      if (!validateStep(currentStep)) {
+        return;
+      }
+
+      if (currentStep < totalSteps) {
+        currentStep++;
+
+        if (currentStep === 5) {
+          updateReview();
+        }
+
+        showStep(currentStep);
+      }
+    });
+  }
+
+
+  if (backButton) {
+    backButton.addEventListener("click", () => {
+      if (currentStep > 1) {
+        currentStep--;
+
+        showStep(currentStep);
+      }
+    });
+  }
+
+
+  document
+    .querySelectorAll(".edit-step-button")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        const step =
+          Number(button.dataset.editStep);
+
+        if (step >= 1 && step <= 5) {
+          currentStep = step;
+
+          showStep(currentStep);
+        }
+      });
+    });
+
+
+  /* =====================================================
+     SHOW STEP
+     ===================================================== */
+
+  function showStep(step) {
+    formSteps.forEach((section) => {
+      const sectionStep =
+        Number(section.dataset.step);
+
+      section.classList.toggle(
         "active",
-        stepValue === currentStep
+        sectionStep === step
       );
     });
 
+
     stepIndicators.forEach((indicator) => {
-      const indicatorValue = Number(
-        indicator.dataset.indicator
-      );
+      const indicatorNumber =
+        Number(indicator.dataset.indicator);
 
       indicator.classList.toggle(
         "active",
-        indicatorValue === currentStep
+        indicatorNumber === step
       );
 
       indicator.classList.toggle(
         "completed",
-        indicatorValue < currentStep
+        indicatorNumber < step
       );
     });
 
-    const progress = Math.round(
-      (currentStep / totalSteps) * 100
-    );
 
-    progressText.textContent =
-      `Step ${currentStep} of ${totalSteps}`;
+    const percent =
+      Math.round(
+        (step / totalSteps) * 100
+      );
 
-    progressPercent.textContent =
-      `${progress}% complete`;
 
-    progressFill.style.width = `${progress}%`;
-
-    backButton.classList.toggle(
-      "hidden-button",
-      currentStep === 1
-    );
-
-    nextButton.classList.toggle(
-      "hidden-button",
-      currentStep === totalSteps
-    );
-
-    submitButton.classList.toggle(
-      "hidden-button",
-      currentStep !== totalSteps
-    );
-
-    if (currentStep === totalSteps) {
-      updateReview();
+    if (progressText) {
+      progressText.textContent =
+        `Step ${step} of ${totalSteps}`;
     }
+
+
+    if (progressPercent) {
+      progressPercent.textContent =
+        `${percent}% complete`;
+    }
+
+
+    if (progressFill) {
+      progressFill.style.width =
+        `${percent}%`;
+    }
+
+
+    if (backButton) {
+      backButton.classList.toggle(
+        "hidden-button",
+        step === 1
+      );
+    }
+
+
+    if (nextButton) {
+      nextButton.classList.toggle(
+        "hidden-button",
+        step === totalSteps
+      );
+    }
+
+
+    if (submitButton) {
+      submitButton.classList.toggle(
+        "hidden-button",
+        step !== totalSteps
+      );
+    }
+
 
     window.scrollTo({
       top: 0,
@@ -210,916 +515,688 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* ========================================
-     ERROR HELPERS
-  ======================================== */
+  /* =====================================================
+     VALIDATION
+     ===================================================== */
 
-  function showError(input, errorElement) {
-    if (input) {
-      input.classList.add("input-error");
+  function validateStep(step) {
+    clearStepErrors(step);
+
+    if (step === 1) {
+      const selectedService =
+        document.querySelector(
+          'input[name="service"]:checked'
+        );
+
+      if (!selectedService) {
+        showError("serviceError");
+        return false;
+      }
     }
 
-    if (errorElement) {
-      errorElement.classList.add("show");
-    }
-  }
 
-  function clearError(input, errorElement) {
-    if (input) {
-      input.classList.remove("input-error");
-    }
+    if (step === 2) {
+      let valid = true;
 
-    if (errorElement) {
-      errorElement.classList.remove("show");
-    }
-  }
+      if (
+        !jobTitle ||
+        jobTitle.value.trim().length < 3
+      ) {
+        showError("jobTitleError");
+        valid = false;
+      }
 
-  function clearRadioError(errorElement) {
-    if (errorElement) {
-      errorElement.classList.remove("show");
-    }
-  }
+      if (
+        !jobDescription ||
+        jobDescription.value.trim().length < 10
+      ) {
+        showError("descriptionError");
+        valid = false;
+      }
 
-  function isValidEmail(emailValue) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      emailValue
-    );
-  }
-
-  function isValidPhone(phoneValue) {
-    const digits = phoneValue.replace(/\D/g, "");
-
-    return digits.length >= 10;
-  }
-
-
-  /* ========================================
-     STEP VALIDATION
-  ======================================== */
-
-  function validateStepOne() {
-    const selectedService = document.querySelector(
-      'input[name="service"]:checked'
-    );
-
-    const serviceError = document.getElementById(
-      "serviceError"
-    );
-
-    if (!selectedService) {
-      serviceError.classList.add("show");
-      return false;
+      return valid;
     }
 
-    serviceError.classList.remove("show");
+
+    if (step === 3) {
+      let valid = true;
+
+      const city =
+        document.getElementById("city");
+
+      const zipCode =
+        document.getElementById("zipCode");
+
+      const budget =
+        document.getElementById("budget");
+
+      const selectedTimeframe =
+        document.querySelector(
+          'input[name="timeframe"]:checked'
+        );
+
+
+      if (
+        !city ||
+        city.value.trim().length < 2
+      ) {
+        showError("cityError");
+        valid = false;
+      }
+
+
+      if (
+        !zipCode ||
+        !/^\d{5}$/.test(
+          zipCode.value.trim()
+        )
+      ) {
+        showError("zipError");
+        valid = false;
+      }
+
+
+      if (!selectedTimeframe) {
+        showError("timeframeError");
+        valid = false;
+      }
+
+
+      if (
+        selectedTimeframe?.value ===
+          "Specific date" &&
+        !preferredDate?.value
+      ) {
+        alert(
+          "Please select your preferred date."
+        );
+
+        valid = false;
+      }
+
+
+      if (!budget?.value) {
+        showError("budgetError");
+        valid = false;
+      }
+
+      return valid;
+    }
+
+
+    if (step === 4) {
+      let valid = true;
+
+      const firstName =
+        document.getElementById("firstName");
+
+      const lastName =
+        document.getElementById("lastName");
+
+      const email =
+        document.getElementById("email");
+
+      const phone =
+        document.getElementById("phone");
+
+      const termsAgreement =
+        document.getElementById(
+          "termsAgreement"
+        );
+
+
+      if (!firstName?.value.trim()) {
+        showError("firstNameError");
+        valid = false;
+      }
+
+
+      if (!lastName?.value.trim()) {
+        showError("lastNameError");
+        valid = false;
+      }
+
+
+      if (
+        !email?.value.trim() ||
+        !isValidEmail(email.value)
+      ) {
+        showError("emailError");
+        valid = false;
+      }
+
+
+      if (
+        !phone?.value.trim() ||
+        !isValidPhone(phone.value)
+      ) {
+        showError("phoneError");
+        valid = false;
+      }
+
+
+      if (!termsAgreement?.checked) {
+        showError("termsError");
+        valid = false;
+      }
+
+      return valid;
+    }
+
+
     return true;
   }
 
-  function validateStepTwo() {
-    let isValid = true;
 
-    const jobTitleError = document.getElementById(
-      "jobTitleError"
-    );
+  function showError(id) {
+    const element =
+      document.getElementById(id);
 
-    const descriptionError = document.getElementById(
-      "descriptionError"
-    );
-
-    if (jobTitle.value.trim().length < 5) {
-      showError(jobTitle, jobTitleError);
-      isValid = false;
-    } else {
-      clearError(jobTitle, jobTitleError);
+    if (element) {
+      element.style.display = "block";
     }
-
-    if (jobDescription.value.trim().length < 20) {
-      showError(
-        jobDescription,
-        descriptionError
-      );
-
-      isValid = false;
-    } else {
-      clearError(
-        jobDescription,
-        descriptionError
-      );
-    }
-
-    return isValid;
   }
 
-  function validateStepThree() {
-    let isValid = true;
 
-    const city = document.getElementById("city");
-    const zipCode = document.getElementById("zipCode");
-    const budget = document.getElementById("budget");
+  function hideError(id) {
+    const element =
+      document.getElementById(id);
 
-    const cityError = document.getElementById(
-      "cityError"
-    );
-
-    const zipError = document.getElementById(
-      "zipError"
-    );
-
-    const timeframeError = document.getElementById(
-      "timeframeError"
-    );
-
-    const budgetError = document.getElementById(
-      "budgetError"
-    );
-
-    const selectedTimeframe = document.querySelector(
-      'input[name="timeframe"]:checked'
-    );
-
-    if (city.value.trim().length < 2) {
-      showError(city, cityError);
-      isValid = false;
-    } else {
-      clearError(city, cityError);
+    if (element) {
+      element.style.display = "none";
     }
-
-    if (!/^\d{5}$/.test(zipCode.value.trim())) {
-      showError(zipCode, zipError);
-      isValid = false;
-    } else {
-      clearError(zipCode, zipError);
-    }
-
-    if (!selectedTimeframe) {
-      timeframeError.classList.add("show");
-      isValid = false;
-    } else {
-      timeframeError.classList.remove("show");
-    }
-
-    if (
-      selectedTimeframe &&
-      selectedTimeframe.value === "Specific date" &&
-      !preferredDate.value
-    ) {
-      showError(preferredDate, timeframeError);
-      isValid = false;
-    } else {
-      clearError(preferredDate, null);
-    }
-
-    if (!budget.value) {
-      showError(budget, budgetError);
-      isValid = false;
-    } else {
-      clearError(budget, budgetError);
-    }
-
-    return isValid;
   }
 
-  function validateStepFour() {
-    let isValid = true;
 
-    const firstName = document.getElementById(
-      "firstName"
+  function clearStepErrors(step) {
+    const section =
+      document.querySelector(
+        `.form-step[data-step="${step}"]`
+      );
+
+    if (!section) return;
+
+    section
+      .querySelectorAll(".field-error")
+      .forEach((error) => {
+        error.style.display = "none";
+      });
+  }
+
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email.trim()
     );
+  }
 
-    const lastName = document.getElementById(
-      "lastName"
-    );
 
-    const email = document.getElementById("email");
-    const phone = document.getElementById("phone");
+  function isValidPhone(phone) {
+    const numbers =
+      phone.replace(/\D/g, "");
 
-    const termsAgreement = document.getElementById(
+    return numbers.length >= 10;
+  }
+
+
+  /* =====================================================
+     LIVE ERROR CLEARING
+     ===================================================== */
+
+  const errorMap = {
+    city: "cityError",
+    zipCode: "zipError",
+    budget: "budgetError",
+    firstName: "firstNameError",
+    lastName: "lastNameError",
+    email: "emailError",
+    phone: "phoneError"
+  };
+
+
+  Object.entries(errorMap).forEach(
+    ([fieldId, errorId]) => {
+      const field =
+        document.getElementById(fieldId);
+
+      field?.addEventListener(
+        "input",
+        () => hideError(errorId)
+      );
+
+      field?.addEventListener(
+        "change",
+        () => hideError(errorId)
+      );
+    }
+  );
+
+
+  const termsAgreement =
+    document.getElementById(
       "termsAgreement"
     );
 
-    const firstNameError = document.getElementById(
-      "firstNameError"
-    );
-
-    const lastNameError = document.getElementById(
-      "lastNameError"
-    );
-
-    const emailError = document.getElementById(
-      "emailError"
-    );
-
-    const phoneError = document.getElementById(
-      "phoneError"
-    );
-
-    const termsError = document.getElementById(
-      "termsError"
-    );
-
-    if (firstName.value.trim().length < 2) {
-      showError(firstName, firstNameError);
-      isValid = false;
-    } else {
-      clearError(firstName, firstNameError);
-    }
-
-    if (lastName.value.trim().length < 2) {
-      showError(lastName, lastNameError);
-      isValid = false;
-    } else {
-      clearError(lastName, lastNameError);
-    }
-
-    if (!isValidEmail(email.value.trim())) {
-      showError(email, emailError);
-      isValid = false;
-    } else {
-      clearError(email, emailError);
-    }
-
-    if (!isValidPhone(phone.value.trim())) {
-      showError(phone, phoneError);
-      isValid = false;
-    } else {
-      clearError(phone, phoneError);
-    }
-
-    if (!termsAgreement.checked) {
-      termsError.classList.add("show");
-      isValid = false;
-    } else {
-      termsError.classList.remove("show");
-    }
-
-    return isValid;
-  }
-
-  function validateCurrentStep() {
-    switch (currentStep) {
-      case 1:
-        return validateStepOne();
-
-      case 2:
-        return validateStepTwo();
-
-      case 3:
-        return validateStepThree();
-
-      case 4:
-        return validateStepFour();
-
-      default:
-        return true;
-    }
-  }
-
-
-  /* ========================================
-     NEXT AND BACK BUTTONS
-  ======================================== */
-
-  nextButton.addEventListener("click", () => {
-    const isValid = validateCurrentStep();
-
-    if (!isValid) {
-      const firstError = document.querySelector(
-        ".form-step.active .input-error, " +
-        ".form-step.active .field-error.show"
-      );
-
-      if (firstError) {
-        firstError.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
+  termsAgreement?.addEventListener(
+    "change",
+    () => {
+      if (termsAgreement.checked) {
+        hideError("termsError");
       }
-
-      return;
     }
-
-    if (currentStep < totalSteps) {
-      showStep(currentStep + 1);
-    }
-  });
-
-  backButton.addEventListener("click", () => {
-    if (currentStep > 1) {
-      showStep(currentStep - 1);
-    }
-  });
-
-
-  /* ========================================
-     SERVICE SELECTION
-  ======================================== */
-
-  serviceInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      serviceCards.forEach((card) => {
-        const radio = card.querySelector(
-          'input[name="service"]'
-        );
-
-        card.classList.toggle(
-          "selected",
-          radio.checked
-        );
-      });
-
-      clearRadioError(
-        document.getElementById("serviceError")
-      );
-    });
-  });
-
-
-  /* ========================================
-     SERVICE SEARCH
-  ======================================== */
-
-  serviceSearch.addEventListener("input", () => {
-    const searchTerm = serviceSearch.value
-      .trim()
-      .toLowerCase();
-
-    serviceCards.forEach((card) => {
-      const serviceName = card.dataset.serviceName
-        .toLowerCase();
-
-      const serviceText = card.textContent
-        .toLowerCase();
-
-      const isMatch =
-        serviceName.includes(searchTerm) ||
-        serviceText.includes(searchTerm);
-
-      card.classList.toggle(
-        "hidden-service",
-        !isMatch
-      );
-    });
-  });
-
-
-  /* ========================================
-     TEXT COUNTERS
-  ======================================== */
-
-  function updateCharacterCount(
-    input,
-    countElement,
-    maximum
-  ) {
-    countElement.textContent =
-      `${input.value.length} / ${maximum}`;
-  }
-
-  jobTitle.addEventListener("input", () => {
-    updateCharacterCount(
-      jobTitle,
-      jobTitleCount,
-      80
-    );
-
-    if (jobTitle.value.trim().length >= 5) {
-      clearError(
-        jobTitle,
-        document.getElementById("jobTitleError")
-      );
-    }
-  });
-
-  jobDescription.addEventListener("input", () => {
-    updateCharacterCount(
-      jobDescription,
-      descriptionCount,
-      1200
-    );
-
-    if (jobDescription.value.trim().length >= 20) {
-      clearError(
-        jobDescription,
-        document.getElementById(
-          "descriptionError"
-        )
-      );
-    }
-  });
-
-
-  /* ========================================
-     LIVE FIELD ERROR CLEARING
-  ======================================== */
-
-  const fieldsWithErrors = [
-    {
-      input: document.getElementById("city"),
-      error: document.getElementById("cityError")
-    },
-    {
-      input: document.getElementById("zipCode"),
-      error: document.getElementById("zipError")
-    },
-    {
-      input: document.getElementById("budget"),
-      error: document.getElementById("budgetError")
-    },
-    {
-      input: document.getElementById("firstName"),
-      error: document.getElementById(
-        "firstNameError"
-      )
-    },
-    {
-      input: document.getElementById("lastName"),
-      error: document.getElementById(
-        "lastNameError"
-      )
-    },
-    {
-      input: document.getElementById("email"),
-      error: document.getElementById(
-        "emailError"
-      )
-    },
-    {
-      input: document.getElementById("phone"),
-      error: document.getElementById(
-        "phoneError"
-      )
-    }
-  ];
-
-  fieldsWithErrors.forEach(({ input, error }) => {
-    if (!input) {
-      return;
-    }
-
-    input.addEventListener("input", () => {
-      clearError(input, error);
-    });
-
-    input.addEventListener("change", () => {
-      clearError(input, error);
-    });
-  });
-
-
-  /* ========================================
-     PHONE NUMBER FORMATTING
-  ======================================== */
-
-  const phoneInput = document.getElementById("phone");
-
-  phoneInput.addEventListener("input", () => {
-    let digits = phoneInput.value.replace(/\D/g, "");
-
-    digits = digits.slice(0, 10);
-
-    if (digits.length >= 7) {
-      phoneInput.value =
-        `(${digits.slice(0, 3)}) ` +
-        `${digits.slice(3, 6)}-` +
-        `${digits.slice(6)}`;
-    } else if (digits.length >= 4) {
-      phoneInput.value =
-        `(${digits.slice(0, 3)}) ` +
-        `${digits.slice(3)}`;
-    } else if (digits.length > 0) {
-      phoneInput.value = `(${digits}`;
-    }
-  });
-
-
-  /* ========================================
-     ZIP CODE FORMATTING
-  ======================================== */
-
-  const zipCodeInput = document.getElementById(
-    "zipCode"
   );
 
-  zipCodeInput.addEventListener("input", () => {
-    zipCodeInput.value = zipCodeInput.value
-      .replace(/\D/g, "")
-      .slice(0, 5);
-  });
 
-
-  /* ========================================
-     TIMEFRAME SELECTION
-  ======================================== */
-
-  timeframeInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      const showDate =
-        input.checked &&
-        input.value === "Specific date";
-
-      preferredDateGroup.classList.toggle(
-        "show",
-        showDate
-      );
-
-      if (!showDate) {
-        preferredDate.value = "";
-      }
-
-      clearRadioError(
-        document.getElementById(
-          "timeframeError"
-        )
-      );
-    });
-  });
-
-
-  /* ========================================
-     PHOTO UPLOAD
-  ======================================== */
-
-  uploadButton.addEventListener("click", () => {
-    projectPhotos.click();
-  });
-
-  uploadArea.addEventListener("dragover", (event) => {
-    event.preventDefault();
-    uploadArea.classList.add("dragging");
-  });
-
-  uploadArea.addEventListener("dragleave", () => {
-    uploadArea.classList.remove("dragging");
-  });
-
-  uploadArea.addEventListener("drop", (event) => {
-    event.preventDefault();
-
-    uploadArea.classList.remove("dragging");
-
-    const droppedFiles = Array.from(
-      event.dataTransfer.files
-    );
-
-    addPhotoFiles(droppedFiles);
-  });
-
-  projectPhotos.addEventListener("change", () => {
-    const uploadedFiles = Array.from(
-      projectPhotos.files
-    );
-
-    addPhotoFiles(uploadedFiles);
-  });
-
-  function addPhotoFiles(files) {
-    const imageFiles = files.filter((file) => {
-      return file.type.startsWith("image/");
-    });
-
-    const availableSlots =
-      5 - selectedPhotoFiles.length;
-
-    const filesToAdd = imageFiles.slice(
-      0,
-      availableSlots
-    );
-
-    selectedPhotoFiles = [
-      ...selectedPhotoFiles,
-      ...filesToAdd
-    ];
-
-    renderPhotoPreviews();
-
-    projectPhotos.value = "";
-  }
-
-  function renderPhotoPreviews() {
-    imagePreviewGrid.innerHTML = "";
-
-    selectedPhotoFiles.forEach((file, index) => {
-      const preview = document.createElement("div");
-      preview.className = "image-preview";
-
-      const image = document.createElement("img");
-
-      image.alt =
-        `Project upload preview ${index + 1}`;
-
-      const removeButton =
-        document.createElement("button");
-
-      removeButton.type = "button";
-      removeButton.className =
-        "remove-image-button";
-
-      removeButton.setAttribute(
-        "aria-label",
-        `Remove photo ${index + 1}`
-      );
-
-      removeButton.textContent = "×";
-
-      const reader = new FileReader();
-
-      reader.addEventListener("load", () => {
-        image.src = reader.result;
-      });
-
-      reader.readAsDataURL(file);
-
-      removeButton.addEventListener(
-        "click",
-        () => {
-          selectedPhotoFiles.splice(index, 1);
-          renderPhotoPreviews();
-        }
-      );
-
-      preview.append(image, removeButton);
-      imagePreviewGrid.appendChild(preview);
-    });
-  }
-
-
-  /* ========================================
-     EDIT BUTTONS ON REVIEW PAGE
-  ======================================== */
-
-  const editStepButtons = document.querySelectorAll(
-    ".edit-step-button"
-  );
-
-  editStepButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const targetStep = Number(
-        button.dataset.editStep
-      );
-
-      showStep(targetStep);
-    });
-  });
-
-
-  /* ========================================
+  /* =====================================================
      REVIEW PAGE
-  ======================================== */
-
-  function getSelectedValue(name) {
-    const selected = document.querySelector(
-      `input[name="${name}"]:checked`
-    );
-
-    return selected ? selected.value : "";
-  }
-
-  function setReviewText(elementId, value) {
-    const element = document.getElementById(elementId);
-
-    if (element) {
-      element.textContent =
-        value && value.trim()
-          ? value
-          : "Not provided";
-    }
-  }
-
-  function formatDate(dateValue) {
-    if (!dateValue) {
-      return "";
-    }
-
-    const date = new Date(`${dateValue}T12:00:00`);
-
-    return date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric"
-    });
-  }
+     ===================================================== */
 
   function updateReview() {
-    const service = getSelectedValue("service");
-    const timeframe = getSelectedValue("timeframe");
+    const selectedService =
+      document.querySelector(
+        'input[name="service"]:checked'
+      )?.value;
 
-    const propertyType = document.getElementById(
-      "propertyType"
-    ).value;
+    const propertyType =
+      document.getElementById(
+        "propertyType"
+      )?.value;
 
-    const jobSize = document.getElementById(
-      "jobSize"
-    ).value;
+    const jobSize =
+      document.getElementById(
+        "jobSize"
+      )?.value;
 
-    const city = document.getElementById("city").value;
-    const zipCode = document.getElementById(
-      "zipCode"
-    ).value;
+    const city =
+      document.getElementById("city")
+        ?.value;
 
-    const budget = document.getElementById(
-      "budget"
-    ).value;
+    const zipCode =
+      document.getElementById("zipCode")
+        ?.value;
 
-    const materialsProvided = document.getElementById(
-      "materialsProvided"
-    ).checked;
+    const timeframe =
+      document.querySelector(
+        'input[name="timeframe"]:checked'
+      )?.value;
 
-    const firstName = document.getElementById(
-      "firstName"
-    ).value;
+    const budget =
+      document.getElementById("budget")
+        ?.value;
 
-    const lastName = document.getElementById(
-      "lastName"
-    ).value;
+    const materialsProvided =
+      document.getElementById(
+        "materialsProvided"
+      )?.checked;
 
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+    const firstName =
+      document.getElementById(
+        "firstName"
+      )?.value;
 
-    const contactPreference = getSelectedValue(
-      "contactPreference"
+    const lastName =
+      document.getElementById(
+        "lastName"
+      )?.value;
+
+    const email =
+      document.getElementById("email")
+        ?.value;
+
+    const phone =
+      document.getElementById("phone")
+        ?.value;
+
+    const contactPreference =
+      document.querySelector(
+        'input[name="contactPreference"]:checked'
+      )?.value;
+
+
+    setText(
+      "reviewService",
+      selectedService || "Not selected"
     );
 
-    let displayedTimeframe = timeframe;
+    setText(
+      "reviewJobTitle",
+      jobTitle?.value.trim() ||
+        "Not provided"
+    );
+
+    setText(
+      "reviewDescription",
+      jobDescription?.value.trim() ||
+        "Not provided"
+    );
+
+    setText(
+      "reviewProperty",
+      propertyType || "Not provided"
+    );
+
+    setText(
+      "reviewSize",
+      jobSize || "Not provided"
+    );
+
+    setText(
+      "reviewLocation",
+      city && zipCode
+        ? `${city}, ${zipCode}`
+        : "Not provided"
+    );
+
+
+    let timeframeText =
+      timeframe || "Not provided";
 
     if (
       timeframe === "Specific date" &&
-      preferredDate.value
+      preferredDate?.value
     ) {
-      displayedTimeframe =
-        `Specific date — ${formatDate(
-          preferredDate.value
-        )}`;
+      timeframeText =
+        formatDate(preferredDate.value);
     }
 
-    setReviewText("reviewService", service);
-
-    setReviewText(
-      "reviewJobTitle",
-      jobTitle.value.trim()
-    );
-
-    setReviewText(
-      "reviewDescription",
-      jobDescription.value.trim()
-    );
-
-    setReviewText(
-      "reviewProperty",
-      propertyType
-    );
-
-    setReviewText("reviewSize", jobSize);
-
-    setReviewText(
-      "reviewLocation",
-      `${city.trim()}, GA ${zipCode.trim()}`
-    );
-
-    setReviewText(
+    setText(
       "reviewTimeframe",
-      displayedTimeframe
+      timeframeText
     );
 
-    setReviewText("reviewBudget", budget);
+    setText(
+      "reviewBudget",
+      budget || "Not provided"
+    );
 
-    setReviewText(
+    setText(
       "reviewMaterials",
       materialsProvided
-        ? "Customer has some or all materials"
-        : "Professional may need to provide materials"
+        ? "Customer has materials"
+        : "Materials may be needed"
     );
 
-    setReviewText(
+    setText(
       "reviewName",
-      `${firstName.trim()} ${lastName.trim()}`
+      `${firstName || ""} ${
+        lastName || ""
+      }`.trim() || "Not provided"
     );
 
-    setReviewText(
+    setText(
       "reviewEmail",
-      email.trim()
+      email || "Not provided"
     );
 
-    setReviewText(
+    setText(
       "reviewPhone",
-      phone.trim()
+      phone || "Not provided"
     );
 
-    setReviewText(
+    setText(
       "reviewContactPreference",
-      contactPreference
+      contactPreference ||
+        "Korvo messages"
     );
   }
 
 
-  /* ========================================
-     SAVE JOB TO LOCAL STORAGE
-  ======================================== */
+  function setText(id, value) {
+    const element =
+      document.getElementById(id);
+
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+
+  /* =====================================================
+     CREATE JOB DATA
+     ===================================================== */
 
   function createJobData() {
-    const jobId =
-      `KORVO-${Date.now().toString().slice(-6)}`;
+    const service =
+      document.querySelector(
+        'input[name="service"]:checked'
+      )?.value || "Other Service";
+
+    const timeframe =
+      document.querySelector(
+        'input[name="timeframe"]:checked'
+      )?.value || "";
+
+    const city =
+      document.getElementById("city")
+        ?.value.trim() || "";
+
+    const zipCode =
+      document.getElementById("zipCode")
+        ?.value.trim() || "";
+
+    const firstName =
+      document.getElementById(
+        "firstName"
+      )?.value.trim() || "";
+
+    const lastName =
+      document.getElementById(
+        "lastName"
+      )?.value.trim() || "";
+
+    const budget =
+      document.getElementById("budget")
+        ?.value || "";
+
+    const reference =
+      generateJobReference();
+
+
+    const customerDisplayName =
+      `${firstName} ${
+        lastName
+          ? lastName.charAt(0).toUpperCase() +
+            "."
+          : ""
+      }`.trim();
+
+
+    let requestedDate = timeframe;
+
+    if (
+      timeframe === "Specific date" &&
+      preferredDate?.value
+    ) {
+      requestedDate =
+        formatDate(preferredDate.value);
+    }
+
 
     return {
-      id: jobId,
+      id: reference,
 
-      createdAt: new Date().toISOString(),
+      reference,
 
-      status: "Open",
+      title:
+        jobTitle.value.trim(),
 
-      service: getSelectedValue("service"),
+      jobTitle:
+        jobTitle.value.trim(),
 
-      title: jobTitle.value.trim(),
+      category:
+        normalizeCategory(service),
 
-      description: jobDescription.value.trim(),
+      service,
+
+      description:
+        jobDescription.value.trim(),
 
       propertyType:
-        document.getElementById("propertyType").value,
+        document.getElementById(
+          "propertyType"
+        )?.value || "",
 
       jobSize:
-        document.getElementById("jobSize").value,
+        document.getElementById(
+          "jobSize"
+        )?.value || "",
 
-      city:
-        document.getElementById("city").value.trim(),
+      location:
+        `${city}, ${zipCode}`,
 
-      zipCode:
-        document.getElementById("zipCode").value.trim(),
+      city,
 
-      timeframe:
-        getSelectedValue("timeframe"),
+      zipCode,
 
-      preferredDate: preferredDate.value,
+      budget,
 
-      budget:
-        document.getElementById("budget").value,
+      budgetRange: budget,
+
+      timeframe,
+
+      preferredDate:
+        preferredDate?.value || "",
+
+      date: requestedDate,
 
       materialsProvided:
         document.getElementById(
           "materialsProvided"
-        ).checked,
+        )?.checked || false,
 
-      customer: {
-        firstName:
-          document.getElementById(
-            "firstName"
-          ).value.trim(),
+      customer:
+        customerDisplayName,
 
-        lastName:
-          document.getElementById(
-            "lastName"
-          ).value.trim(),
+      customerName:
+        customerDisplayName,
 
-        email:
-          document.getElementById(
-            "email"
-          ).value.trim(),
+      firstName,
 
-        phone:
-          document.getElementById(
-            "phone"
-          ).value.trim(),
+      lastName,
 
-        contactPreference:
-          getSelectedValue(
-            "contactPreference"
-          )
-      },
+      email:
+        document.getElementById("email")
+          ?.value.trim() || "",
 
-      photoCount: selectedPhotoFiles.length,
+      phone:
+        document.getElementById("phone")
+          ?.value.trim() || "",
 
-      interestedProfessionals: 0,
+      contactPreference:
+        document.querySelector(
+          'input[name="contactPreference"]:checked'
+        )?.value || "Korvo messages",
 
-      messages: 0
+      photoCount:
+        selectedPhotos.length,
+
+      status: "Open",
+
+      quotesCount: 0,
+
+      createdAt:
+        new Date().toISOString()
     };
   }
+
+
+  /* =====================================================
+     CATEGORY COMPATIBILITY
+
+     Matches Professional Dashboard filters.
+     ===================================================== */
+
+  function normalizeCategory(service) {
+    const value =
+      service.toLowerCase();
+
+    if (value.includes("clean")) {
+      return "cleaning";
+    }
+
+    if (value.includes("paint")) {
+      return "painting";
+    }
+
+    if (value.includes("electrical")) {
+      return "electrical";
+    }
+
+    if (
+      value.includes("lawn") ||
+      value.includes("landscap")
+    ) {
+      return "landscaping";
+    }
+
+    if (value.includes("moving")) {
+      return "moving";
+    }
+
+    if (
+      value.includes("drapery") ||
+      value.includes("shade") ||
+      value.includes("blind") ||
+      value.includes("window")
+    ) {
+      return "window treatments";
+    }
+
+    return "other";
+  }
+
+
+  /* =====================================================
+     JOB REFERENCE
+     ===================================================== */
+
+  function generateJobReference() {
+    const randomNumber =
+      Math.floor(
+        100000 + Math.random() * 900000
+      );
+
+    return `KORVO-${randomNumber}`;
+  }
+
+
+  /* =====================================================
+     SAVE JOB
+     ===================================================== */
 
   function saveJob(jobData) {
     let savedJobs = [];
 
     try {
       const existingJobs =
-        localStorage.getItem("korvoJobs");
+        localStorage.getItem(
+          STORAGE_KEY
+        );
 
-      savedJobs = existingJobs
-        ? JSON.parse(existingJobs)
-        : [];
+      if (existingJobs) {
+        const parsedJobs =
+          JSON.parse(existingJobs);
 
-      if (!Array.isArray(savedJobs)) {
-        savedJobs = [];
+        if (Array.isArray(parsedJobs)) {
+          savedJobs = parsedJobs;
+        }
       }
     } catch (error) {
       console.error(
-        "Korvo could not read saved jobs:",
+        "Could not load existing Korvo jobs:",
         error
       );
 
       savedJobs = [];
     }
 
+
     savedJobs.unshift(jobData);
+
 
     try {
       localStorage.setItem(
-        "korvoJobs",
+        STORAGE_KEY,
         JSON.stringify(savedJobs)
       );
 
@@ -1131,7 +1208,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return true;
     } catch (error) {
       console.error(
-        "Korvo could not save the job:",
+        "Could not save Korvo job:",
         error
       );
 
@@ -1140,166 +1217,202 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* ========================================
+  /* =====================================================
      FORM SUBMISSION
-  ======================================== */
+     ===================================================== */
 
-  jobForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+  if (jobForm) {
+    jobForm.addEventListener(
+      "submit",
+      (event) => {
+        event.preventDefault();
 
-    const jobData = createJobData();
-    const savedSuccessfully = saveJob(jobData);
 
-    if (!savedSuccessfully) {
-      alert(
-        "Korvo could not save this job in your browser. " +
-        "Please check your browser storage settings."
-      );
+        if (!validateStep(4)) {
+          currentStep = 4;
 
-      return;
+          showStep(currentStep);
+
+          return;
+        }
+
+
+        const jobData =
+          createJobData();
+
+
+        const saved =
+          saveJob(jobData);
+
+
+        if (!saved) {
+          alert(
+            "Korvo could not save the job. Please try again."
+          );
+
+          return;
+        }
+
+
+        showSuccessModal(jobData);
+      }
+    );
+  }
+
+
+  /* =====================================================
+     SUCCESS MODAL
+     ===================================================== */
+
+  const successModal =
+    document.getElementById(
+      "successModal"
+    );
+
+  const jobReference =
+    document.getElementById(
+      "jobReference"
+    );
+
+  const postAnotherButton =
+    document.getElementById(
+      "postAnotherButton"
+    );
+
+
+  function showSuccessModal(jobData) {
+    if (!successModal) return;
+
+
+    if (jobReference) {
+      jobReference.textContent =
+        jobData.reference;
     }
 
-    jobReference.textContent = jobData.id;
 
-    successModal.classList.add("open");
+    successModal.classList.add(
+      "active"
+    );
 
     successModal.setAttribute(
       "aria-hidden",
       "false"
     );
 
-    document.body.classList.add("modal-open");
-  });
-
-
-  /* ========================================
-     POST ANOTHER JOB
-  ======================================== */
-
-  postAnotherButton.addEventListener("click", () => {
-    successModal.classList.remove("open");
-
-    successModal.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-    document.body.classList.remove("modal-open");
-
-    jobForm.reset();
-
-    selectedPhotoFiles = [];
-
-    imagePreviewGrid.innerHTML = "";
-
-    serviceCards.forEach((card) => {
-      card.classList.remove(
-        "selected",
-        "hidden-service"
-      );
-    });
-
-    serviceSearch.value = "";
-
-    preferredDateGroup.classList.remove("show");
-
-    document
-      .querySelectorAll(".field-error")
-      .forEach((error) => {
-        error.classList.remove("show");
-      });
-
-    document
-      .querySelectorAll(".input-error")
-      .forEach((input) => {
-        input.classList.remove("input-error");
-      });
-
-    updateCharacterCount(
-      jobTitle,
-      jobTitleCount,
-      80
-    );
-
-    updateCharacterCount(
-      jobDescription,
-      descriptionCount,
-      1200
-    );
-
-    showStep(1);
-  });
-
-
-  /* ========================================
-     CLOSE MODAL WITH ESCAPE KEY
-  ======================================== */
-
-  document.addEventListener("keydown", (event) => {
-    if (
-      event.key === "Escape" &&
-      successModal.classList.contains("open")
-    ) {
-      successModal.classList.remove("open");
-
-      successModal.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-      document.body.classList.remove("modal-open");
-    }
-  });
-
-
-  /* ========================================
-     LOAD SERVICE FROM URL
-  ======================================== */
-
-  function loadServiceFromURL() {
-    const params = new URLSearchParams(
-      window.location.search
-    );
-
-    const requestedService = params.get("service");
-
-    if (!requestedService) {
-      return;
-    }
-
-    serviceInputs.forEach((input) => {
-      const isMatch =
-        input.value.toLowerCase() ===
-        requestedService.toLowerCase();
-
-      if (isMatch) {
-        input.checked = true;
-
-        input
-          .closest(".service-card")
-          .classList.add("selected");
-      }
-    });
+    document.body.style.overflow =
+      "hidden";
   }
 
 
-  /* ========================================
-     INITIAL PAGE SETUP
-  ======================================== */
+  if (postAnotherButton) {
+    postAnotherButton.addEventListener(
+      "click",
+      () => {
+        successModal?.classList.remove(
+          "active"
+        );
 
-  loadServiceFromURL();
+        successModal?.setAttribute(
+          "aria-hidden",
+          "true"
+        );
 
-  updateCharacterCount(
-    jobTitle,
-    jobTitleCount,
-    80
-  );
+        document.body.style.overflow =
+          "";
 
-  updateCharacterCount(
-    jobDescription,
-    descriptionCount,
-    1200
-  );
+
+        jobForm?.reset();
+
+        selectedPhotos = [];
+
+        if (imagePreviewGrid) {
+          imagePreviewGrid.innerHTML = "";
+        }
+
+
+        serviceCards.forEach((card) => {
+          card.classList.remove(
+            "selected"
+          );
+        });
+
+
+        document
+          .querySelectorAll(
+            ".option-card"
+          )
+          .forEach((card) => {
+            card.classList.remove(
+              "selected"
+            );
+          });
+
+
+        preferredDateGroup?.classList.add(
+          "hidden-field"
+        );
+
+
+        if (jobTitleCount) {
+          jobTitleCount.textContent =
+            "0 / 80";
+        }
+
+
+        if (descriptionCount) {
+          descriptionCount.textContent =
+            "0 / 1200";
+        }
+
+
+        currentStep = 1;
+
+        showStep(currentStep);
+      }
+    );
+  }
+
+
+  /* =====================================================
+     DATE FORMATTER
+     ===================================================== */
+
+  function formatDate(dateValue) {
+    if (!dateValue) {
+      return "";
+    }
+
+    const date =
+      new Date(
+        `${dateValue}T12:00:00`
+      );
+
+    return date.toLocaleDateString(
+      "en-US",
+      {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      }
+    );
+  }
+
+
+  /* =====================================================
+     START PAGE
+     ===================================================== */
+
+  document
+    .querySelectorAll(".field-error")
+    .forEach((error) => {
+      error.style.display = "none";
+    });
+
 
   showStep(1);
+
+
+  console.log(
+    "Korvo Post-a-Job system loaded."
+  );
 });
