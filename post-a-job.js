@@ -1044,7 +1044,71 @@ document.addEventListener("DOMContentLoaded", function () {
   /* ======================================
      START
   ====================================== */
+/* ======================================
+   FIX SERVICE CATEGORY SELECTION
+====================================== */
 
+const serviceCardElements =
+  document.querySelectorAll(".service-card");
+
+serviceCardElements.forEach(function (card) {
+
+  const radio =
+    card.querySelector(
+      'input[type="radio"][name="service"]'
+    );
+
+  if (!radio) return;
+
+
+  card.addEventListener(
+    "click",
+    function () {
+
+      radio.checked = true;
+
+      serviceCardElements.forEach(
+        function (otherCard) {
+
+          otherCard.classList.remove(
+            "selected"
+          );
+
+        }
+      );
+
+      card.classList.add("selected");
+
+      hideError("serviceError");
+
+    }
+  );
+
+
+  radio.addEventListener(
+    "change",
+    function () {
+
+      if (radio.checked) {
+
+        serviceCardElements.forEach(
+          function (otherCard) {
+
+            otherCard.classList.remove(
+              "selected"
+            );
+
+          }
+        );
+
+        card.classList.add("selected");
+
+      }
+
+    }
+  );
+
+});
   showStep(1);
 
   console.log(
