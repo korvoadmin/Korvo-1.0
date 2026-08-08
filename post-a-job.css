@@ -1689,3 +1689,177 @@ label:has(input:focus-visible) {
     transition-duration: 0.01ms !important;
   }
 }
+/* =========================================
+   FIX: CENTER JOB POSTED CONFIRMATION
+========================================= */
+
+.success-modal {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(3, 10, 20, 0.82);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  z-index: 99999;
+}
+
+.success-modal.active {
+  display: flex !important;
+}
+
+.success-modal-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.success-modal-content {
+  position: relative;
+  z-index: 2;
+
+  width: min(520px, 100%);
+
+  margin: auto;
+
+  text-align: center;
+
+  background: #0d1b2d;
+
+  border: 1px solid rgba(33, 208, 122, 0.5);
+
+  border-radius: 24px;
+
+  padding: 40px 32px;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(33, 208, 122, 0.08);
+}
+
+.success-checkmark {
+  width: 64px;
+  height: 64px;
+
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #21d07a;
+  color: #04140c;
+
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.success-label {
+  display: inline-block;
+
+  margin-bottom: 10px;
+
+  color: #21d07a;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+.success-modal-content h2 {
+  margin-bottom: 12px;
+
+  color: white;
+
+  font-size: 1.8rem;
+}
+
+.success-modal-content > p {
+  max-width: 420px;
+
+  margin: 0 auto 22px;
+
+  color: #9db0c8;
+
+  line-height: 1.6;
+}
+
+.success-job-number {
+  max-width: 360px;
+
+  margin: 0 auto 24px;
+
+  padding: 15px;
+
+  border: 1px solid #203650;
+  border-radius: 13px;
+
+  background: #07111f;
+}
+
+.success-job-number span {
+  display: block;
+
+  color: #91a4bd;
+
+  font-size: 0.75rem;
+
+  margin-bottom: 4px;
+}
+
+.success-job-number strong {
+  color: #21d07a;
+
+  font-size: 1.05rem;
+
+  letter-spacing: 1px;
+}
+
+.success-actions {
+  display: flex;
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.return-home-link {
+  display: inline-block;
+
+  color: #91a4bd;
+
+  font-size: 0.85rem;
+}
+
+.return-home-link:hover {
+  color: white;
+}
+
+@media (max-width: 550px) {
+
+  .success-modal-content {
+    padding: 32px 20px;
+  }
+
+  .success-actions {
+    flex-direction: column;
+  }
+
+  .success-actions a,
+  .success-actions button {
+    width: 100%;
+  }
+}
