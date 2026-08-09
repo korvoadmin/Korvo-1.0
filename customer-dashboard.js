@@ -592,26 +592,18 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function getSubmittedJobs() {
-    const possibleStorageKeys = [
-      "korvoJobs",
-      "korvoPostedJobs",
-      "korvoSubmittedJobs"
-    ];
+  const jobs =
+    safelyReadLocalStorage(
+      "korvoCustomerJobs",
+      []
+    );
 
-    for (const key of possibleStorageKeys) {
-      const jobs =
-        safelyReadLocalStorage(key, []);
-
-      if (
-        Array.isArray(jobs) &&
-        jobs.length > 0
-      ) {
-        return jobs;
-      }
-    }
-
-    return [];
+  if (Array.isArray(jobs)) {
+    return jobs;
   }
+
+  return [];
+}
 
   function formatPostedDate(dateValue) {
     if (!dateValue) {
