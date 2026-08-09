@@ -123,11 +123,148 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   }
+ function showDemoMessage(message) {
+  openInfoModal({
+    eyebrow: "KORVO",
+    title: "Coming Soon",
+    message: message,
+    details: []
+  });
+}
+/* =========================
+   Korvo Information Modal
+   ========================= */
 
-  function showDemoMessage(message) {
-    alert(message);
+const infoModal =
+  document.getElementById("infoModal");
+
+const infoModalCard =
+  infoModal
+    ? infoModal.querySelector(".info-modal-card")
+    : null;
+
+const infoModalEyebrow =
+  document.getElementById("infoModalEyebrow");
+
+const infoModalTitle =
+  document.getElementById("infoModalTitle");
+
+const infoModalMessage =
+  document.getElementById("infoModalMessage");
+
+const infoModalDetails =
+  document.getElementById("infoModalDetails");
+
+const closeInfoModalButton =
+  document.getElementById("closeInfoModalButton");
+
+const infoModalDoneButton =
+  document.getElementById("infoModalDoneButton");
+
+const infoModalIcon =
+  document.getElementById("infoModalIcon");
+
+
+function openInfoModal({
+  eyebrow = "KORVO",
+  title = "Information",
+  message = "",
+  details = [],
+  success = false
+}) {
+  if (!infoModal) {
+    return;
   }
 
+  infoModalEyebrow.textContent =
+    eyebrow;
+
+  infoModalTitle.textContent =
+    title;
+
+  infoModalMessage.textContent =
+    message;
+
+  infoModalDetails.innerHTML =
+    "";
+
+  if (infoModalCard) {
+    infoModalCard.classList.toggle(
+      "success-modal",
+      success
+    );
+  }
+
+  if (infoModalIcon) {
+    infoModalIcon.textContent =
+      success ? "✓" : "i";
+  }
+
+  details.forEach((detail) => {
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "info-detail-row";
+
+    row.innerHTML = `
+      <span class="info-detail-label">
+        ${detail.label}
+      </span>
+
+      <span class="info-detail-value">
+        ${detail.value}
+      </span>
+    `;
+
+    infoModalDetails.appendChild(
+      row
+    );
+  });
+
+  infoModal.classList.remove(
+    "hidden"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
+}
+
+
+function closeInfoModal() {
+  if (!infoModal) {
+    return;
+  }
+
+  infoModal.classList.add(
+    "hidden"
+  );
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+}
+
+
+closeInfoModalButton?.addEventListener(
+  "click",
+  closeInfoModal
+);
+
+infoModalDoneButton?.addEventListener(
+  "click",
+  closeInfoModal
+);
+
+infoModal?.addEventListener(
+  "click",
+  (event) => {
+    if (event.target === infoModal) {
+      closeInfoModal();
+    }
+  }
+);
   /* =========================
      Mobile Navigation
      ========================= */
@@ -163,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
   }
-
+  
   /* =========================
      Customer Menu
      ========================= */
@@ -352,28 +489,61 @@ document.addEventListener("DOMContentLoaded", () => {
         acceptedQuotes
       );
 
-      showDemoMessage(
-        `Quote from ${pendingProfessional} accepted in the Korvo demo.`
-      );
+      const acceptedProfessional =
+  pendingProfessional;
 
+closeAcceptModal();
+
+openInfoModal({
+  eyebrow: "QUOTE ACCEPTED",
+  title: "Professional Selected!",
+  message:
+    "Your quote selection has been saved in the Korvo demo.",
+  success: true,
+  details: [
+    {
+      label: "Professional",
+      value: acceptedProfessional
+    },
+    {
+      label: "Status",
+      value: "Accepted"
+    },
+    {
+      label: "Next Step",
+      value: "Booking and payment flow coming soon"
+    }
+  ]
+});
+    }
+  );
+
+ document.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    if (
+      acceptQuoteModal &&
+      !acceptQuoteModal.classList.contains(
+        "hidden"
+      )
+    ) {
       closeAcceptModal();
     }
-  );
 
-  document.addEventListener(
-    "keydown",
-    (event) => {
-      if (
-        event.key === "Escape" &&
-        acceptQuoteModal &&
-        !acceptQuoteModal.classList.contains(
-          "hidden"
-        )
-      ) {
-        closeAcceptModal();
-      }
+    if (
+      infoModal &&
+      !infoModal.classList.contains(
+        "hidden"
+      )
+    ) {
+      closeInfoModal();
     }
-  );
+  }
+);
 
   /* =========================
      Message Buttons

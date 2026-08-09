@@ -1668,3 +1668,83 @@ textarea {
     width: 100%;
   }
 }
+
+/* =========================
+   Korvo Information Modal
+   ========================= */
+
+.info-modal-card {
+  max-width: 560px;
+}
+
+.info-modal-details {
+  margin-top: 22px;
+  display: grid;
+  gap: 12px;
+}
+
+.info-detail-row {
+  padding: 14px 16px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 12px;
+
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.info-detail-label {
+  color: #94a3b8;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.info-detail-value {
+  color: #f8fafc;
+
+  font-weight: 800;
+
+  text-align: right;
+}
+
+.info-modal-card.success-modal {
+  text-align: center;
+}
+
+.info-modal-card.success-modal
+.info-modal-details {
+  text-align: left;
+}
+
+.info-modal-card .modal-actions {
+  margin-top: 24px;
+}
+
+.info-modal-card
+.modal-actions
+.primary-button {
+  min-width: 120px;
+}
+
+@media (max-width: 600px) {
+  .info-detail-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .info-detail-value {
+    text-align: left;
+  }
+
+  .info-modal-card
+  .modal-actions
+  .primary-button {
+    width: 100%;
+  }
+}
