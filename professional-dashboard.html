@@ -710,7 +710,60 @@
       </form>
     </div>
   </div>
+  <!-- =========================
+       Korvo Information Modal
+       ========================= -->
 
+  <div
+    class="modal-overlay hidden"
+    id="infoModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="infoModalTitle"
+  >
+    <div class="modal-card info-modal-card">
+      <button
+        type="button"
+        class="modal-close-button"
+        id="closeInfoModalButton"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+      <div class="modal-header">
+        <p
+          class="eyebrow"
+          id="infoModalEyebrow"
+        >
+          KORVO
+        </p>
+
+        <h2 id="infoModalTitle">
+          Information
+        </h2>
+
+        <p id="infoModalMessage">
+          Details will appear here.
+        </p>
+      </div>
+
+      <div
+        class="info-modal-details"
+        id="infoModalDetails"
+      ></div>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="primary-button"
+          id="infoModalDoneButton"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
   <!-- =========================
        Footer
        ========================= -->

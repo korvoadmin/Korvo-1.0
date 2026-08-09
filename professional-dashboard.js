@@ -565,12 +565,35 @@ document.addEventListener("DOMContentLoaded", () => {
             "Not listed";
 
 
-          alert(
-            `${title}\n\n` +
-            `${description}\n\n` +
-            `Location: ${location}\n` +
-            `Budget: ${budget}`
-          );
+         openInfoModal({
+  eyebrow: "JOB DETAILS",
+  title: title,
+  message: description,
+  details: [
+    {
+      label: "Location",
+      value: location
+    },
+    {
+      label: "Budget",
+      value: budget
+    },
+    {
+      label: "Preferred Date",
+      value:
+        job.date ||
+        job.preferredDate ||
+        "Flexible"
+    },
+    {
+      label: "Customer",
+      value:
+        job.customer ||
+        job.customerName ||
+        "Korvo Customer"
+    }
+  ]
+});
         }
       );
     });
@@ -831,9 +854,31 @@ document.addEventListener("DOMContentLoaded", () => {
         closeQuoteModal();
 
 
-        alert(
-          `Quote submitted successfully!\n\n$${amount.toLocaleString()} for ${quote.jobTitle}`
-        );
+        openInfoModal({
+  eyebrow: "QUOTE SENT",
+  title: "Quote Submitted!",
+  message:
+    "Your quote has been sent to the customer and is now being tracked in Submitted Quotes.",
+  success: true,
+  details: [
+    {
+      label: "Job",
+      value: quote.jobTitle
+    },
+    {
+      label: "Your Quote",
+      value: `$${amount.toLocaleString()}`
+    },
+    {
+      label: "Timeframe",
+      value: quote.timeframe
+    },
+    {
+      label: "Status",
+      value: quote.status
+    }
+  ]
+});
       }
     );
   }
@@ -1248,52 +1293,124 @@ document.addEventListener("DOMContentLoaded", () => {
      Quick Actions
      ========================= */
 
-  if (messagesButton) {
-    messagesButton.addEventListener(
-      "click",
-      () => {
-        alert(
-          "Korvo Messages will be built in an upcoming step."
-        );
-      }
-    );
-  }
+ if (messagesButton) {
+  messagesButton.addEventListener(
+    "click",
+    () => {
+      openInfoModal({
+        eyebrow: "KORVO MESSAGES",
+        title: "Messages Coming Soon",
+        message:
+          "Customer and professional conversations will live securely inside Korvo.",
+        details: [
+          {
+            label: "Communication",
+            value: "Inside Korvo"
+          },
+          {
+            label: "Job Records",
+            value: "Messages retained with the job"
+          },
+          {
+            label: "Purpose",
+            value: "Support and dispute records"
+          }
+        ]
+      });
+    }
+  );
+}
 
 
   if (availabilityButton) {
-    availabilityButton.addEventListener(
-      "click",
-      () => {
-        alert(
-          "Professional availability settings are coming next."
-        );
-      }
-    );
-  }
+  availabilityButton.addEventListener(
+    "click",
+    () => {
+      openInfoModal({
+        eyebrow: "AVAILABILITY",
+        title: "Availability Settings",
+        message:
+          "Soon you will be able to control when customers can request or book your services.",
+        details: [
+          {
+            label: "Weekly Schedule",
+            value: "Coming soon"
+          },
+          {
+            label: "Unavailable Dates",
+            value: "Coming soon"
+          },
+          {
+            label: "Booking Preferences",
+            value: "Coming soon"
+          }
+        ]
+      });
+    }
+  );
+}
 
 
-  if (servicesButton) {
-    servicesButton.addEventListener(
-      "click",
-      () => {
-        alert(
-          "Service management will be added to the professional profile system."
-        );
-      }
-    );
-  }
+ if (servicesButton) {
+  servicesButton.addEventListener(
+    "click",
+    () => {
+      openInfoModal({
+        eyebrow: "SERVICES",
+        title: "Manage Services",
+        message:
+          "Soon you will be able to choose the services you offer and control what kinds of jobs appear in your dashboard.",
+        details: [
+          {
+            label: "Service Categories",
+            value: "Coming soon"
+          },
+          {
+            label: "Job Matching",
+            value: "Based on your services"
+          },
+          {
+            label: "Service Area",
+            value: "Coming soon"
+          }
+        ]
+      });
+    }
+  );
+}
 
 
   if (accountSettingsButton) {
-    accountSettingsButton.addEventListener(
-      "click",
-      () => {
-        alert(
-          "Account Settings will be added after the dashboard system is complete."
-        );
-      }
-    );
-  }
+  accountSettingsButton.addEventListener(
+    "click",
+    () => {
+      openInfoModal({
+        eyebrow: "ACCOUNT SETTINGS",
+        title: "Account Settings",
+        message:
+          "Soon you will be able to manage your Korvo account, security, and professional preferences here.",
+        details: [
+          {
+            label: "Login & Security",
+            value: "Coming soon"
+          },
+          {
+            label: "Notifications",
+            value: "Coming soon"
+          },
+          {
+            label: "Language",
+            value: "English / Español"
+          },
+          {
+            label: "Account Type",
+            value: "Professional"
+          }
+        ]
+      });
+    }
+  );
+}
 
 
   if (logoutButton) {
@@ -1343,7 +1460,153 @@ document.addEventListener("DOMContentLoaded", () => {
       );
   }
 
+  /* =========================
+     Korvo Information Modal
+     ========================= */
 
+  const infoModal =
+    document.getElementById("infoModal");
+
+  const infoModalCard =
+    infoModal
+      ? infoModal.querySelector(".info-modal-card")
+      : null;
+
+  const infoModalEyebrow =
+    document.getElementById("infoModalEyebrow");
+
+  const infoModalTitle =
+    document.getElementById("infoModalTitle");
+
+  const infoModalMessage =
+    document.getElementById("infoModalMessage");
+
+  const infoModalDetails =
+    document.getElementById("infoModalDetails");
+
+  const closeInfoModalButton =
+    document.getElementById("closeInfoModalButton");
+
+  const infoModalDoneButton =
+    document.getElementById("infoModalDoneButton");
+
+
+  function openInfoModal({
+    eyebrow = "KORVO",
+    title = "Information",
+    message = "",
+    details = [],
+    success = false
+  }) {
+    if (!infoModal) {
+      return;
+    }
+
+    infoModalEyebrow.textContent =
+      eyebrow;
+
+    infoModalTitle.textContent =
+      title;
+
+    infoModalMessage.textContent =
+      message;
+
+    infoModalDetails.innerHTML =
+      "";
+
+    if (infoModalCard) {
+      infoModalCard.classList.toggle(
+        "success-modal",
+        success
+      );
+    }
+
+    if (success) {
+      const successIcon =
+        document.createElement("div");
+
+      successIcon.className =
+        "info-success-icon";
+
+      successIcon.textContent =
+        "✓";
+
+      infoModalDetails.appendChild(
+        successIcon
+      );
+    }
+
+    details.forEach((detail) => {
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "info-detail-row";
+
+      row.innerHTML = `
+        <span class="info-detail-label">
+          ${escapeHTML(detail.label)}
+        </span>
+
+        <span class="info-detail-value">
+          ${escapeHTML(detail.value)}
+        </span>
+      `;
+
+      infoModalDetails.appendChild(
+        row
+      );
+    });
+
+    infoModal.classList.remove(
+      "hidden"
+    );
+
+    document.body.style.overflow =
+      "hidden";
+  }
+
+
+  function closeInfoModal() {
+    if (!infoModal) {
+      return;
+    }
+
+    infoModal.classList.add(
+      "hidden"
+    );
+
+    document.body.style.overflow =
+      "";
+  }
+
+
+  if (closeInfoModalButton) {
+    closeInfoModalButton.addEventListener(
+      "click",
+      closeInfoModal
+    );
+  }
+
+
+  if (infoModalDoneButton) {
+    infoModalDoneButton.addEventListener(
+      "click",
+      closeInfoModal
+    );
+  }
+
+
+  if (infoModal) {
+    infoModal.addEventListener(
+      "click",
+      (event) => {
+        if (event.target === infoModal) {
+          closeInfoModal();
+        }
+      }
+    );
+  }
   /* =========================
      Initialize Dashboard
      ========================= */
