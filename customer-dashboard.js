@@ -550,50 +550,57 @@ openInfoModal({
      ========================= */
 
   document
-    .querySelectorAll(
-      ".message-professional-button"
-    )
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        const professionalName =
-          button.dataset.professional ||
-          "this professional";
+  .querySelectorAll(
+    ".message-professional-button"
+  )
+  .forEach((button) => {
+    button.addEventListener("click", () => {
+      const professionalName =
+        button.dataset.professional ||
+        "";
 
-        showDemoMessage(
-          `Messaging with ${professionalName} is coming next.`
-        );
-      });
+      localStorage.setItem(
+        "korvoOpenConversation",
+        professionalName
+      );
+
+      window.location.href =
+        "messages.html";
     });
+  });
 
-  document
-    .querySelectorAll(
-      "[data-message-professional]"
-    )
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        const professionalName =
-          button.dataset.messageProfessional ||
-          "this professional";
+ document
+  .querySelectorAll(
+    "[data-message-professional]"
+  )
+  .forEach((button) => {
+    button.addEventListener("click", () => {
+      const professionalName =
+        button.dataset.messageProfessional ||
+        "";
 
-        showDemoMessage(
-          `Opening the conversation with ${professionalName} will be added on the messaging page.`
-        );
-      });
+      localStorage.setItem(
+        "korvoOpenConversation",
+        professionalName
+      );
+
+      window.location.href =
+        "messages.html";
     });
+  });
 
   [
-    "messagesQuickAction",
-    "menuMessagesButton",
-    "viewMessagesButton"
-  ].forEach((elementId) => {
-    document
-      .getElementById(elementId)
-      ?.addEventListener("click", () => {
-        showDemoMessage(
-          "The Korvo inbox and messaging page will be built next."
-        );
-      });
-  });
+  "messagesQuickAction",
+  "menuMessagesButton",
+  "viewMessagesButton"
+].forEach((elementId) => {
+  document
+    .getElementById(elementId)
+    ?.addEventListener("click", () => {
+      window.location.href =
+        "messages.html";
+    });
+});
 
   [
     "settingsQuickAction",

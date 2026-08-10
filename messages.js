@@ -117,7 +117,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   let activeConversationId =
-    "chris-custom-installations";
+  "chris-custom-installations";
+
+const requestedConversationName =
+  localStorage.getItem(
+    "korvoOpenConversation"
+  );
+
+if (requestedConversationName) {
+  const matchingConversation =
+    Object.entries(conversations)
+      .find(
+        ([, conversation]) =>
+          conversation.name ===
+          requestedConversationName
+      );
+
+  if (matchingConversation) {
+    activeConversationId =
+      matchingConversation[0];
+  }
+
+  localStorage.removeItem(
+    "korvoOpenConversation"
+  );
+}
 
 
   /* =========================
