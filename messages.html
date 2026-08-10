@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Korvo in-app messaging for customers and professionals."
+  />
+
+  <title>Messages | Korvo</title>
+
+  <link rel="stylesheet" href="messages.css" />
+</head>
+
+<body>
+
+  <!-- =========================
+       Header
+       ========================= -->
+
+  <header class="site-header">
+    <div class="header-container">
+
+      <a
+        href="index.html"
+        class="logo"
+        aria-label="Korvo home"
+      >
+        Korvo
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse Professionals</a>
+        <a href="customer-dashboard.html">Customer Dashboard</a>
+        <a href="professional-dashboard.html">Pro Dashboard</a>
+        <a href="messages.html" class="active">Messages</a>
+      </nav>
+
+      <div class="header-actions">
+
+        <button
+          type="button"
+          class="notification-button"
+          aria-label="Notifications"
+        >
+          🔔
+          <span class="notification-count">2</span>
+        </button>
+
+        <a
+          href="customer-dashboard.html"
+          class="profile-button"
+        >
+          <span class="profile-avatar">CC</span>
+          <span class="profile-name">Chris</span>
+        </a>
+
+        <button
+          type="button"
+          class="mobile-menu-button"
+          id="mobileMenuButton"
+          aria-label="Open navigation"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+
+      </div>
+    </div>
+
+    <nav
+      class="mobile-nav"
+      id="mobileNav"
+    >
+      <a href="index.html">Home</a>
+      <a href="browse.html">Browse Professionals</a>
+      <a href="customer-dashboard.html">Customer Dashboard</a>
+      <a href="professional-dashboard.html">Pro Dashboard</a>
+      <a href="messages.html">Messages</a>
+    </nav>
+  </header>
+
+
+  <!-- =========================
+       Main Messaging App
+       ========================= -->
+
+  <main class="messages-page">
+
+    <div class="messages-container">
+
+      <!-- Page Heading -->
+
+      <section class="messages-heading">
+        <div>
+          <p class="eyebrow">
+            KORVO MESSAGES
+          </p>
+
+          <h1>
+            Keep every job conversation in one place
+          </h1>
+
+          <p>
+            Message customers and professionals directly through Korvo
+            so job details, updates and agreements stay connected to
+            the project record.
+          </p>
+        </div>
+      </section>
+
+
+      <!-- Safety Notice -->
+
+      <section class="message-safety-notice">
+        <div class="safety-icon">
+          🛡️
+        </div>
+
+        <div>
+          <strong>
+            Keep communication inside Korvo
+          </strong>
+
+          <p>
+            Staying in Korvo creates a clearer record of job
+            conversations. Off-platform communication or transactions
+            may not be eligible for certain Korvo support or
+            protection features.
+          </p>
+        </div>
+      </section>
+
+
+      <!-- Messaging Layout -->
+
+      <section class="messaging-layout">
+
+        <!-- Conversation Sidebar -->
+
+        <aside class="conversation-sidebar">
+
+          <div class="conversation-sidebar-header">
+            <div>
+              <p class="eyebrow">
+                INBOX
+              </p>
+
+              <h2>
+                Conversations
+              </h2>
+            </div>
+
+            <span class="conversation-count">
+              2
+            </span>
+          </div>
+
+
+          <div class="conversation-search">
+            <label
+              for="conversationSearch"
+              class="sr-only"
+            >
+              Search conversations
+            </label>
+
+            <input
+              type="search"
+              id="conversationSearch"
+              placeholder="Search messages..."
+            />
+          </div>
+
+
+          <div
+            class="conversation-list"
+            id="conversationList"
+          >
+
+            <button
+              type="button"
+              class="conversation-item active"
+              data-conversation="chris-custom-installations"
+            >
+              <div class="conversation-avatar">
+                CC
+              </div>
+
+              <div class="conversation-preview">
+                <div class="conversation-preview-top">
+                  <strong>
+                    Chris Custom Installations
+                  </strong>
+
+                  <span>
+                    12m
+                  </span>
+                </div>
+
+                <p>
+                  I can complete the installation Friday...
+                </p>
+
+                <span class="conversation-job">
+                  Install Motorized Shades
+                </span>
+              </div>
+
+              <span class="conversation-unread-dot"></span>
+            </button>
+
+
+            <button
+              type="button"
+              class="conversation-item"
+              data-conversation="prestige-cleaning"
+            >
+              <div class="conversation-avatar cleaning-avatar">
+                PE
+              </div>
+
+              <div class="conversation-preview">
+                <div class="conversation-preview-top">
+                  <strong>
+                    Prestige Estate Cleaning
+                  </strong>
+
+                  <span>
+                    1d
+                  </span>
+                </div>
+
+                <p>
+                  We updated the estimate for your project.
+                </p>
+
+                <span class="conversation-job">
+                  Deep Cleaning for Apartment
+                </span>
+              </div>
+            </button>
+
+          </div>
+        </aside>
+
+
+        <!-- Active Conversation -->
+
+        <section class="chat-panel">
+
+          <!-- Chat Header -->
+
+          <div class="chat-header">
+
+            <div class="chat-professional">
+
+              <div class="chat-avatar">
+                CC
+              </div>
+
+              <div>
+                <div class="chat-name-row">
+                  <h2 id="activeConversationName">
+                    Chris Custom Installations
+                  </h2>
+
+                  <span class="verified-badge">
+                    ✓ Verified
+                  </span>
+                </div>
+
+                <p id="activeConversationStatus">
+                  Typically replies within an hour
+                </p>
+              </div>
+
+            </div>
+
+            <a
+              href="chris-profile.html"
+              class="secondary-button"
+              id="viewConversationProfile"
+            >
+              View Profile
+            </a>
+
+          </div>
+
+
+          <!-- Job Context -->
+
+          <div class="chat-job-context">
+
+            <div>
+              <span class="job-context-label">
+                JOB
+              </span>
+
+              <strong id="activeJobTitle">
+                Install Motorized Shades
+              </strong>
+            </div>
+
+            <div>
+              <span class="job-context-label">
+                LOCATION
+              </span>
+
+              <strong id="activeJobLocation">
+                Atlanta, GA
+              </strong>
+            </div>
+
+            <div>
+              <span class="job-context-label">
+                STATUS
+              </span>
+
+              <strong class="job-status">
+                Quote received
+              </strong>
+            </div>
+
+          </div>
+
+
+          <!-- Messages -->
+
+          <div
+            class="chat-messages"
+            id="chatMessages"
+          >
+
+            <div class="message-date-divider">
+              Today
+            </div>
+
+
+            <article class="message-bubble incoming">
+
+              <div class="message-sender">
+                Chris Custom Installations
+              </div>
+
+              <p>
+                Hi Chris, I saw your motorized shade installation
+                request. I can complete the installation Friday
+                afternoon.
+              </p>
+
+              <span class="message-time">
+                6:32 PM
+              </span>
+
+            </article>
+
+
+            <article class="message-bubble outgoing">
+
+              <p>
+                Sounds good. Does your quote include programming the
+                shades too?
+              </p>
+
+              <span class="message-time">
+                6:36 PM
+              </span>
+
+            </article>
+
+
+            <article class="message-bubble incoming">
+
+              <div class="message-sender">
+                Chris Custom Installations
+              </div>
+
+              <p>
+                Yes. Installation, programming, testing and cleanup
+                are included.
+              </p>
+
+              <span class="message-time">
+                6:39 PM
+              </span>
+
+            </article>
+
+          </div>
+
+
+          <!-- Composer -->
+
+          <div class="message-composer">
+
+            <div class="composer-notice">
+              Job-related messages may be retained as part of the Korvo
+              job record for support, safety and dispute review.
+            </div>
+
+            <form id="messageForm">
+
+              <div class="composer-row">
+
+                <button
+                  type="button"
+                  class="attachment-button"
+                  id="attachmentButton"
+                  aria-label="Attach photo"
+                >
+                  ＋
+                </button>
+
+                <textarea
+                  id="messageInput"
+                  rows="1"
+                  maxlength="1200"
+                  placeholder="Write a message..."
+                  required
+                ></textarea>
+
+                <button
+                  type="submit"
+                  class="send-button"
+                >
+                  Send
+                </button>
+
+              </div>
+
+              <div class="composer-footer">
+
+                <span>
+                  Keep phone numbers, payments and job details inside
+                  Korvo whenever possible.
+                </span>
+
+                <span>
+                  <span id="messageCharacterCount">0</span>/1200
+                </span>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </section>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       Footer
+       ========================= -->
+
+  <footer class="site-footer">
+
+    <div class="footer-container">
+
+      <div>
+        <a
+          href="index.html"
+          class="footer-logo"
+        >
+          Korvo
+        </a>
+
+        <p>
+          Local work. Trusted connections.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="browse.html">Browse Professionals</a>
+        <a href="customer-dashboard.html">Customer Dashboard</a>
+        <a href="professional-dashboard.html">Pro Dashboard</a>
+        <a href="mission.html">Our Mission</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © <span id="currentYear"></span> Korvo.
+      All rights reserved.
+    </div>
+
+  </footer>
+
+
+  <script src="messages.js"></script>
+
+</body>
+</html>
