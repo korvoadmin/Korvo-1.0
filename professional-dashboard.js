@@ -1307,32 +1307,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 }
-  messagesButton.addEventListener(
-    "click",
-    () => {
-      openInfoModal({
-        eyebrow: "KORVO MESSAGES",
-        title: "Messages Coming Soon",
-        message:
-          "Customer and professional conversations will live securely inside Korvo.",
-        details: [
-          {
-            label: "Communication",
-            value: "Inside Korvo"
-          },
-          {
-            label: "Job Records",
-            value: "Messages retained with the job"
-          },
-          {
-            label: "Purpose",
-            value: "Support and dispute records"
-          }
-        ]
-      });
-    }
-  );
-}
 
 
   if (availabilityButton) {
