@@ -1297,6 +1297,19 @@ document.addEventListener("DOMContentLoaded", () => {
   messagesButton.addEventListener(
     "click",
     () => {
+      localStorage.setItem(
+        "korvoMessagingRole",
+        "professional"
+      );
+
+      window.location.href =
+        "messages.html";
+    }
+  );
+}
+  messagesButton.addEventListener(
+    "click",
+    () => {
       openInfoModal({
         eyebrow: "KORVO MESSAGES",
         title: "Messages Coming Soon",
