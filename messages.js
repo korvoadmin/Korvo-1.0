@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const isProfessional =
     messagingRole === "professional";
 
+  const messageStorageKey =
+    isProfessional
+      ? "korvoProfessionalMessages"
+      : "korvoCustomerMessages";
+
 
   /* =========================
      Page Elements
@@ -94,14 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
             "Hi Chris, I saw your motorized shade installation request. I can complete the installation Friday afternoon.",
           time: "6:32 PM"
         },
-
         {
           type: "outgoing",
           text:
             "Sounds good. Does your quote include programming the shades too?",
           time: "6:36 PM"
         },
-
         {
           type: "incoming",
           text:
@@ -110,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       ]
     },
-
 
     "prestige-cleaning": {
       name: "Prestige Estate Cleaning",
@@ -129,14 +131,12 @@ document.addEventListener("DOMContentLoaded", () => {
             "Hi Chris, we reviewed your deep-cleaning request and can complete the project Saturday morning.",
           time: "Yesterday"
         },
-
         {
           type: "outgoing",
           text:
             "Does the estimate include the kitchen and both bathrooms?",
           time: "Yesterday"
         },
-
         {
           type: "incoming",
           text:
@@ -174,14 +174,12 @@ document.addEventListener("DOMContentLoaded", () => {
             "Hi Sarah, I saw your motorized shade installation request. I can complete the installation Friday afternoon.",
           time: "6:32 PM"
         },
-
         {
           type: "incoming",
           text:
             "Sounds good. Does your quote include programming the shades too?",
           time: "6:36 PM"
         },
-
         {
           type: "outgoing",
           text:
@@ -190,7 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       ]
     },
-
 
     "michael-r": {
       name: "Michael R.",
@@ -211,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "Hi, I had a question about the painting quote you submitted.",
           time: "Today"
         },
-
         {
           type: "outgoing",
           text:
@@ -264,10 +260,8 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     if (matchingConversation) {
-
       activeConversationId =
         matchingConversation[0];
-
     }
 
     localStorage.removeItem(
@@ -307,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const stored =
         JSON.parse(
           localStorage.getItem(
-            "korvoMessages"
+            messageStorageKey
           )
         );
 
@@ -379,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       localStorage.setItem(
-        "korvoMessages",
+        messageStorageKey,
         JSON.stringify(
           messagesToSave
         )
@@ -470,7 +464,6 @@ document.addEventListener("DOMContentLoaded", () => {
         bubble.className =
           `message-bubble ${message.type}`;
 
-
         if (
           message.type ===
           "incoming"
@@ -539,7 +532,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     conversationList.innerHTML = "";
 
-
     Object.entries(
       conversations
     ).forEach(
@@ -555,22 +547,17 @@ document.addEventListener("DOMContentLoaded", () => {
         button.className =
           "conversation-item";
 
-
         if (
           conversationId ===
           activeConversationId
         ) {
-
           button.classList.add(
             "active"
           );
-
         }
-
 
         button.dataset.conversation =
           conversationId;
-
 
         const initials =
           conversation.name
@@ -583,12 +570,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")
             .toUpperCase();
 
-
         const latestMessage =
           conversation.messages[
             conversation.messages.length - 1
           ];
-
 
         button.innerHTML = `
           <div class="conversation-avatar">
@@ -630,18 +615,14 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
 
-
         button.addEventListener(
           "click",
           () => {
-
             renderConversation(
               conversationId
             );
-
           }
         );
-
 
         conversationList.appendChild(
           button
@@ -668,13 +649,11 @@ document.addEventListener("DOMContentLoaded", () => {
             .trim()
             .toLowerCase();
 
-
         const conversationItems =
           conversationList
             ?.querySelectorAll(
               ".conversation-item"
             ) || [];
-
 
         conversationItems.forEach(
           (item) => {
@@ -683,12 +662,10 @@ document.addEventListener("DOMContentLoaded", () => {
               item.textContent
                 .toLowerCase();
 
-
             const matches =
               searchableText.includes(
                 searchValue
               );
-
 
             item.style.display =
               matches
@@ -716,34 +693,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.preventDefault();
 
-
         const text =
           messageInput.value
             .trim();
 
-
         if (!text) {
           return;
         }
-
 
         const conversation =
           conversations[
             activeConversationId
           ];
 
-
         if (!conversation) {
           return;
         }
 
-
         const newMessage = {
-
           type: "outgoing",
-
           text,
-
           time:
             new Date()
               .toLocaleTimeString(
@@ -753,32 +722,24 @@ document.addEventListener("DOMContentLoaded", () => {
                   minute: "2-digit"
                 }
               )
-
         };
-
 
         conversation.messages.push(
           newMessage
         );
 
-
         saveMessages();
-
 
         renderMessages(
           conversation
         );
 
-
         buildConversationList();
-
 
         messageInput.value = "";
 
-
         messageCharacterCount.textContent =
           "0";
-
 
         messageInput.style.height =
           "";
@@ -804,10 +765,8 @@ document.addEventListener("DOMContentLoaded", () => {
             messageInput.value.length
           );
 
-
         messageInput.style.height =
           "auto";
-
 
         messageInput.style.height =
           `${Math.min(
@@ -817,7 +776,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
     );
-
 
     messageInput.addEventListener(
       "keydown",
@@ -877,18 +835,15 @@ document.addEventListener("DOMContentLoaded", () => {
           "open"
         );
 
-
         const isOpen =
           mobileNav.classList.contains(
             "open"
           );
 
-
         mobileMenuButton.setAttribute(
           "aria-expanded",
           String(isOpen)
         );
-
 
         mobileMenuButton.textContent =
           isOpen
