@@ -48,8 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const activeJobTitle =
     document.getElementById("activeJobTitle");
 
+  const activeJobReference =
+    document.getElementById("activeJobReference");
+
   const activeJobLocation =
     document.getElementById("activeJobLocation");
+
+  const activeJobStatus =
+    document.getElementById("activeJobStatus");
 
   const chatMessages =
     document.getElementById("chatMessages");
@@ -86,62 +92,113 @@ document.addEventListener("DOMContentLoaded", () => {
     "chris-custom-installations": {
       name: "Chris Custom Installations",
       status: "Typically replies within an hour",
-      jobTitle: "Install Motorized Shades",
-      location: "Atlanta, GA",
-      profile: "chris-profile.html",
+
+      jobTitle:
+        "Install Motorized Shades",
+
+      jobReference:
+        "KRV-1001",
+
+      jobStatus:
+        "Quote Received",
+
+      location:
+        "Atlanta, GA",
+
+      profile:
+        "chris-profile.html",
+
       senderName:
         "Chris Custom Installations",
 
       messages: [
         {
           type: "incoming",
+
           text:
             "Hi Chris, I saw your motorized shade installation request. I can complete the installation Friday afternoon.",
-          time: "6:32 PM"
+
+          time:
+            "6:32 PM"
         },
+
         {
           type: "outgoing",
+
           text:
             "Sounds good. Does your quote include programming the shades too?",
-          time: "6:36 PM"
+
+          time:
+            "6:36 PM"
         },
+
         {
           type: "incoming",
+
           text:
             "Yes. Installation, programming, testing and cleanup are included.",
-          time: "6:39 PM"
+
+          time:
+            "6:39 PM"
         }
       ]
     },
 
+
     "prestige-cleaning": {
-      name: "Prestige Estate Cleaning",
-      status: "Usually replies the same day",
+      name:
+        "Prestige Estate Cleaning",
+
+      status:
+        "Usually replies the same day",
+
       jobTitle:
         "Deep Cleaning for Apartment",
-      location: "Chamblee, GA",
-      profile: "browse.html",
+
+      jobReference:
+        "KRV-1002",
+
+      jobStatus:
+        "Quote Received",
+
+      location:
+        "Chamblee, GA",
+
+      profile:
+        "browse.html",
+
       senderName:
         "Prestige Estate Cleaning",
 
       messages: [
         {
           type: "incoming",
+
           text:
             "Hi Chris, we reviewed your deep-cleaning request and can complete the project Saturday morning.",
-          time: "Yesterday"
+
+          time:
+            "Yesterday"
         },
+
         {
           type: "outgoing",
+
           text:
             "Does the estimate include the kitchen and both bathrooms?",
-          time: "Yesterday"
+
+          time:
+            "Yesterday"
         },
+
         {
           type: "incoming",
+
           text:
             "Yes. The estimate includes both bathrooms, the kitchen, floors, dusting and general cleanup.",
-          time: "Yesterday"
+
+          time:
+            "Yesterday"
         }
       ]
     }
@@ -156,63 +213,108 @@ document.addEventListener("DOMContentLoaded", () => {
   const professionalConversations = {
 
     "sarah-m": {
-      name: "Sarah M.",
-      status: "Korvo Customer",
+      name:
+        "Sarah M.",
+
+      status:
+        "Korvo Customer",
+
       jobTitle:
         "Motorized Shade Installation",
+
+      jobReference:
+        "KRV-1001",
+
+      jobStatus:
+        "Quote Submitted",
+
       location:
         "Buckhead, Atlanta",
+
       profile:
         "customer-dashboard.html",
+
       senderName:
         "Sarah M.",
 
       messages: [
         {
           type: "outgoing",
+
           text:
             "Hi Sarah, I saw your motorized shade installation request. I can complete the installation Friday afternoon.",
-          time: "6:32 PM"
+
+          time:
+            "6:32 PM"
         },
+
         {
           type: "incoming",
+
           text:
             "Sounds good. Does your quote include programming the shades too?",
-          time: "6:36 PM"
+
+          time:
+            "6:36 PM"
         },
+
         {
           type: "outgoing",
+
           text:
             "Yes. Installation, programming, testing and cleanup are included.",
-          time: "6:39 PM"
+
+          time:
+            "6:39 PM"
         }
       ]
     },
 
+
     "michael-r": {
-      name: "Michael R.",
-      status: "Korvo Customer",
+      name:
+        "Michael R.",
+
+      status:
+        "Korvo Customer",
+
       jobTitle:
         "Interior Painting",
+
+      jobReference:
+        "KRV-1003",
+
+      jobStatus:
+        "Quote Submitted",
+
       location:
         "Brookhaven, GA",
+
       profile:
         "customer-dashboard.html",
+
       senderName:
         "Michael R.",
 
       messages: [
         {
           type: "incoming",
+
           text:
             "Hi, I had a question about the painting quote you submitted.",
-          time: "Today"
+
+          time:
+            "Today"
         },
+
         {
           type: "outgoing",
+
           text:
             "Absolutely. What would you like to know?",
-          time: "Today"
+
+          time:
+            "Today"
         }
       ]
     }
@@ -260,8 +362,10 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     if (matchingConversation) {
+
       activeConversationId =
         matchingConversation[0];
+
     }
 
     localStorage.removeItem(
@@ -420,8 +524,14 @@ document.addEventListener("DOMContentLoaded", () => {
     activeJobTitle.textContent =
       conversation.jobTitle;
 
+    activeJobReference.textContent =
+      conversation.jobReference;
+
     activeJobLocation.textContent =
       conversation.location;
+
+    activeJobStatus.textContent =
+      conversation.jobStatus;
 
     viewConversationProfile.href =
       conversation.profile;
@@ -542,7 +652,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "button"
           );
 
-        button.type = "button";
+        button.type =
+          "button";
 
         button.className =
           "conversation-item";
@@ -551,9 +662,11 @@ document.addEventListener("DOMContentLoaded", () => {
           conversationId ===
           activeConversationId
         ) {
+
           button.classList.add(
             "active"
           );
+
         }
 
         button.dataset.conversation =
@@ -618,9 +731,11 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener(
           "click",
           () => {
+
             renderConversation(
               conversationId
             );
+
           }
         );
 
@@ -711,17 +826,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const newMessage = {
-          type: "outgoing",
+
+          type:
+            "outgoing",
+
           text,
+
           time:
             new Date()
               .toLocaleTimeString(
                 [],
                 {
-                  hour: "numeric",
-                  minute: "2-digit"
+                  hour:
+                    "numeric",
+
+                  minute:
+                    "2-digit"
                 }
               )
+
         };
 
         conversation.messages.push(
@@ -736,7 +859,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         buildConversationList();
 
-        messageInput.value = "";
+        messageInput.value =
+          "";
 
         messageCharacterCount.textContent =
           "0";
@@ -777,12 +901,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+
     messageInput.addEventListener(
       "keydown",
       (event) => {
 
         if (
-          event.key === "Enter" &&
+          event.key ===
+            "Enter" &&
           !event.shiftKey
         ) {
 
