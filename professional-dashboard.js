@@ -1,3 +1,5 @@
+"use strict";
+
 document.addEventListener("DOMContentLoaded", () => {
   /* =========================
      Elements
@@ -95,6 +97,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutButton =
     document.getElementById("logoutButton");
 
+  const infoModal =
+    document.getElementById("infoModal");
+
+  const infoModalCard =
+    infoModal
+      ? infoModal.querySelector(".info-modal-card")
+      : null;
+
+  const infoModalEyebrow =
+    document.getElementById("infoModalEyebrow");
+
+  const infoModalTitle =
+    document.getElementById("infoModalTitle");
+
+  const infoModalMessage =
+    document.getElementById("infoModalMessage");
+
+  const infoModalDetails =
+    document.getElementById("infoModalDetails");
+
+  const closeInfoModalButton =
+    document.getElementById("closeInfoModalButton");
+
+  const infoModalDoneButton =
+    document.getElementById("infoModalDoneButton");
+
+
+  /* =========================
+     Current Professional
+     ========================= */
+
+  const professionalProfile = {
+    name: "Chris Custom Installations",
+    type: "Window Treatment Specialist",
+    profile: "chris-profile.html",
+    initials: "CC",
+    rating: "5.0"
+  };
+
 
   /* =========================
      Current Year
@@ -102,143 +143,203 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (currentYear) {
     currentYear.textContent =
-      new Date().getFullYear();
+      String(new Date().getFullYear());
   }
 
 
   /* =========================
      Sample Jobs
-
-     These are temporary until
-     Korvo has a real backend.
      ========================= */
 
   const sampleJobs = [
     {
       id: "job-001",
-
-      title:
-        "Motorized Shade Installation",
-
-      category:
-        "window treatments",
-
-      location:
-        "Buckhead, Atlanta",
-
-      budget:
-        "$450 - $650",
-
-      date:
-        "August 10",
-
+      reference: "KRV-1001",
+      title: "Motorized Shade Installation",
+      category: "window treatments",
+      location: "Buckhead, Atlanta",
+      budget: "$450 - $650",
+      date: "August 10",
       description:
         "Customer needs six motorized roller shades installed and programmed.",
-
-      customer:
-        "Sarah M."
+      customer: "Sarah M."
     },
 
     {
       id: "job-002",
-
-      title:
-        "Interior Painting",
-
-      category:
-        "painting",
-
-      location:
-        "Brookhaven, GA",
-
-      budget:
-        "$900 - $1,300",
-
-      date:
-        "August 14",
-
+      reference: "KRV-1003",
+      title: "Interior Painting",
+      category: "painting",
+      location: "Brookhaven, GA",
+      budget: "$900 - $1,300",
+      date: "August 14",
       description:
         "Paint living room, hallway, and two bedrooms in a residential home.",
-
-      customer:
-        "Michael R."
+      customer: "Michael R."
     },
 
     {
       id: "job-003",
-
-      title:
-        "Move Apartment Furniture",
-
-      category:
-        "moving",
-
-      location:
-        "Midtown Atlanta",
-
-      budget:
-        "$300 - $450",
-
-      date:
-        "August 12",
-
+      reference: "KRV-1004",
+      title: "Move Apartment Furniture",
+      category: "moving",
+      location: "Midtown Atlanta",
+      budget: "$300 - $450",
+      date: "August 12",
       description:
         "Help move furniture from a one-bedroom apartment into a nearby apartment.",
-
-      customer:
-        "Jessica L."
+      customer: "Jessica L."
     },
 
     {
       id: "job-004",
-
-      title:
-        "Deep Home Cleaning",
-
-      category:
-        "cleaning",
-
-      location:
-        "Sandy Springs, GA",
-
-      budget:
-        "$250 - $400",
-
-      date:
-        "August 11",
-
+      reference: "KRV-1002",
+      title: "Deep Home Cleaning",
+      category: "cleaning",
+      location: "Sandy Springs, GA",
+      budget: "$250 - $400",
+      date: "August 11",
       description:
         "Deep cleaning needed for a four-bedroom home before guests arrive.",
-
-      customer:
-        "Amanda P."
+      customer: "Amanda P."
     },
 
     {
       id: "job-005",
-
-      title:
-        "Landscape Cleanup",
-
-      category:
-        "landscaping",
-
-      location:
-        "Dunwoody, GA",
-
-      budget:
-        "$275 - $500",
-
-      date:
-        "August 16",
-
+      reference: "KRV-1005",
+      title: "Landscape Cleanup",
+      category: "landscaping",
+      location: "Dunwoody, GA",
+      budget: "$275 - $500",
+      date: "August 16",
       description:
         "Trim shrubs, remove leaves, clean flower beds, and haul away debris.",
-
-      customer:
-        "Daniel K."
+      customer: "Daniel K."
     }
   ];
+
+
+  /* =========================
+     HTML Safety
+     ========================= */
+
+  function escapeHTML(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  /* =========================
+     Korvo Information Modal
+     ========================= */
+
+  function openInfoModal({
+    eyebrow = "KORVO",
+    title = "Information",
+    message = "",
+    details = [],
+    success = false
+  }) {
+    if (!infoModal) {
+      return;
+    }
+
+    if (infoModalEyebrow) {
+      infoModalEyebrow.textContent = eyebrow;
+    }
+
+    if (infoModalTitle) {
+      infoModalTitle.textContent = title;
+    }
+
+    if (infoModalMessage) {
+      infoModalMessage.textContent = message;
+    }
+
+    if (infoModalDetails) {
+      infoModalDetails.innerHTML = "";
+    }
+
+    if (infoModalCard) {
+      infoModalCard.classList.toggle(
+        "success-modal",
+        success
+      );
+    }
+
+    if (success && infoModalDetails) {
+      const successIcon =
+        document.createElement("div");
+
+      successIcon.className =
+        "info-success-icon";
+
+      successIcon.textContent = "✓";
+
+      infoModalDetails.appendChild(
+        successIcon
+      );
+    }
+
+    if (infoModalDetails) {
+      details.forEach((detail) => {
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "info-detail-row";
+
+        row.innerHTML = `
+          <span class="info-detail-label">
+            ${escapeHTML(detail.label)}
+          </span>
+
+          <span class="info-detail-value">
+            ${escapeHTML(detail.value)}
+          </span>
+        `;
+
+        infoModalDetails.appendChild(row);
+      });
+    }
+
+    infoModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+
+  function closeInfoModal() {
+    if (!infoModal) {
+      return;
+    }
+
+    infoModal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+
+  closeInfoModalButton?.addEventListener(
+    "click",
+    closeInfoModal
+  );
+
+  infoModalDoneButton?.addEventListener(
+    "click",
+    closeInfoModal
+  );
+
+  infoModal?.addEventListener(
+    "click",
+    (event) => {
+      if (event.target === infoModal) {
+        closeInfoModal();
+      }
+    }
+  );
 
 
   /* =========================
@@ -258,7 +359,25 @@ document.addEventListener("DOMContentLoaded", () => {
         Array.isArray(savedJobs) &&
         savedJobs.length > 0
       ) {
-        return savedJobs;
+        return savedJobs.map(
+          (job, index) => ({
+            ...job,
+
+            id:
+              job.id ||
+              job.jobId ||
+              `customer-job-${index + 1}`,
+
+            reference:
+              job.reference ||
+              job.jobReference ||
+              job.id ||
+              job.jobId ||
+              `KRV-${String(
+                index + 1
+              ).padStart(4, "0")}`
+          })
+        );
       }
 
       return sampleJobs;
@@ -297,10 +416,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function saveSubmittedQuotes(quotes) {
-    localStorage.setItem(
-      "korvoProfessionalQuotes",
-      JSON.stringify(quotes)
-    );
+    try {
+      localStorage.setItem(
+        "korvoProfessionalQuotes",
+        JSON.stringify(quotes)
+      );
+    } catch (error) {
+      console.error(
+        "Could not save submitted quotes:",
+        error
+      );
+    }
   }
 
 
@@ -309,6 +435,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let submittedQuotes =
     getSubmittedQuotes();
+
+
+  /* =========================
+     Job Helpers
+     ========================= */
+
+  function getJobId(job) {
+    return String(
+      job.id ||
+      job.jobId ||
+      job.reference ||
+      job.jobReference ||
+      ""
+    );
+  }
+
+
+  function getJobReference(job) {
+    return String(
+      job.reference ||
+      job.jobReference ||
+      job.id ||
+      job.jobId ||
+      "KRV-UNASSIGNED"
+    );
+  }
+
+
+  function getJobLocation(job) {
+    if (job.location) {
+      return job.location;
+    }
+
+    const city =
+      job.city || "Atlanta";
+
+    const state =
+      job.state || "GA";
+
+    return `${city}, ${state}`;
+  }
+
+
+  function findJobById(jobId) {
+    return customerJobs.find(
+      (job) =>
+        getJobId(job) === String(jobId)
+    );
+  }
 
 
   /* =========================
@@ -337,24 +512,19 @@ document.addEventListener("DOMContentLoaded", () => {
               selectedCategory.toLowerCase()
           );
 
-
     if (filteredJobs.length === 0) {
       availableJobsList.innerHTML = `
         <div class="empty-state">
-
           <div class="empty-state-icon">
             🛠️
           </div>
 
-          <h3>
-            No jobs found
-          </h3>
+          <h3>No jobs found</h3>
 
           <p>
             There are currently no jobs
             available in this category.
           </p>
-
         </div>
       `;
 
@@ -371,9 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const jobCard =
         document.createElement("article");
 
-      jobCard.className =
-        "job-card";
-
+      jobCard.className = "job-card";
 
       const title =
         job.title ||
@@ -381,8 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Customer Project";
 
       const location =
-        job.location ||
-        "Atlanta, GA";
+        getJobLocation(job);
 
       const budget =
         job.budget ||
@@ -392,10 +559,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const date =
         job.date ||
         job.preferredDate ||
+        job.timeframe ||
         "Flexible";
 
       const description =
         job.description ||
+        job.jobDescription ||
         "Customer has not added a description.";
 
       const customer =
@@ -404,13 +573,13 @@ document.addEventListener("DOMContentLoaded", () => {
         "Korvo Customer";
 
       const id =
-        job.id ||
-        `job-${Date.now()}-${Math.random()}`;
+        getJobId(job);
 
+      const reference =
+        getJobReference(job);
 
       jobCard.innerHTML = `
         <div class="job-card-header">
-
           <div>
 
             <p class="eyebrow">
@@ -436,7 +605,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <strong>
             ${escapeHTML(budget)}
           </strong>
-
         </div>
 
 
@@ -457,6 +625,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <span>
             📅 ${escapeHTML(date)}
+          </span>
+
+          <span>
+            🆔 ${escapeHTML(reference)}
           </span>
 
         </div>
@@ -483,7 +655,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
 
-
       availableJobsList.appendChild(
         jobCard
       );
@@ -492,9 +663,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (availableJobsCount) {
       availableJobsCount.textContent =
-        filteredJobs.length;
+        String(filteredJobs.length);
     }
-
 
     addJobButtonListeners();
   }
@@ -505,98 +675,126 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function addJobButtonListeners() {
-    const quoteButtons =
-      document.querySelectorAll(
+
+    document
+      .querySelectorAll(
         ".submit-quote-button"
-      );
+      )
+      .forEach((button) => {
 
-    const detailsButtons =
-      document.querySelectorAll(
-        ".view-job-button"
-      );
+        button.addEventListener(
+          "click",
+          () => {
 
-
-    quoteButtons.forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          const jobId =
-            button.dataset.jobId;
-
-          openQuoteModal(jobId);
-        }
-      );
-    });
-
-
-    detailsButtons.forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          const job =
-            customerJobs.find(
-              (item) =>
-                String(item.id) ===
-                String(
-                  button.dataset.jobId
-                )
+            openQuoteModal(
+              button.dataset.jobId
             );
 
-          if (!job) {
-            return;
           }
+        );
 
-          const title =
-            job.title ||
-            job.jobTitle ||
-            "Customer Project";
-
-          const description =
-            job.description ||
-            "No description provided.";
-
-          const location =
-            job.location ||
-            "Atlanta, GA";
-
-          const budget =
-            job.budget ||
-            job.budgetRange ||
-            "Not listed";
+      });
 
 
-         openInfoModal({
-  eyebrow: "JOB DETAILS",
-  title: title,
-  message: description,
-  details: [
-    {
-      label: "Location",
-      value: location
-    },
-    {
-      label: "Budget",
-      value: budget
-    },
-    {
-      label: "Preferred Date",
-      value:
-        job.date ||
-        job.preferredDate ||
-        "Flexible"
-    },
-    {
-      label: "Customer",
-      value:
-        job.customer ||
-        job.customerName ||
-        "Korvo Customer"
-    }
-  ]
-});
-        }
-      );
-    });
+    document
+      .querySelectorAll(
+        ".view-job-button"
+      )
+      .forEach((button) => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const job =
+              findJobById(
+                button.dataset.jobId
+              );
+
+            if (!job) {
+              return;
+            }
+
+            const title =
+              job.title ||
+              job.jobTitle ||
+              "Customer Project";
+
+            const description =
+              job.description ||
+              job.jobDescription ||
+              "No description provided.";
+
+            const location =
+              getJobLocation(job);
+
+            const budget =
+              job.budget ||
+              job.budgetRange ||
+              "Not listed";
+
+            openInfoModal({
+              eyebrow:
+                "JOB DETAILS",
+
+              title,
+
+              message:
+                description,
+
+              details: [
+                {
+                  label:
+                    "Reference",
+
+                  value:
+                    getJobReference(job)
+                },
+
+                {
+                  label:
+                    "Location",
+
+                  value:
+                    location
+                },
+
+                {
+                  label:
+                    "Budget",
+
+                  value:
+                    budget
+                },
+
+                {
+                  label:
+                    "Preferred Date",
+
+                  value:
+                    job.date ||
+                    job.preferredDate ||
+                    job.timeframe ||
+                    "Flexible"
+                },
+
+                {
+                  label:
+                    "Customer",
+
+                  value:
+                    job.customer ||
+                    job.customerName ||
+                    "Korvo Customer"
+                }
+              ]
+            });
+
+          }
+        );
+
+      });
+
   }
 
 
@@ -605,106 +803,94 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function openQuoteModal(jobId) {
-    const job =
-      customerJobs.find(
-        (item) =>
-          String(item.id) ===
-          String(jobId)
-      );
 
+    const job =
+      findJobById(jobId);
 
     if (!job || !quoteModal) {
       return;
     }
 
+    if (selectedJobReference) {
+      selectedJobReference.value =
+        getJobId(job);
+    }
 
-    selectedJobReference.value =
-      jobId;
-
-
-    selectedJobTitle.textContent =
-      job.title ||
-      job.jobTitle ||
-      "this customer project";
-
+    if (selectedJobTitle) {
+      selectedJobTitle.textContent =
+        job.title ||
+        job.jobTitle ||
+        "this customer project";
+    }
 
     quoteModal.classList.remove(
       "hidden"
     );
 
-
     document.body.style.overflow =
       "hidden";
 
-
     setTimeout(() => {
-      quoteAmount.focus();
+      quoteAmount?.focus();
     }, 100);
+
   }
 
 
   function closeQuoteModal() {
+
     if (!quoteModal) {
       return;
     }
-
 
     quoteModal.classList.add(
       "hidden"
     );
 
-
     document.body.style.overflow =
       "";
 
-
-    if (quoteForm) {
-      quoteForm.reset();
-    }
-
+    quoteForm?.reset();
 
     if (quoteMessageCount) {
       quoteMessageCount.textContent =
         "0";
     }
+
   }
 
 
-  if (closeQuoteModalButton) {
-    closeQuoteModalButton.addEventListener(
-      "click",
-      closeQuoteModal
-    );
-  }
+  closeQuoteModalButton?.addEventListener(
+    "click",
+    closeQuoteModal
+  );
 
+  cancelQuoteButton?.addEventListener(
+    "click",
+    closeQuoteModal
+  );
 
-  if (cancelQuoteButton) {
-    cancelQuoteButton.addEventListener(
-      "click",
-      closeQuoteModal
-    );
-  }
+  quoteModal?.addEventListener(
+    "click",
+    (event) => {
 
-
-  if (quoteModal) {
-    quoteModal.addEventListener(
-      "click",
-      (event) => {
-        if (
-          event.target === quoteModal
-        ) {
-          closeQuoteModal();
-        }
+      if (event.target === quoteModal) {
+        closeQuoteModal();
       }
-    );
-  }
+
+    }
+  );
 
 
   document.addEventListener(
     "keydown",
     (event) => {
+
+      if (event.key !== "Escape") {
+        return;
+      }
+
       if (
-        event.key === "Escape" &&
         quoteModal &&
         !quoteModal.classList.contains(
           "hidden"
@@ -712,6 +898,16 @@ document.addEventListener("DOMContentLoaded", () => {
       ) {
         closeQuoteModal();
       }
+
+      if (
+        infoModal &&
+        !infoModal.classList.contains(
+          "hidden"
+        )
+      ) {
+        closeInfoModal();
+      }
+
     }
   );
 
@@ -720,179 +916,283 @@ document.addEventListener("DOMContentLoaded", () => {
      Character Counter
      ========================= */
 
-  if (quoteMessage) {
-    quoteMessage.addEventListener(
-      "input",
-      () => {
+  quoteMessage?.addEventListener(
+    "input",
+    () => {
+
+      if (quoteMessageCount) {
         quoteMessageCount.textContent =
-          quoteMessage.value.length;
+          String(
+            quoteMessage.value.length
+          );
       }
-    );
-  }
+
+    }
+  );
 
 
   /* =========================
      Submit Quote
      ========================= */
 
-  if (quoteForm) {
-    quoteForm.addEventListener(
-      "submit",
-      (event) => {
-        event.preventDefault();
+  quoteForm?.addEventListener(
+    "submit",
+    (event) => {
+
+      event.preventDefault();
+
+      const jobId =
+        selectedJobReference?.value ||
+        "";
+
+      const job =
+        findJobById(jobId);
 
 
-        const jobId =
-          selectedJobReference.value;
-
-
-        const job =
-          customerJobs.find(
-            (item) =>
-              String(item.id) ===
-              String(jobId)
-          );
-
-
-        if (!job) {
-          alert(
-            "Korvo could not find this job."
-          );
-
-          return;
-        }
-
-
-        const amount =
-          Number(quoteAmount.value);
-
-
-        if (
-          !amount ||
-          amount <= 0
-        ) {
-          alert(
-            "Please enter a valid quote amount."
-          );
-
-          return;
-        }
-
-
-        const existingQuote =
-          submittedQuotes.find(
-            (quote) =>
-              String(quote.jobId) ===
-              String(jobId)
-          );
-
-
-        if (existingQuote) {
-          alert(
-            "You already submitted a quote for this job."
-          );
-
-          return;
-        }
-
-
-        const quote = {
-          id:
-            `quote-${Date.now()}`,
-
-          jobId,
-
-          jobTitle:
-            job.title ||
-            job.jobTitle ||
-            "Customer Project",
-
-          customer:
-            job.customer ||
-            job.customerName ||
-            "Korvo Customer",
-
-          location:
-            job.location ||
-            "Atlanta, GA",
-
-          amount,
-
-          timeframe:
-            quoteTimeframe.value,
-
-          message:
-            quoteMessage.value.trim(),
-
-          status:
-            "Pending",
-
-          createdAt:
-            new Date().toISOString()
-        };
-
-
-        submittedQuotes.unshift(
-          quote
-        );
-
-
-        saveSubmittedQuotes(
-          submittedQuotes
-        );
-
-
-        renderSubmittedQuotes();
-
-        updateDashboardCounters();
-
-        addNotification(
-          `Quote submitted for ${quote.jobTitle}.`
-        );
-
-
-        closeQuoteModal();
-
+      if (!job) {
 
         openInfoModal({
-  eyebrow: "QUOTE SENT",
-  title: "Quote Submitted!",
-  message:
-    "Your quote has been sent to the customer and is now being tracked in Submitted Quotes.",
-  success: true,
-  details: [
-    {
-      label: "Job",
-      value: quote.jobTitle
-    },
-    {
-      label: "Your Quote",
-      value: `$${amount.toLocaleString()}`
-    },
-    {
-      label: "Timeframe",
-      value: quote.timeframe
-    },
-    {
-      label: "Status",
-      value: quote.status
-    }
-  ]
-});
+          eyebrow:
+            "QUOTE ERROR",
+
+          title:
+            "Job Not Found",
+
+          message:
+            "Korvo could not find this job. Refresh the dashboard and try again."
+        });
+
+        return;
       }
-    );
-  }
+
+
+      const amount =
+        Number(
+          quoteAmount?.value
+        );
+
+
+      if (!amount || amount <= 0) {
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ERROR",
+
+          title:
+            "Enter a Valid Amount",
+
+          message:
+            "Your quote amount must be greater than $0."
+        });
+
+        quoteAmount?.focus();
+
+        return;
+      }
+
+
+      const existingQuote =
+        submittedQuotes.find(
+          (quote) =>
+            String(quote.jobId) ===
+            String(jobId)
+        );
+
+
+      if (existingQuote) {
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ALREADY SENT",
+
+          title:
+            "Quote Already Submitted",
+
+          message:
+            "You already submitted a quote for this job.",
+
+          details: [
+            {
+              label:
+                "Job",
+
+              value:
+                existingQuote.jobTitle ||
+                "Customer Project"
+            },
+
+            {
+              label:
+                "Status",
+
+              value:
+                existingQuote.status ||
+                "Pending"
+            }
+          ]
+        });
+
+        return;
+      }
+
+
+      const quote = {
+
+        id:
+          `quote-${Date.now()}`,
+
+        jobId,
+
+        jobReference:
+          getJobReference(job),
+
+        jobTitle:
+          job.title ||
+          job.jobTitle ||
+          "Customer Project",
+
+        customer:
+          job.customer ||
+          job.customerName ||
+          "Korvo Customer",
+
+        location:
+          getJobLocation(job),
+
+        professional:
+          professionalProfile.name,
+
+        professionalType:
+          professionalProfile.type,
+
+        professionalProfile:
+          professionalProfile.profile,
+
+        professionalInitials:
+          professionalProfile.initials,
+
+        professionalRating:
+          professionalProfile.rating,
+
+        amount,
+
+        timeframe:
+          quoteTimeframe?.value ||
+          "Flexible",
+
+        message:
+          quoteMessage?.value.trim() ||
+          "",
+
+        status:
+          "Pending",
+
+        createdAt:
+          new Date().toISOString()
+
+      };
+
+
+      submittedQuotes.unshift(
+        quote
+      );
+
+
+      saveSubmittedQuotes(
+        submittedQuotes
+      );
+
+
+      renderSubmittedQuotes();
+
+      updateDashboardCounters();
+
+
+      addNotification(
+        `Quote submitted for ${quote.jobTitle}.`
+      );
+
+
+      closeQuoteModal();
+
+
+      openInfoModal({
+        eyebrow:
+          "QUOTE SENT",
+
+        title:
+          "Quote Submitted!",
+
+        message:
+          "Your quote has been sent to the customer and is now being tracked in Submitted Quotes.",
+
+        success:
+          true,
+
+        details: [
+          {
+            label:
+              "Job",
+
+            value:
+              quote.jobTitle
+          },
+
+          {
+            label:
+              "Reference",
+
+            value:
+              quote.jobReference
+          },
+
+          {
+            label:
+              "Customer",
+
+            value:
+              quote.customer
+          },
+
+          {
+            label:
+              "Your Quote",
+
+            value:
+              `$${amount.toLocaleString()}`
+          },
+
+          {
+            label:
+              "Timeframe",
+
+            value:
+              quote.timeframe
+          },
+
+          {
+            label:
+              "Status",
+
+            value:
+              quote.status
+          }
+        ]
+      });
+
+    }
+  );
 
 
   /* =========================
-     Render Quotes
+     Render Submitted Quotes
      ========================= */
 
   function renderSubmittedQuotes() {
+
     if (!submittedQuotesList) {
       return;
     }
-
 
     submittedQuotesList.innerHTML =
       "";
@@ -901,6 +1201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       submittedQuotes.length === 0
     ) {
+
       submittedQuotesList.innerHTML = `
         <div class="empty-state compact">
 
@@ -926,27 +1227,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     submittedQuotes.forEach(
       (quote) => {
+
         const quoteCard =
           document.createElement(
             "article"
           );
 
-
         quoteCard.className =
           "quote-card";
 
 
-        const formattedDate =
+        const createdDate =
           new Date(
             quote.createdAt
-          ).toLocaleDateString(
-            "en-US",
-            {
-              month: "short",
-              day: "numeric",
-              year: "numeric"
-            }
           );
+
+
+        const formattedDate =
+          Number.isNaN(
+            createdDate.getTime()
+          )
+            ? "Recently"
+            : createdDate
+                .toLocaleDateString(
+                  "en-US",
+                  {
+                    month:
+                      "short",
+
+                    day:
+                      "numeric",
+
+                    year:
+                      "numeric"
+                  }
+                );
 
 
         quoteCard.innerHTML = `
@@ -963,17 +1278,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
               <h3>
                 ${escapeHTML(
-                  quote.jobTitle
+                  quote.jobTitle ||
+                  "Customer Project"
                 )}
               </h3>
 
               <p>
                 ${escapeHTML(
-                  quote.customer
+                  quote.customer ||
+                  "Korvo Customer"
                 )}
                 ·
                 ${escapeHTML(
-                  quote.location
+                  quote.location ||
+                  "Atlanta, GA"
                 )}
               </p>
 
@@ -981,7 +1299,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <strong>
               $${Number(
-                quote.amount
+                quote.amount ||
+                0
               ).toLocaleString()}
             </strong>
 
@@ -991,9 +1310,19 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="job-meta">
 
             <span>
+              🆔
+              ${escapeHTML(
+                quote.jobReference ||
+                quote.jobId ||
+                "Not assigned"
+              )}
+            </span>
+
+            <span>
               ⏱
               ${escapeHTML(
-                quote.timeframe
+                quote.timeframe ||
+                "Flexible"
               )}
             </span>
 
@@ -1007,7 +1336,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <span>
               Status:
               ${escapeHTML(
-                quote.status
+                quote.status ||
+                "Pending"
               )}
             </span>
 
@@ -1016,7 +1346,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <p style="margin-top: 14px;">
             ${escapeHTML(
-              quote.message
+              quote.message ||
+              "No message included."
             )}
           </p>
         `;
@@ -1025,8 +1356,10 @@ document.addEventListener("DOMContentLoaded", () => {
         submittedQuotesList.appendChild(
           quoteCard
         );
+
       }
     );
+
   }
 
 
@@ -1035,19 +1368,25 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function updateDashboardCounters() {
+
     if (availableJobsCount) {
       availableJobsCount.textContent =
-        customerJobs.length;
+        String(
+          customerJobs.length
+        );
     }
 
 
     if (submittedQuotesCount) {
       submittedQuotesCount.textContent =
-        submittedQuotes.length;
+        String(
+          submittedQuotes.length
+        );
     }
 
 
     if (jobsWonCount) {
+
       const wonQuotes =
         submittedQuotes.filter(
           (quote) =>
@@ -1057,10 +1396,13 @@ document.addEventListener("DOMContentLoaded", () => {
             "accepted"
         );
 
-
       jobsWonCount.textContent =
-        wonQuotes.length;
+        String(
+          wonQuotes.length
+        );
+
     }
+
   }
 
 
@@ -1068,16 +1410,16 @@ document.addEventListener("DOMContentLoaded", () => {
      Service Filter
      ========================= */
 
-  if (serviceFilter) {
-    serviceFilter.addEventListener(
-      "change",
-      () => {
-        renderJobs(
-          serviceFilter.value
-        );
-      }
-    );
-  }
+  serviceFilter?.addEventListener(
+    "change",
+    () => {
+
+      renderJobs(
+        serviceFilter.value
+      );
+
+    }
+  );
 
 
   /* =========================
@@ -1088,27 +1430,27 @@ document.addEventListener("DOMContentLoaded", () => {
     profileButton &&
     professionalMenu
   ) {
+
     profileButton.addEventListener(
       "click",
       (event) => {
-        event.stopPropagation();
 
+        event.stopPropagation();
 
         professionalMenu.classList.toggle(
           "hidden"
         );
-
 
         const menuIsOpen =
           !professionalMenu.classList.contains(
             "hidden"
           );
 
-
         profileButton.setAttribute(
           "aria-expanded",
-          menuIsOpen
+          String(menuIsOpen)
         );
+
       }
     );
 
@@ -1116,6 +1458,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener(
       "click",
       (event) => {
+
         if (
           !professionalMenu.contains(
             event.target
@@ -1124,18 +1467,21 @@ document.addEventListener("DOMContentLoaded", () => {
             event.target
           )
         ) {
+
           professionalMenu.classList.add(
             "hidden"
           );
-
 
           profileButton.setAttribute(
             "aria-expanded",
             "false"
           );
+
         }
+
       }
     );
+
   }
 
 
@@ -1147,26 +1493,28 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenuButton &&
     mobileNav
   ) {
+
     mobileMenuButton.addEventListener(
       "click",
       () => {
+
         mobileNav.classList.toggle(
           "open"
         );
-
 
         const navOpen =
           mobileNav.classList.contains(
             "open"
           );
 
-
         mobileMenuButton.setAttribute(
           "aria-expanded",
-          navOpen
+          String(navOpen)
         );
+
       }
     );
+
   }
 
 
@@ -1175,20 +1523,18 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function addNotification(message) {
+
     if (!notificationsList) {
       return;
     }
-
 
     const notification =
       document.createElement(
         "article"
       );
 
-
     notification.className =
       "notification-item unread";
-
 
     notification.innerHTML = `
       <span class="notification-icon">
@@ -1210,30 +1556,29 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="unread-dot"></span>
     `;
 
-
     notificationsList.prepend(
       notification
     );
 
-
     updateNotificationCount();
+
   }
 
 
   function updateNotificationCount() {
+
     if (!notificationCount) {
       return;
     }
-
 
     const unread =
       document.querySelectorAll(
         ".notification-item.unread"
       ).length;
 
-
     notificationCount.textContent =
-      unread;
+      String(unread);
+
   }
 
 
@@ -1241,62 +1586,64 @@ document.addEventListener("DOMContentLoaded", () => {
     notificationButton &&
     notificationsSection
   ) {
+
     notificationButton.addEventListener(
       "click",
       () => {
-        notificationsSection.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
+
+        notificationsSection
+          .scrollIntoView({
+            behavior:
+              "smooth",
+
+            block:
+              "center"
+          });
+
       }
     );
+
   }
 
 
-  if (markAllReadButton) {
-    markAllReadButton.addEventListener(
-      "click",
-      () => {
-        const unreadNotifications =
-          document.querySelectorAll(
-            ".notification-item.unread"
-          );
+  markAllReadButton?.addEventListener(
+    "click",
+    () => {
 
-
-        unreadNotifications.forEach(
+      document
+        .querySelectorAll(
+          ".notification-item.unread"
+        )
+        .forEach(
           (notification) => {
+
             notification.classList.remove(
               "unread"
             );
 
-
-            const dot =
-              notification.querySelector(
+            notification
+              .querySelector(
                 ".unread-dot"
-              );
+              )
+              ?.remove();
 
-
-            if (dot) {
-              dot.remove();
-            }
           }
         );
 
+      updateNotificationCount();
 
-        updateNotificationCount();
-      }
-    );
-  }
+    }
+  );
 
 
   /* =========================
      Quick Actions
      ========================= */
 
- if (messagesButton) {
-  messagesButton.addEventListener(
+  messagesButton?.addEventListener(
     "click",
     () => {
+
       localStorage.setItem(
         "korvoMessagingRole",
         "professional"
@@ -1304,296 +1651,172 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.location.href =
         "messages.html";
+
     }
   );
-}
 
 
-  if (availabilityButton) {
-  availabilityButton.addEventListener(
+  availabilityButton?.addEventListener(
     "click",
     () => {
+
       openInfoModal({
-        eyebrow: "AVAILABILITY",
-        title: "Availability Settings",
+        eyebrow:
+          "AVAILABILITY",
+
+        title:
+          "Availability Settings",
+
         message:
           "Soon you will be able to control when customers can request or book your services.",
+
         details: [
           {
-            label: "Weekly Schedule",
-            value: "Coming soon"
+            label:
+              "Weekly Schedule",
+
+            value:
+              "Coming soon"
           },
+
           {
-            label: "Unavailable Dates",
-            value: "Coming soon"
+            label:
+              "Unavailable Dates",
+
+            value:
+              "Coming soon"
           },
+
           {
-            label: "Booking Preferences",
-            value: "Coming soon"
+            label:
+              "Booking Preferences",
+
+            value:
+              "Coming soon"
           }
         ]
       });
+
     }
   );
-}
 
 
- if (servicesButton) {
-  servicesButton.addEventListener(
+  servicesButton?.addEventListener(
     "click",
     () => {
+
       openInfoModal({
-        eyebrow: "SERVICES",
-        title: "Manage Services",
+        eyebrow:
+          "SERVICES",
+
+        title:
+          "Manage Services",
+
         message:
           "Soon you will be able to choose the services you offer and control what kinds of jobs appear in your dashboard.",
+
         details: [
           {
-            label: "Service Categories",
-            value: "Coming soon"
+            label:
+              "Service Categories",
+
+            value:
+              "Coming soon"
           },
+
           {
-            label: "Job Matching",
-            value: "Based on your services"
+            label:
+              "Job Matching",
+
+            value:
+              "Based on your services"
           },
+
           {
-            label: "Service Area",
-            value: "Coming soon"
+            label:
+              "Service Area",
+
+            value:
+              "Coming soon"
           }
         ]
       });
+
     }
   );
-}
 
 
-  if (accountSettingsButton) {
-  accountSettingsButton.addEventListener(
+  accountSettingsButton?.addEventListener(
     "click",
     () => {
+
       openInfoModal({
-        eyebrow: "ACCOUNT SETTINGS",
-        title: "Account Settings",
+        eyebrow:
+          "ACCOUNT SETTINGS",
+
+        title:
+          "Account Settings",
+
         message:
           "Soon you will be able to manage your Korvo account, security, and professional preferences here.",
+
         details: [
           {
-            label: "Login & Security",
-            value: "Coming soon"
+            label:
+              "Login & Security",
+
+            value:
+              "Coming soon"
           },
+
           {
-            label: "Notifications",
-            value: "Coming soon"
+            label:
+              "Notifications",
+
+            value:
+              "Coming soon"
           },
+
           {
-            label: "Language",
-            value: "English / Español"
+            label:
+              "Language",
+
+            value:
+              "English / Español"
           },
+
           {
-            label: "Account Type",
-            value: "Professional"
+            label:
+              "Account Type",
+
+            value:
+              "Professional"
           }
         ]
       });
+
     }
   );
-}
 
 
-  if (logoutButton) {
-    logoutButton.addEventListener(
-      "click",
-      () => {
-        const confirmed =
-          confirm(
-            "Log out of your Korvo professional account?"
-          );
+  logoutButton?.addEventListener(
+    "click",
+    () => {
 
+      const confirmed =
+        confirm(
+          "Log out of your Korvo professional account?"
+        );
 
-        if (confirmed) {
-          window.location.href =
-            "index.html";
-        }
+      if (confirmed) {
+        window.location.href =
+          "index.html";
       }
-    );
-  }
 
-
-  /* =========================
-     HTML Safety
-     ========================= */
-
-  function escapeHTML(value) {
-    return String(value)
-      .replaceAll(
-        "&",
-        "&amp;"
-      )
-      .replaceAll(
-        "<",
-        "&lt;"
-      )
-      .replaceAll(
-        ">",
-        "&gt;"
-      )
-      .replaceAll(
-        '"',
-        "&quot;"
-      )
-      .replaceAll(
-        "'",
-        "&#039;"
-      );
-  }
-
-  /* =========================
-     Korvo Information Modal
-     ========================= */
-
-  const infoModal =
-    document.getElementById("infoModal");
-
-  const infoModalCard =
-    infoModal
-      ? infoModal.querySelector(".info-modal-card")
-      : null;
-
-  const infoModalEyebrow =
-    document.getElementById("infoModalEyebrow");
-
-  const infoModalTitle =
-    document.getElementById("infoModalTitle");
-
-  const infoModalMessage =
-    document.getElementById("infoModalMessage");
-
-  const infoModalDetails =
-    document.getElementById("infoModalDetails");
-
-  const closeInfoModalButton =
-    document.getElementById("closeInfoModalButton");
-
-  const infoModalDoneButton =
-    document.getElementById("infoModalDoneButton");
-
-
-  function openInfoModal({
-    eyebrow = "KORVO",
-    title = "Information",
-    message = "",
-    details = [],
-    success = false
-  }) {
-    if (!infoModal) {
-      return;
     }
-
-    infoModalEyebrow.textContent =
-      eyebrow;
-
-    infoModalTitle.textContent =
-      title;
-
-    infoModalMessage.textContent =
-      message;
-
-    infoModalDetails.innerHTML =
-      "";
-
-    if (infoModalCard) {
-      infoModalCard.classList.toggle(
-        "success-modal",
-        success
-      );
-    }
-
-    if (success) {
-      const successIcon =
-        document.createElement("div");
-
-      successIcon.className =
-        "info-success-icon";
-
-      successIcon.textContent =
-        "✓";
-
-      infoModalDetails.appendChild(
-        successIcon
-      );
-    }
-
-    details.forEach((detail) => {
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "info-detail-row";
-
-      row.innerHTML = `
-        <span class="info-detail-label">
-          ${escapeHTML(detail.label)}
-        </span>
-
-        <span class="info-detail-value">
-          ${escapeHTML(detail.value)}
-        </span>
-      `;
-
-      infoModalDetails.appendChild(
-        row
-      );
-    });
-
-    infoModal.classList.remove(
-      "hidden"
-    );
-
-    document.body.style.overflow =
-      "hidden";
-  }
+  );
 
 
-  function closeInfoModal() {
-    if (!infoModal) {
-      return;
-    }
-
-    infoModal.classList.add(
-      "hidden"
-    );
-
-    document.body.style.overflow =
-      "";
-  }
-
-
-  if (closeInfoModalButton) {
-    closeInfoModalButton.addEventListener(
-      "click",
-      closeInfoModal
-    );
-  }
-
-
-  if (infoModalDoneButton) {
-    infoModalDoneButton.addEventListener(
-      "click",
-      closeInfoModal
-    );
-  }
-
-
-  if (infoModal) {
-    infoModal.addEventListener(
-      "click",
-      (event) => {
-        if (event.target === infoModal) {
-          closeInfoModal();
-        }
-      }
-    );
-  }
   /* =========================
      Initialize Dashboard
      ========================= */
@@ -1605,4 +1828,5 @@ document.addEventListener("DOMContentLoaded", () => {
   updateDashboardCounters();
 
   updateNotificationCount();
+
 });

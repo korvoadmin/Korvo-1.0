@@ -5,104 +5,136 @@
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+
   /* =========================
      Page Elements
      ========================= */
 
-  const mobileMenuButton = document.getElementById(
-    "mobileMenuButton"
-  );
+  const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
 
-  const mobileNav = document.getElementById(
-    "mobileNav"
-  );
+  const mobileNav =
+    document.getElementById("mobileNav");
 
-  const notificationButton = document.getElementById(
-    "notificationButton"
-  );
+  const notificationButton =
+    document.getElementById("notificationButton");
 
-  const customerProfileButton = document.getElementById(
-    "customerProfileButton"
-  );
+  const customerProfileButton =
+    document.getElementById(
+      "customerProfileButton"
+    );
 
-  const customerMenu = document.getElementById(
-    "customerMenu"
-  );
+  const customerMenu =
+    document.getElementById(
+      "customerMenu"
+    );
 
-  const markAllReadButton = document.getElementById(
-    "markAllReadButton"
-  );
+  const markAllReadButton =
+    document.getElementById(
+      "markAllReadButton"
+    );
 
-  const notificationsList = document.getElementById(
-    "notificationsList"
-  );
+  const notificationsList =
+    document.getElementById(
+      "notificationsList"
+    );
 
-  const acceptQuoteModal = document.getElementById(
-    "acceptQuoteModal"
-  );
+  const quotesList =
+    document.getElementById(
+      "quotesList"
+    );
 
-  const closeAcceptQuoteModal = document.getElementById(
-    "closeAcceptQuoteModal"
-  );
+  const acceptQuoteModal =
+    document.getElementById(
+      "acceptQuoteModal"
+    );
 
-  const cancelAcceptQuoteButton = document.getElementById(
-    "cancelAcceptQuoteButton"
-  );
+  const closeAcceptQuoteModal =
+    document.getElementById(
+      "closeAcceptQuoteModal"
+    );
 
-  const confirmAcceptQuoteButton = document.getElementById(
-    "confirmAcceptQuoteButton"
-  );
+  const cancelAcceptQuoteButton =
+    document.getElementById(
+      "cancelAcceptQuoteButton"
+    );
 
-  const selectedProfessionalName = document.getElementById(
-    "selectedProfessionalName"
-  );
+  const confirmAcceptQuoteButton =
+    document.getElementById(
+      "confirmAcceptQuoteButton"
+    );
 
-  const savedProfessionalsGrid = document.getElementById(
-    "savedProfessionalsGrid"
-  );
+  const selectedProfessionalName =
+    document.getElementById(
+      "selectedProfessionalName"
+    );
 
-  const savedProsCount = document.getElementById(
-    "savedProsCount"
-  );
+  const savedProfessionalsGrid =
+    document.getElementById(
+      "savedProfessionalsGrid"
+    );
 
-  const jobsList = document.getElementById(
-    "jobsList"
-  );
+  const savedProsCount =
+    document.getElementById(
+      "savedProsCount"
+    );
 
-  const activeJobsCount = document.getElementById(
-    "activeJobsCount"
-  );
+  const jobsList =
+    document.getElementById(
+      "jobsList"
+    );
 
-  const quotesCount = document.getElementById(
-    "quotesCount"
-  );
+  const activeJobsCount =
+    document.getElementById(
+      "activeJobsCount"
+    );
 
-  const completedJobsCount = document.getElementById(
-    "completedJobsCount"
-  );
+  const quotesCount =
+    document.getElementById(
+      "quotesCount"
+    );
 
-  const currentYear = document.getElementById(
-    "currentYear"
-  );
+  const completedJobsCount =
+    document.getElementById(
+      "completedJobsCount"
+    );
 
-  let pendingProfessional = "";
+  const currentYear =
+    document.getElementById(
+      "currentYear"
+    );
+
 
   /* =========================
-     Utility Functions
+     Quote Selection State
      ========================= */
 
-  function safelyReadLocalStorage(key, fallbackValue) {
+  let pendingProfessional = "";
+  let pendingQuoteId = "";
+
+
+  /* =========================
+     Local Storage Helpers
+     ========================= */
+
+  function safelyReadLocalStorage(
+    key,
+    fallbackValue
+  ) {
     try {
-      const storedValue = localStorage.getItem(key);
+      const storedValue =
+        localStorage.getItem(key);
 
       if (!storedValue) {
         return fallbackValue;
       }
 
-      return JSON.parse(storedValue);
+      return JSON.parse(
+        storedValue
+      );
     } catch (error) {
       console.error(
-        `Unable to read ${key} from localStorage:`,
+        `Unable to read ${key}:`,
         error
       );
 
@@ -110,7 +142,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function safelyWriteLocalStorage(key, value) {
+
+  function safelyWriteLocalStorage(
+    key,
+    value
+  ) {
     try {
       localStorage.setItem(
         key,
@@ -118,201 +154,289 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     } catch (error) {
       console.error(
-        `Unable to save ${key} to localStorage:`,
+        `Unable to save ${key}:`,
         error
       );
     }
   }
- function showDemoMessage(message) {
-  openInfoModal({
-    eyebrow: "KORVO",
-    title: "Coming Soon",
-    message: message,
-    details: []
-  });
-}
-/* =========================
-   Korvo Information Modal
-   ========================= */
-
-const infoModal =
-  document.getElementById("infoModal");
-
-const infoModalCard =
-  infoModal
-    ? infoModal.querySelector(".info-modal-card")
-    : null;
-
-const infoModalEyebrow =
-  document.getElementById("infoModalEyebrow");
-
-const infoModalTitle =
-  document.getElementById("infoModalTitle");
-
-const infoModalMessage =
-  document.getElementById("infoModalMessage");
-
-const infoModalDetails =
-  document.getElementById("infoModalDetails");
-
-const closeInfoModalButton =
-  document.getElementById("closeInfoModalButton");
-
-const infoModalDoneButton =
-  document.getElementById("infoModalDoneButton");
-
-const infoModalIcon =
-  document.getElementById("infoModalIcon");
 
 
-function openInfoModal({
-  eyebrow = "KORVO",
-  title = "Information",
-  message = "",
-  details = [],
-  success = false
-}) {
-  if (!infoModal) {
-    return;
+  /* =========================
+     HTML Safety
+     ========================= */
+
+  function escapeHTML(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
   }
 
-  infoModalEyebrow.textContent =
-    eyebrow;
 
-  infoModalTitle.textContent =
-    title;
+  /* =========================
+     Korvo Information Modal
+     ========================= */
 
-  infoModalMessage.textContent =
-    message;
-
-  infoModalDetails.innerHTML =
-    "";
-
-  if (infoModalCard) {
-    infoModalCard.classList.toggle(
-      "success-modal",
-      success
+  const infoModal =
+    document.getElementById(
+      "infoModal"
     );
-  }
 
-  if (infoModalIcon) {
-    infoModalIcon.textContent =
-      success ? "✓" : "i";
-  }
+  const infoModalCard =
+    infoModal
+      ? infoModal.querySelector(
+          ".info-modal-card"
+        )
+      : null;
 
-  details.forEach((detail) => {
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "info-detail-row";
-
-    row.innerHTML = `
-      <span class="info-detail-label">
-        ${detail.label}
-      </span>
-
-      <span class="info-detail-value">
-        ${detail.value}
-      </span>
-    `;
-
-    infoModalDetails.appendChild(
-      row
+  const infoModalEyebrow =
+    document.getElementById(
+      "infoModalEyebrow"
     );
-  });
 
-  infoModal.classList.remove(
-    "hidden"
-  );
+  const infoModalTitle =
+    document.getElementById(
+      "infoModalTitle"
+    );
 
-  document.body.classList.add(
-    "modal-open"
-  );
-}
+  const infoModalMessage =
+    document.getElementById(
+      "infoModalMessage"
+    );
+
+  const infoModalDetails =
+    document.getElementById(
+      "infoModalDetails"
+    );
+
+  const closeInfoModalButton =
+    document.getElementById(
+      "closeInfoModalButton"
+    );
+
+  const infoModalDoneButton =
+    document.getElementById(
+      "infoModalDoneButton"
+    );
+
+  const infoModalIcon =
+    document.getElementById(
+      "infoModalIcon"
+    );
 
 
-function closeInfoModal() {
-  if (!infoModal) {
-    return;
-  }
-
-  infoModal.classList.add(
-    "hidden"
-  );
-
-  document.body.classList.remove(
-    "modal-open"
-  );
-}
-
-
-closeInfoModalButton?.addEventListener(
-  "click",
-  closeInfoModal
-);
-
-infoModalDoneButton?.addEventListener(
-  "click",
-  closeInfoModal
-);
-
-infoModal?.addEventListener(
-  "click",
-  (event) => {
-    if (event.target === infoModal) {
-      closeInfoModal();
+  function openInfoModal({
+    eyebrow = "KORVO",
+    title = "Information",
+    message = "",
+    details = [],
+    success = false
+  }) {
+    if (!infoModal) {
+      return;
     }
+
+    if (infoModalEyebrow) {
+      infoModalEyebrow.textContent =
+        eyebrow;
+    }
+
+    if (infoModalTitle) {
+      infoModalTitle.textContent =
+        title;
+    }
+
+    if (infoModalMessage) {
+      infoModalMessage.textContent =
+        message;
+    }
+
+    if (infoModalDetails) {
+      infoModalDetails.innerHTML =
+        "";
+    }
+
+    if (infoModalCard) {
+      infoModalCard.classList.toggle(
+        "success-modal",
+        success
+      );
+    }
+
+    if (infoModalIcon) {
+      infoModalIcon.textContent =
+        success ? "✓" : "i";
+    }
+
+    if (infoModalDetails) {
+      details.forEach(
+        (detail) => {
+          const row =
+            document.createElement(
+              "div"
+            );
+
+          row.className =
+            "info-detail-row";
+
+          row.innerHTML = `
+            <span class="info-detail-label">
+              ${escapeHTML(
+                detail.label
+              )}
+            </span>
+
+            <span class="info-detail-value">
+              ${escapeHTML(
+                detail.value
+              )}
+            </span>
+          `;
+
+          infoModalDetails
+            .appendChild(row);
+        }
+      );
+    }
+
+    infoModal.classList.remove(
+      "hidden"
+    );
+
+    document.body.classList.add(
+      "modal-open"
+    );
   }
-);
+
+
+  function closeInfoModal() {
+    if (!infoModal) {
+      return;
+    }
+
+    infoModal.classList.add(
+      "hidden"
+    );
+
+    document.body.classList.remove(
+      "modal-open"
+    );
+  }
+
+
+  function showDemoMessage(message) {
+    openInfoModal({
+      eyebrow: "KORVO",
+      title: "Coming Soon",
+      message,
+      details: []
+    });
+  }
+
+
+  closeInfoModalButton
+    ?.addEventListener(
+      "click",
+      closeInfoModal
+    );
+
+  infoModalDoneButton
+    ?.addEventListener(
+      "click",
+      closeInfoModal
+    );
+
+  infoModal?.addEventListener(
+    "click",
+    (event) => {
+      if (
+        event.target === infoModal
+      ) {
+        closeInfoModal();
+      }
+    }
+  );
+
+
   /* =========================
      Mobile Navigation
      ========================= */
 
-  if (mobileMenuButton && mobileNav) {
-    mobileMenuButton.addEventListener("click", () => {
-      mobileNav.classList.toggle("open");
+  if (
+    mobileMenuButton &&
+    mobileNav
+  ) {
+    mobileMenuButton
+      .addEventListener(
+        "click",
+        () => {
+          mobileNav.classList.toggle(
+            "open"
+          );
 
-      const isOpen =
-        mobileNav.classList.contains("open");
+          const isOpen =
+            mobileNav.classList.contains(
+              "open"
+            );
 
-      mobileMenuButton.setAttribute(
-        "aria-expanded",
-        String(isOpen)
+          mobileMenuButton
+            .setAttribute(
+              "aria-expanded",
+              String(isOpen)
+            );
+
+          mobileMenuButton.textContent =
+            isOpen
+              ? "×"
+              : "☰";
+        }
       );
-
-      mobileMenuButton.textContent =
-        isOpen ? "×" : "☰";
-    });
 
     mobileNav
       .querySelectorAll("a")
       .forEach((link) => {
-        link.addEventListener("click", () => {
-          mobileNav.classList.remove("open");
+        link.addEventListener(
+          "click",
+          () => {
+            mobileNav.classList.remove(
+              "open"
+            );
 
-          mobileMenuButton.setAttribute(
-            "aria-expanded",
-            "false"
-          );
+            mobileMenuButton
+              .setAttribute(
+                "aria-expanded",
+                "false"
+              );
 
-          mobileMenuButton.textContent = "☰";
-        });
+            mobileMenuButton.textContent =
+              "☰";
+          }
+        );
       });
   }
-  
+
+
   /* =========================
      Customer Menu
      ========================= */
 
-  customerProfileButton?.addEventListener(
-    "click",
-    (event) => {
-      event.stopPropagation();
+  customerProfileButton
+    ?.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
 
-      customerMenu?.classList.toggle("hidden");
-    }
-  );
+        customerMenu
+          ?.classList.toggle(
+            "hidden"
+          );
+      }
+    );
 
   customerMenu?.addEventListener(
     "click",
@@ -321,59 +445,78 @@ infoModal?.addEventListener(
     }
   );
 
-  document.addEventListener("click", () => {
-    customerMenu?.classList.add("hidden");
-  });
+  document.addEventListener(
+    "click",
+    () => {
+      customerMenu
+        ?.classList.add(
+          "hidden"
+        );
+    }
+  );
+
 
   /* =========================
      Notifications
      ========================= */
 
-  notificationButton?.addEventListener(
-    "click",
-    () => {
-      notificationsList?.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-  );
-
-  markAllReadButton?.addEventListener(
-    "click",
-    () => {
-      const unreadNotifications =
-        document.querySelectorAll(
-          ".notification-item.unread"
-        );
-
-      unreadNotifications.forEach(
-        (notification) => {
-          notification.classList.remove("unread");
-
-          const unreadDot =
-            notification.querySelector(".unread-dot");
-
-          unreadDot?.remove();
-        }
-      );
-
-      const notificationCount =
-        document.querySelector(
-          ".notification-count"
-        );
-
-      if (notificationCount) {
-        notificationCount.textContent = "0";
-        notificationCount.classList.add("hidden");
+  notificationButton
+    ?.addEventListener(
+      "click",
+      () => {
+        notificationsList
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
       }
+    );
 
-      safelyWriteLocalStorage(
-        "korvoNotificationsRead",
-        true
-      );
-    }
-  );
+
+  markAllReadButton
+    ?.addEventListener(
+      "click",
+      () => {
+        document
+          .querySelectorAll(
+            ".notification-item.unread"
+          )
+          .forEach(
+            (notification) => {
+              notification
+                .classList.remove(
+                  "unread"
+                );
+
+              notification
+                .querySelector(
+                  ".unread-dot"
+                )
+                ?.remove();
+            }
+          );
+
+        const count =
+          document.querySelector(
+            ".notification-count"
+          );
+
+        if (count) {
+          count.textContent =
+            "0";
+
+          count.classList.add(
+            "hidden"
+          );
+        }
+
+        safelyWriteLocalStorage(
+          "korvoNotificationsRead",
+          true
+        );
+      }
+    );
+
 
   function loadNotificationState() {
     const notificationsRead =
@@ -387,306 +530,897 @@ infoModal?.addEventListener(
     }
 
     document
-      .querySelectorAll(".notification-item.unread")
-      .forEach((notification) => {
-        notification.classList.remove("unread");
+      .querySelectorAll(
+        ".notification-item.unread"
+      )
+      .forEach(
+        (notification) => {
+          notification
+            .classList.remove(
+              "unread"
+            );
 
-        notification
-          .querySelector(".unread-dot")
-          ?.remove();
-      });
+          notification
+            .querySelector(
+              ".unread-dot"
+            )
+            ?.remove();
+        }
+      );
 
-    const notificationCount =
+    const count =
       document.querySelector(
         ".notification-count"
       );
 
-    if (notificationCount) {
-      notificationCount.textContent = "0";
-      notificationCount.classList.add("hidden");
+    if (count) {
+      count.textContent =
+        "0";
+
+      count.classList.add(
+        "hidden"
+      );
     }
   }
+
 
   /* =========================
-     Accept Quote Modal
+     Professional Quotes
      ========================= */
 
-  function openAcceptQuoteModal(
-    professionalName
-  ) {
-    pendingProfessional = professionalName;
-
-    if (selectedProfessionalName) {
-      selectedProfessionalName.textContent =
-        professionalName;
-    }
-
-    acceptQuoteModal?.classList.remove("hidden");
-    document.body.classList.add("modal-open");
-  }
-
-  function closeAcceptModal() {
-    acceptQuoteModal?.classList.add("hidden");
-    document.body.classList.remove("modal-open");
-
-    pendingProfessional = "";
-  }
-
-  document
-    .querySelectorAll(".accept-quote-button")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        const professionalName =
-          button.dataset.professional ||
-          "this professional";
-
-        openAcceptQuoteModal(
-          professionalName
-        );
-      });
-    });
-
-  closeAcceptQuoteModal?.addEventListener(
-    "click",
-    closeAcceptModal
-  );
-
-  cancelAcceptQuoteButton?.addEventListener(
-    "click",
-    closeAcceptModal
-  );
-
-  acceptQuoteModal?.addEventListener(
-    "click",
-    (event) => {
-      if (event.target === acceptQuoteModal) {
-        closeAcceptModal();
-      }
-    }
-  );
-
-  confirmAcceptQuoteButton?.addEventListener(
-    "click",
-    () => {
-      if (!pendingProfessional) {
-        return;
-      }
-
-      const acceptedQuotes =
-        safelyReadLocalStorage(
-          "korvoAcceptedQuotes",
-          []
-        );
-
-      acceptedQuotes.push({
-        professional: pendingProfessional,
-        acceptedAt: new Date().toISOString(),
-        status: "accepted"
-      });
-
-      safelyWriteLocalStorage(
-        "korvoAcceptedQuotes",
-        acceptedQuotes
+  function getProfessionalQuotes() {
+    const quotes =
+      safelyReadLocalStorage(
+        "korvoProfessionalQuotes",
+        []
       );
 
-      const acceptedProfessional =
-  pendingProfessional;
+    return Array.isArray(quotes)
+      ? quotes
+      : [];
+  }
 
-closeAcceptModal();
 
-openInfoModal({
-  eyebrow: "QUOTE ACCEPTED",
-  title: "Professional Selected!",
-  message:
-    "Your quote selection has been saved in the Korvo demo.",
-  success: true,
-  details: [
-    {
-      label: "Professional",
-      value: acceptedProfessional
-    },
-    {
-      label: "Status",
-      value: "Accepted"
-    },
-    {
-      label: "Next Step",
-      value: "Booking and payment flow coming soon"
+  function saveProfessionalQuotes(
+    quotes
+  ) {
+    safelyWriteLocalStorage(
+      "korvoProfessionalQuotes",
+      quotes
+    );
+  }
+
+
+  function formatQuoteDate(
+    dateValue
+  ) {
+    const date =
+      new Date(dateValue);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return "Recently";
     }
-  ]
-});
-    }
-  );
 
- document.addEventListener(
-  "keydown",
-  (event) => {
-    if (event.key !== "Escape") {
+    return date.toLocaleDateString(
+      "en-US",
+      {
+        month: "short",
+        day: "numeric"
+      }
+    );
+  }
+
+
+  function getInitials(name) {
+    return String(
+      name || "Korvo Pro"
+    )
+      .split(" ")
+      .map(
+        (word) =>
+          word.charAt(0)
+      )
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  }
+
+
+  /* =========================
+     Dynamic Quote Cards
+     ========================= */
+
+  function createProfessionalQuoteCard(
+    quote
+  ) {
+    const article =
+      document.createElement(
+        "article"
+      );
+
+    article.className =
+      "quote-item generated-quote-item";
+
+    article.dataset.quoteId =
+      quote.id || "";
+
+    const professionalName =
+      quote.professional ||
+      "Korvo Professional";
+
+    const professionalType =
+      quote.professionalType ||
+      "Local Professional";
+
+    const initials =
+      quote.professionalInitials ||
+      getInitials(
+        professionalName
+      );
+
+    const rating =
+      quote.professionalRating ||
+      "5.0";
+
+    const profile =
+      quote.professionalProfile ||
+      "browse.html";
+
+    const amount =
+      Number(
+        quote.amount || 0
+      );
+
+    const timeframe =
+      quote.timeframe ||
+      "Flexible";
+
+    const message =
+      quote.message ||
+      "No message included.";
+
+    const status =
+      quote.status ||
+      "Pending";
+
+    const jobTitle =
+      quote.jobTitle ||
+      "Customer Project";
+
+    const reference =
+      quote.jobReference ||
+      quote.jobId ||
+      "Not assigned";
+
+    const createdDate =
+      formatQuoteDate(
+        quote.createdAt
+      );
+
+    const quoteAccepted =
+      String(status)
+        .toLowerCase() ===
+        "accepted";
+
+
+    article.innerHTML = `
+      <div class="quote-professional">
+
+        <div class="professional-avatar">
+          ${escapeHTML(initials)}
+        </div>
+
+        <div>
+
+          <div class="professional-name-row">
+
+            <h3>
+              ${escapeHTML(
+                professionalName
+              )}
+            </h3>
+
+            <span class="verified-check">
+              ✓
+            </span>
+
+          </div>
+
+          <p>
+            ${escapeHTML(
+              professionalType
+            )}
+          </p>
+
+          <div class="rating-row">
+
+            <span class="stars">
+              ★★★★★
+            </span>
+
+            <strong>
+              ${escapeHTML(
+                rating
+              )}
+            </strong>
+
+            <span>
+              Verified Korvo Pro
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="quote-details">
+
+        <div>
+
+          <span class="quote-label">
+            Quote amount
+          </span>
+
+          <strong class="quote-price">
+            $${amount.toLocaleString()}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span class="quote-label">
+            Availability
+          </span>
+
+          <strong class="quote-availability">
+            ${escapeHTML(
+              timeframe
+            )}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <p class="quote-message">
+        “${escapeHTML(
+          message
+        )}”
+      </p>
+
+
+      <div class="job-footer">
+
+        <span>
+          🛠️ ${escapeHTML(
+            jobTitle
+          )}
+        </span>
+
+        <span>
+          🆔 ${escapeHTML(
+            reference
+          )}
+        </span>
+
+        <span>
+          📅 ${escapeHTML(
+            createdDate
+          )}
+        </span>
+
+      </div>
+
+
+      <div class="quote-actions">
+
+        <button
+          type="button"
+          class="primary-button generated-accept-quote-button"
+          data-professional="${escapeHTML(
+            professionalName
+          )}"
+          data-quote-id="${escapeHTML(
+            quote.id || ""
+          )}"
+          ${quoteAccepted
+            ? "disabled"
+            : ""}
+        >
+          ${quoteAccepted
+            ? "Quote Accepted"
+            : "Accept Quote"}
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary-button generated-message-button"
+          data-professional="${escapeHTML(
+            professionalName
+          )}"
+        >
+          Message
+        </button>
+
+
+        <a
+          href="${escapeHTML(
+            profile
+          )}"
+          class="profile-text-link"
+        >
+          View Profile
+        </a>
+
+      </div>
+    `;
+
+
+    article
+      .querySelector(
+        ".generated-accept-quote-button"
+      )
+      ?.addEventListener(
+        "click",
+        (event) => {
+          const button =
+            event.currentTarget;
+
+          if (button.disabled) {
+            return;
+          }
+
+          openAcceptQuoteModal(
+            button.dataset.professional,
+            button.dataset.quoteId
+          );
+        }
+      );
+
+
+    article
+      .querySelector(
+        ".generated-message-button"
+      )
+      ?.addEventListener(
+        "click",
+        (event) => {
+          const professionalName =
+            event.currentTarget
+              .dataset.professional ||
+            "";
+
+          openProfessionalConversation(
+            professionalName
+          );
+        }
+      );
+
+
+    return article;
+  }
+
+
+  function renderProfessionalQuotes() {
+    if (!quotesList) {
       return;
     }
 
-    if (
-      acceptQuoteModal &&
-      !acceptQuoteModal.classList.contains(
-        "hidden"
+    quotesList
+      .querySelectorAll(
+        ".generated-quote-item"
       )
-    ) {
-      closeAcceptModal();
-    }
+      .forEach(
+        (item) =>
+          item.remove()
+      );
 
-    if (
-      infoModal &&
-      !infoModal.classList.contains(
-        "hidden"
-      )
-    ) {
-      closeInfoModal();
-    }
+    const quotes =
+      getProfessionalQuotes();
+
+    quotes
+      .slice()
+      .reverse()
+      .forEach(
+        (quote) => {
+          const card =
+            createProfessionalQuoteCard(
+              quote
+            );
+
+          quotesList.prepend(
+            card
+          );
+        }
+      );
   }
-);
+
 
   /* =========================
-     Message Buttons
+     Accept Quote
      ========================= */
 
+  function openAcceptQuoteModal(
+    professionalName,
+    quoteId = ""
+  ) {
+    pendingProfessional =
+      professionalName;
+
+    pendingQuoteId =
+      quoteId;
+
+    if (
+      selectedProfessionalName
+    ) {
+      selectedProfessionalName
+        .textContent =
+          professionalName;
+    }
+
+    acceptQuoteModal
+      ?.classList.remove(
+        "hidden"
+      );
+
+    document.body.classList.add(
+      "modal-open"
+    );
+  }
+
+
+  function closeAcceptModal() {
+    acceptQuoteModal
+      ?.classList.add(
+        "hidden"
+      );
+
+    document.body.classList.remove(
+      "modal-open"
+    );
+
+    pendingProfessional = "";
+    pendingQuoteId = "";
+  }
+
+
   document
-  .querySelectorAll(
-    ".message-professional-button"
-  )
-  .forEach((button) => {
-    button.addEventListener("click", () => {
-      const professionalName =
-        button.dataset.professional ||
-        "";
+    .querySelectorAll(
+      ".accept-quote-button"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          openAcceptQuoteModal(
+            button.dataset.professional ||
+            "this professional",
+            ""
+          );
+        }
+      );
+    });
 
+
+  closeAcceptQuoteModal
+    ?.addEventListener(
+      "click",
+      closeAcceptModal
+    );
+
+  cancelAcceptQuoteButton
+    ?.addEventListener(
+      "click",
+      closeAcceptModal
+    );
+
+  acceptQuoteModal
+    ?.addEventListener(
+      "click",
+      (event) => {
+        if (
+          event.target ===
+          acceptQuoteModal
+        ) {
+          closeAcceptModal();
+        }
+      }
+    );
+
+
+  confirmAcceptQuoteButton
+    ?.addEventListener(
+      "click",
+      () => {
+        if (
+          !pendingProfessional
+        ) {
+          return;
+        }
+
+
+        const acceptedProfessional =
+          pendingProfessional;
+
+        const acceptedQuoteId =
+          pendingQuoteId;
+
+
+        const acceptedQuotes =
+          safelyReadLocalStorage(
+            "korvoAcceptedQuotes",
+            []
+          );
+
+
+        acceptedQuotes.push({
+          quoteId:
+            acceptedQuoteId,
+
+          professional:
+            acceptedProfessional,
+
+          acceptedAt:
+            new Date()
+              .toISOString(),
+
+          status:
+            "accepted"
+        });
+
+
+        safelyWriteLocalStorage(
+          "korvoAcceptedQuotes",
+          acceptedQuotes
+        );
+
+
+        if (acceptedQuoteId) {
+          const professionalQuotes =
+            getProfessionalQuotes();
+
+          const updatedQuotes =
+            professionalQuotes.map(
+              (quote) => {
+                if (
+                  String(
+                    quote.id
+                  ) ===
+                  String(
+                    acceptedQuoteId
+                  )
+                ) {
+                  return {
+                    ...quote,
+                    status:
+                      "Accepted",
+
+                    acceptedAt:
+                      new Date()
+                        .toISOString()
+                  };
+                }
+
+                return quote;
+              }
+            );
+
+          saveProfessionalQuotes(
+            updatedQuotes
+          );
+        }
+
+
+        closeAcceptModal();
+
+        renderProfessionalQuotes();
+
+        loadDashboardStats();
+
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ACCEPTED",
+
+          title:
+            "Professional Selected!",
+
+          message:
+            "Your Korvo quote has been accepted and saved.",
+
+          success:
+            true,
+
+          details: [
+            {
+              label:
+                "Professional",
+
+              value:
+                acceptedProfessional
+            },
+
+            {
+              label:
+                "Status",
+
+              value:
+                "Accepted"
+            },
+
+            {
+              label:
+                "Next Step",
+
+              value:
+                "Continue the conversation in Korvo Messages"
+            }
+          ]
+        });
+      }
+    );
+
+
+  /* =========================
+     Escape Key
+     ========================= */
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (
+        event.key !==
+        "Escape"
+      ) {
+        return;
+      }
+
+      if (
+        acceptQuoteModal &&
+        !acceptQuoteModal
+          .classList.contains(
+            "hidden"
+          )
+      ) {
+        closeAcceptModal();
+      }
+
+      if (
+        infoModal &&
+        !infoModal
+          .classList.contains(
+            "hidden"
+          )
+      ) {
+        closeInfoModal();
+      }
+    }
+  );
+
+
+  /* =========================
+     Messaging
+     ========================= */
+
+  function openProfessionalConversation(
+    professionalName = ""
+  ) {
+    localStorage.setItem(
+      "korvoMessagingRole",
+      "customer"
+    );
+
+    if (professionalName) {
       localStorage.setItem(
         "korvoOpenConversation",
         professionalName
       );
-
-      window.location.href =
-        "messages.html";
-    });
-  });
-
- document
-  .querySelectorAll(
-    "[data-message-professional]"
-  )
-  .forEach((button) => {
-    button.addEventListener("click", () => {
-      const professionalName =
-        button.dataset.messageProfessional ||
-        "";
-
-      localStorage.setItem(
-        "korvoOpenConversation",
-        professionalName
+    } else {
+      localStorage.removeItem(
+        "korvoOpenConversation"
       );
+    }
 
-      window.location.href =
-        "messages.html";
+    window.location.href =
+      "messages.html";
+  }
+
+
+  document
+    .querySelectorAll(
+      ".message-professional-button"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          openProfessionalConversation(
+            button.dataset
+              .professional ||
+            ""
+          );
+        }
+      );
     });
-  });
+
+
+  document
+    .querySelectorAll(
+      "[data-message-professional]"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          openProfessionalConversation(
+            button.dataset
+              .messageProfessional ||
+            ""
+          );
+        }
+      );
+    });
+
 
   [
-  "messagesQuickAction",
-  "menuMessagesButton",
-  "viewMessagesButton"
-].forEach((elementId) => {
-  document
-    .getElementById(elementId)
-    ?.addEventListener("click", () => {
-      window.location.href =
-        "messages.html";
-    });
-});
+    "messagesQuickAction",
+    "menuMessagesButton",
+    "viewMessagesButton"
+  ].forEach(
+    (elementId) => {
+      document
+        .getElementById(
+          elementId
+        )
+        ?.addEventListener(
+          "click",
+          () => {
+            openProfessionalConversation();
+          }
+        );
+    }
+  );
+
+
+  /* =========================
+     Settings
+     ========================= */
 
   [
     "settingsQuickAction",
     "menuSettingsButton"
-  ].forEach((elementId) => {
-    document
-      .getElementById(elementId)
-      ?.addEventListener("click", () => {
-        showDemoMessage(
-          "Customer account settings are coming soon."
+  ].forEach(
+    (elementId) => {
+      document
+        .getElementById(
+          elementId
+        )
+        ?.addEventListener(
+          "click",
+          () => {
+            showDemoMessage(
+              "Customer account settings are coming soon."
+            );
+          }
         );
-      });
-  });
+    }
+  );
+
 
   /* =========================
      Job Buttons
      ========================= */
 
   document
-    .querySelectorAll("[data-job-action]")
+    .querySelectorAll(
+      "[data-job-action]"
+    )
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        const action =
-          button.dataset.jobAction;
+      button.addEventListener(
+        "click",
+        () => {
+          const action =
+            button.dataset
+              .jobAction;
 
-        const actionMessages = {
-          view:
-            "A full job-details page will be added later.",
+          const messages = {
+            view:
+              "A full job-details page will be added later.",
 
-          quotes:
-            "The complete quote comparison screen will be added later.",
+            quotes:
+              "The complete quote comparison screen will be added later.",
 
-          review:
-            "The customer review form will be built after messaging."
-        };
+            review:
+              "The customer review form will be built after messaging."
+          };
 
-        showDemoMessage(
-          actionMessages[action] ||
-          "This job feature is coming soon."
-        );
-      });
-    });
-
-  document
-    .querySelectorAll(".more-button")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        showDemoMessage(
-          "Job options such as edit, close and delete will be added later."
-        );
-      });
-    });
-
-  document
-    .getElementById("viewAllJobsButton")
-    ?.addEventListener("click", () => {
-      showDemoMessage(
-        "The full My Jobs page is coming soon."
+          showDemoMessage(
+            messages[action] ||
+            "This job feature is coming soon."
+          );
+        }
       );
     });
 
+
   document
-    .getElementById("viewAllQuotesButton")
-    ?.addEventListener("click", () => {
-      showDemoMessage(
-        "The full quote comparison page is coming soon."
+    .querySelectorAll(
+      ".more-button"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          showDemoMessage(
+            "Job options such as edit, close and delete will be added later."
+          );
+        }
       );
     });
+
+
+  document
+    .getElementById(
+      "viewAllJobsButton"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        showDemoMessage(
+          "The full My Jobs page is coming soon."
+        );
+      }
+    );
+
+
+  document
+    .getElementById(
+      "viewAllQuotesButton"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        showDemoMessage(
+          "The full quote comparison page is coming soon."
+        );
+      }
+    );
+
 
   /* =========================
      Saved Professionals
      ========================= */
 
   function updateSavedCount() {
-    if (!savedProfessionalsGrid || !savedProsCount) {
+    if (
+      !savedProfessionalsGrid ||
+      !savedProsCount
+    ) {
       return;
     }
 
-    const visibleSavedCards =
-      savedProfessionalsGrid.querySelectorAll(
-        ".saved-professional-card:not(.hidden)"
-      );
+    const visibleCards =
+      savedProfessionalsGrid
+        .querySelectorAll(
+          ".saved-professional-card:not(.hidden)"
+        );
 
     savedProsCount.textContent =
-      String(visibleSavedCards.length);
+      String(
+        visibleCards.length
+      );
   }
+
 
   function loadSavedProfessionals() {
     const savedProfessionals =
@@ -696,8 +1430,11 @@ openInfoModal({
       );
 
     if (
-      !Array.isArray(savedProfessionals) ||
-      savedProfessionals.length === 0
+      !Array.isArray(
+        savedProfessionals
+      ) ||
+      savedProfessionals.length ===
+        0
     ) {
       updateSavedCount();
       return;
@@ -708,88 +1445,105 @@ openInfoModal({
         ".saved-professional-card"
       )
       .forEach((card) => {
-        const professionalName =
-          card.dataset.professionalName;
-
-        const isSaved =
-          savedProfessionals.includes(
-            professionalName
-          );
+        const name =
+          card.dataset
+            .professionalName;
 
         card.classList.toggle(
           "hidden",
-          !isSaved
+          !savedProfessionals
+            .includes(name)
         );
       });
 
     updateSavedCount();
   }
 
+
   document
-    .querySelectorAll(".favorite-button")
+    .querySelectorAll(
+      ".favorite-button"
+    )
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        const card = button.closest(
-          ".saved-professional-card"
-        );
+      button.addEventListener(
+        "click",
+        () => {
+          const card =
+            button.closest(
+              ".saved-professional-card"
+            );
 
-        const professionalName =
-          card?.dataset.professionalName;
+          const name =
+            card?.dataset
+              .professionalName;
 
-        if (!card || !professionalName) {
-          return;
-        }
+          if (
+            !card ||
+            !name
+          ) {
+            return;
+          }
 
-        const savedProfessionals =
-          safelyReadLocalStorage(
+          const saved =
+            safelyReadLocalStorage(
+              "korvoSavedProfessionals",
+              []
+            );
+
+          const updated =
+            saved.filter(
+              (professional) =>
+                professional !==
+                name
+            );
+
+          safelyWriteLocalStorage(
             "korvoSavedProfessionals",
-            []
+            updated
           );
 
-        const updatedSavedProfessionals =
-          savedProfessionals.filter(
-            (savedProfessional) =>
-              savedProfessional !==
-              professionalName
+          card.classList.add(
+            "hidden"
           );
 
-        safelyWriteLocalStorage(
-          "korvoSavedProfessionals",
-          updatedSavedProfessionals
-        );
-
-        card.classList.add("hidden");
-
-        updateSavedCount();
-      });
+          updateSavedCount();
+        }
+      );
     });
 
+
   /* =========================
-     Posted Jobs from Form
+     Submitted Customer Jobs
      ========================= */
 
   function getSubmittedJobs() {
-  const jobs =
-    safelyReadLocalStorage(
-      "korvoCustomerJobs",
-      []
-    );
+    const jobs =
+      safelyReadLocalStorage(
+        "korvoCustomerJobs",
+        []
+      );
 
-  if (Array.isArray(jobs)) {
-    return jobs;
+    return Array.isArray(jobs)
+      ? jobs
+      : [];
   }
 
-  return [];
-}
 
-  function formatPostedDate(dateValue) {
+  function formatPostedDate(
+    dateValue
+  ) {
     if (!dateValue) {
       return "Recently posted";
     }
 
-    const date = new Date(dateValue);
+    const date =
+      new Date(dateValue);
 
-    if (Number.isNaN(date.getTime())) {
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
       return "Recently posted";
     }
 
@@ -803,32 +1557,42 @@ openInfoModal({
     );
   }
 
-  function getJobIcon(serviceName) {
-    const normalizedService =
-      String(serviceName || "")
-        .toLowerCase();
+
+  function getJobIcon(
+    serviceName
+  ) {
+    const service =
+      String(
+        serviceName || ""
+      ).toLowerCase();
 
     if (
-      normalizedService.includes("clean")
+      service.includes(
+        "clean"
+      )
     ) {
       return "🧹";
     }
 
     if (
-      normalizedService.includes("paint")
+      service.includes(
+        "paint"
+      )
     ) {
       return "🎨";
     }
 
     if (
-      normalizedService.includes("electric")
+      service.includes(
+        "electric"
+      )
     ) {
       return "⚡";
     }
 
     if (
-      normalizedService.includes("lawn") ||
-      normalizedService.includes(
+      service.includes("lawn") ||
+      service.includes(
         "landscap"
       )
     ) {
@@ -836,15 +1600,23 @@ openInfoModal({
     }
 
     if (
-      normalizedService.includes("moving")
+      service.includes(
+        "moving"
+      )
     ) {
       return "📦";
     }
 
     if (
-      normalizedService.includes("drapery") ||
-      normalizedService.includes("shade") ||
-      normalizedService.includes("blind")
+      service.includes(
+        "drapery"
+      ) ||
+      service.includes(
+        "shade"
+      ) ||
+      service.includes(
+        "blind"
+      )
     ) {
       return "🪟";
     }
@@ -852,18 +1624,24 @@ openInfoModal({
     return "🛠️";
   }
 
-  function createSubmittedJobCard(job) {
-    const article =
-      document.createElement("article");
 
-    article.className = "job-item";
+  function createSubmittedJobCard(
+    job
+  ) {
+    const article =
+      document.createElement(
+        "article"
+      );
+
+    article.className =
+      "job-item";
 
     const service =
       job.service ||
       job.category ||
       "Local Service";
 
-    const jobTitle =
+    const title =
       job.jobTitle ||
       job.title ||
       `${service} Project`;
@@ -884,42 +1662,60 @@ openInfoModal({
     const budget =
       job.budget ||
       "Budget not specified";
-      const timeframe =
-  job.timeframe ||
-  "Flexible";
 
-const reference =
-  job.reference ||
-  job.jobReference ||
-  "KRV-000000";
+    const timeframe =
+      job.timeframe ||
+      "Flexible";
 
-const customer =
-  job.customerName ||
-  "Customer";
+    const reference =
+      job.reference ||
+      job.jobReference ||
+      job.id ||
+      "KRV-000000";
+
+    const customer =
+      job.customerName ||
+      job.customer ||
+      "Customer";
 
     const submittedAt =
       job.submittedAt ||
       job.createdAt ||
       job.date;
 
+
     article.innerHTML = `
       <div class="job-icon">
-        ${getJobIcon(service)}
+        ${getJobIcon(
+          service
+        )}
       </div>
+
 
       <div class="job-main">
 
         <div class="job-title-row">
 
           <div>
-            <h3>${jobTitle}</h3>
+
+            <h3>
+              ${escapeHTML(
+                title
+              )}
+            </h3>
 
             <p>
-              ${city}, ${state} ·
-              Posted ${formatPostedDate(
-                submittedAt
+              ${escapeHTML(
+                `${city}, ${state}`
+              )}
+              · Posted
+              ${escapeHTML(
+                formatPostedDate(
+                  submittedAt
+                )
               )}
             </p>
+
           </div>
 
           <span class="status-badge waiting">
@@ -928,130 +1724,174 @@ const customer =
 
         </div>
 
+
         <p class="job-description">
-          ${description}
+          ${escapeHTML(
+            description
+          )}
         </p>
+
 
         <div class="job-footer">
 
-    <span>
-        💰 ${budget}
-    </span>
+          <span>
+            💰 ${escapeHTML(
+              budget
+            )}
+          </span>
 
-    <span>
-        📅 ${timeframe}
-    </span>
+          <span>
+            📅 ${escapeHTML(
+              timeframe
+            )}
+          </span>
 
-    <span>
-        🆔 ${reference}
-    </span>
+          <span>
+            🆔 ${escapeHTML(
+              reference
+            )}
+          </span>
 
-</div>
+        </div>
 
-<p class="job-customer">
-    Posted by ${customer}
-</p>
 
-      <div class="job-actions">
+        <p class="job-customer">
+          Posted by
+          ${escapeHTML(
+            customer
+          )}
+        </p>
 
-        <button
-          type="button"
-          class="small-secondary-button generated-job-button"
-        >
-          View Job
-        </button>
 
-        <button
-          type="button"
-          class="more-button generated-more-button"
-          aria-label="More job options"
-        >
-          •••
-        </button>
+        <div class="job-actions">
+
+          <button
+            type="button"
+            class="small-secondary-button generated-job-button"
+          >
+            View Job
+          </button>
+
+          <button
+            type="button"
+            class="more-button generated-more-button"
+            aria-label="More job options"
+          >
+            •••
+          </button>
+
+        </div>
 
       </div>
     `;
+
 
     article
       .querySelector(
         ".generated-job-button"
       )
-      ?.addEventListener("click", () => {
-        showDemoMessage(
-          "The full job-details page will be added later."
-        );
-      });
+      ?.addEventListener(
+        "click",
+        () => {
+          openInfoModal({
+            eyebrow:
+              "JOB DETAILS",
+
+            title,
+
+            message:
+              description,
+
+            details: [
+              {
+                label:
+                  "Reference",
+
+                value:
+                  reference
+              },
+
+              {
+                label:
+                  "Budget",
+
+                value:
+                  budget
+              },
+
+              {
+                label:
+                  "Timeframe",
+
+                value:
+                  timeframe
+              },
+
+              {
+                label:
+                  "Customer",
+
+                value:
+                  customer
+              }
+            ]
+          });
+        }
+      );
+
 
     article
       .querySelector(
         ".generated-more-button"
       )
-      ?.addEventListener("click", () => {
-        showDemoMessage(
-          "Editing and deleting submitted jobs will be added later."
-        );
-      });
+      ?.addEventListener(
+        "click",
+        () => {
+          showDemoMessage(
+            "Editing and deleting submitted jobs will be added later."
+          );
+        }
+      );
+
 
     return article;
   }
 
+
   function loadSubmittedJobs() {
-    const submittedJobs =
+    const jobs =
       getSubmittedJobs();
 
     if (
       !jobsList ||
-      submittedJobs.length === 0
+      jobs.length === 0
     ) {
       return;
     }
 
-    submittedJobs
+    jobs
       .slice()
       .reverse()
       .forEach((job) => {
-        const jobCard =
-          createSubmittedJobCard(job);
-
-        jobsList.prepend(jobCard);
-      });
-
-    if (activeJobsCount) {
-      const currentCount =
-        Number(activeJobsCount.textContent) ||
-        0;
-
-      activeJobsCount.textContent =
-        String(
-          currentCount +
-          submittedJobs.length
+        jobsList.prepend(
+          createSubmittedJobCard(
+            job
+          )
         );
-    }
+      });
   }
 
+
   /* =========================
-     Stats from Local Storage
+     Dashboard Stats
      ========================= */
 
   function loadDashboardStats() {
-    const quoteRequests =
-      safelyReadLocalStorage(
-        "korvoQuoteRequests",
-        []
-      );
+    const submittedJobs =
+      getSubmittedJobs();
 
-    if (
-      quotesCount &&
-      Array.isArray(quoteRequests)
-    ) {
-      quotesCount.textContent =
-        String(
-          Math.max(
-            7,
-            quoteRequests.length
-          )
-        );
-    }
+    const professionalQuotes =
+      getProfessionalQuotes();
 
     const acceptedQuotes =
       safelyReadLocalStorage(
@@ -1059,28 +1899,65 @@ const customer =
         []
       );
 
+
+    if (activeJobsCount) {
+      activeJobsCount.textContent =
+        String(
+          3 +
+          submittedJobs.length
+        );
+    }
+
+
+    if (quotesCount) {
+      quotesCount.textContent =
+        String(
+          2 +
+          professionalQuotes.length
+        );
+    }
+
+
     if (
       completedJobsCount &&
-      Array.isArray(acceptedQuotes)
+      Array.isArray(
+        acceptedQuotes
+      )
     ) {
       completedJobsCount.textContent =
         String(
-          18 + acceptedQuotes.length
+          18 +
+          acceptedQuotes.length
         );
     }
   }
 
+
   /* =========================
-     Initial Page Load
+     Current Year
      ========================= */
 
   if (currentYear) {
     currentYear.textContent =
-      String(new Date().getFullYear());
+      String(
+        new Date()
+          .getFullYear()
+      );
   }
 
+
+  /* =========================
+     Initialize
+     ========================= */
+
   loadNotificationState();
+
   loadSavedProfessionals();
+
   loadSubmittedJobs();
+
+  renderProfessionalQuotes();
+
   loadDashboardStats();
+
 });
