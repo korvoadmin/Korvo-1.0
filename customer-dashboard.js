@@ -502,8 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
         if (count) {
-          count.textContent =
-            "0";
+          count.textContent = "0";
 
           count.classList.add(
             "hidden"
@@ -554,8 +553,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
     if (count) {
-      count.textContent =
-        "0";
+      count.textContent = "0";
 
       count.classList.add(
         "hidden"
@@ -631,6 +629,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
+     Quote Status Helpers
+     ========================= */
+
+  function getQuoteStatus(
+    quote
+  ) {
+    const status =
+      String(
+        quote.status ||
+        "Pending"
+      ).toLowerCase();
+
+    if (status === "accepted") {
+      return "Accepted";
+    }
+
+    if (status === "declined") {
+      return "Declined";
+    }
+
+    return "Pending";
+  }
+
+
+  function updateQuoteStatus(
+    quoteId,
+    newStatus
+  ) {
+    const quotes =
+      getProfessionalQuotes();
+
+    const updatedQuotes =
+      quotes.map(
+        (quote) => {
+          if (
+            String(quote.id) ===
+            String(quoteId)
+          ) {
+            return {
+              ...quote,
+
+              status:
+                newStatus,
+
+              statusUpdatedAt:
+                new Date()
+                  .toISOString()
+            };
+          }
+
+          return quote;
+        }
+      );
+
+    saveProfessionalQuotes(
+      updatedQuotes
+    );
+  }
+
+
+  /* =========================
      Dynamic Quote Cards
      ========================= */
 
@@ -647,6 +706,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     article.dataset.quoteId =
       quote.id || "";
+
 
     const professionalName =
       quote.professional ||
@@ -684,8 +744,12 @@ document.addEventListener("DOMContentLoaded", () => {
       "No message included.";
 
     const status =
-      quote.status ||
-      "Pending";
+      getQuoteStatus(
+        quote
+      );
+
+    const statusClass =
+      status.toLowerCase();
 
     const jobTitle =
       quote.jobTitle ||
@@ -702,16 +766,34 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
     const quoteAccepted =
-      String(status)
-        .toLowerCase() ===
-        "accepted";
+      status === "Accepted";
+
+    const quoteDeclined =
+      status === "Declined";
+
+    const quotePending =
+      status === "Pending";
 
 
     article.innerHTML = `
+
+      <div
+        class="quote-status ${escapeHTML(
+          statusClass
+        )}"
+      >
+        ${escapeHTML(
+          status
+        )}
+      </div>
+
+
       <div class="quote-professional">
 
         <div class="professional-avatar">
-          ${escapeHTML(initials)}
+          ${escapeHTML(
+            initials
+          )}
         </div>
 
         <div>
@@ -801,19 +883,22 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="job-footer">
 
         <span>
-          🛠️ ${escapeHTML(
+          🛠️
+          ${escapeHTML(
             jobTitle
           )}
         </span>
 
         <span>
-          🆔 ${escapeHTML(
+          🆔
+          ${escapeHTML(
             reference
           )}
         </span>
 
         <span>
-          📅 ${escapeHTML(
+          📅
+          ${escapeHTML(
             createdDate
           )}
         </span>
@@ -832,13 +917,38 @@ document.addEventListener("DOMContentLoaded", () => {
           data-quote-id="${escapeHTML(
             quote.id || ""
           )}"
-          ${quoteAccepted
-            ? "disabled"
-            : ""}
+          ${quotePending
+            ? ""
+            : "disabled"}
         >
-          ${quoteAccepted
-            ? "Quote Accepted"
-            : "Accept Quote"}
+          ${
+            quoteAccepted
+              ? "Quote Accepted"
+              : quoteDeclined
+                ? "Quote Declined"
+                : "Accept Quote"
+          }
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary-button generated-decline-quote-button"
+          data-professional="${escapeHTML(
+            professionalName
+          )}"
+          data-quote-id="${escapeHTML(
+            quote.id || ""
+          )}"
+          ${quotePending
+            ? ""
+            : "disabled"}
+        >
+          ${
+            quoteDeclined
+              ? "Declined"
+              : "Decline Quote"
+          }
         </button>
 
 
@@ -866,6 +976,8 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
 
+    /* Accept Quote */
+
     article
       .querySelector(
         ".generated-accept-quote-button"
@@ -888,6 +1000,83 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
 
+    /* Decline Quote */
+
+    article
+      .querySelector(
+        ".generated-decline-quote-button"
+      )
+      ?.addEventListener(
+        "click",
+        (event) => {
+          const button =
+            event.currentTarget;
+
+          if (button.disabled) {
+            return;
+          }
+
+          const quoteId =
+            button.dataset.quoteId;
+
+          const professional =
+            button.dataset.professional ||
+            "this professional";
+
+
+          updateQuoteStatus(
+            quoteId,
+            "Declined"
+          );
+
+
+          renderProfessionalQuotes();
+
+          loadDashboardStats();
+
+
+          openInfoModal({
+            eyebrow:
+              "QUOTE DECLINED",
+
+            title:
+              "Quote Declined",
+
+            message:
+              "This quote has been declined and the professional-side status has been updated.",
+
+            details: [
+              {
+                label:
+                  "Professional",
+
+                value:
+                  professional
+              },
+
+              {
+                label:
+                  "Status",
+
+                value:
+                  "Declined"
+              },
+
+              {
+                label:
+                  "Next Step",
+
+                value:
+                  "You can review another quote"
+              }
+            ]
+          });
+        }
+      );
+
+
+    /* Message Professional */
+
     article
       .querySelector(
         ".generated-message-button"
@@ -895,13 +1084,13 @@ document.addEventListener("DOMContentLoaded", () => {
       ?.addEventListener(
         "click",
         (event) => {
-          const professionalName =
+          const professional =
             event.currentTarget
               .dataset.professional ||
             "";
 
           openProfessionalConversation(
-            professionalName
+            professional
           );
         }
       );
@@ -928,6 +1117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const quotes =
       getProfessionalQuotes();
 
+
     quotes
       .slice()
       .reverse()
@@ -947,7 +1137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     Accept Quote
+     Accept Quote Modal
      ========================= */
 
   function openAcceptQuoteModal(
@@ -994,6 +1184,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  /* Static demo quote buttons */
+
   document
     .querySelectorAll(
       ".accept-quote-button"
@@ -1018,11 +1210,13 @@ document.addEventListener("DOMContentLoaded", () => {
       closeAcceptModal
     );
 
+
   cancelAcceptQuoteButton
     ?.addEventListener(
       "click",
       closeAcceptModal
     );
+
 
   acceptQuoteModal
     ?.addEventListener(
@@ -1042,6 +1236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ?.addEventListener(
       "click",
       () => {
+
         if (
           !pendingProfessional
         ) {
@@ -1086,37 +1281,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         if (acceptedQuoteId) {
-          const professionalQuotes =
-            getProfessionalQuotes();
-
-          const updatedQuotes =
-            professionalQuotes.map(
-              (quote) => {
-                if (
-                  String(
-                    quote.id
-                  ) ===
-                  String(
-                    acceptedQuoteId
-                  )
-                ) {
-                  return {
-                    ...quote,
-                    status:
-                      "Accepted",
-
-                    acceptedAt:
-                      new Date()
-                        .toISOString()
-                  };
-                }
-
-                return quote;
-              }
-            );
-
-          saveProfessionalQuotes(
-            updatedQuotes
+          updateQuoteStatus(
+            acceptedQuoteId,
+            "Accepted"
           );
         }
 
@@ -1167,6 +1334,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           ]
         });
+
       }
     );
 
@@ -1178,12 +1346,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener(
     "keydown",
     (event) => {
+
       if (
-        event.key !==
-        "Escape"
+        event.key !== "Escape"
       ) {
         return;
       }
+
 
       if (
         acceptQuoteModal &&
@@ -1195,6 +1364,7 @@ document.addEventListener("DOMContentLoaded", () => {
         closeAcceptModal();
       }
 
+
       if (
         infoModal &&
         !infoModal
@@ -1204,6 +1374,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ) {
         closeInfoModal();
       }
+
     }
   );
 
@@ -1220,6 +1391,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "customer"
     );
 
+
     if (professionalName) {
       localStorage.setItem(
         "korvoOpenConversation",
@@ -1230,6 +1402,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "korvoOpenConversation"
       );
     }
+
 
     window.location.href =
       "messages.html";
@@ -1329,6 +1502,7 @@ document.addEventListener("DOMContentLoaded", () => {
       button.addEventListener(
         "click",
         () => {
+
           const action =
             button.dataset
               .jobAction;
@@ -1348,6 +1522,7 @@ document.addEventListener("DOMContentLoaded", () => {
             messages[action] ||
             "This job feature is coming soon."
           );
+
         }
       );
     });
@@ -1433,8 +1608,7 @@ document.addEventListener("DOMContentLoaded", () => {
       !Array.isArray(
         savedProfessionals
       ) ||
-      savedProfessionals.length ===
-        0
+      savedProfessionals.length === 0
     ) {
       updateSavedCount();
       return;
@@ -1445,6 +1619,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ".saved-professional-card"
       )
       .forEach((card) => {
+
         const name =
           card.dataset
             .professionalName;
@@ -1454,6 +1629,7 @@ document.addEventListener("DOMContentLoaded", () => {
           !savedProfessionals
             .includes(name)
         );
+
       });
 
     updateSavedCount();
@@ -1468,6 +1644,7 @@ document.addEventListener("DOMContentLoaded", () => {
       button.addEventListener(
         "click",
         () => {
+
           const card =
             button.closest(
               ".saved-professional-card"
@@ -1493,8 +1670,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const updated =
             saved.filter(
               (professional) =>
-                professional !==
-                name
+                professional !== name
             );
 
           safelyWriteLocalStorage(
@@ -1507,6 +1683,7 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
           updateSavedCount();
+
         }
       );
     });
@@ -1636,6 +1813,7 @@ document.addEventListener("DOMContentLoaded", () => {
     article.className =
       "job-item";
 
+
     const service =
       job.service ||
       job.category ||
@@ -1735,19 +1913,22 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="job-footer">
 
           <span>
-            💰 ${escapeHTML(
+            💰
+            ${escapeHTML(
               budget
             )}
           </span>
 
           <span>
-            📅 ${escapeHTML(
+            📅
+            ${escapeHTML(
               timeframe
             )}
           </span>
 
           <span>
-            🆔 ${escapeHTML(
+            🆔
+            ${escapeHTML(
               reference
             )}
           </span>
