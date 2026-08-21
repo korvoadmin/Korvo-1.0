@@ -1286,7 +1286,75 @@ document.addEventListener("DOMContentLoaded", () => {
             "Accepted"
           );
         }
+      const acceptedQuote =
+  getProfessionalQuotes().find(
+    (quote) =>
+      String(quote.id) ===
+      String(acceptedQuoteId)
+  );
 
+if (acceptedQuote) {
+  const activeJobs =
+    safelyReadLocalStorage(
+      "korvoActiveJobs",
+      []
+    );
+
+  const alreadyActive =
+    activeJobs.some(
+      (job) =>
+        String(job.quoteId) ===
+        String(acceptedQuoteId)
+    );
+
+  if (!alreadyActive) {
+    activeJobs.push({
+      id:
+        `active-${Date.now()}`,
+
+      quoteId:
+        acceptedQuote.id,
+
+      jobId:
+        acceptedQuote.jobId,
+
+      jobReference:
+        acceptedQuote.jobReference,
+
+      jobTitle:
+        acceptedQuote.jobTitle,
+
+      customer:
+        acceptedQuote.customer,
+
+      location:
+        acceptedQuote.location,
+
+      professional:
+        acceptedQuote.professional,
+
+      professionalProfile:
+        acceptedQuote.professionalProfile,
+
+      amount:
+        acceptedQuote.amount,
+
+      timeframe:
+        acceptedQuote.timeframe,
+
+      status:
+        "Active",
+
+      acceptedAt:
+        new Date().toISOString()
+    });
+
+    safelyWriteLocalStorage(
+      "korvoActiveJobs",
+      activeJobs
+    );
+  }
+}
 
         closeAcceptModal();
 
@@ -2038,29 +2106,258 @@ document.addEventListener("DOMContentLoaded", () => {
     return article;
   }
 
+  function createActiveJobCard(
+  job
+) {
+  const article =
+    document.createElement(
+      "article"
+    );
 
+  article.className =
+    "job-item active-job-item";
+
+  const title =
+    job.jobTitle ||
+    "Active Korvo Job";
+
+  const location =
+    job.location ||
+    "Atlanta, GA";
+
+  const professional =
+    job.professional ||
+    "Korvo Professional";
+
+  const amount =
+    Number(
+      job.amount || 0
+    );
+
+  const reference =
+    job.jobReference ||
+    job.jobId ||
+    "KRV-000000";
+
+  const timeframe =
+    job.timeframe ||
+    "Flexible";
+
+  article.innerHTML = `
+    <div class="job-icon">
+      ✅
+    </div>
+
+    <div class="job-main">
+
+      <div class="job-title-row">
+
+        <div>
+          <h3>
+            ${escapeHTML(title)}
+          </h3>
+
+          <p>
+            ${escapeHTML(location)}
+          </p>
+        </div>
+
+        <span class="status-badge completed">
+          Active
+        </span>
+
+      </div>
+
+      <p class="job-description">
+        Assigned to
+        <strong>
+          ${escapeHTML(
+            professional
+          )}
+        </strong>
+      </p>
+
+      <div class="job-footer">
+
+        <span>
+          💰 $${amount.toLocaleString()}
+        </span>
+
+        <span>
+          📅 ${escapeHTML(
+            timeframe
+          )}
+        </span>
+
+        <span>
+          🆔 ${escapeHTML(
+            reference
+          )}
+        </span>
+
+      </div>
+
+      <div class="job-actions">
+
+        <button
+          type="button"
+          class="small-primary-button active-job-message-button"
+          data-professional="${escapeHTML(
+            professional
+          )}"
+        >
+          Message Professional
+        </button>
+
+        <button
+          type="button"
+          class="small-secondary-button active-job-view-button"
+        >
+          View Job
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  article
+    .querySelector(
+      ".active-job-message-button"
+    )
+    ?.addEventListener(
+      "click",
+      (event) => {
+        openProfessionalConversation(
+          event.currentTarget
+            .dataset.professional ||
+          ""
+        );
+      }
+    );
+
+  article
+    .querySelector(
+      ".active-job-view-button"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        openInfoModal({
+          eyebrow:
+            "ACTIVE JOB",
+
+          title,
+
+          message:
+            `This job is assigned to ${professional}.`,
+
+          details: [
+            {
+              label:
+                "Reference",
+
+              value:
+                reference
+            },
+
+            {
+              label:
+                "Professional",
+
+              value:
+                professional
+            },
+
+            {
+              label:
+                "Amount",
+
+              value:
+                `$${amount.toLocaleString()}`
+            },
+
+            {
+              label:
+                "Status",
+
+              value:
+                "Active"
+            }
+          ]
+        });
+      }
+    );
+
+  return article;
+}
   function loadSubmittedJobs() {
-    const jobs =
-      getSubmittedJobs();
+  const submittedJobs =
+    getSubmittedJobs();
 
-    if (
-      !jobsList ||
-      jobs.length === 0
-    ) {
-      return;
-    }
+  const activeJobs =
+    safelyReadLocalStorage(
+      "korvoActiveJobs",
+      []
+    );
 
-    jobs
+  if (!jobsList) {
+    return;
+  }
+
+  if (
+    Array.isArray(activeJobs) &&
+    activeJobs.length > 0
+  ) {
+    activeJobs
       .slice()
       .reverse()
       .forEach((job) => {
         jobsList.prepend(
-          createSubmittedJobCard(
+          createActiveJobCard(
             job
           )
         );
       });
   }
+
+  if (
+    submittedJobs.length === 0
+  ) {
+    return;
+  }
+
+  submittedJobs
+    .slice()
+    .reverse()
+    .forEach((job) => {
+      const isAlreadyActive =
+        Array.isArray(activeJobs) &&
+        activeJobs.some(
+          (activeJob) =>
+            String(
+              activeJob.jobId ||
+              activeJob.jobReference
+            ) ===
+            String(
+              job.id ||
+              job.jobId ||
+              job.reference ||
+              job.jobReference
+            )
+        );
+
+      if (isAlreadyActive) {
+        return;
+      }
+
+      jobsList.prepend(
+        createSubmittedJobCard(
+          job
+        )
+      );
+    });
+}
 
 
   /* =========================
@@ -2068,26 +2365,33 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function loadDashboardStats() {
-    const submittedJobs =
-      getSubmittedJobs();
+  const submittedJobs =
+    getSubmittedJobs();
 
-    const professionalQuotes =
-      getProfessionalQuotes();
+  const professionalQuotes =
+    getProfessionalQuotes();
 
-    const acceptedQuotes =
-      safelyReadLocalStorage(
-        "korvoAcceptedQuotes",
-        []
-      );
+  const acceptedQuotes =
+    safelyReadLocalStorage(
+      "korvoAcceptedQuotes",
+      []
+    );
+
+  const activeJobs =
+    safelyReadLocalStorage(
+      "korvoActiveJobs",
+      []
+    );
 
 
     if (activeJobsCount) {
-      activeJobsCount.textContent =
-        String(
-          3 +
-          submittedJobs.length
-        );
-    }
+  activeJobsCount.textContent =
+    String(
+      Array.isArray(activeJobs)
+        ? activeJobs.length
+        : 0
+    );
+}
 
 
     if (quotesCount) {
