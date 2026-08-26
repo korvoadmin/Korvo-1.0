@@ -22,12 +22,15 @@
 </head>
 
 <body>
+
   <!-- =========================
        Header
        ========================= -->
 
   <header class="site-header">
+
     <div class="header-container">
+
       <a
         href="index.html"
         class="logo"
@@ -37,7 +40,10 @@
       </a>
 
       <nav class="desktop-nav">
-        <a href="index.html">Home</a>
+
+        <a href="index.html">
+          Home
+        </a>
 
         <a href="browse.html">
           Browse Professionals
@@ -49,9 +55,12 @@
         >
           Professional Dashboard
         </a>
+
       </nav>
 
+
       <div class="header-actions">
+
         <button
           type="button"
           class="notification-button"
@@ -68,12 +77,14 @@
           </span>
         </button>
 
+
         <button
           type="button"
           class="profile-button"
           id="professionalProfileButton"
           aria-expanded="false"
         >
+
           <span class="profile-avatar">
             CC
           </span>
@@ -85,7 +96,9 @@
           <span class="profile-arrow">
             ▾
           </span>
+
         </button>
+
 
         <button
           type="button"
@@ -96,12 +109,15 @@
         >
           ☰
         </button>
+
       </div>
+
 
       <div
         class="profile-menu hidden"
         id="professionalMenu"
       >
+
         <a href="profile.html">
           View Public Profile
         </a>
@@ -119,14 +135,20 @@
         >
           Log Out
         </button>
+
       </div>
+
     </div>
+
 
     <nav
       class="mobile-nav"
       id="mobileNav"
     >
-      <a href="index.html">Home</a>
+
+      <a href="index.html">
+        Home
+      </a>
 
       <a href="browse.html">
         Browse Professionals
@@ -135,19 +157,27 @@
       <a href="professional-dashboard.html">
         Professional Dashboard
       </a>
+
     </nav>
+
   </header>
+
 
   <!-- =========================
        Main Content
        ========================= -->
 
   <main class="dashboard-page">
+
     <div class="dashboard-container">
+
+
       <!-- Welcome Area -->
 
       <section class="welcome-section">
+
         <div>
+
           <p class="eyebrow">
             PROFESSIONAL DASHBOARD
           </p>
@@ -160,7 +190,9 @@
             Find new customer projects, submit quotes,
             and grow your business through Korvo.
           </p>
+
         </div>
+
 
         <a
           href="profile.html"
@@ -168,7 +200,9 @@
         >
           View My Profile
         </a>
+
       </section>
+
 
       <!-- Dashboard Statistics -->
 
@@ -176,12 +210,15 @@
         class="stats-grid"
         aria-label="Professional statistics"
       >
+
         <article class="stat-card">
+
           <div class="stat-icon">
             💼
           </div>
 
           <div>
+
             <p class="stat-label">
               Available Jobs
             </p>
@@ -192,15 +229,20 @@
             >
               0
             </p>
+
           </div>
+
         </article>
 
+
         <article class="stat-card">
+
           <div class="stat-icon">
             📄
           </div>
 
           <div>
+
             <p class="stat-label">
               Quotes Submitted
             </p>
@@ -211,15 +253,20 @@
             >
               0
             </p>
+
           </div>
+
         </article>
 
+
         <article class="stat-card">
+
           <div class="stat-icon">
             ✅
           </div>
 
           <div>
+
             <p class="stat-label">
               Jobs Won
             </p>
@@ -230,15 +277,20 @@
             >
               0
             </p>
+
           </div>
+
         </article>
 
+
         <article class="stat-card">
+
           <div class="stat-icon">
             ⭐
           </div>
 
           <div>
+
             <p class="stat-label">
               Rating
             </p>
@@ -246,19 +298,32 @@
             <p class="stat-value">
               4.9
             </p>
+
           </div>
+
         </article>
+
       </section>
+
 
       <!-- Main Dashboard Layout -->
 
       <div class="dashboard-layout">
+
+
         <!-- Left Column -->
 
         <div class="dashboard-main">
+
+
+          <!-- Available Customer Jobs -->
+
           <section class="dashboard-card">
+
             <div class="section-header">
+
               <div>
+
                 <p class="eyebrow">
                   LOCAL OPPORTUNITIES
                 </p>
@@ -271,9 +336,12 @@
                   Jobs posted by customers will appear
                   here automatically.
                 </p>
+
               </div>
 
+
               <div class="filter-controls">
+
                 <label
                   for="serviceFilter"
                   class="sr-only"
@@ -282,6 +350,7 @@
                 </label>
 
                 <select id="serviceFilter">
+
                   <option value="all">
                     All Services
                   </option>
@@ -313,20 +382,24 @@
                   <option value="other">
                     Other Services
                   </option>
+
                 </select>
+
               </div>
+
             </div>
+
 
             <div
               class="jobs-list"
               id="availableJobsList"
             >
-              <!-- Jobs will be inserted here by JavaScript -->
 
               <div
                 class="empty-state"
                 id="jobsEmptyState"
               >
+
                 <div class="empty-state-icon">
                   🛠️
                 </div>
@@ -346,15 +419,22 @@
                 >
                   Post a Test Job
                 </a>
+
               </div>
+
             </div>
+
           </section>
+
 
           <!-- Submitted Quotes -->
 
           <section class="dashboard-card">
+
             <div class="section-header">
+
               <div>
+
                 <p class="eyebrow">
                   YOUR ACTIVITY
                 </p>
@@ -367,17 +447,22 @@
                   Track the quotes you have sent to
                   Korvo customers.
                 </p>
+
               </div>
+
             </div>
+
 
             <div
               class="quotes-list"
               id="submittedQuotesList"
             >
+
               <div
                 class="empty-state compact"
                 id="quotesEmptyState"
               >
+
                 <div class="empty-state-icon">
                   📄
                 </div>
@@ -389,18 +474,83 @@
                 <p>
                   Your submitted quotes will appear here.
                 </p>
+
               </div>
+
             </div>
+
           </section>
+
+
+          <!-- Active Work -->
+
+          <section class="dashboard-card">
+
+            <div class="section-header">
+
+              <div>
+
+                <p class="eyebrow">
+                  JOBS WON
+                </p>
+
+                <h2>
+                  Active Work
+                </h2>
+
+                <p>
+                  Jobs accepted by customers will
+                  appear here automatically.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="jobs-list"
+              id="activeWorkList"
+            >
+
+              <div
+                class="empty-state compact"
+                id="activeWorkEmptyState"
+              >
+
+                <div class="empty-state-icon">
+                  ✅
+                </div>
+
+                <h3>
+                  No active jobs yet
+                </h3>
+
+                <p>
+                  When a customer accepts one of
+                  your quotes, the job will appear here.
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
         </div>
+
 
         <!-- Right Column -->
 
         <aside class="dashboard-sidebar">
+
+
           <!-- Profile Completion -->
 
           <section class="sidebar-card">
+
             <div class="sidebar-card-header">
+
               <h2>
                 Profile Strength
               </h2>
@@ -408,24 +558,31 @@
               <span class="completion-percentage">
                 80%
               </span>
+
             </div>
+
 
             <div
               class="progress-track"
               aria-label="Profile completion: 80 percent"
             >
+
               <div
                 class="progress-bar"
                 style="width: 80%;"
               ></div>
+
             </div>
+
 
             <p>
               Complete your profile to build more
               customer trust and receive more work.
             </p>
 
+
             <ul class="profile-checklist">
+
               <li class="completed">
                 ✓ Business information
               </li>
@@ -445,7 +602,9 @@
               <li>
                 Complete background verification
               </li>
+
             </ul>
+
 
             <a
               href="profile.html"
@@ -453,20 +612,25 @@
             >
               Complete Profile
             </a>
+
           </section>
+
 
           <!-- Quick Actions -->
 
           <section class="sidebar-card">
+
             <h2>
               Quick Actions
             </h2>
 
             <div class="quick-actions">
+
               <a
                 href="profile.html"
                 class="quick-action"
               >
+
                 <span class="quick-action-icon">
                   👤
                 </span>
@@ -474,13 +638,16 @@
                 <span>
                   Edit Professional Profile
                 </span>
+
               </a>
+
 
               <button
                 type="button"
                 class="quick-action"
                 id="messagesButton"
               >
+
                 <span class="quick-action-icon">
                   💬
                 </span>
@@ -488,13 +655,16 @@
                 <span>
                   Open Messages
                 </span>
+
               </button>
+
 
               <button
                 type="button"
                 class="quick-action"
                 id="availabilityButton"
               >
+
                 <span class="quick-action-icon">
                   📅
                 </span>
@@ -502,13 +672,16 @@
                 <span>
                   Update Availability
                 </span>
+
               </button>
+
 
               <button
                 type="button"
                 class="quick-action"
                 id="servicesButton"
               >
+
                 <span class="quick-action-icon">
                   🧰
                 </span>
@@ -516,9 +689,13 @@
                 <span>
                   Manage Services
                 </span>
+
               </button>
+
             </div>
+
           </section>
+
 
           <!-- Notifications -->
 
@@ -526,7 +703,9 @@
             class="sidebar-card"
             id="notificationsSection"
           >
+
             <div class="sidebar-card-header">
+
               <h2>
                 Notifications
               </h2>
@@ -538,18 +717,23 @@
               >
                 Mark all read
               </button>
+
             </div>
+
 
             <div
               class="notifications-list"
               id="notificationsList"
             >
+
               <article class="notification-item unread">
+
                 <span class="notification-icon">
                   💼
                 </span>
 
                 <div>
+
                   <p>
                     New customer jobs will appear here.
                   </p>
@@ -557,16 +741,25 @@
                   <span>
                     Just now
                   </span>
+
                 </div>
 
                 <span class="unread-dot"></span>
+
               </article>
+
             </div>
+
           </section>
+
         </aside>
+
       </div>
+
     </div>
+
   </main>
+
 
   <!-- =========================
        Quote Modal
@@ -579,7 +772,9 @@
     aria-modal="true"
     aria-labelledby="quoteModalTitle"
   >
+
     <div class="modal-card">
+
       <button
         type="button"
         class="modal-close-button"
@@ -589,7 +784,9 @@
         ×
       </button>
 
+
       <div class="modal-header">
+
         <p class="eyebrow">
           SUBMIT A QUOTE
         </p>
@@ -604,21 +801,29 @@
             this customer project
           </strong>.
         </p>
+
       </div>
 
+
       <form id="quoteForm">
+
         <input
           type="hidden"
           id="selectedJobReference"
         />
 
+
         <div class="form-group">
+
           <label for="quoteAmount">
             Quote Amount
           </label>
 
           <div class="money-input">
-            <span>$</span>
+
+            <span>
+              $
+            </span>
 
             <input
               type="number"
@@ -628,10 +833,14 @@
               placeholder="500"
               required
             />
+
           </div>
+
         </div>
 
+
         <div class="form-group">
+
           <label for="quoteTimeframe">
             Estimated Completion Time
           </label>
@@ -640,6 +849,7 @@
             id="quoteTimeframe"
             required
           >
+
             <option value="">
               Select a timeframe
             </option>
@@ -667,10 +877,14 @@
             <option value="Custom schedule">
               Custom schedule
             </option>
+
           </select>
+
         </div>
 
+
         <div class="form-group">
+
           <label for="quoteMessage">
             Message to Customer
           </label>
@@ -684,14 +898,19 @@
           ></textarea>
 
           <div class="character-counter">
+
             <span id="quoteMessageCount">
               0
             </span>
             / 800
+
           </div>
+
         </div>
 
+
         <div class="modal-actions">
+
           <button
             type="button"
             class="secondary-button"
@@ -706,10 +925,16 @@
           >
             Submit Quote
           </button>
+
         </div>
+
       </form>
+
     </div>
+
   </div>
+
+
   <!-- =========================
        Korvo Information Modal
        ========================= -->
@@ -721,7 +946,9 @@
     aria-modal="true"
     aria-labelledby="infoModalTitle"
   >
+
     <div class="modal-card info-modal-card">
+
       <button
         type="button"
         class="modal-close-button"
@@ -731,7 +958,9 @@
         ×
       </button>
 
+
       <div class="modal-header">
+
         <p
           class="eyebrow"
           id="infoModalEyebrow"
@@ -746,14 +975,18 @@
         <p id="infoModalMessage">
           Details will appear here.
         </p>
+
       </div>
+
 
       <div
         class="info-modal-details"
         id="infoModalDetails"
       ></div>
 
+
       <div class="modal-actions">
+
         <button
           type="button"
           class="primary-button"
@@ -761,16 +994,24 @@
         >
           Done
         </button>
+
       </div>
+
     </div>
+
   </div>
+
+
   <!-- =========================
        Footer
        ========================= -->
 
   <footer class="site-footer">
+
     <div class="footer-container">
+
       <div>
+
         <a
           href="index.html"
           class="footer-logo"
@@ -782,15 +1023,21 @@
           Connecting trusted local professionals
           with customers who need work completed.
         </p>
+
       </div>
 
+
       <p>
-        © <span id="currentYear"></span> Korvo.
-        All rights reserved.
+        © <span id="currentYear"></span>
+        Korvo. All rights reserved.
       </p>
+
     </div>
+
   </footer>
 
+
   <script src="professional-dashboard.js"></script>
+
 </body>
 </html>

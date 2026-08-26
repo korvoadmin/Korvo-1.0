@@ -1,127 +1,210 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
+
   /* =========================
      Elements
      ========================= */
 
-  const currentYear = document.getElementById("currentYear");
+  const currentYear =
+    document.getElementById("currentYear");
 
   const profileButton =
-    document.getElementById("professionalProfileButton");
+    document.getElementById(
+      "professionalProfileButton"
+    );
 
   const professionalMenu =
-    document.getElementById("professionalMenu");
+    document.getElementById(
+      "professionalMenu"
+    );
 
   const mobileMenuButton =
-    document.getElementById("mobileMenuButton");
+    document.getElementById(
+      "mobileMenuButton"
+    );
 
   const mobileNav =
-    document.getElementById("mobileNav");
+    document.getElementById(
+      "mobileNav"
+    );
 
   const notificationButton =
-    document.getElementById("notificationButton");
+    document.getElementById(
+      "notificationButton"
+    );
 
   const notificationCount =
-    document.getElementById("notificationCount");
+    document.getElementById(
+      "notificationCount"
+    );
 
   const notificationsSection =
-    document.getElementById("notificationsSection");
+    document.getElementById(
+      "notificationsSection"
+    );
 
   const notificationsList =
-    document.getElementById("notificationsList");
+    document.getElementById(
+      "notificationsList"
+    );
 
   const markAllReadButton =
-    document.getElementById("markAllReadButton");
+    document.getElementById(
+      "markAllReadButton"
+    );
 
   const availableJobsList =
-    document.getElementById("availableJobsList");
+    document.getElementById(
+      "availableJobsList"
+    );
 
   const submittedQuotesList =
-    document.getElementById("submittedQuotesList");
+    document.getElementById(
+      "submittedQuotesList"
+    );
+
+  const activeWorkList =
+    document.getElementById(
+      "activeWorkList"
+    );
 
   const availableJobsCount =
-    document.getElementById("availableJobsCount");
+    document.getElementById(
+      "availableJobsCount"
+    );
 
   const submittedQuotesCount =
-    document.getElementById("submittedQuotesCount");
+    document.getElementById(
+      "submittedQuotesCount"
+    );
 
   const jobsWonCount =
-    document.getElementById("jobsWonCount");
+    document.getElementById(
+      "jobsWonCount"
+    );
 
   const serviceFilter =
-    document.getElementById("serviceFilter");
+    document.getElementById(
+      "serviceFilter"
+    );
 
   const quoteModal =
-    document.getElementById("quoteModal");
+    document.getElementById(
+      "quoteModal"
+    );
 
   const closeQuoteModalButton =
-    document.getElementById("closeQuoteModalButton");
+    document.getElementById(
+      "closeQuoteModalButton"
+    );
 
   const cancelQuoteButton =
-    document.getElementById("cancelQuoteButton");
+    document.getElementById(
+      "cancelQuoteButton"
+    );
 
   const quoteForm =
-    document.getElementById("quoteForm");
+    document.getElementById(
+      "quoteForm"
+    );
 
   const selectedJobTitle =
-    document.getElementById("selectedJobTitle");
+    document.getElementById(
+      "selectedJobTitle"
+    );
 
   const selectedJobReference =
-    document.getElementById("selectedJobReference");
+    document.getElementById(
+      "selectedJobReference"
+    );
 
   const quoteAmount =
-    document.getElementById("quoteAmount");
+    document.getElementById(
+      "quoteAmount"
+    );
 
   const quoteTimeframe =
-    document.getElementById("quoteTimeframe");
+    document.getElementById(
+      "quoteTimeframe"
+    );
 
   const quoteMessage =
-    document.getElementById("quoteMessage");
+    document.getElementById(
+      "quoteMessage"
+    );
 
   const quoteMessageCount =
-    document.getElementById("quoteMessageCount");
+    document.getElementById(
+      "quoteMessageCount"
+    );
 
   const messagesButton =
-    document.getElementById("messagesButton");
+    document.getElementById(
+      "messagesButton"
+    );
 
   const availabilityButton =
-    document.getElementById("availabilityButton");
+    document.getElementById(
+      "availabilityButton"
+    );
 
   const servicesButton =
-    document.getElementById("servicesButton");
+    document.getElementById(
+      "servicesButton"
+    );
 
   const accountSettingsButton =
-    document.getElementById("accountSettingsButton");
+    document.getElementById(
+      "accountSettingsButton"
+    );
 
   const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+      "logoutButton"
+    );
 
   const infoModal =
-    document.getElementById("infoModal");
+    document.getElementById(
+      "infoModal"
+    );
 
   const infoModalCard =
     infoModal
-      ? infoModal.querySelector(".info-modal-card")
+      ? infoModal.querySelector(
+          ".info-modal-card"
+        )
       : null;
 
   const infoModalEyebrow =
-    document.getElementById("infoModalEyebrow");
+    document.getElementById(
+      "infoModalEyebrow"
+    );
 
   const infoModalTitle =
-    document.getElementById("infoModalTitle");
+    document.getElementById(
+      "infoModalTitle"
+    );
 
   const infoModalMessage =
-    document.getElementById("infoModalMessage");
+    document.getElementById(
+      "infoModalMessage"
+    );
 
   const infoModalDetails =
-    document.getElementById("infoModalDetails");
+    document.getElementById(
+      "infoModalDetails"
+    );
 
   const closeInfoModalButton =
-    document.getElementById("closeInfoModalButton");
+    document.getElementById(
+      "closeInfoModalButton"
+    );
 
   const infoModalDoneButton =
-    document.getElementById("infoModalDoneButton");
+    document.getElementById(
+      "infoModalDoneButton"
+    );
 
 
   /* =========================
@@ -129,11 +212,20 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   const professionalProfile = {
-    name: "Chris Custom Installations",
-    type: "Window Treatment Specialist",
-    profile: "chris-profile.html",
-    initials: "CC",
-    rating: "5.0"
+    name:
+      "Chris Custom Installations",
+
+    type:
+      "Window Treatment Specialist",
+
+    profile:
+      "chris-profile.html",
+
+    initials:
+      "CC",
+
+    rating:
+      "5.0"
   };
 
 
@@ -143,7 +235,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (currentYear) {
     currentYear.textContent =
-      String(new Date().getFullYear());
+      String(
+        new Date().getFullYear()
+      );
   }
 
 
@@ -153,68 +247,148 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const sampleJobs = [
     {
-      id: "job-001",
-      reference: "KRV-1001",
-      title: "Motorized Shade Installation",
-      category: "window treatments",
-      location: "Buckhead, Atlanta",
-      budget: "$450 - $650",
-      date: "August 10",
+      id:
+        "job-001",
+
+      reference:
+        "KRV-1001",
+
+      title:
+        "Motorized Shade Installation",
+
+      category:
+        "window treatments",
+
+      location:
+        "Buckhead, Atlanta",
+
+      budget:
+        "$450 - $650",
+
+      date:
+        "August 10",
+
       description:
         "Customer needs six motorized roller shades installed and programmed.",
-      customer: "Sarah M."
+
+      customer:
+        "Sarah M."
     },
 
     {
-      id: "job-002",
-      reference: "KRV-1003",
-      title: "Interior Painting",
-      category: "painting",
-      location: "Brookhaven, GA",
-      budget: "$900 - $1,300",
-      date: "August 14",
+      id:
+        "job-002",
+
+      reference:
+        "KRV-1003",
+
+      title:
+        "Interior Painting",
+
+      category:
+        "painting",
+
+      location:
+        "Brookhaven, GA",
+
+      budget:
+        "$900 - $1,300",
+
+      date:
+        "August 14",
+
       description:
         "Paint living room, hallway, and two bedrooms in a residential home.",
-      customer: "Michael R."
+
+      customer:
+        "Michael R."
     },
 
     {
-      id: "job-003",
-      reference: "KRV-1004",
-      title: "Move Apartment Furniture",
-      category: "moving",
-      location: "Midtown Atlanta",
-      budget: "$300 - $450",
-      date: "August 12",
+      id:
+        "job-003",
+
+      reference:
+        "KRV-1004",
+
+      title:
+        "Move Apartment Furniture",
+
+      category:
+        "moving",
+
+      location:
+        "Midtown Atlanta",
+
+      budget:
+        "$300 - $450",
+
+      date:
+        "August 12",
+
       description:
         "Help move furniture from a one-bedroom apartment into a nearby apartment.",
-      customer: "Jessica L."
+
+      customer:
+        "Jessica L."
     },
 
     {
-      id: "job-004",
-      reference: "KRV-1002",
-      title: "Deep Home Cleaning",
-      category: "cleaning",
-      location: "Sandy Springs, GA",
-      budget: "$250 - $400",
-      date: "August 11",
+      id:
+        "job-004",
+
+      reference:
+        "KRV-1002",
+
+      title:
+        "Deep Home Cleaning",
+
+      category:
+        "cleaning",
+
+      location:
+        "Sandy Springs, GA",
+
+      budget:
+        "$250 - $400",
+
+      date:
+        "August 11",
+
       description:
         "Deep cleaning needed for a four-bedroom home before guests arrive.",
-      customer: "Amanda P."
+
+      customer:
+        "Amanda P."
     },
 
     {
-      id: "job-005",
-      reference: "KRV-1005",
-      title: "Landscape Cleanup",
-      category: "landscaping",
-      location: "Dunwoody, GA",
-      budget: "$275 - $500",
-      date: "August 16",
+      id:
+        "job-005",
+
+      reference:
+        "KRV-1005",
+
+      title:
+        "Landscape Cleanup",
+
+      category:
+        "landscaping",
+
+      location:
+        "Dunwoody, GA",
+
+      budget:
+        "$275 - $500",
+
+      date:
+        "August 16",
+
       description:
         "Trim shrubs, remove leaves, clean flower beds, and haul away debris.",
-      customer: "Daniel K."
+
+      customer:
+        "Daniel K."
     }
   ];
 
@@ -225,16 +399,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function escapeHTML(value) {
     return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
   }
 
 
   /* =========================
-     Korvo Information Modal
+     Information Modal
      ========================= */
 
   function openInfoModal({
@@ -249,19 +438,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (infoModalEyebrow) {
-      infoModalEyebrow.textContent = eyebrow;
+      infoModalEyebrow.textContent =
+        eyebrow;
     }
 
     if (infoModalTitle) {
-      infoModalTitle.textContent = title;
+      infoModalTitle.textContent =
+        title;
     }
 
     if (infoModalMessage) {
-      infoModalMessage.textContent = message;
+      infoModalMessage.textContent =
+        message;
     }
 
     if (infoModalDetails) {
-      infoModalDetails.innerHTML = "";
+      infoModalDetails.innerHTML =
+        "";
     }
 
     if (infoModalCard) {
@@ -271,14 +464,20 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    if (success && infoModalDetails) {
+    if (
+      success &&
+      infoModalDetails
+    ) {
       const successIcon =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       successIcon.className =
         "info-success-icon";
 
-      successIcon.textContent = "✓";
+      successIcon.textContent =
+        "✓";
 
       infoModalDetails.appendChild(
         successIcon
@@ -286,29 +485,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (infoModalDetails) {
-      details.forEach((detail) => {
-        const row =
-          document.createElement("div");
+      details.forEach(
+        (detail) => {
+          const row =
+            document.createElement(
+              "div"
+            );
 
-        row.className =
-          "info-detail-row";
+          row.className =
+            "info-detail-row";
 
-        row.innerHTML = `
-          <span class="info-detail-label">
-            ${escapeHTML(detail.label)}
-          </span>
+          row.innerHTML = `
+            <span class="info-detail-label">
+              ${escapeHTML(
+                detail.label
+              )}
+            </span>
 
-          <span class="info-detail-value">
-            ${escapeHTML(detail.value)}
-          </span>
-        `;
+            <span class="info-detail-value">
+              ${escapeHTML(
+                detail.value
+              )}
+            </span>
+          `;
 
-        infoModalDetails.appendChild(row);
-      });
+          infoModalDetails
+            .appendChild(row);
+        }
+      );
     }
 
-    infoModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
+    infoModal.classList.remove(
+      "hidden"
+    );
+
+    document.body.style.overflow =
+      "hidden";
   }
 
 
@@ -317,25 +529,34 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    infoModal.classList.add("hidden");
-    document.body.style.overflow = "";
+    infoModal.classList.add(
+      "hidden"
+    );
+
+    document.body.style.overflow =
+      "";
   }
 
 
-  closeInfoModalButton?.addEventListener(
-    "click",
-    closeInfoModal
-  );
+  closeInfoModalButton
+    ?.addEventListener(
+      "click",
+      closeInfoModal
+    );
 
-  infoModalDoneButton?.addEventListener(
-    "click",
-    closeInfoModal
-  );
+  infoModalDoneButton
+    ?.addEventListener(
+      "click",
+      closeInfoModal
+    );
 
   infoModal?.addEventListener(
     "click",
     (event) => {
-      if (event.target === infoModal) {
+      if (
+        event.target ===
+        infoModal
+      ) {
         closeInfoModal();
       }
     }
@@ -375,7 +596,10 @@ document.addEventListener("DOMContentLoaded", () => {
               job.jobId ||
               `KRV-${String(
                 index + 1
-              ).padStart(4, "0")}`
+              ).padStart(
+                4,
+                "0"
+              )}`
           })
         );
       }
@@ -415,17 +639,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  function saveSubmittedQuotes(quotes) {
+  function saveSubmittedQuotes(
+    quotes
+  ) {
     try {
       localStorage.setItem(
         "korvoProfessionalQuotes",
-        JSON.stringify(quotes)
+        JSON.stringify(
+          quotes
+        )
       );
     } catch (error) {
       console.error(
         "Could not save submitted quotes:",
         error
       );
+    }
+  }
+
+
+  function getActiveJobs() {
+    try {
+      const activeJobs =
+        JSON.parse(
+          localStorage.getItem(
+            "korvoActiveJobs"
+          )
+        );
+
+      return Array.isArray(
+        activeJobs
+      )
+        ? activeJobs
+        : [];
+    } catch (error) {
+      console.error(
+        "Could not load active jobs:",
+        error
+      );
+
+      return [];
     }
   }
 
@@ -469,10 +722,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const city =
-      job.city || "Atlanta";
+      job.city ||
+      "Atlanta";
 
     const state =
-      job.state || "GA";
+      job.state ||
+      "GA";
 
     return `${city}, ${state}`;
   }
@@ -481,13 +736,14 @@ document.addEventListener("DOMContentLoaded", () => {
   function findJobById(jobId) {
     return customerJobs.find(
       (job) =>
-        getJobId(job) === String(jobId)
+        getJobId(job) ===
+        String(jobId)
     );
   }
 
 
   /* =========================
-     Render Available Jobs
+     Available Jobs
      ========================= */
 
   function renderJobs(
@@ -497,7 +753,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    availableJobsList.innerHTML = "";
+    availableJobsList.innerHTML =
+      "";
 
     const filteredJobs =
       selectedCategory === "all"
@@ -509,22 +766,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 job.service ||
                 ""
               ).toLowerCase() ===
-              selectedCategory.toLowerCase()
+              selectedCategory
+                .toLowerCase()
           );
 
-    if (filteredJobs.length === 0) {
+
+    if (
+      filteredJobs.length === 0
+    ) {
       availableJobsList.innerHTML = `
         <div class="empty-state">
+
           <div class="empty-state-icon">
             🛠️
           </div>
 
-          <h3>No jobs found</h3>
+          <h3>
+            No jobs found
+          </h3>
 
           <p>
             There are currently no jobs
             available in this category.
           </p>
+
         </div>
       `;
 
@@ -537,134 +802,171 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    filteredJobs.forEach((job) => {
-      const jobCard =
-        document.createElement("article");
+    filteredJobs.forEach(
+      (job) => {
 
-      jobCard.className = "job-card";
+        const jobCard =
+          document.createElement(
+            "article"
+          );
 
-      const title =
-        job.title ||
-        job.jobTitle ||
-        "Customer Project";
+        jobCard.className =
+          "job-card";
 
-      const location =
-        getJobLocation(job);
+        const title =
+          job.title ||
+          job.jobTitle ||
+          "Customer Project";
 
-      const budget =
-        job.budget ||
-        job.budgetRange ||
-        "Budget not listed";
+        const location =
+          getJobLocation(job);
 
-      const date =
-        job.date ||
-        job.preferredDate ||
-        job.timeframe ||
-        "Flexible";
+        const budget =
+          job.budget ||
+          job.budgetRange ||
+          "Budget not listed";
 
-      const description =
-        job.description ||
-        job.jobDescription ||
-        "Customer has not added a description.";
+        const date =
+          job.date ||
+          job.preferredDate ||
+          job.timeframe ||
+          "Flexible";
 
-      const customer =
-        job.customer ||
-        job.customerName ||
-        "Korvo Customer";
+        const description =
+          job.description ||
+          job.jobDescription ||
+          "Customer has not added a description.";
 
-      const id =
-        getJobId(job);
+        const customer =
+          job.customer ||
+          job.customerName ||
+          "Korvo Customer";
 
-      const reference =
-        getJobReference(job);
+        const id =
+          getJobId(job);
 
-      jobCard.innerHTML = `
-        <div class="job-card-header">
-          <div>
+        const reference =
+          getJobReference(job);
 
-            <p class="eyebrow">
+
+        jobCard.innerHTML = `
+          <div class="job-card-header">
+
+            <div>
+
+              <p class="eyebrow">
+                ${escapeHTML(
+                  String(
+                    job.category ||
+                    job.service ||
+                    "Local Service"
+                  )
+                )}
+              </p>
+
+              <h3>
+                ${escapeHTML(
+                  title
+                )}
+              </h3>
+
+              <p>
+                ${escapeHTML(
+                  location
+                )}
+              </p>
+
+            </div>
+
+            <strong>
               ${escapeHTML(
-                String(
-                  job.category ||
-                  job.service ||
-                  "Local Service"
-                )
+                budget
               )}
-            </p>
-
-            <h3>
-              ${escapeHTML(title)}
-            </h3>
-
-            <p>
-              ${escapeHTML(location)}
-            </p>
+            </strong>
 
           </div>
 
-          <strong>
-            ${escapeHTML(budget)}
-          </strong>
-        </div>
+
+          <p style="margin-top: 14px;">
+            ${escapeHTML(
+              description
+            )}
+          </p>
 
 
-        <p style="margin-top: 14px;">
-          ${escapeHTML(description)}
-        </p>
+          <div class="job-meta">
+
+            <span>
+              👤
+              ${escapeHTML(
+                customer
+              )}
+            </span>
+
+            <span>
+              📍
+              ${escapeHTML(
+                location
+              )}
+            </span>
+
+            <span>
+              📅
+              ${escapeHTML(
+                date
+              )}
+            </span>
+
+            <span>
+              🆔
+              ${escapeHTML(
+                reference
+              )}
+            </span>
+
+          </div>
 
 
-        <div class="job-meta">
+          <div class="job-actions">
 
-          <span>
-            👤 ${escapeHTML(customer)}
-          </span>
+            <button
+              type="button"
+              class="primary-button submit-quote-button"
+              data-job-id="${escapeHTML(
+                id
+              )}"
+            >
+              Submit Quote
+            </button>
 
-          <span>
-            📍 ${escapeHTML(location)}
-          </span>
+            <button
+              type="button"
+              class="secondary-button view-job-button"
+              data-job-id="${escapeHTML(
+                id
+              )}"
+            >
+              View Details
+            </button>
 
-          <span>
-            📅 ${escapeHTML(date)}
-          </span>
+          </div>
+        `;
 
-          <span>
-            🆔 ${escapeHTML(reference)}
-          </span>
+        availableJobsList.appendChild(
+          jobCard
+        );
 
-        </div>
-
-
-        <div class="job-actions">
-
-          <button
-            type="button"
-            class="primary-button submit-quote-button"
-            data-job-id="${escapeHTML(id)}"
-          >
-            Submit Quote
-          </button>
-
-          <button
-            type="button"
-            class="secondary-button view-job-button"
-            data-job-id="${escapeHTML(id)}"
-          >
-            View Details
-          </button>
-
-        </div>
-      `;
-
-      availableJobsList.appendChild(
-        jobCard
-      );
-    });
+      }
+    );
 
 
     if (availableJobsCount) {
       availableJobsCount.textContent =
-        String(filteredJobs.length);
+        String(
+          filteredJobs.length
+        );
     }
+
 
     addJobButtonListeners();
   }
@@ -680,121 +982,127 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll(
         ".submit-quote-button"
       )
-      .forEach((button) => {
+      .forEach(
+        (button) => {
 
-        button.addEventListener(
-          "click",
-          () => {
+          button.addEventListener(
+            "click",
+            () => {
 
-            openQuoteModal(
-              button.dataset.jobId
-            );
+              openQuoteModal(
+                button.dataset.jobId
+              );
 
-          }
-        );
+            }
+          );
 
-      });
+        }
+      );
 
 
     document
       .querySelectorAll(
         ".view-job-button"
       )
-      .forEach((button) => {
+      .forEach(
+        (button) => {
 
-        button.addEventListener(
-          "click",
-          () => {
+          button.addEventListener(
+            "click",
+            () => {
 
-            const job =
-              findJobById(
-                button.dataset.jobId
-              );
+              const job =
+                findJobById(
+                  button.dataset.jobId
+                );
 
-            if (!job) {
-              return;
+              if (!job) {
+                return;
+              }
+
+              const title =
+                job.title ||
+                job.jobTitle ||
+                "Customer Project";
+
+              const description =
+                job.description ||
+                job.jobDescription ||
+                "No description provided.";
+
+              const location =
+                getJobLocation(job);
+
+              const budget =
+                job.budget ||
+                job.budgetRange ||
+                "Not listed";
+
+
+              openInfoModal({
+                eyebrow:
+                  "JOB DETAILS",
+
+                title,
+
+                message:
+                  description,
+
+                details: [
+                  {
+                    label:
+                      "Reference",
+
+                    value:
+                      getJobReference(
+                        job
+                      )
+                  },
+
+                  {
+                    label:
+                      "Location",
+
+                    value:
+                      location
+                  },
+
+                  {
+                    label:
+                      "Budget",
+
+                    value:
+                      budget
+                  },
+
+                  {
+                    label:
+                      "Preferred Date",
+
+                    value:
+                      job.date ||
+                      job.preferredDate ||
+                      job.timeframe ||
+                      "Flexible"
+                  },
+
+                  {
+                    label:
+                      "Customer",
+
+                    value:
+                      job.customer ||
+                      job.customerName ||
+                      "Korvo Customer"
+                  }
+                ]
+              });
+
             }
+          );
 
-            const title =
-              job.title ||
-              job.jobTitle ||
-              "Customer Project";
-
-            const description =
-              job.description ||
-              job.jobDescription ||
-              "No description provided.";
-
-            const location =
-              getJobLocation(job);
-
-            const budget =
-              job.budget ||
-              job.budgetRange ||
-              "Not listed";
-
-            openInfoModal({
-              eyebrow:
-                "JOB DETAILS",
-
-              title,
-
-              message:
-                description,
-
-              details: [
-                {
-                  label:
-                    "Reference",
-
-                  value:
-                    getJobReference(job)
-                },
-
-                {
-                  label:
-                    "Location",
-
-                  value:
-                    location
-                },
-
-                {
-                  label:
-                    "Budget",
-
-                  value:
-                    budget
-                },
-
-                {
-                  label:
-                    "Preferred Date",
-
-                  value:
-                    job.date ||
-                    job.preferredDate ||
-                    job.timeframe ||
-                    "Flexible"
-                },
-
-                {
-                  label:
-                    "Customer",
-
-                  value:
-                    job.customer ||
-                    job.customerName ||
-                    "Korvo Customer"
-                }
-              ]
-            });
-
-          }
-        );
-
-      });
-
+        }
+      );
   }
 
 
@@ -805,16 +1113,25 @@ document.addEventListener("DOMContentLoaded", () => {
   function openQuoteModal(jobId) {
 
     const job =
-      findJobById(jobId);
+      findJobById(
+        jobId
+      );
 
-    if (!job || !quoteModal) {
+    if (
+      !job ||
+      !quoteModal
+    ) {
       return;
     }
 
-    if (selectedJobReference) {
+
+    if (
+      selectedJobReference
+    ) {
       selectedJobReference.value =
         getJobId(job);
     }
+
 
     if (selectedJobTitle) {
       selectedJobTitle.textContent =
@@ -823,6 +1140,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "this customer project";
     }
 
+
     quoteModal.classList.remove(
       "hidden"
     );
@@ -830,10 +1148,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.overflow =
       "hidden";
 
-    setTimeout(() => {
-      quoteAmount?.focus();
-    }, 100);
 
+    setTimeout(
+      () => {
+        quoteAmount?.focus();
+      },
+      100
+    );
   }
 
 
@@ -856,25 +1177,29 @@ document.addEventListener("DOMContentLoaded", () => {
       quoteMessageCount.textContent =
         "0";
     }
-
   }
 
 
-  closeQuoteModalButton?.addEventListener(
-    "click",
-    closeQuoteModal
-  );
+  closeQuoteModalButton
+    ?.addEventListener(
+      "click",
+      closeQuoteModal
+    );
 
-  cancelQuoteButton?.addEventListener(
-    "click",
-    closeQuoteModal
-  );
+  cancelQuoteButton
+    ?.addEventListener(
+      "click",
+      closeQuoteModal
+    );
 
   quoteModal?.addEventListener(
     "click",
     (event) => {
 
-      if (event.target === quoteModal) {
+      if (
+        event.target ===
+        quoteModal
+      ) {
         closeQuoteModal();
       }
 
@@ -882,28 +1207,39 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
+  /* =========================
+     Escape Key
+     ========================= */
+
   document.addEventListener(
     "keydown",
     (event) => {
 
-      if (event.key !== "Escape") {
+      if (
+        event.key !==
+        "Escape"
+      ) {
         return;
       }
 
+
       if (
         quoteModal &&
-        !quoteModal.classList.contains(
-          "hidden"
-        )
+        !quoteModal
+          .classList.contains(
+            "hidden"
+          )
       ) {
         closeQuoteModal();
       }
 
+
       if (
         infoModal &&
-        !infoModal.classList.contains(
-          "hidden"
-        )
+        !infoModal
+          .classList.contains(
+            "hidden"
+          )
       ) {
         closeInfoModal();
       }
@@ -941,12 +1277,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       event.preventDefault();
 
+
       const jobId =
         selectedJobReference?.value ||
         "";
 
+
       const job =
-        findJobById(jobId);
+        findJobById(
+          jobId
+        );
 
 
       if (!job) {
@@ -972,7 +1312,10 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-      if (!amount || amount <= 0) {
+      if (
+        !amount ||
+        amount <= 0
+      ) {
 
         openInfoModal({
           eyebrow:
@@ -994,8 +1337,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const existingQuote =
         submittedQuotes.find(
           (quote) =>
-            String(quote.jobId) ===
-            String(jobId)
+            String(
+              quote.jobId
+            ) ===
+            String(
+              jobId
+            )
         );
 
 
@@ -1044,7 +1391,9 @@ document.addEventListener("DOMContentLoaded", () => {
         jobId,
 
         jobReference:
-          getJobReference(job),
+          getJobReference(
+            job
+          ),
 
         jobTitle:
           job.title ||
@@ -1057,7 +1406,9 @@ document.addEventListener("DOMContentLoaded", () => {
           "Korvo Customer",
 
         location:
-          getJobLocation(job),
+          getJobLocation(
+            job
+          ),
 
         professional:
           professionalProfile.name,
@@ -1081,14 +1432,16 @@ document.addEventListener("DOMContentLoaded", () => {
           "Flexible",
 
         message:
-          quoteMessage?.value.trim() ||
+          quoteMessage?.value
+            .trim() ||
           "",
 
         status:
           "Pending",
 
         createdAt:
-          new Date().toISOString()
+          new Date()
+            .toISOString()
 
       };
 
@@ -1104,6 +1457,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       renderSubmittedQuotes();
+
+      renderActiveWork();
 
       updateDashboardCounters();
 
@@ -1185,7 +1540,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     Render Submitted Quotes
+     Submitted Quotes
      ========================= */
 
   function renderSubmittedQuotes() {
@@ -1194,12 +1549,18 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+
+    submittedQuotes =
+      getSubmittedQuotes();
+
+
     submittedQuotesList.innerHTML =
       "";
 
 
     if (
-      submittedQuotes.length === 0
+      submittedQuotes.length ===
+      0
     ) {
 
       submittedQuotesList.innerHTML = `
@@ -1264,6 +1625,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
+        const quoteStatus =
+          quote.status ||
+          "Pending";
+
+
         quoteCard.innerHTML = `
           <div class="quote-card-header">
 
@@ -1271,8 +1637,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               <p class="eyebrow">
                 ${escapeHTML(
-                  quote.status ||
-                  "Pending"
+                  quoteStatus
                 )}
               </p>
 
@@ -1336,8 +1701,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span>
               Status:
               ${escapeHTML(
-                quote.status ||
-                "Pending"
+                quoteStatus
               )}
             </span>
 
@@ -1353,12 +1717,354 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
 
-        submittedQuotesList.appendChild(
-          quoteCard
-        );
+        submittedQuotesList
+          .appendChild(
+            quoteCard
+          );
 
       }
     );
+
+  }
+
+
+  /* =========================
+     Active Work
+     ========================= */
+
+  function getProfessionalActiveJobs() {
+
+    const activeJobs =
+      getActiveJobs();
+
+
+    return activeJobs.filter(
+      (job) =>
+        String(
+          job.professional ||
+          ""
+        ).toLowerCase() ===
+        professionalProfile.name
+          .toLowerCase()
+    );
+
+  }
+
+
+  function openCustomerConversation(
+    customerName = ""
+  ) {
+    localStorage.setItem(
+      "korvoMessagingRole",
+      "professional"
+    );
+
+    if (customerName) {
+      localStorage.setItem(
+        "korvoOpenConversation",
+        customerName
+      );
+    } else {
+      localStorage.removeItem(
+        "korvoOpenConversation"
+      );
+    }
+
+    window.location.href =
+      "messages.html";
+  }
+
+
+  function createActiveWorkCard(
+    job
+  ) {
+
+    const article =
+      document.createElement(
+        "article"
+      );
+
+    article.className =
+      "job-card active-work-card";
+
+
+    const title =
+      job.jobTitle ||
+      "Active Korvo Job";
+
+    const customer =
+      job.customer ||
+      "Korvo Customer";
+
+    const location =
+      job.location ||
+      "Atlanta, GA";
+
+    const amount =
+      Number(
+        job.amount ||
+        0
+      );
+
+    const timeframe =
+      job.timeframe ||
+      "Flexible";
+
+    const reference =
+      job.jobReference ||
+      job.jobId ||
+      "KRV-UNASSIGNED";
+
+    const status =
+      job.status ||
+      "Active";
+
+
+    article.innerHTML = `
+      <div class="job-card-header">
+
+        <div>
+
+          <p class="eyebrow">
+            ${escapeHTML(
+              status
+            )}
+          </p>
+
+          <h3>
+            ${escapeHTML(
+              title
+            )}
+          </h3>
+
+          <p>
+            ${escapeHTML(
+              customer
+            )}
+            ·
+            ${escapeHTML(
+              location
+            )}
+          </p>
+
+        </div>
+
+        <strong>
+          $${amount.toLocaleString()}
+        </strong>
+
+      </div>
+
+
+      <div class="job-meta">
+
+        <span>
+          👤
+          ${escapeHTML(
+            customer
+          )}
+        </span>
+
+        <span>
+          📍
+          ${escapeHTML(
+            location
+          )}
+        </span>
+
+        <span>
+          ⏱
+          ${escapeHTML(
+            timeframe
+          )}
+        </span>
+
+        <span>
+          🆔
+          ${escapeHTML(
+            reference
+          )}
+        </span>
+
+      </div>
+
+
+      <div class="job-actions">
+
+        <button
+          type="button"
+          class="primary-button active-work-message-button"
+          data-customer="${escapeHTML(
+            customer
+          )}"
+        >
+          Message Customer
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button active-work-view-button"
+        >
+          View Job
+        </button>
+
+      </div>
+    `;
+
+
+    article
+      .querySelector(
+        ".active-work-message-button"
+      )
+      ?.addEventListener(
+        "click",
+        (event) => {
+
+          openCustomerConversation(
+            event.currentTarget
+              .dataset.customer ||
+            ""
+          );
+
+        }
+      );
+
+
+    article
+      .querySelector(
+        ".active-work-view-button"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+
+          openInfoModal({
+            eyebrow:
+              "ACTIVE WORK",
+
+            title,
+
+            message:
+              `This job was accepted by ${customer} and is now active.`,
+
+            details: [
+              {
+                label:
+                  "Customer",
+
+                value:
+                  customer
+              },
+
+              {
+                label:
+                  "Reference",
+
+                value:
+                  reference
+              },
+
+              {
+                label:
+                  "Location",
+
+                value:
+                  location
+              },
+
+              {
+                label:
+                  "Amount",
+
+                value:
+                  `$${amount.toLocaleString()}`
+              },
+
+              {
+                label:
+                  "Timeframe",
+
+                value:
+                  timeframe
+              },
+
+              {
+                label:
+                  "Status",
+
+                value:
+                  status
+              }
+            ]
+          });
+
+        }
+      );
+
+
+    return article;
+  }
+
+
+  function renderActiveWork() {
+
+    if (!activeWorkList) {
+      return;
+    }
+
+
+    const activeJobs =
+      getProfessionalActiveJobs();
+
+
+    activeWorkList.innerHTML =
+      "";
+
+
+    if (
+      activeJobs.length ===
+      0
+    ) {
+
+      activeWorkList.innerHTML = `
+        <div class="empty-state compact">
+
+          <div class="empty-state-icon">
+            ✅
+          </div>
+
+          <h3>
+            No active jobs yet
+          </h3>
+
+          <p>
+            When a customer accepts one
+            of your quotes, the job will
+            appear here.
+          </p>
+
+        </div>
+      `;
+
+      return;
+    }
+
+
+    activeJobs
+      .slice()
+      .reverse()
+      .forEach(
+        (job) => {
+
+          activeWorkList
+            .appendChild(
+              createActiveWorkCard(
+                job
+              )
+            );
+
+        }
+      );
 
   }
 
@@ -1368,6 +2074,16 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function updateDashboardCounters() {
+
+    customerJobs =
+      getCustomerJobs();
+
+    submittedQuotes =
+      getSubmittedQuotes();
+
+    const activeJobs =
+      getProfessionalActiveJobs();
+
 
     if (availableJobsCount) {
       availableJobsCount.textContent =
@@ -1386,21 +2102,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     if (jobsWonCount) {
-
-      const wonQuotes =
-        submittedQuotes.filter(
-          (quote) =>
-            String(
-              quote.status
-            ).toLowerCase() ===
-            "accepted"
-        );
-
       jobsWonCount.textContent =
         String(
-          wonQuotes.length
+          activeJobs.length
         );
-
     }
 
   }
@@ -1437,18 +2142,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.stopPropagation();
 
-        professionalMenu.classList.toggle(
-          "hidden"
-        );
-
-        const menuIsOpen =
-          !professionalMenu.classList.contains(
+        professionalMenu
+          .classList.toggle(
             "hidden"
           );
 
+
+        const menuIsOpen =
+          !professionalMenu
+            .classList.contains(
+              "hidden"
+            );
+
+
         profileButton.setAttribute(
           "aria-expanded",
-          String(menuIsOpen)
+          String(
+            menuIsOpen
+          )
         );
 
       }
@@ -1502,14 +2213,19 @@ document.addEventListener("DOMContentLoaded", () => {
           "open"
         );
 
+
         const navOpen =
-          mobileNav.classList.contains(
-            "open"
-          );
+          mobileNav
+            .classList.contains(
+              "open"
+            );
+
 
         mobileMenuButton.setAttribute(
           "aria-expanded",
-          String(navOpen)
+          String(
+            navOpen
+          )
         );
 
       }
@@ -1522,19 +2238,24 @@ document.addEventListener("DOMContentLoaded", () => {
      Notifications
      ========================= */
 
-  function addNotification(message) {
+  function addNotification(
+    message
+  ) {
 
     if (!notificationsList) {
       return;
     }
+
 
     const notification =
       document.createElement(
         "article"
       );
 
+
     notification.className =
       "notification-item unread";
+
 
     notification.innerHTML = `
       <span class="notification-icon">
@@ -1544,7 +2265,9 @@ document.addEventListener("DOMContentLoaded", () => {
       <div>
 
         <p>
-          ${escapeHTML(message)}
+          ${escapeHTML(
+            message
+          )}
         </p>
 
         <span>
@@ -1556,12 +2279,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="unread-dot"></span>
     `;
 
+
     notificationsList.prepend(
       notification
     );
 
-    updateNotificationCount();
 
+    updateNotificationCount();
   }
 
 
@@ -1571,13 +2295,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+
     const unread =
       document.querySelectorAll(
         ".notification-item.unread"
       ).length;
 
+
     notificationCount.textContent =
-      String(unread);
+      String(
+        unread
+      );
 
   }
 
@@ -1587,234 +2315,243 @@ document.addEventListener("DOMContentLoaded", () => {
     notificationsSection
   ) {
 
-    notificationButton.addEventListener(
-      "click",
-      () => {
+    notificationButton
+      .addEventListener(
+        "click",
+        () => {
 
-        notificationsSection
-          .scrollIntoView({
-            behavior:
-              "smooth",
+          notificationsSection
+            .scrollIntoView({
+              behavior:
+                "smooth",
 
-            block:
-              "center"
-          });
+              block:
+                "center"
+            });
 
-      }
-    );
+        }
+      );
 
   }
 
 
-  markAllReadButton?.addEventListener(
-    "click",
-    () => {
+  markAllReadButton
+    ?.addEventListener(
+      "click",
+      () => {
 
-      document
-        .querySelectorAll(
-          ".notification-item.unread"
-        )
-        .forEach(
-          (notification) => {
+        document
+          .querySelectorAll(
+            ".notification-item.unread"
+          )
+          .forEach(
+            (notification) => {
 
-            notification.classList.remove(
-              "unread"
-            );
+              notification
+                .classList.remove(
+                  "unread"
+                );
 
-            notification
-              .querySelector(
-                ".unread-dot"
-              )
-              ?.remove();
+              notification
+                .querySelector(
+                  ".unread-dot"
+                )
+                ?.remove();
 
-          }
-        );
+            }
+          );
 
-      updateNotificationCount();
+        updateNotificationCount();
 
-    }
-  );
+      }
+    );
 
 
   /* =========================
      Quick Actions
      ========================= */
 
-  messagesButton?.addEventListener(
-    "click",
-    () => {
+  messagesButton
+    ?.addEventListener(
+      "click",
+      () => {
 
-      localStorage.setItem(
-        "korvoMessagingRole",
-        "professional"
-      );
-
-      window.location.href =
-        "messages.html";
-
-    }
-  );
-
-
-  availabilityButton?.addEventListener(
-    "click",
-    () => {
-
-      openInfoModal({
-        eyebrow:
-          "AVAILABILITY",
-
-        title:
-          "Availability Settings",
-
-        message:
-          "Soon you will be able to control when customers can request or book your services.",
-
-        details: [
-          {
-            label:
-              "Weekly Schedule",
-
-            value:
-              "Coming soon"
-          },
-
-          {
-            label:
-              "Unavailable Dates",
-
-            value:
-              "Coming soon"
-          },
-
-          {
-            label:
-              "Booking Preferences",
-
-            value:
-              "Coming soon"
-          }
-        ]
-      });
-
-    }
-  );
-
-
-  servicesButton?.addEventListener(
-    "click",
-    () => {
-
-      openInfoModal({
-        eyebrow:
-          "SERVICES",
-
-        title:
-          "Manage Services",
-
-        message:
-          "Soon you will be able to choose the services you offer and control what kinds of jobs appear in your dashboard.",
-
-        details: [
-          {
-            label:
-              "Service Categories",
-
-            value:
-              "Coming soon"
-          },
-
-          {
-            label:
-              "Job Matching",
-
-            value:
-              "Based on your services"
-          },
-
-          {
-            label:
-              "Service Area",
-
-            value:
-              "Coming soon"
-          }
-        ]
-      });
-
-    }
-  );
-
-
-  accountSettingsButton?.addEventListener(
-    "click",
-    () => {
-
-      openInfoModal({
-        eyebrow:
-          "ACCOUNT SETTINGS",
-
-        title:
-          "Account Settings",
-
-        message:
-          "Soon you will be able to manage your Korvo account, security, and professional preferences here.",
-
-        details: [
-          {
-            label:
-              "Login & Security",
-
-            value:
-              "Coming soon"
-          },
-
-          {
-            label:
-              "Notifications",
-
-            value:
-              "Coming soon"
-          },
-
-          {
-            label:
-              "Language",
-
-            value:
-              "English / Español"
-          },
-
-          {
-            label:
-              "Account Type",
-
-            value:
-              "Professional"
-          }
-        ]
-      });
-
-    }
-  );
-
-
-  logoutButton?.addEventListener(
-    "click",
-    () => {
-
-      const confirmed =
-        confirm(
-          "Log out of your Korvo professional account?"
+        localStorage.setItem(
+          "korvoMessagingRole",
+          "professional"
         );
 
-      if (confirmed) {
         window.location.href =
-          "index.html";
-      }
+          "messages.html";
 
-    }
-  );
+      }
+    );
+
+
+  availabilityButton
+    ?.addEventListener(
+      "click",
+      () => {
+
+        openInfoModal({
+          eyebrow:
+            "AVAILABILITY",
+
+          title:
+            "Availability Settings",
+
+          message:
+            "Soon you will be able to control when customers can request or book your services.",
+
+          details: [
+            {
+              label:
+                "Weekly Schedule",
+
+              value:
+                "Coming soon"
+            },
+
+            {
+              label:
+                "Unavailable Dates",
+
+              value:
+                "Coming soon"
+            },
+
+            {
+              label:
+                "Booking Preferences",
+
+              value:
+                "Coming soon"
+            }
+          ]
+        });
+
+      }
+    );
+
+
+  servicesButton
+    ?.addEventListener(
+      "click",
+      () => {
+
+        openInfoModal({
+          eyebrow:
+            "SERVICES",
+
+          title:
+            "Manage Services",
+
+          message:
+            "Soon you will be able to choose the services you offer and control what kinds of jobs appear in your dashboard.",
+
+          details: [
+            {
+              label:
+                "Service Categories",
+
+              value:
+                "Coming soon"
+            },
+
+            {
+              label:
+                "Job Matching",
+
+              value:
+                "Based on your services"
+            },
+
+            {
+              label:
+                "Service Area",
+
+              value:
+                "Coming soon"
+            }
+          ]
+        });
+
+      }
+    );
+
+
+  accountSettingsButton
+    ?.addEventListener(
+      "click",
+      () => {
+
+        openInfoModal({
+          eyebrow:
+            "ACCOUNT SETTINGS",
+
+          title:
+            "Account Settings",
+
+          message:
+            "Soon you will be able to manage your Korvo account, security, and professional preferences here.",
+
+          details: [
+            {
+              label:
+                "Login & Security",
+
+              value:
+                "Coming soon"
+            },
+
+            {
+              label:
+                "Notifications",
+
+              value:
+                "Coming soon"
+            },
+
+            {
+              label:
+                "Language",
+
+              value:
+                "English / Español"
+            },
+
+            {
+              label:
+                "Account Type",
+
+              value:
+                "Professional"
+            }
+          ]
+        });
+
+      }
+    );
+
+
+  logoutButton
+    ?.addEventListener(
+      "click",
+      () => {
+
+        const confirmed =
+          confirm(
+            "Log out of your Korvo professional account?"
+          );
+
+
+        if (confirmed) {
+          window.location.href =
+            "index.html";
+        }
+
+      }
+    );
 
 
   /* =========================
@@ -1824,6 +2561,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderJobs();
 
   renderSubmittedQuotes();
+
+  renderActiveWork();
 
   updateDashboardCounters();
 
