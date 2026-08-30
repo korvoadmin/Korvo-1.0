@@ -1816,8 +1816,12 @@ document.addEventListener("DOMContentLoaded", () => {
       "KRV-UNASSIGNED";
 
     const status =
-      job.status ||
-      "Active";
+  job.status ||
+  "Active";
+
+const isPendingCustomerConfirmation =
+  status ===
+  "Pending Customer Confirmation";
 
 
     article.innerHTML = `
@@ -1891,24 +1895,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div class="job-actions">
 
-        <button
-          type="button"
-          class="primary-button active-work-message-button"
-          data-customer="${escapeHTML(
-            customer
-          )}"
-        >
-          Message Customer
-        </button>
+  <button
+    type="button"
+    class="primary-button active-work-message-button"
+    data-customer="${escapeHTML(
+      customer
+    )}"
+  >
+    Message Customer
+  </button>
 
-        <button
-          type="button"
-          class="secondary-button active-work-view-button"
-        >
-          View Job
-        </button>
+  <button
+    type="button"
+    class="secondary-button active-work-view-button"
+  >
+    View Job
+  </button>
 
-      </div>
+  ${
+  isPendingCustomerConfirmation
+    ? `
+      <button
+        type="button"
+        class="secondary-button"
+        disabled
+      >
+        ⏳ Waiting for Customer Confirmation
+      </button>
+    `
+    : `
+      <button
+        type="button"
+        class="primary-button mark-work-complete-button"
+      >
+        ✓ Mark Work Complete
+      </button>
+    `
+}
+
+</div>
     `;
 
 
@@ -2001,7 +2026,132 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
+article
+  .querySelector(
+    ".mark-work-complete-button"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
 
+      const allActiveJobs =
+        getActiveJobs();
+
+      const jobIndex =
+        allActiveJobs.findIndex(
+          (activeJob) =>
+            String(
+              activeJob.id ||
+              activeJob.jobId ||
+              activeJob.jobReference
+            ) ===
+            String(
+              job.id ||
+              job.jobId ||
+              job.jobReference
+            )
+        );
+
+      if (jobIndex === -1) {
+
+        openInfoModal({
+          eyebrow:
+            "JOB ERROR",
+
+          title:
+            "Job Not Found",
+
+          message:
+            "Korvo could not find this active job. Refresh the dashboard and try again."
+        });
+
+        return;
+      }
+
+      const confirmed =
+        confirm(
+          `Mark "${title}" as complete and send it to ${customer} for confirmation?`
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      allActiveJobs[jobIndex] = {
+        ...allActiveJobs[jobIndex],
+
+        status:
+          "Pending Customer Confirmation",
+
+        professionalCompletedAt:
+          new Date().toISOString()
+      };
+
+      localStorage.setItem(
+        "korvoActiveJobs",
+        JSON.stringify(
+          allActiveJobs
+        )
+      );
+
+      renderActiveWork();
+
+      updateDashboardCounters();
+
+      addNotification(
+        `${title} was submitted for customer confirmation.`
+      );
+
+      openInfoModal({
+        eyebrow:
+          "WORK SUBMITTED",
+
+        title:
+          "Sent to Customer",
+
+        message:
+          `${customer} can now review and confirm that the work is complete.`,
+
+        success:
+          true,
+
+        details: [
+          {
+            label:
+              "Job",
+
+            value:
+              title
+          },
+
+          {
+            label:
+              "Customer",
+
+            value:
+              customer
+          },
+
+          {
+            label:
+              "Reference",
+
+            value:
+              reference
+          },
+
+          {
+            label:
+              "Status",
+
+            value:
+              "Pending Customer Confirmation"
+          }
+        ]
+      });
+
+    }
+  );
     return article;
   }
 
