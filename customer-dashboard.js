@@ -1910,14 +1910,14 @@ if (acceptedQuote) {
       "Budget not specified";
 
     const timeframe =
-      job.timeframe ||
-      "Flexible";
+  job.timeframe ||
+  "Flexible";
 
-    const reference =
-      job.reference ||
-      job.jobReference ||
-      job.id ||
-      "KRV-000000";
+const reference =
+  job.reference ||
+  job.jobReference ||
+  job.id ||
+  "KRV-000000";
 
     const customer =
       job.customerName ||
@@ -2142,7 +2142,13 @@ if (acceptedQuote) {
   const timeframe =
     job.timeframe ||
     "Flexible";
+  const status =
+  job.status ||
+  "Active";
 
+const isPendingCustomerConfirmation =
+  status ===
+  "Pending Customer Confirmation";
   article.innerHTML = `
     <div class="job-icon">
       ✅
@@ -2162,20 +2168,31 @@ if (acceptedQuote) {
           </p>
         </div>
 
-        <span class="status-badge completed">
-          Active
-        </span>
+        <span class="status-badge ${
+  isPendingCustomerConfirmation
+    ? "waiting"
+    : "completed"
+}">
+  ${
+    isPendingCustomerConfirmation
+      ? "Completion Requested"
+      : "Active"
+  }
+</span>
 
       </div>
 
       <p class="job-description">
-        Assigned to
-        <strong>
-          ${escapeHTML(
-            professional
-          )}
-        </strong>
-      </p>
+  ${
+    isPendingCustomerConfirmation
+      ? `${escapeHTML(
+          professional
+        )} has marked this job complete. Review the work and confirm completion.`
+      : `Assigned to <strong>${escapeHTML(
+          professional
+        )}</strong>`
+  }
+</p>
 
       <div class="job-footer">
 
@@ -2198,7 +2215,18 @@ if (acceptedQuote) {
       </div>
 
       <div class="job-actions">
-
+      ${
+  isPendingCustomerConfirmation
+    ? `
+      <button
+        type="button"
+        class="small-primary-button confirm-completion-button"
+      >
+        ✓ Confirm Completion
+      </button>
+    `
+    : ""
+}
         <button
           type="button"
           class="small-primary-button active-job-message-button"
@@ -2220,7 +2248,105 @@ if (acceptedQuote) {
 
     </div>
   `;
+article
+  .querySelector(
+    ".confirm-completion-button"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
 
+      const allActiveJobs =
+        safelyReadLocalStorage(
+          "korvoActiveJobs",
+          []
+        );
+
+      const jobIndex =
+        allActiveJobs.findIndex(
+          (activeJob) =>
+            String(
+              activeJob.id ||
+              activeJob.jobId ||
+              activeJob.jobReference
+            ) ===
+            String(
+              job.id ||
+              job.jobId ||
+              job.jobReference
+            )
+        );
+
+      if (jobIndex === -1) {
+        openInfoModal({
+          eyebrow: "JOB ERROR",
+          title: "Job Not Found",
+          message:
+            "Korvo could not find this active job. Refresh the dashboard and try again."
+        });
+
+        return;
+      }
+
+      const confirmed =
+        confirm(
+          `Confirm that "${title}" has been completed by ${professional}?`
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      allActiveJobs[jobIndex] = {
+        ...allActiveJobs[jobIndex],
+
+        status: "Completed",
+
+        completedAt:
+          new Date().toISOString()
+      };
+
+      safelyWriteLocalStorage(
+        "korvoActiveJobs",
+        allActiveJobs
+      );
+
+      article.remove();
+
+      loadDashboardStats();
+
+      openInfoModal({
+        eyebrow: "JOB COMPLETED",
+
+        title: "Completion Confirmed!",
+
+        message:
+          `${professional}'s work has been marked complete.`,
+
+        success: true,
+
+        details: [
+          {
+            label: "Job",
+            value: title
+          },
+          {
+            label: "Professional",
+            value: professional
+          },
+          {
+            label: "Reference",
+            value: reference
+          },
+          {
+            label: "Status",
+            value: "Completed"
+          }
+        ]
+      });
+
+    }
+  );
   article
     .querySelector(
       ".active-job-message-button"
