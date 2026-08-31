@@ -2431,21 +2431,31 @@ article
     return;
   }
 
-  if (
-    Array.isArray(activeJobs) &&
-    activeJobs.length > 0
-  ) {
-    activeJobs
-      .slice()
-      .reverse()
-      .forEach((job) => {
-        jobsList.prepend(
-          createActiveJobCard(
-            job
-          )
-        );
-      });
-  }
+  const visibleActiveJobs =
+  Array.isArray(activeJobs)
+    ? activeJobs.filter(
+        (job) =>
+          String(
+            job.status || "Active"
+          ).toLowerCase() !==
+          "completed"
+      )
+    : [];
+
+if (
+  visibleActiveJobs.length > 0
+) {
+  visibleActiveJobs
+    .slice()
+    .reverse()
+    .forEach((job) => {
+      jobsList.prepend(
+        createActiveJobCard(
+          job
+        )
+      );
+    });
+}
 
   if (
     submittedJobs.length === 0
@@ -2510,12 +2520,21 @@ article
     );
 
 
-    if (activeJobsCount) {
+    const activeJobTotal =
+  Array.isArray(activeJobs)
+    ? activeJobs.filter(
+        (job) =>
+          String(
+            job.status || "Active"
+          ).toLowerCase() !==
+          "completed"
+      ).length
+    : 0;
+
+if (activeJobsCount) {
   activeJobsCount.textContent =
     String(
-      Array.isArray(activeJobs)
-        ? activeJobs.length
-        : 0
+      activeJobTotal
     );
 }
 
@@ -2529,18 +2548,24 @@ article
     }
 
 
-    if (
-      completedJobsCount &&
-      Array.isArray(
-        acceptedQuotes
-      )
-    ) {
-      completedJobsCount.textContent =
-        String(
-          18 +
-          acceptedQuotes.length
-        );
-    }
+    const completedJobTotal =
+  Array.isArray(activeJobs)
+    ? activeJobs.filter(
+        (job) =>
+          String(
+            job.status || ""
+          ).toLowerCase() ===
+          "completed"
+      ).length
+    : 0;
+
+if (completedJobsCount) {
+  completedJobsCount.textContent =
+    String(
+      18 +
+      completedJobTotal
+    );
+}
   }
 
 
