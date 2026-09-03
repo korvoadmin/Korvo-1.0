@@ -90,62 +90,13 @@
             flex-shrink: 0;
         }
 
-        .korvo-k {
-    position: relative;
-    width: 78px;
-    height: 62px;
+        .korvo-k-image {
+    display: block;
+    width: 76px;
+    height: 76px;
+    object-fit: contain;
     flex-shrink: 0;
-    overflow: visible;
 }
-
-        .korvo-k-piece {
-            position: absolute;
-            display: block;
-            background:
-                linear-gradient(
-                    180deg,
-                    #13e6c4 0%,
-                    #02b8ef 36%,
-                    #1267ff 68%,
-                    #173df5 100%
-                );
-            box-shadow:
-                0 0 18px rgba(0, 174, 255, 0.14);
-        }
-
-        .korvo-k-stem {
-            left: 0;
-            top: 12px;
-            width: 14px;
-            height: 44px;
-        }
-
-        .korvo-k-upper {
-    left: 10px;
-    top: 5px;
-    width: 48px;
-    height: 14px;
-    transform: rotate(-44deg);
-    transform-origin: left center;
-}
-
-        .korvo-k-lower {
-    left: 10px;
-    top: 31px;
-    width: 52px;
-    height: 14px;
-    transform: rotate(45deg);
-    transform-origin: left center;
-}
-
-        .korvo-k-accent {
-            left: 0;
-            top: 0;
-            width: 13px;
-            height: 13px;
-            clip-path: polygon(0 0, 100% 0, 0 100%);
-            background: #12dfbd;
-        }
 
         .brand-divider {
             width: 1px;
@@ -1162,13 +1113,10 @@
                 gap: 10px;
             }
 
-            .korvo-k {
-                width: 45px;
-                height: 46px;
-                transform: scale(0.8);
-                transform-origin: left center;
-                margin-right: -7px;
-            }
+            .korvo-k-image {
+    width: 54px;
+    height: 54px;
+}
 
             .brand-divider {
                 height: 42px;
@@ -1263,12 +1211,11 @@
                 class="korvo-brand"
                 aria-label="Korvo Home"
             >
-                <span class="korvo-k">
-                    <span class="korvo-k-piece korvo-k-stem"></span>
-                    <span class="korvo-k-piece korvo-k-upper"></span>
-                    <span class="korvo-k-piece korvo-k-lower"></span>
-                    <span class="korvo-k-piece korvo-k-accent"></span>
-                </span>
+                <img
+    src="korvo-k.png"
+    alt=""
+    class="korvo-k-image"
+>
 
                 <span class="brand-divider"></span>
 
