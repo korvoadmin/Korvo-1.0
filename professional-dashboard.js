@@ -747,229 +747,274 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function renderJobs(
-    selectedCategory = "all"
-  ) {
-    if (!availableJobsList) {
-      return;
-    }
+  selectedCategory = "all"
+) {
+  if (!availableJobsList) {
+    return;
+  }
 
-    availableJobsList.innerHTML =
-      "";
+  availableJobsList.innerHTML =
+    "";
 
-    const filteredJobs =
-      selectedCategory === "all"
-        ? customerJobs
-        : customerJobs.filter(
-            (job) =>
-              String(
-                job.category ||
-                job.service ||
-                ""
-              ).toLowerCase() ===
-              selectedCategory
-                .toLowerCase()
-          );
+  const activeJobs =
+    getActiveJobs();
 
-
-    if (
-      filteredJobs.length === 0
-    ) {
-      availableJobsList.innerHTML = `
-        <div class="empty-state">
-
-          <div class="empty-state-icon">
-            🛠️
-          </div>
-
-          <h3>
-            No jobs found
-          </h3>
-
-          <p>
-            There are currently no jobs
-            available in this category.
-          </p>
-
-        </div>
-      `;
-
-      if (availableJobsCount) {
-        availableJobsCount.textContent =
-          "0";
-      }
-
-      return;
-    }
-
-
-    filteredJobs.forEach(
+  const availableCustomerJobs =
+    customerJobs.filter(
       (job) => {
 
-        const jobCard =
-          document.createElement(
-            "article"
-          );
-
-        jobCard.className =
-          "job-card";
-
-        const title =
-          job.title ||
-          job.jobTitle ||
-          "Customer Project";
-
-        const location =
-          getJobLocation(job);
-
-        const budget =
-          job.budget ||
-          job.budgetRange ||
-          "Budget not listed";
-
-        const date =
-          job.date ||
-          job.preferredDate ||
-          job.timeframe ||
-          "Flexible";
-
-        const description =
-          job.description ||
-          job.jobDescription ||
-          "Customer has not added a description.";
-
-        const customer =
-          job.customer ||
-          job.customerName ||
-          "Korvo Customer";
-
-        const id =
+        const jobId =
           getJobId(job);
 
-        const reference =
+        const jobReference =
           getJobReference(job);
 
+        const isAlreadyActive =
+          activeJobs.some(
+            (activeJob) => {
 
-        jobCard.innerHTML = `
-          <div class="job-card-header">
+              const activeJobId =
+                String(
+                  activeJob.jobId ||
+                  activeJob.id ||
+                  ""
+                );
 
-            <div>
+              const activeJobReference =
+                String(
+                  activeJob.jobReference ||
+                  activeJob.reference ||
+                  ""
+                );
 
-              <p class="eyebrow">
-                ${escapeHTML(
-                  String(
-                    job.category ||
-                    job.service ||
-                    "Local Service"
-                  )
-                )}
-              </p>
+              return (
+                activeJobId ===
+                  String(jobId) ||
+                activeJobReference ===
+                  String(jobReference)
+              );
+            }
+          );
 
-              <h3>
-                ${escapeHTML(
-                  title
-                )}
-              </h3>
-
-              <p>
-                ${escapeHTML(
-                  location
-                )}
-              </p>
-
-            </div>
-
-            <strong>
-              ${escapeHTML(
-                budget
-              )}
-            </strong>
-
-          </div>
-
-
-          <p style="margin-top: 14px;">
-            ${escapeHTML(
-              description
-            )}
-          </p>
-
-
-          <div class="job-meta">
-
-            <span>
-              👤
-              ${escapeHTML(
-                customer
-              )}
-            </span>
-
-            <span>
-              📍
-              ${escapeHTML(
-                location
-              )}
-            </span>
-
-            <span>
-              📅
-              ${escapeHTML(
-                date
-              )}
-            </span>
-
-            <span>
-              🆔
-              ${escapeHTML(
-                reference
-              )}
-            </span>
-
-          </div>
-
-
-          <div class="job-actions">
-
-            <button
-              type="button"
-              class="primary-button submit-quote-button"
-              data-job-id="${escapeHTML(
-                id
-              )}"
-            >
-              Submit Quote
-            </button>
-
-            <button
-              type="button"
-              class="secondary-button view-job-button"
-              data-job-id="${escapeHTML(
-                id
-              )}"
-            >
-              View Details
-            </button>
-
-          </div>
-        `;
-
-        availableJobsList.appendChild(
-          jobCard
-        );
-
+        return !isAlreadyActive;
       }
     );
 
 
+  const filteredJobs =
+    selectedCategory === "all"
+      ? availableCustomerJobs
+      : availableCustomerJobs.filter(
+          (job) =>
+            String(
+              job.category ||
+              job.service ||
+              ""
+            ).toLowerCase() ===
+            selectedCategory
+              .toLowerCase()
+        );
+
+
+  if (
+    filteredJobs.length === 0
+  ) {
+    availableJobsList.innerHTML = `
+      <div class="empty-state">
+
+        <div class="empty-state-icon">
+          🛠️
+        </div>
+
+        <h3>
+          No jobs found
+        </h3>
+
+        <p>
+          There are currently no jobs
+          available in this category.
+        </p>
+
+      </div>
+    `;
+
     if (availableJobsCount) {
       availableJobsCount.textContent =
-        String(
-          filteredJobs.length
-        );
+        "0";
     }
 
-
-    addJobButtonListeners();
+    return;
   }
+
+
+  filteredJobs.forEach(
+    (job) => {
+
+      const jobCard =
+        document.createElement(
+          "article"
+        );
+
+      jobCard.className =
+        "job-card";
+
+      const title =
+        job.title ||
+        job.jobTitle ||
+        "Customer Project";
+
+      const location =
+        getJobLocation(job);
+
+      const budget =
+        job.budget ||
+        job.budgetRange ||
+        "Budget not listed";
+
+      const date =
+        job.date ||
+        job.preferredDate ||
+        job.timeframe ||
+        "Flexible";
+
+      const description =
+        job.description ||
+        job.jobDescription ||
+        "Customer has not added a description.";
+
+      const customer =
+        job.customer ||
+        job.customerName ||
+        "Korvo Customer";
+
+      const id =
+        getJobId(job);
+
+      const reference =
+        getJobReference(job);
+
+
+      jobCard.innerHTML = `
+        <div class="job-card-header">
+
+          <div>
+
+            <p class="eyebrow">
+              ${escapeHTML(
+                String(
+                  job.category ||
+                  job.service ||
+                  "Local Service"
+                )
+              )}
+            </p>
+
+            <h3>
+              ${escapeHTML(
+                title
+              )}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                location
+              )}
+            </p>
+
+          </div>
+
+          <strong>
+            ${escapeHTML(
+              budget
+            )}
+          </strong>
+
+        </div>
+
+
+        <p style="margin-top: 14px;">
+          ${escapeHTML(
+            description
+          )}
+        </p>
+
+
+        <div class="job-meta">
+
+          <span>
+            👤
+            ${escapeHTML(
+              customer
+            )}
+          </span>
+
+          <span>
+            📍
+            ${escapeHTML(
+              location
+            )}
+          </span>
+
+          <span>
+            📅
+            ${escapeHTML(
+              date
+            )}
+          </span>
+
+          <span>
+            🆔
+            ${escapeHTML(
+              reference
+            )}
+          </span>
+
+        </div>
+
+
+        <div class="job-actions">
+
+          <button
+            type="button"
+            class="primary-button submit-quote-button"
+            data-job-id="${escapeHTML(
+              id
+            )}"
+          >
+            Submit Quote
+          </button>
+
+          <button
+            type="button"
+            class="secondary-button view-job-button"
+            data-job-id="${escapeHTML(
+              id
+            )}"
+          >
+            View Details
+          </button>
+
+        </div>
+      `;
+
+      availableJobsList.appendChild(
+        jobCard
+      );
+
+    }
+  );
+
+
+  if (availableJobsCount) {
+    availableJobsCount.textContent =
+      String(
+        filteredJobs.length
+      );
+  }
+
+
+  addJobButtonListeners();
+}
 
 
   /* =========================
@@ -1732,23 +1777,36 @@ document.addEventListener("DOMContentLoaded", () => {
      Active Work
      ========================= */
 
-  function getProfessionalActiveJobs() {
+  function getProfessionalJobsWon() {
 
-    const activeJobs =
-      getActiveJobs();
+  const activeJobs =
+    getActiveJobs();
+
+  return activeJobs.filter(
+    (job) =>
+      String(
+        job.professional ||
+        ""
+      ).toLowerCase() ===
+      professionalProfile.name
+        .toLowerCase()
+  );
+
+}
 
 
-    return activeJobs.filter(
-      (job) =>
-        String(
-          job.professional ||
-          ""
-        ).toLowerCase() ===
-        professionalProfile.name
-          .toLowerCase()
-    );
+function getProfessionalActiveJobs() {
 
-  }
+  return getProfessionalJobsWon().filter(
+    (job) =>
+      String(
+        job.status ||
+        "Active"
+      ).toLowerCase() !==
+      "completed"
+  );
+
+}
 
 
   function openCustomerConversation(
@@ -2236,11 +2294,46 @@ article
 
 
     if (availableJobsCount) {
-      availableJobsCount.textContent =
-        String(
-          customerJobs.length
-        );
-    }
+
+  const activeJobs =
+    getActiveJobs();
+
+  const availableJobTotal =
+    customerJobs.filter(
+      (job) => {
+
+        const jobId =
+          getJobId(job);
+
+        const jobReference =
+          getJobReference(job);
+
+        const isAlreadyActive =
+          activeJobs.some(
+            (activeJob) =>
+              String(
+                activeJob.jobId ||
+                activeJob.id ||
+                ""
+              ) ===
+                String(jobId) ||
+              String(
+                activeJob.jobReference ||
+                activeJob.reference ||
+                ""
+              ) ===
+                String(jobReference)
+          );
+
+        return !isAlreadyActive;
+      }
+    ).length;
+
+  availableJobsCount.textContent =
+    String(
+      availableJobTotal
+    );
+}
 
 
     if (submittedQuotesCount) {
@@ -2252,11 +2345,15 @@ article
 
 
     if (jobsWonCount) {
-      jobsWonCount.textContent =
-        String(
-          activeJobs.length
-        );
-    }
+
+  const jobsWon =
+    getProfessionalJobsWon();
+
+  jobsWonCount.textContent =
+    String(
+      jobsWon.length
+    );
+}
 
   }
 
