@@ -228,7 +228,48 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(
       "infoModalIcon"
     );
+  /* =========================
+   Review Modal Elements
+   ========================= */
 
+const reviewModal =
+  document.getElementById(
+    "reviewModal"
+  );
+
+const closeReviewModalButton =
+  document.getElementById(
+    "closeReviewModalButton"
+  );
+
+const cancelReviewButton =
+  document.getElementById(
+    "cancelReviewButton"
+  );
+
+const submitReviewButton =
+  document.getElementById(
+    "submitReviewButton"
+  );
+
+const reviewProfessionalText =
+  document.getElementById(
+    "reviewProfessionalText"
+  );
+
+const reviewComment =
+  document.getElementById(
+    "reviewComment"
+  );
+
+const reviewStars =
+  document.querySelectorAll(
+    ".review-star"
+  );
+
+let selectedReviewRating = 0;
+
+let shouldOpenReviewAfterInfo = false;
 
   function openInfoModal({
     eyebrow = "KORVO",
@@ -327,7 +368,280 @@ document.addEventListener("DOMContentLoaded", () => {
       "modal-open"
     );
   }
+  /* =========================
+   Review Modal Functions
+   ========================= */
 
+function openReviewModal() {
+  if (!reviewModal) {
+    return;
+  }
+
+  const pendingReview =
+    safelyReadLocalStorage(
+      "korvoPendingReview",
+      null
+    );
+
+  if (!pendingReview) {
+    openInfoModal({
+      eyebrow: "REVIEW",
+      title: "No Review Pending",
+      message:
+        "There is no completed job waiting for a review right now."
+    });
+
+    return;
+  }
+
+  selectedReviewRating = 0;
+
+  reviewStars.forEach(
+    (star) => {
+      star.classList.remove(
+        "active"
+      );
+    }
+  );
+
+  if (reviewComment) {
+    reviewComment.value = "";
+  }
+
+  if (reviewProfessionalText) {
+    reviewProfessionalText.textContent =
+      `How was your experience with ${pendingReview.professional} on "${pendingReview.jobTitle}"?`;
+  }
+
+  reviewModal.classList.remove(
+    "hidden"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
+}
+
+
+function closeReviewModal() {
+  if (!reviewModal) {
+    return;
+  }
+
+  reviewModal.classList.add(
+    "hidden"
+  );
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+}
+
+
+reviewStars.forEach(
+  (star) => {
+    star.addEventListener(
+      "click",
+      () => {
+
+        selectedReviewRating =
+          Number(
+            star.dataset.rating || 0
+          );
+
+        reviewStars.forEach(
+          (reviewStar) => {
+            const rating =
+              Number(
+                reviewStar.dataset.rating || 0
+              );
+
+            reviewStar.classList.toggle(
+              "active",
+              rating <=
+              selectedReviewRating
+            );
+          }
+        );
+
+      }
+    );
+  }
+);
+
+
+closeReviewModalButton
+  ?.addEventListener(
+    "click",
+    closeReviewModal
+  );
+
+
+cancelReviewButton
+  ?.addEventListener(
+    "click",
+    closeReviewModal
+  );
+
+
+reviewModal
+  ?.addEventListener(
+    "click",
+    (event) => {
+      if (
+        event.target ===
+        reviewModal
+      ) {
+        closeReviewModal();
+      }
+    }
+  );
+  submitReviewButton
+  ?.addEventListener(
+    "click",
+    () => {
+
+      if (
+        selectedReviewRating === 0
+      ) {
+        alert(
+          "Please choose a star rating before submitting your review."
+        );
+
+        return;
+      }
+
+
+      const pendingReview =
+        safelyReadLocalStorage(
+          "korvoPendingReview",
+          null
+        );
+
+
+      if (!pendingReview) {
+        closeReviewModal();
+
+        openInfoModal({
+          eyebrow: "REVIEW ERROR",
+
+          title: "Review Not Found",
+
+          message:
+            "Korvo could not find the completed job connected to this review."
+        });
+
+        return;
+      }
+
+
+      const reviews =
+        safelyReadLocalStorage(
+          "korvoReviews",
+          []
+        );
+
+
+      const reviewList =
+        Array.isArray(reviews)
+          ? reviews
+          : [];
+
+
+      reviewList.push({
+        id:
+          `review-${Date.now()}`,
+
+        jobId:
+          pendingReview.jobId ||
+          "",
+
+        jobReference:
+          pendingReview.jobReference ||
+          "",
+
+        jobTitle:
+          pendingReview.jobTitle ||
+          "Completed Korvo Job",
+
+        professional:
+          pendingReview.professional ||
+          "Korvo Professional",
+
+        rating:
+          selectedReviewRating,
+
+        comment:
+          reviewComment
+            ? reviewComment.value.trim()
+            : "",
+
+        createdAt:
+          new Date().toISOString()
+      });
+
+
+      safelyWriteLocalStorage(
+        "korvoReviews",
+        reviewList
+      );
+
+
+      localStorage.removeItem(
+        "korvoPendingReview"
+      );
+
+
+      const reviewedProfessional =
+        pendingReview.professional ||
+        "this professional";
+
+
+      closeReviewModal();
+
+
+      openInfoModal({
+        eyebrow:
+          "REVIEW SUBMITTED",
+
+        title:
+          "Thank You!",
+
+        message:
+          `Your review for ${reviewedProfessional} has been submitted.`,
+
+        success:
+          true,
+
+        details: [
+          {
+            label:
+              "Rating",
+
+            value:
+              `${selectedReviewRating} out of 5 stars`
+          },
+
+          {
+            label:
+              "Professional",
+
+            value:
+              reviewedProfessional
+          },
+
+          {
+            label:
+              "Status",
+
+            value:
+              "Review submitted"
+          }
+        ]
+      });
+
+    }
+  );
 
   function showDemoMessage(message) {
     openInfoModal({
@@ -340,28 +654,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   closeInfoModalButton
-    ?.addEventListener(
-      "click",
-      closeInfoModal
-    );
+  ?.addEventListener(
+    "click",
+    () => {
+      shouldOpenReviewAfterInfo =
+        false;
+
+      closeInfoModal();
+    }
+  );
 
   infoModalDoneButton
-    ?.addEventListener(
-      "click",
-      closeInfoModal
-    );
-
-  infoModal?.addEventListener(
+  ?.addEventListener(
     "click",
-    (event) => {
+    () => {
+      closeInfoModal();
+
       if (
-        event.target === infoModal
+        shouldOpenReviewAfterInfo
       ) {
-        closeInfoModal();
+        shouldOpenReviewAfterInfo =
+          false;
+
+        openReviewModal();
       }
     }
   );
 
+  infoModal?.addEventListener(
+  "click",
+  (event) => {
+    if (
+      event.target === infoModal
+    ) {
+      shouldOpenReviewAfterInfo =
+        false;
+
+      closeInfoModal();
+    }
+  }
+);
 
   /* =========================
      Mobile Navigation
@@ -1412,39 +1744,53 @@ if (acceptedQuote) {
      ========================= */
 
   document.addEventListener(
-    "keydown",
-    (event) => {
+  "keydown",
+  (event) => {
 
-      if (
-        event.key !== "Escape"
-      ) {
-        return;
-      }
-
-
-      if (
-        acceptQuoteModal &&
-        !acceptQuoteModal
-          .classList.contains(
-            "hidden"
-          )
-      ) {
-        closeAcceptModal();
-      }
-
-
-      if (
-        infoModal &&
-        !infoModal
-          .classList.contains(
-            "hidden"
-          )
-      ) {
-        closeInfoModal();
-      }
-
+    if (
+      event.key !== "Escape"
+    ) {
+      return;
     }
-  );
+
+
+    if (
+      acceptQuoteModal &&
+      !acceptQuoteModal
+        .classList.contains(
+          "hidden"
+        )
+    ) {
+      closeAcceptModal();
+    }
+
+
+    if (
+      reviewModal &&
+      !reviewModal
+        .classList.contains(
+          "hidden"
+        )
+    ) {
+      closeReviewModal();
+    }
+
+
+    if (
+      infoModal &&
+      !infoModal
+        .classList.contains(
+          "hidden"
+        )
+    ) {
+      shouldOpenReviewAfterInfo =
+        false;
+
+      closeInfoModal();
+    }
+
+  }
+);
 
 
   /* =========================
@@ -1572,19 +1918,21 @@ if (acceptedQuote) {
         () => {
 
           const action =
-            button.dataset
-              .jobAction;
+  button.dataset
+    .jobAction;
 
-          const messages = {
-            view:
-              "A full job-details page will be added later.",
+if (action === "review") {
+  openReviewModal();
+  return;
+}
 
-            quotes:
-              "The complete quote comparison screen will be added later.",
+const messages = {
+  view:
+    "A full job-details page will be added later.",
 
-            review:
-              "The customer review form will be built after messaging."
-          };
+  quotes:
+    "The complete quote comparison screen will be added later."
+};
 
           showDemoMessage(
             messages[action] ||
@@ -2314,6 +2662,29 @@ article
       article.remove();
 
       loadDashboardStats();
+    safelyWriteLocalStorage(
+  "korvoPendingReview",
+  {
+    jobId:
+      job.id ||
+      job.jobId ||
+      "",
+
+    jobReference:
+      reference,
+
+    jobTitle:
+      title,
+
+    professional:
+      professional,
+
+    completedAt:
+      new Date().toISOString()
+  }
+);
+
+    shouldOpenReviewAfterInfo = true;
 
       openInfoModal({
         eyebrow: "JOB COMPLETED",
@@ -2339,9 +2710,9 @@ article
             value: reference
           },
           {
-            label: "Status",
-            value: "Completed"
-          }
+  label: "Next Step",
+  value: "Leave a review for this professional"
+}
         ]
       });
 

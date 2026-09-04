@@ -1749,6 +1749,200 @@ textarea {
   }
 }
 /* =========================
+   Customer Review Modal
+   ========================= */
+
+.info-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+
+  padding: 22px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(1, 7, 13, 0.82);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.info-modal-card {
+  position: relative;
+
+  width: min(560px, 100%);
+  padding: 32px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(16, 34, 52, 0.99),
+      rgba(8, 24, 38, 0.99)
+    );
+
+  border: 1px solid rgba(148, 184, 218, 0.18);
+  border-radius: 24px;
+
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.55);
+
+  text-align: center;
+}
+
+.info-modal-close {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  width: 37px;
+  height: 37px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255, 255, 255, 0.055);
+  color: white;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  font-size: 1.3rem;
+}
+
+.info-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.info-modal-icon {
+  width: 62px;
+  height: 62px;
+
+  margin: 0 auto 16px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 19px;
+
+  background: rgba(255, 212, 92, 0.1);
+  color: var(--gold);
+
+  border: 1px solid rgba(255, 212, 92, 0.2);
+
+  font-size: 1.6rem;
+}
+
+.info-modal-eyebrow {
+  color: var(--primary);
+
+  font-size: 0.76rem;
+  font-weight: 850;
+
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.info-modal-card h2 {
+  margin-top: 5px;
+
+  color: white;
+
+  font-size: 1.7rem;
+}
+
+#reviewProfessionalText {
+  margin-top: 8px;
+
+  color: var(--muted);
+}
+
+.review-stars {
+  margin-top: 22px;
+
+  display: flex;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.review-star {
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.2);
+
+  font-size: 2rem;
+
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.review-star:hover {
+  color: var(--gold);
+  transform: scale(1.1);
+}
+
+.review-star.active {
+  color: var(--gold);
+}
+
+#reviewComment {
+  width: 100%;
+  min-height: 125px;
+
+  margin-top: 22px;
+  padding: 14px 16px;
+
+  resize: vertical;
+
+  background: rgba(255, 255, 255, 0.035);
+  color: white;
+
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+#reviewComment::placeholder {
+  color: var(--muted);
+}
+
+#reviewComment:focus {
+  border-color: rgba(56, 217, 150, 0.45);
+
+  box-shadow:
+    0 0 0 3px rgba(56, 217, 150, 0.08);
+}
+
+.info-modal-actions {
+  margin-top: 22px;
+
+  display: flex;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+
+  .info-modal-card {
+    padding: 28px 20px;
+  }
+
+  .review-star {
+    font-size: 1.7rem;
+  }
+
+  .info-modal-actions {
+    flex-direction: column;
+  }
+
+  .info-modal-actions button {
+    width: 100%;
+  }
+}
+/* =========================
    Quote Status Colors
    ========================= */
 
