@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Create your professional profile on Korvo."
+  />
+
+  <title>Professional Onboarding | Korvo</title>
+
+  <link
+    rel="stylesheet"
+    href="professional-onboarding.css"
+  />
+</head>
+
+<body>
+
+  <header class="onboarding-header">
+    <a href="index.html" class="brand">
+      KORVO
+    </a>
+
+    <span class="step-label">
+      Professional Setup
+    </span>
+  </header>
+
+
+  <main class="onboarding-main">
+
+    <section class="onboarding-card">
+
+      <p class="eyebrow">
+        JOIN KORVO AS A PRO
+      </p>
+
+      <h1>
+        Build Your Professional Profile
+      </h1>
+
+      <p class="intro-text">
+        Tell Korvo what you do, where you work,
+        and what types of jobs you want to take on.
+        You’ll still be able to browse all local opportunities.
+      </p>
+
+
+      <form id="professionalOnboardingForm">
+
+        <div class="form-section">
+
+          <h2>
+            Basic Information
+          </h2>
+
+          <div class="form-grid">
+
+            <label>
+              Full Name
+
+              <input
+                type="text"
+                id="professionalName"
+                required
+                placeholder="Your full name"
+              />
+            </label>
+
+
+            <label>
+              Business Name
+
+              <input
+                type="text"
+                id="businessName"
+                placeholder="Optional"
+              />
+            </label>
+
+
+            <label>
+              Phone Number
+
+              <input
+                type="tel"
+                id="professionalPhone"
+                required
+                placeholder="(404) 555-0123"
+              />
+            </label>
+
+
+            <label>
+              Email Address
+
+              <input
+                type="email"
+                id="professionalEmail"
+                required
+                placeholder="you@example.com"
+              />
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <h2>
+            What Services Do You Offer?
+          </h2>
+
+          <p class="section-description">
+            Choose everything you’re comfortable doing.
+            You can update this later.
+          </p>
+
+          <div class="option-grid">
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="window treatments"
+              />
+
+              <span>
+                Window Treatments
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="painting"
+              />
+
+              <span>
+                Painting
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="cleaning"
+              />
+
+              <span>
+                Cleaning
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="moving"
+              />
+
+              <span>
+                Moving
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="landscaping"
+              />
+
+              <span>
+                Landscaping
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="handyman"
+              />
+
+              <span>
+                Handyman
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="electrical"
+              />
+
+              <span>
+                Electrical
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="services"
+                value="plumbing"
+              />
+
+              <span>
+                Plumbing
+              </span>
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <h2>
+            Preferred Service Areas
+          </h2>
+
+          <p class="section-description">
+            These help Korvo recommend nearby jobs first.
+            They will not prevent you from viewing other opportunities.
+          </p>
+
+          <div class="option-grid">
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="areas"
+                value="Atlanta"
+              />
+
+              <span>
+                Atlanta
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="areas"
+                value="Buckhead"
+              />
+
+              <span>
+                Buckhead
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="areas"
+                value="Brookhaven"
+              />
+
+              <span>
+                Brookhaven
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="areas"
+                value="Chamblee"
+              />
+
+              <span>
+                Chamblee
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="areas"
+                value="Sandy Springs"
+              />
+
+              <span>
+                Sandy Springs
+              </span>
+            </label>
+
+
+            <label class="option-card">
+              <input
+                type="checkbox"
+                name="areas"
+                value="Dunwoody"
+              />
+
+              <span>
+                Dunwoody
+              </span>
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <h2>
+            Experience
+          </h2>
+
+          <div class="form-grid">
+
+            <label>
+              Years of Experience
+
+              <select
+                id="experienceYears"
+                required
+              >
+                <option value="">
+                  Select experience
+                </option>
+
+                <option value="less-than-1">
+                  Less than 1 year
+                </option>
+
+                <option value="1-2">
+                  1–2 years
+                </option>
+
+                <option value="3-5">
+                  3–5 years
+                </option>
+
+                <option value="6-10">
+                  6–10 years
+                </option>
+
+                <option value="10-plus">
+                  10+ years
+                </option>
+              </select>
+            </label>
+
+
+            <label>
+              Typical Availability
+
+              <select
+                id="professionalAvailability"
+                required
+              >
+                <option value="">
+                  Select availability
+                </option>
+
+                <option value="weekdays">
+                  Weekdays
+                </option>
+
+                <option value="evenings">
+                  Evenings
+                </option>
+
+                <option value="weekends">
+                  Weekends
+                </option>
+
+                <option value="flexible">
+                  Flexible
+                </option>
+              </select>
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <h2>
+            Tell Customers About Your Work
+          </h2>
+
+          <label>
+            Professional Bio
+
+            <textarea
+              id="professionalBio"
+              rows="6"
+              maxlength="600"
+              placeholder="Describe your experience, specialties, and what customers can expect when hiring you."
+            ></textarea>
+          </label>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <a
+            href="index.html"
+            class="secondary-button"
+          >
+            Back
+          </a>
+
+          <button
+            type="submit"
+            class="primary-button"
+          >
+            Continue
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </main>
+
+
+  <script src="professional-onboarding.js"></script>
+
+</body>
+</html>
