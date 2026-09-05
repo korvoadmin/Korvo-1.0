@@ -364,7 +364,64 @@ span::before {
 #serviceSearch {
   width: 100%;
 }
+/* =========================
+   Custom Service
+   ========================= */
 
+.custom-service-option {
+  margin-top: 14px;
+}
+
+.suggest-service-button {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.suggest-service-button:hover {
+  background: var(--card-soft);
+  color: var(--text);
+  border-color: rgba(39, 211, 194, 0.45);
+}
+
+.custom-service-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.custom-service-form.hidden {
+  display: none;
+}
+
+.custom-service-form input {
+  flex: 1;
+}
+
+.custom-service-form .primary-button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .custom-service-form {
+    flex-direction: column;
+  }
+
+  .custom-service-form .primary-button {
+    width: 100%;
+  }
+}
 .service-search-results {
   margin-top: 10px;
   border: 1px solid var(--border);

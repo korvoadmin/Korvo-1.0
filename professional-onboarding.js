@@ -17,7 +17,25 @@ const selectedServicesContainer =
   document.getElementById(
     "selectedServices"
   );
+const suggestServiceButton =
+  document.getElementById(
+    "suggestServiceButton"
+  );
 
+const customServiceForm =
+  document.getElementById(
+    "customServiceForm"
+  );
+
+const customServiceInput =
+  document.getElementById(
+    "customServiceInput"
+  );
+
+const addCustomServiceButton =
+  document.getElementById(
+    "addCustomServiceButton"
+  );
 const selectedServices = [];
 
 const serviceCatalog = [
@@ -606,7 +624,73 @@ document.addEventListener(
     }
   }
 );
+suggestServiceButton?.addEventListener(
+  "click",
+  () => {
+    customServiceForm?.classList.toggle(
+      "hidden"
+    );
 
+    if (
+      !customServiceForm?.classList.contains(
+        "hidden"
+      )
+    ) {
+      customServiceInput?.focus();
+    }
+  }
+);
+
+function addCustomService() {
+  const customService =
+    customServiceInput?.value.trim();
+
+  if (!customService) {
+    return;
+  }
+
+  const alreadySelected =
+    selectedServices.some(
+      (service) =>
+        service.toLowerCase() ===
+        customService.toLowerCase()
+    );
+
+  if (alreadySelected) {
+    alert(
+      "You already selected that service."
+    );
+
+    return;
+  }
+
+  selectedServices.push(
+    customService
+  );
+
+  customServiceInput.value = "";
+
+  customServiceForm?.classList.add(
+    "hidden"
+  );
+
+  renderSelectedServices();
+}
+
+addCustomServiceButton?.addEventListener(
+  "click",
+  addCustomService
+);
+
+customServiceInput?.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addCustomService();
+    }
+  }
+);
 professionalOnboardingForm?.addEventListener(
   "submit",
   (event) => {
