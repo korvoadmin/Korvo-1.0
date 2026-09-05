@@ -21,125 +21,371 @@ const selectedServicesContainer =
 const selectedServices = [];
 
 const serviceCatalog = [
-  { name: "Window Treatments", category: "Home Services" },
-  { name: "Blind Installation", category: "Home Services" },
-  { name: "Curtain Installation", category: "Home Services" },
-  { name: "Handyman", category: "Home Services" },
-  { name: "Furniture Assembly", category: "Home Services" },
-  { name: "TV Mounting", category: "Home Services" },
-  { name: "Painting", category: "Home Services" },
-  { name: "Interior Painting", category: "Home Services" },
-  { name: "Exterior Painting", category: "Home Services" },
-  { name: "Drywall Repair", category: "Home Services" },
-  { name: "Carpentry", category: "Home Services" },
-  { name: "Flooring Installation", category: "Home Services" },
-  { name: "Tile Installation", category: "Home Services" },
-  { name: "Cabinet Installation", category: "Home Services" },
-  { name: "Appliance Installation", category: "Home Services" },
-  { name: "Pressure Washing", category: "Home Services" },
-  { name: "Gutter Cleaning", category: "Home Services" },
-  { name: "Roof Repair", category: "Home Services" },
-  { name: "Plumbing", category: "Home Services" },
-  { name: "Electrical", category: "Home Services" },
-  { name: "HVAC", category: "Home Services" },
-  { name: "Locksmith", category: "Home Services" },
+
+  // =========================
+  // Handyman & Home Help
+  // =========================
+
+  { name: "Handyman", category: "Handyman & Home" },
+  { name: "Furniture Assembly", category: "Handyman & Home" },
+  { name: "IKEA Furniture Assembly", category: "Handyman & Home" },
+  { name: "TV Mounting", category: "Handyman & Home" },
+  { name: "Shelf Installation", category: "Handyman & Home" },
+  { name: "Picture Hanging", category: "Handyman & Home" },
+  { name: "Mirror Installation", category: "Handyman & Home" },
+  { name: "Curtain Installation", category: "Handyman & Home" },
+  { name: "Curtain Rod Installation", category: "Handyman & Home" },
+  { name: "Blind Installation", category: "Handyman & Home" },
+  { name: "Window Treatment Installation", category: "Handyman & Home" },
+  { name: "Door Repair", category: "Handyman & Home" },
+  { name: "Door Installation", category: "Handyman & Home" },
+  { name: "Interior Door Installation", category: "Handyman & Home" },
+  { name: "Screen Door Repair", category: "Handyman & Home" },
+  { name: "Cabinet Hardware Installation", category: "Handyman & Home" },
+  { name: "Cabinet Installation", category: "Handyman & Home" },
+  { name: "Minor Home Repairs", category: "Handyman & Home" },
+  { name: "Caulking", category: "Handyman & Home" },
+  { name: "Weatherstripping", category: "Handyman & Home" },
+  { name: "Childproofing", category: "Handyman & Home" },
+  { name: "Home Organization", category: "Handyman & Home" },
+  { name: "Closet Organization", category: "Handyman & Home" },
+  { name: "Garage Organization", category: "Handyman & Home" },
+
+  // =========================
+  // Painting & Walls
+  // =========================
+
+  { name: "Interior Painting", category: "Painting & Walls" },
+  { name: "Exterior Painting", category: "Painting & Walls" },
+  { name: "Room Painting", category: "Painting & Walls" },
+  { name: "Accent Wall Painting", category: "Painting & Walls" },
+  { name: "Cabinet Painting", category: "Painting & Walls" },
+  { name: "Fence Painting", category: "Painting & Walls" },
+  { name: "Deck Painting", category: "Painting & Walls" },
+  { name: "Drywall Repair", category: "Painting & Walls" },
+  { name: "Drywall Patching", category: "Painting & Walls" },
+  { name: "Hole Repair", category: "Painting & Walls" },
+  { name: "Wallpaper Installation", category: "Painting & Walls" },
+  { name: "Wallpaper Removal", category: "Painting & Walls" },
+
+  // =========================
+  // Cleaning
+  // =========================
 
   { name: "Home Cleaning", category: "Cleaning" },
+  { name: "House Cleaning", category: "Cleaning" },
+  { name: "Apartment Cleaning", category: "Cleaning" },
   { name: "Deep Cleaning", category: "Cleaning" },
   { name: "Move-In Cleaning", category: "Cleaning" },
   { name: "Move-Out Cleaning", category: "Cleaning" },
+  { name: "Airbnb Cleaning", category: "Cleaning" },
+  { name: "Vacation Rental Cleaning", category: "Cleaning" },
   { name: "Office Cleaning", category: "Cleaning" },
-  { name: "Carpet Cleaning", category: "Cleaning" },
-  { name: "Upholstery Cleaning", category: "Cleaning" },
-  { name: "Window Cleaning", category: "Cleaning" },
+  { name: "Kitchen Cleaning", category: "Cleaning" },
+  { name: "Bathroom Cleaning", category: "Cleaning" },
+  { name: "Garage Cleaning", category: "Cleaning" },
   { name: "Post-Construction Cleaning", category: "Cleaning" },
+  { name: "Window Cleaning", category: "Cleaning" },
+  { name: "Carpet Cleaning", category: "Cleaning" },
+  { name: "Rug Cleaning", category: "Cleaning" },
+  { name: "Upholstery Cleaning", category: "Cleaning" },
+  { name: "Couch Cleaning", category: "Cleaning" },
+  { name: "Mattress Cleaning", category: "Cleaning" },
+  { name: "Pressure Washing", category: "Cleaning" },
+  { name: "Driveway Cleaning", category: "Cleaning" },
+  { name: "Patio Cleaning", category: "Cleaning" },
+  { name: "Trash Bin Cleaning", category: "Cleaning" },
 
-  { name: "Lawn Care", category: "Outdoor Services" },
-  { name: "Landscaping", category: "Outdoor Services" },
-  { name: "Tree Trimming", category: "Outdoor Services" },
-  { name: "Leaf Removal", category: "Outdoor Services" },
-  { name: "Snow Removal", category: "Outdoor Services" },
-  { name: "Fence Installation", category: "Outdoor Services" },
-  { name: "Deck Repair", category: "Outdoor Services" },
-  { name: "Pool Cleaning", category: "Outdoor Services" },
-  { name: "Junk Removal", category: "Outdoor Services" },
+  // =========================
+  // Lawn & Outdoor
+  // =========================
+
+  { name: "Lawn Mowing", category: "Lawn & Outdoor" },
+  { name: "Lawn Care", category: "Lawn & Outdoor" },
+  { name: "Landscaping", category: "Lawn & Outdoor" },
+  { name: "Weed Removal", category: "Lawn & Outdoor" },
+  { name: "Leaf Removal", category: "Lawn & Outdoor" },
+  { name: "Yard Cleanup", category: "Lawn & Outdoor" },
+  { name: "Bush Trimming", category: "Lawn & Outdoor" },
+  { name: "Hedge Trimming", category: "Lawn & Outdoor" },
+  { name: "Small Tree Trimming", category: "Lawn & Outdoor" },
+  { name: "Mulching", category: "Lawn & Outdoor" },
+  { name: "Garden Help", category: "Lawn & Outdoor" },
+  { name: "Planting", category: "Lawn & Outdoor" },
+  { name: "Flower Bed Maintenance", category: "Lawn & Outdoor" },
+  { name: "Gutter Cleaning", category: "Lawn & Outdoor" },
+  { name: "Fence Repair", category: "Lawn & Outdoor" },
+  { name: "Deck Cleaning", category: "Lawn & Outdoor" },
+  { name: "Deck Staining", category: "Lawn & Outdoor" },
+  { name: "Pool Cleaning", category: "Lawn & Outdoor" },
+  { name: "Junk Removal", category: "Lawn & Outdoor" },
+  { name: "Brush Removal", category: "Lawn & Outdoor" },
+
+  // =========================
+  // Moving & Muscle
+  // =========================
+
+  { name: "Moving Help", category: "Moving & Labor" },
+  { name: "Local Moving", category: "Moving & Labor" },
+  { name: "Furniture Moving", category: "Moving & Labor" },
+  { name: "Loading Help", category: "Moving & Labor" },
+  { name: "Unloading Help", category: "Moving & Labor" },
+  { name: "Packing Help", category: "Moving & Labor" },
+  { name: "Unpacking Help", category: "Moving & Labor" },
+  { name: "Heavy Lifting", category: "Moving & Labor" },
+  { name: "General Labor", category: "Moving & Labor" },
+  { name: "Garage Cleanout", category: "Moving & Labor" },
+  { name: "Basement Cleanout", category: "Moving & Labor" },
+  { name: "Storage Unit Cleanout", category: "Moving & Labor" },
+  { name: "Junk Hauling", category: "Moving & Labor" },
+  { name: "Furniture Delivery", category: "Moving & Labor" },
+  { name: "Appliance Moving", category: "Moving & Labor" },
+
+  // =========================
+  // Delivery & Errands
+  // =========================
+
+  { name: "Local Delivery", category: "Delivery & Errands" },
+  { name: "Package Delivery", category: "Delivery & Errands" },
+  { name: "Furniture Pickup", category: "Delivery & Errands" },
+  { name: "Store Pickup", category: "Delivery & Errands" },
+  { name: "Grocery Shopping", category: "Delivery & Errands" },
+  { name: "Grocery Delivery", category: "Delivery & Errands" },
+  { name: "Errand Running", category: "Delivery & Errands" },
+  { name: "Personal Shopper", category: "Delivery & Errands" },
+  { name: "Prescription Pickup", category: "Delivery & Errands" },
+  { name: "Courier Service", category: "Delivery & Errands" },
+
+  // =========================
+  // Pet Services
+  // =========================
 
   { name: "Dog Walking", category: "Pet Services" },
   { name: "Pet Sitting", category: "Pet Services" },
   { name: "Dog Sitting", category: "Pet Services" },
   { name: "Cat Sitting", category: "Pet Services" },
+  { name: "House & Pet Sitting", category: "Pet Services" },
+  { name: "Pet Feeding", category: "Pet Services" },
   { name: "Pet Boarding", category: "Pet Services" },
+  { name: "Dog Boarding", category: "Pet Services" },
   { name: "Dog Training", category: "Pet Services" },
+  { name: "Basic Puppy Training", category: "Pet Services" },
   { name: "Pet Grooming", category: "Pet Services" },
+  { name: "Dog Grooming", category: "Pet Services" },
+  { name: "Mobile Pet Grooming", category: "Pet Services" },
   { name: "Pet Waste Cleanup", category: "Pet Services" },
+  { name: "Pet Transportation", category: "Pet Services" },
 
-  { name: "Bartender", category: "Events" },
-  { name: "Event Planning", category: "Events" },
-  { name: "Wedding Planning", category: "Events" },
-  { name: "Party Planning", category: "Events" },
-  { name: "Event Setup", category: "Events" },
-  { name: "Event Cleanup", category: "Events" },
-  { name: "Server", category: "Events" },
-  { name: "Catering", category: "Events" },
-  { name: "Private Chef", category: "Events" },
-  { name: "DJ", category: "Events" },
-  { name: "MC / Host", category: "Events" },
-  { name: "Event Decorator", category: "Events" },
-  { name: "Balloon Decor", category: "Events" },
-  { name: "Wedding Decor", category: "Events" },
-  { name: "Photography", category: "Events" },
-  { name: "Videography", category: "Events" },
-  { name: "Photo Booth", category: "Events" },
+  // =========================
+  // Events & Parties
+  // =========================
 
-  { name: "Moving", category: "Moving & Labor" },
-  { name: "Loading Help", category: "Moving & Labor" },
-  { name: "Unloading Help", category: "Moving & Labor" },
-  { name: "Packing Help", category: "Moving & Labor" },
-  { name: "Delivery Help", category: "Moving & Labor" },
-  { name: "General Labor", category: "Moving & Labor" },
-  { name: "Furniture Moving", category: "Moving & Labor" },
-  { name: "Hauling", category: "Moving & Labor" },
+  { name: "Bartender", category: "Events & Parties" },
+  { name: "Mobile Bartender", category: "Events & Parties" },
+  { name: "Event Planning", category: "Events & Parties" },
+  { name: "Party Planning", category: "Events & Parties" },
+  { name: "Wedding Planning", category: "Events & Parties" },
+  { name: "Wedding Coordinator", category: "Events & Parties" },
+  { name: "Day-Of Wedding Coordinator", category: "Events & Parties" },
+  { name: "Birthday Party Setup", category: "Events & Parties" },
+  { name: "Event Setup", category: "Events & Parties" },
+  { name: "Event Cleanup", category: "Events & Parties" },
+  { name: "Event Staff", category: "Events & Parties" },
+  { name: "Waitstaff", category: "Events & Parties" },
+  { name: "Server", category: "Events & Parties" },
+  { name: "Party Host", category: "Events & Parties" },
+  { name: "MC / Host", category: "Events & Parties" },
+  { name: "DJ", category: "Events & Parties" },
+  { name: "Karaoke Host", category: "Events & Parties" },
+  { name: "Live Music", category: "Events & Parties" },
+  { name: "Party Decorator", category: "Events & Parties" },
+  { name: "Event Decorator", category: "Events & Parties" },
+  { name: "Balloon Decor", category: "Events & Parties" },
+  { name: "Balloon Artist", category: "Events & Parties" },
+  { name: "Backdrop Setup", category: "Events & Parties" },
+  { name: "Table & Chair Setup", category: "Events & Parties" },
+  { name: "Photo Booth Attendant", category: "Events & Parties" },
+  { name: "Face Painting", category: "Events & Parties" },
+  { name: "Party Cleanup", category: "Events & Parties" },
+
+  // =========================
+  // Food & Hospitality
+  // =========================
+
+  { name: "Catering", category: "Food & Hospitality" },
+  { name: "Catering Assistant", category: "Food & Hospitality" },
+  { name: "Private Chef", category: "Food & Hospitality" },
+  { name: "Personal Chef", category: "Food & Hospitality" },
+  { name: "Meal Prep", category: "Food & Hospitality" },
+  { name: "Party Food Preparation", category: "Food & Hospitality" },
+  { name: "Cake Decorating", category: "Food & Hospitality" },
+  { name: "Baking", category: "Food & Hospitality" },
+  { name: "Dessert Catering", category: "Food & Hospitality" },
+  { name: "BBQ Catering", category: "Food & Hospitality" },
+  { name: "Bartending Assistant", category: "Food & Hospitality" },
+
+  // =========================
+  // Photography & Creative
+  // =========================
+
+  { name: "Photography", category: "Photography & Creative" },
+  { name: "Portrait Photography", category: "Photography & Creative" },
+  { name: "Family Photography", category: "Photography & Creative" },
+  { name: "Event Photography", category: "Photography & Creative" },
+  { name: "Wedding Photography", category: "Photography & Creative" },
+  { name: "Real Estate Photography", category: "Photography & Creative" },
+  { name: "Product Photography", category: "Photography & Creative" },
+  { name: "Car Photography", category: "Photography & Creative" },
+  { name: "Videography", category: "Photography & Creative" },
+  { name: "Video Editing", category: "Photography & Creative" },
+  { name: "Drone Photography", category: "Photography & Creative" },
+  { name: "Content Creation", category: "Photography & Creative" },
+  { name: "Graphic Design", category: "Photography & Creative" },
+  { name: "Flyer Design", category: "Photography & Creative" },
+  { name: "Logo Design", category: "Photography & Creative" },
+
+  // =========================
+  // Automotive
+  // =========================
 
   { name: "Mobile Car Wash", category: "Automotive" },
   { name: "Car Detailing", category: "Automotive" },
   { name: "Mobile Detailing", category: "Automotive" },
+  { name: "Interior Car Cleaning", category: "Automotive" },
+  { name: "Headlight Restoration", category: "Automotive" },
   { name: "Mobile Mechanic", category: "Automotive" },
   { name: "Oil Change", category: "Automotive" },
   { name: "Battery Replacement", category: "Automotive" },
-  { name: "Brake Service", category: "Automotive" },
+  { name: "Battery Jump Start", category: "Automotive" },
+  { name: "Brake Pad Replacement", category: "Automotive" },
   { name: "Tire Change", category: "Automotive" },
+  { name: "Flat Tire Help", category: "Automotive" },
+  { name: "Mobile Tire Service", category: "Automotive" },
   { name: "Roadside Assistance", category: "Automotive" },
+  { name: "Car Audio Installation", category: "Automotive" },
+  { name: "Dash Cam Installation", category: "Automotive" },
   { name: "Window Tinting", category: "Automotive" },
+  { name: "Vehicle Wrap Installation", category: "Automotive" },
 
-  { name: "Hair Stylist", category: "Beauty & Personal Care" },
-  { name: "Barber", category: "Beauty & Personal Care" },
-  { name: "Makeup Artist", category: "Beauty & Personal Care" },
-  { name: "Nail Technician", category: "Beauty & Personal Care" },
-  { name: "Braiding", category: "Beauty & Personal Care" },
-  { name: "Massage", category: "Beauty & Personal Care" },
-  { name: "Personal Trainer", category: "Beauty & Personal Care" },
+  // =========================
+  // Beauty & Grooming
+  // =========================
 
-  { name: "Tutoring", category: "Education" },
-  { name: "Math Tutoring", category: "Education" },
-  { name: "English Tutoring", category: "Education" },
-  { name: "Spanish Tutoring", category: "Education" },
-  { name: "Music Lessons", category: "Education" },
-  { name: "Computer Lessons", category: "Education" },
+  { name: "Barber", category: "Beauty & Grooming" },
+  { name: "Mobile Barber", category: "Beauty & Grooming" },
+  { name: "Hair Stylist", category: "Beauty & Grooming" },
+  { name: "Braiding", category: "Beauty & Grooming" },
+  { name: "Loc Maintenance", category: "Beauty & Grooming" },
+  { name: "Hair Extensions", category: "Beauty & Grooming" },
+  { name: "Makeup Artist", category: "Beauty & Grooming" },
+  { name: "Wedding Makeup", category: "Beauty & Grooming" },
+  { name: "Nail Technician", category: "Beauty & Grooming" },
+  { name: "Mobile Nail Technician", category: "Beauty & Grooming" },
+  { name: "Lash Technician", category: "Beauty & Grooming" },
+  { name: "Eyebrow Services", category: "Beauty & Grooming" },
+  { name: "Esthetician", category: "Beauty & Grooming" },
 
-  { name: "Babysitting", category: "Care Services" },
-  { name: "Childcare", category: "Care Services" },
-  { name: "Senior Companion", category: "Care Services" },
-  { name: "Errand Running", category: "Care Services" },
-  { name: "Personal Assistant", category: "Care Services" },
+  // =========================
+  // Fitness & Wellness
+  // =========================
 
-  { name: "Graphic Design", category: "Creative & Business" },
-  { name: "Logo Design", category: "Creative & Business" },
-  { name: "Website Design", category: "Creative & Business" },
-  { name: "Social Media Help", category: "Creative & Business" },
-  { name: "Content Creation", category: "Creative & Business" },
-  { name: "Resume Writing", category: "Creative & Business" },
-  { name: "Translation", category: "Creative & Business" },
-  { name: "Bookkeeping", category: "Creative & Business" }
+  { name: "Personal Trainer", category: "Fitness & Wellness" },
+  { name: "Workout Partner", category: "Fitness & Wellness" },
+  { name: "Running Coach", category: "Fitness & Wellness" },
+  { name: "Yoga Instructor", category: "Fitness & Wellness" },
+  { name: "Dance Instructor", category: "Fitness & Wellness" },
+  { name: "Stretching Coach", category: "Fitness & Wellness" },
+
+  // =========================
+  // Childcare & Household Help
+  // =========================
+
+  { name: "Babysitting", category: "Family & Household" },
+  { name: "Date Night Babysitter", category: "Family & Household" },
+  { name: "Nanny Services", category: "Family & Household" },
+  { name: "Mother's Helper", category: "Family & Household" },
+  { name: "House Sitting", category: "Family & Household" },
+  { name: "Senior Companion", category: "Family & Household" },
+  { name: "Companion Services", category: "Family & Household" },
+  { name: "Personal Assistant", category: "Family & Household" },
+  { name: "Household Assistant", category: "Family & Household" },
+
+  // =========================
+  // Tutoring & Lessons
+  // =========================
+
+  { name: "Tutoring", category: "Tutoring & Lessons" },
+  { name: "Math Tutoring", category: "Tutoring & Lessons" },
+  { name: "English Tutoring", category: "Tutoring & Lessons" },
+  { name: "Spanish Tutoring", category: "Tutoring & Lessons" },
+  { name: "Reading Tutoring", category: "Tutoring & Lessons" },
+  { name: "Homework Help", category: "Tutoring & Lessons" },
+  { name: "GED Tutoring", category: "Tutoring & Lessons" },
+  { name: "Computer Lessons", category: "Tutoring & Lessons" },
+  { name: "Smartphone Lessons", category: "Tutoring & Lessons" },
+  { name: "Music Lessons", category: "Tutoring & Lessons" },
+  { name: "Guitar Lessons", category: "Tutoring & Lessons" },
+  { name: "Piano Lessons", category: "Tutoring & Lessons" },
+  { name: "Singing Lessons", category: "Tutoring & Lessons" },
+  { name: "Dance Lessons", category: "Tutoring & Lessons" },
+
+  // =========================
+  // Tech Help
+  // =========================
+
+  { name: "Computer Help", category: "Technology" },
+  { name: "Computer Repair", category: "Technology" },
+  { name: "Laptop Setup", category: "Technology" },
+  { name: "Printer Setup", category: "Technology" },
+  { name: "Wi-Fi Setup", category: "Technology" },
+  { name: "Smart TV Setup", category: "Technology" },
+  { name: "Streaming Device Setup", category: "Technology" },
+  { name: "Smart Home Setup", category: "Technology" },
+  { name: "Security Camera Setup", category: "Technology" },
+  { name: "Doorbell Camera Installation", category: "Technology" },
+  { name: "Gaming Console Setup", category: "Technology" },
+  { name: "Phone Setup", category: "Technology" },
+  { name: "Data Transfer Help", category: "Technology" },
+  { name: "Website Design", category: "Technology" },
+  { name: "Basic Website Setup", category: "Technology" },
+
+  // =========================
+  // Business & Office Help
+  // =========================
+
+  { name: "Resume Writing", category: "Business Help" },
+  { name: "Resume Editing", category: "Business Help" },
+  { name: "Data Entry", category: "Business Help" },
+  { name: "Virtual Assistant", category: "Business Help" },
+  { name: "Administrative Help", category: "Business Help" },
+  { name: "Bookkeeping", category: "Business Help" },
+  { name: "Translation", category: "Business Help" },
+  { name: "Spanish Translation", category: "Business Help" },
+  { name: "English Translation", category: "Business Help" },
+  { name: "Social Media Help", category: "Business Help" },
+  { name: "Social Media Management", category: "Business Help" },
+  { name: "Product Listing Help", category: "Business Help" },
+  { name: "Inventory Help", category: "Business Help" },
+  { name: "Office Organization", category: "Business Help" },
+
+  // =========================
+  // Seasonal & Miscellaneous
+  // =========================
+
+  { name: "Christmas Light Installation", category: "Seasonal & Misc." },
+  { name: "Christmas Light Removal", category: "Seasonal & Misc." },
+  { name: "Holiday Decorating", category: "Seasonal & Misc." },
+  { name: "Holiday Decoration Removal", category: "Seasonal & Misc." },
+  { name: "Gift Wrapping", category: "Seasonal & Misc." },
+  { name: "Party Rental Setup", category: "Seasonal & Misc." },
+  { name: "Tent Setup", category: "Seasonal & Misc." },
+  { name: "Canopy Setup", category: "Seasonal & Misc." },
+  { name: "Grill Assembly", category: "Seasonal & Misc." },
+  { name: "Trampoline Assembly", category: "Seasonal & Misc." },
+  { name: "Playset Assembly", category: "Seasonal & Misc." },
+  { name: "Bike Assembly", category: "Seasonal & Misc." },
+  { name: "Home Gym Assembly", category: "Seasonal & Misc." }
+
 ];
 
 function getCheckedValues(name) {
