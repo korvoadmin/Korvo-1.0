@@ -114,125 +114,53 @@
         </div>
 
 
-        <div class="form-section">
+        
 
-          <h2>
-            What Services Do You Offer?
-          </h2>
+          <div class="form-section">
 
-          <p class="section-description">
-            Choose everything you’re comfortable doing.
-            You can update this later.
-          </p>
+  <h2>
+    What Services Do You Offer?
+  </h2>
 
-          <div class="option-grid">
+  <p class="section-description">
+    Search and select all the services you provide.
+    You can update these later.
+  </p>
 
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="window treatments"
-              />
+  <div class="service-picker">
 
-              <span>
-                Window Treatments
-              </span>
-            </label>
+    <div class="service-search-wrapper">
+      <input
+        type="text"
+        id="serviceSearch"
+        placeholder="Search services..."
+        autocomplete="off"
+      />
+    </div>
 
+    <div
+      id="serviceSearchResults"
+      class="service-search-results hidden"
+    ></div>
 
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="painting"
-              />
+    <div class="selected-services-section">
+      <p class="selected-services-label">
+        Selected Services
+      </p>
 
-              <span>
-                Painting
-              </span>
-            </label>
+      <div
+        id="selectedServices"
+        class="selected-services"
+      >
+        <span class="no-services-selected">
+          No services selected yet.
+        </span>
+      </div>
+    </div>
 
+  </div>
 
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="cleaning"
-              />
-
-              <span>
-                Cleaning
-              </span>
-            </label>
-
-
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="moving"
-              />
-
-              <span>
-                Moving
-              </span>
-            </label>
-
-
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="landscaping"
-              />
-
-              <span>
-                Landscaping
-              </span>
-            </label>
-
-
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="handyman"
-              />
-
-              <span>
-                Handyman
-              </span>
-            </label>
-
-
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="electrical"
-              />
-
-              <span>
-                Electrical
-              </span>
-            </label>
-
-
-            <label class="option-card">
-              <input
-                type="checkbox"
-                name="services"
-                value="plumbing"
-              />
-
-              <span>
-                Plumbing
-              </span>
-            </label>
-
-          </div>
-
-        </div>
+</div>
 
 
         <div class="form-section">
