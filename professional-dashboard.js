@@ -568,54 +568,31 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   function getCustomerJobs() {
-    try {
-      const savedJobs =
-        JSON.parse(
-          localStorage.getItem(
-            "korvoCustomerJobs"
-          )
-        );
-
-      if (
-        Array.isArray(savedJobs) &&
-        savedJobs.length > 0
-      ) {
-        return savedJobs.map(
-          (job, index) => ({
-            ...job,
-
-            id:
-              job.id ||
-              job.jobId ||
-              `customer-job-${index + 1}`,
-
-            reference:
-              job.reference ||
-              job.jobReference ||
-              job.id ||
-              job.jobId ||
-              `KRV-${String(
-                index + 1
-              ).padStart(
-                4,
-                "0"
-              )}`
-          })
-        );
-      }
-
-      return sampleJobs;
-    } catch (error) {
-      console.error(
-        "Could not load customer jobs:",
-        error
+  try {
+    const savedJobs =
+      JSON.parse(
+        localStorage.getItem(
+          "korvoCustomerJobs"
+        )
       );
 
-      return sampleJobs;
-    }
+    return Array.isArray(savedJobs)
+      ? savedJobs
+      : [];
+
+  } catch (error) {
+    console.error(
+      "Could not load customer jobs:",
+      error
+    );
+
+    
+
+
+
+      return [];
   }
-
-
+}
   function getSubmittedQuotes() {
     try {
       const quotes =
