@@ -494,7 +494,13 @@ document.addEventListener("DOMContentLoaded", () => {
         `Welcome to Korvo, ${firstName}! Your demo account has been created.`
       );
 
-      redirectByAccountType(accountType);
+           if (accountType === "professional") {
+        window.location.href =
+          "professional-onboarding.html";
+      } else {
+        window.location.href =
+          "customer-dashboard.html";
+      }
     }
   );
 
