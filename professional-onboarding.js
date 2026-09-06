@@ -402,7 +402,110 @@ const serviceCatalog = [
   { name: "Trampoline Assembly", category: "Seasonal & Misc." },
   { name: "Playset Assembly", category: "Seasonal & Misc." },
   { name: "Bike Assembly", category: "Seasonal & Misc." },
-  { name: "Home Gym Assembly", category: "Seasonal & Misc." }
+  { name: "Home Gym Assembly", category: "Seasonal & Misc." },
+
+// =========================
+// Plumbing
+// =========================
+
+{ name: "Plumber", category: "Plumbing" },
+{ name: "Plumbing Repair", category: "Plumbing" },
+{ name: "Emergency Plumbing", category: "Plumbing" },
+{ name: "Leaky Faucet Repair", category: "Plumbing" },
+{ name: "Pipe Repair", category: "Plumbing" },
+{ name: "Burst Pipe Repair", category: "Plumbing" },
+{ name: "Drain Cleaning", category: "Plumbing" },
+{ name: "Clogged Drain Repair", category: "Plumbing" },
+{ name: "Toilet Repair", category: "Plumbing" },
+{ name: "Toilet Installation", category: "Plumbing" },
+{ name: "Sink Repair", category: "Plumbing" },
+{ name: "Sink Installation", category: "Plumbing" },
+{ name: "Garbage Disposal Repair", category: "Plumbing" },
+{ name: "Garbage Disposal Installation", category: "Plumbing" },
+{ name: "Shower Repair", category: "Plumbing" },
+{ name: "Shower Installation", category: "Plumbing" },
+{ name: "Bathtub Plumbing", category: "Plumbing" },
+{ name: "Water Heater Repair", category: "Plumbing" },
+{ name: "Water Heater Installation", category: "Plumbing" },
+{ name: "Tankless Water Heater Installation", category: "Plumbing" },
+{ name: "Water Line Repair", category: "Plumbing" },
+{ name: "Sewer Line Repair", category: "Plumbing" },
+{ name: "Sewer Cleaning", category: "Plumbing" },
+{ name: "Leak Detection", category: "Plumbing" },
+{ name: "Outdoor Faucet Repair", category: "Plumbing" },
+{ name: "Dishwasher Plumbing Installation", category: "Plumbing" },
+{ name: "Refrigerator Water Line Installation", category: "Plumbing" },
+
+// =========================
+// Restaurant & Hospitality
+// =========================
+
+{ name: "Server", category: "Restaurant & Hospitality" },
+{ name: "Server Assistant", category: "Restaurant & Hospitality" },
+{ name: "Busser", category: "Restaurant & Hospitality" },
+{ name: "Food Runner", category: "Restaurant & Hospitality" },
+{ name: "Host", category: "Restaurant & Hospitality" },
+{ name: "Hostess", category: "Restaurant & Hospitality" },
+{ name: "Banquet Server", category: "Restaurant & Hospitality" },
+{ name: "Banquet Staff", category: "Restaurant & Hospitality" },
+{ name: "Bartender", category: "Restaurant & Hospitality" },
+{ name: "Barback", category: "Restaurant & Hospitality" },
+{ name: "Event Server", category: "Restaurant & Hospitality" },
+{ name: "Catering Server", category: "Restaurant & Hospitality" },
+{ name: "Restaurant Support Staff", category: "Restaurant & Hospitality" },
+{ name: "Dishwasher", category: "Restaurant & Hospitality" },
+{ name: "Kitchen Assistant", category: "Restaurant & Hospitality" },
+
+// =========================
+// Home Maintenance
+// =========================
+
+{ name: "Home Maintenance", category: "Home Maintenance" },
+{ name: "Property Maintenance", category: "Home Maintenance" },
+{ name: "Apartment Maintenance", category: "Home Maintenance" },
+{ name: "Rental Property Maintenance", category: "Home Maintenance" },
+{ name: "Preventive Home Maintenance", category: "Home Maintenance" },
+{ name: "General Home Repairs", category: "Home Maintenance" },
+{ name: "Home Maintenance Inspection", category: "Home Maintenance" },
+{ name: "Seasonal Home Maintenance", category: "Home Maintenance" },
+{ name: "Rental Turnover Maintenance", category: "Home Maintenance" },
+{ name: "Air Filter Replacement", category: "Home Maintenance" },
+{ name: "Smoke Detector Installation", category: "Home Maintenance" },
+{ name: "Smoke Detector Battery Replacement", category: "Home Maintenance" },
+{ name: "Door Hardware Replacement", category: "Home Maintenance" },
+{ name: "Cabinet Hardware Replacement", category: "Home Maintenance" },
+{ name: "Minor Fixture Replacement", category: "Home Maintenance" },
+
+// =========================
+// Security & Safety
+// =========================
+
+{ name: "Security Guard", category: "Security & Safety" },
+{ name: "Event Security", category: "Security & Safety" },
+{ name: "Private Event Security", category: "Security & Safety" },
+{ name: "Residential Security", category: "Security & Safety" },
+{ name: "Commercial Security", category: "Security & Safety" },
+{ name: "Security Patrol", category: "Security & Safety" },
+{ name: "Parking Lot Security", category: "Security & Safety" },
+{ name: "Construction Site Security", category: "Security & Safety" },
+{ name: "Security Camera Installation", category: "Security & Safety" },
+{ name: "Doorbell Camera Installation", category: "Security & Safety" },
+{ name: "Home Security System Installation", category: "Security & Safety" },
+{ name: "Access Control Installation", category: "Security & Safety" },
+{ name: "Security System Setup", category: "Security & Safety" },
+
+// =========================
+// Loss Prevention
+// =========================
+
+{ name: "Loss Prevention", category: "Loss Prevention" },
+{ name: "Retail Loss Prevention", category: "Loss Prevention" },
+{ name: "Asset Protection", category: "Loss Prevention" },
+{ name: "Retail Asset Protection", category: "Loss Prevention" },
+{ name: "Store Security", category: "Loss Prevention" },
+{ name: "Inventory Loss Prevention", category: "Loss Prevention" },
+{ name: "Theft Prevention", category: "Loss Prevention" },
+{ name: "Event Loss Prevention", category: "Loss Prevention" }
 
 ];
 
