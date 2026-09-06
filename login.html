@@ -206,43 +206,6 @@
         </form>
 
 
-        <div class="auth-divider">
-          <span>Demo accounts</span>
-        </div>
-
-
-        <div class="demo-buttons">
-
-          <button
-            type="button"
-            class="demo-button"
-            id="customerDemoButton"
-          >
-            <span>👤</span>
-
-            <div>
-              <strong>Customer Demo</strong>
-              <small>Open the customer dashboard</small>
-            </div>
-          </button>
-
-
-          <button
-            type="button"
-            class="demo-button"
-            id="professionalDemoButton"
-          >
-            <span>🛠️</span>
-
-            <div>
-              <strong>Professional Demo</strong>
-              <small>Open the contractor dashboard</small>
-            </div>
-          </button>
-
-        </div>
-
-
         <p class="auth-switch">
           Do not have a Korvo account?
           <a href="signup.html">Create an account</a>
@@ -277,6 +240,14 @@
 
   </footer>
 
+
+  <!-- Supabase browser library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Korvo Supabase connection -->
+  <script src="supabase.js"></script>
+
+  <!-- Korvo authentication logic -->
   <script src="auth.js"></script>
 
 </body>

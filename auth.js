@@ -1,90 +1,71 @@
 "use strict";
 
 /* =========================
-   Korvo Authentication Demo
-   Login + Signup
+   Korvo Authentication
+   Supabase Auth + Profiles
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* =========================
+     Supabase Check
+     ========================= */
+
+  if (
+    typeof korvoSupabase === "undefined"
+  ) {
+    console.error(
+      "Korvo Supabase client is not available."
+    );
+
+    return;
+  }
+
+
   /* =========================
      Shared Helpers
      ========================= */
 
   function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email
+    );
   }
 
+
   function isValidPhone(phone) {
-    const digits = phone.replace(/\D/g, "");
+    const digits =
+      phone.replace(/\D/g, "");
+
     return digits.length >= 10;
   }
 
-  function setFieldError(input, hasError) {
-    const formGroup = input?.closest(".form-group");
-    const errorMessage = formGroup?.querySelector(".field-error");
 
-    formGroup?.classList.toggle("error", hasError);
+  function setFieldError(
+    input,
+    hasError
+  ) {
+    const formGroup =
+      input?.closest(".form-group");
+
+    const errorMessage =
+      formGroup?.querySelector(
+        ".field-error"
+      );
+
+    formGroup?.classList.toggle(
+      "error",
+      hasError
+    );
 
     if (errorMessage) {
-      errorMessage.style.display = hasError
-        ? "block"
-        : "none";
+      errorMessage.style.display =
+        hasError
+          ? "block"
+          : "none";
     }
   }
 
-  function saveToStorage(key, value) {
-    try {
-      localStorage.setItem(
-        key,
-        JSON.stringify(value)
-      );
-    } catch (error) {
-      console.error(
-        `Unable to save ${key}:`,
-        error
-      );
-    }
-  }
-
-  function readFromStorage(key, fallbackValue) {
-    try {
-      const storedValue = localStorage.getItem(key);
-
-      if (!storedValue) {
-        return fallbackValue;
-      }
-
-      return JSON.parse(storedValue);
-    } catch (error) {
-      console.error(
-        `Unable to read ${key}:`,
-        error
-      );
-
-      return fallbackValue;
-    }
-  }
-
-  function saveDemoSession(accountType, email, name = "") {
-    const session = {
-      accountType,
-      email,
-      name,
-      loggedIn: true,
-      loginTime: new Date().toISOString()
-    };
-
-    saveToStorage("korvoDemoSession", session);
-  }
-
-  function redirectByAccountType(accountType) {
-    if (accountType === "professional") {
-      window.location.href = "dashboard.html";
-      return;
-    }
-
-    window.location.href = "customer-dashboard.html";
-  }
 
   function configurePasswordToggle(
     button,
@@ -94,63 +75,233 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    button.addEventListener("click", () => {
-      const passwordIsHidden =
-        input.type === "password";
+    button.addEventListener(
+      "click",
+      () => {
 
-      input.type = passwordIsHidden
-        ? "text"
-        : "password";
+        const passwordIsHidden =
+          input.type === "password";
 
-      button.textContent = passwordIsHidden
-        ? "Hide"
-        : "Show";
+        input.type =
+          passwordIsHidden
+            ? "text"
+            : "password";
 
-      button.setAttribute(
-        "aria-label",
-        passwordIsHidden
-          ? "Hide password"
-          : "Show password"
-      );
-    });
+        button.textContent =
+          passwordIsHidden
+            ? "Hide"
+            : "Show";
+
+        button.setAttribute(
+          "aria-label",
+          passwordIsHidden
+            ? "Hide password"
+            : "Show password"
+        );
+      }
+    );
   }
+
+
+  function setButtonLoading(
+    button,
+    loading,
+    loadingText = "Please wait..."
+  ) {
+    if (!button) {
+      return;
+    }
+
+    if (loading) {
+      button.dataset.originalText =
+        button.textContent;
+
+      button.textContent =
+        loadingText;
+
+      button.disabled = true;
+      return;
+    }
+
+    button.textContent =
+      button.dataset.originalText ||
+      button.textContent;
+
+    button.disabled = false;
+  }
+
+
+  async function getProfile(
+    userId
+  ) {
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+
+  async function createProfileIfMissing(
+    user
+  ) {
+    let profile =
+      await getProfile(user.id);
+
+    if (profile) {
+      return profile;
+    }
+
+    const metadata =
+      user.user_metadata || {};
+
+    const newProfile = {
+      id: user.id,
+
+      first_name:
+        metadata.first_name || "",
+
+      last_name:
+        metadata.last_name || "",
+
+      phone:
+        metadata.phone || "",
+
+      email:
+        user.email || "",
+
+      account_type:
+        metadata.account_type ||
+        "customer",
+
+      onboarding_complete:
+        metadata.account_type ===
+        "professional"
+          ? false
+          : true,
+
+      is_active: true,
+
+      updated_at:
+        new Date().toISOString()
+    };
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase
+        .from("profiles")
+        .insert(newProfile)
+        .select()
+        .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+
+  function redirectByProfile(
+    profile
+  ) {
+    const accountType =
+      profile?.account_type ||
+      "customer";
+
+    if (
+      accountType ===
+      "professional"
+    ) {
+
+      if (
+        profile?.onboarding_complete
+      ) {
+        window.location.href =
+          "dashboard.html";
+
+        return;
+      }
+
+      window.location.href =
+        "professional-onboarding.html";
+
+      return;
+    }
+
+    window.location.href =
+      "customer-dashboard.html";
+  }
+
 
   /* =========================
      Login Page
      ========================= */
 
   const loginForm =
-    document.getElementById("loginForm");
+    document.getElementById(
+      "loginForm"
+    );
 
   const loginEmail =
-    document.getElementById("loginEmail");
+    document.getElementById(
+      "loginEmail"
+    );
 
   const loginPassword =
-    document.getElementById("loginPassword");
+    document.getElementById(
+      "loginPassword"
+    );
 
   const passwordToggle =
-    document.getElementById("passwordToggle");
+    document.getElementById(
+      "passwordToggle"
+    );
 
   const customerDemoButton =
-    document.getElementById("customerDemoButton");
+    document.getElementById(
+      "customerDemoButton"
+    );
 
   const professionalDemoButton =
     document.getElementById(
       "professionalDemoButton"
     );
 
+
   configurePasswordToggle(
     passwordToggle,
     loginPassword
   );
 
+
   loginForm?.addEventListener(
     "submit",
-    (event) => {
+    async (event) => {
+
       event.preventDefault();
 
+      const submitButton =
+        loginForm.querySelector(
+          'button[type="submit"]'
+        );
+
       const email =
-        loginEmail?.value.trim() || "";
+        loginEmail?.value
+          .trim()
+          .toLowerCase() || "";
 
       const password =
         loginPassword?.value || "";
@@ -160,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const passwordIsValid =
         password.length >= 6;
+
 
       setFieldError(
         loginEmail,
@@ -171,82 +323,111 @@ document.addEventListener("DOMContentLoaded", () => {
         !passwordIsValid
       );
 
-      if (!emailIsValid || !passwordIsValid) {
+
+      if (
+        !emailIsValid ||
+        !passwordIsValid
+      ) {
         return;
       }
 
-      const accounts = readFromStorage(
-        "korvoDemoAccounts",
-        []
-      );
 
-      const existingAccount = accounts.find(
-        (account) =>
-          account.email.toLowerCase() ===
-          email.toLowerCase()
-      );
+      try {
 
-      let accountType = "customer";
-      let customerName = "";
+        setButtonLoading(
+          submitButton,
+          true,
+          "Logging in..."
+        );
 
-      if (existingAccount) {
-        accountType =
-          existingAccount.accountType;
 
-        customerName =
-          existingAccount.firstName || "";
-      } else {
-        const normalizedEmail =
-          email.toLowerCase();
+        const {
+          data,
+          error
+        } =
+          await korvoSupabase
+            .auth
+            .signInWithPassword({
+              email,
+              password
+            });
 
-        accountType =
-          normalizedEmail.includes("pro") ||
-          normalizedEmail.includes("contractor")
-            ? "professional"
-            : "customer";
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data.user) {
+          throw new Error(
+            "Unable to load your Korvo account."
+          );
+        }
+
+
+        const profile =
+          await createProfileIfMissing(
+            data.user
+          );
+
+
+        redirectByProfile(
+          profile
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Korvo login error:",
+          error
+        );
+
+        alert(
+          error.message ||
+          "We couldn't log you in. Please check your email and password."
+        );
+
+      } finally {
+
+        setButtonLoading(
+          submitButton,
+          false
+        );
       }
-
-      saveDemoSession(
-        accountType,
-        email,
-        customerName
-      );
-
-      redirectByAccountType(accountType);
     }
   );
+
+
+  /*
+     Old demo login buttons are
+     intentionally disabled now
+     that Korvo uses real accounts.
+  */
 
   customerDemoButton?.addEventListener(
     "click",
     () => {
-      saveDemoSession(
-        "customer",
-        "customer@korvo.demo",
-        "Chris"
+      alert(
+        "Demo login has been disabled. Please use a real Korvo account."
       );
-
-      window.location.href =
-        "customer-dashboard.html";
     }
   );
+
 
   professionalDemoButton?.addEventListener(
     "click",
     () => {
-      saveDemoSession(
-        "professional",
-        "professional@korvo.demo",
-        "Chris"
+      alert(
+        "Demo login has been disabled. Please use a real Korvo account."
       );
-
-      window.location.href =
-        "dashboard.html";
     }
   );
+
 
   loginEmail?.addEventListener(
     "input",
     () => {
+
       if (
         isValidEmail(
           loginEmail.value.trim()
@@ -260,10 +441,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   loginPassword?.addEventListener(
     "input",
     () => {
-      if (loginPassword.value.length >= 6) {
+
+      if (
+        loginPassword.value.length >= 6
+      ) {
         setFieldError(
           loginPassword,
           false
@@ -272,12 +457,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   /* =========================
      Signup Page
      ========================= */
 
   const signupForm =
-    document.getElementById("signupForm");
+    document.getElementById(
+      "signupForm"
+    );
 
   const signupFirstName =
     document.getElementById(
@@ -324,32 +512,48 @@ document.addEventListener("DOMContentLoaded", () => {
       "confirmPasswordToggle"
     );
 
+
   configurePasswordToggle(
     signupPasswordToggle,
     signupPassword
   );
+
 
   configurePasswordToggle(
     confirmPasswordToggle,
     confirmPassword
   );
 
+
   signupForm?.addEventListener(
     "submit",
-    (event) => {
+    async (event) => {
+
       event.preventDefault();
 
+
+      const submitButton =
+        signupForm.querySelector(
+          'button[type="submit"]'
+        );
+
+
       const firstName =
-        signupFirstName?.value.trim() || "";
+        signupFirstName?.value
+          .trim() || "";
 
       const lastName =
-        signupLastName?.value.trim() || "";
+        signupLastName?.value
+          .trim() || "";
 
       const email =
-        signupEmail?.value.trim() || "";
+        signupEmail?.value
+          .trim()
+          .toLowerCase() || "";
 
       const phone =
-        signupPhone?.value.trim() || "";
+        signupPhone?.value
+          .trim() || "";
 
       const password =
         signupPassword?.value || "";
@@ -357,10 +561,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const confirmedPassword =
         confirmPassword?.value || "";
 
+
       const accountType =
         document.querySelector(
           'input[name="accountType"]:checked'
-        )?.value || "customer";
+        )?.value ||
+        "customer";
+
 
       const firstNameIsValid =
         firstName.length >= 2;
@@ -378,11 +585,15 @@ document.addEventListener("DOMContentLoaded", () => {
         password.length >= 6;
 
       const passwordsMatch =
-        password === confirmedPassword &&
+        password ===
+          confirmedPassword &&
         confirmedPassword.length >= 6;
 
       const termsAccepted =
-        Boolean(signupTerms?.checked);
+        Boolean(
+          signupTerms?.checked
+        );
+
 
       setFieldError(
         signupFirstName,
@@ -414,7 +625,9 @@ document.addEventListener("DOMContentLoaded", () => {
         !passwordsMatch
       );
 
+
       if (signupTerms) {
+
         signupTerms
           .closest(".terms-option")
           ?.classList.toggle(
@@ -422,6 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
             !termsAccepted
           );
       }
+
 
       if (
         !firstNameIsValid ||
@@ -432,6 +646,7 @@ document.addEventListener("DOMContentLoaded", () => {
         !passwordsMatch ||
         !termsAccepted
       ) {
+
         if (!termsAccepted) {
           alert(
             "Please agree to Korvo’s Terms of Service and Privacy Policy."
@@ -441,75 +656,182 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const accounts = readFromStorage(
-        "korvoDemoAccounts",
-        []
-      );
 
-      const accountAlreadyExists =
-        accounts.some(
-          (account) =>
-            account.email.toLowerCase() ===
-            email.toLowerCase()
+      try {
+
+        setButtonLoading(
+          submitButton,
+          true,
+          "Creating Account..."
         );
 
-      if (accountAlreadyExists) {
-        setFieldError(
-          signupEmail,
-          true
-        );
+
+        /*
+           Create the user through
+           Supabase Auth.
+
+           Password is handled by
+           Supabase and is NOT saved
+           in localStorage.
+        */
+
+        const {
+          data,
+          error
+        } =
+          await korvoSupabase
+            .auth
+            .signUp({
+
+              email,
+
+              password,
+
+              options: {
+
+                data: {
+
+                  first_name:
+                    firstName,
+
+                  last_name:
+                    lastName,
+
+                  phone,
+
+                  account_type:
+                    accountType
+                }
+              }
+            });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data.user) {
+          throw new Error(
+            "Korvo could not create your account."
+          );
+        }
+
+
+        /*
+           If Supabase immediately
+           gives us a session, create
+           the public profile now.
+
+           Our RLS policy requires
+           the user to be authenticated.
+        */
+
+        if (data.session) {
+
+          const profile =
+            await createProfileIfMissing(
+              data.user
+            );
+
+
+          alert(
+            `Welcome to Korvo, ${firstName}! Your account has been created.`
+          );
+
+
+          redirectByProfile(
+            profile
+          );
+
+          return;
+        }
+
+
+        /*
+           If email confirmation is
+           enabled, Supabase may create
+           the Auth user without logging
+           them in yet.
+
+           Their metadata is already
+           stored securely with the
+           Auth account.
+
+           On their first confirmed
+           login, Korvo creates the
+           profiles row.
+        */
 
         alert(
-          "A demo account with this email already exists. Try logging in instead."
+          `Welcome to Korvo, ${firstName}! Check your email to confirm your account. After confirming it, log in to continue.`
         );
 
-        return;
-      }
 
-      const newAccount = {
-        id: `KORVO-${Date.now()}`,
-        firstName,
-        lastName,
-        email,
-        phone,
-        password,
-        accountType,
-        createdAt: new Date().toISOString()
-      };
-
-      accounts.push(newAccount);
-
-      saveToStorage(
-        "korvoDemoAccounts",
-        accounts
-      );
-
-      saveDemoSession(
-        accountType,
-        email,
-        firstName
-      );
-
-      alert(
-        `Welcome to Korvo, ${firstName}! Your demo account has been created.`
-      );
-
-           if (accountType === "professional") {
         window.location.href =
-          "professional-onboarding.html";
-      } else {
-        window.location.href =
-          "customer-dashboard.html";
+          "login.html";
+
+
+      } catch (error) {
+
+        console.error(
+          "Korvo signup error:",
+          error
+        );
+
+
+        let message =
+          error.message ||
+          "We couldn't create your Korvo account.";
+
+
+        if (
+          message
+            .toLowerCase()
+            .includes(
+              "already registered"
+            )
+        ) {
+
+          message =
+            "An account with this email already exists. Try logging in instead.";
+
+          setFieldError(
+            signupEmail,
+            true
+          );
+        }
+
+
+        alert(message);
+
+
+      } finally {
+
+        setButtonLoading(
+          submitButton,
+          false
+        );
       }
     }
   );
 
+
+  /* =========================
+     Signup Field Validation
+     ========================= */
+
   signupFirstName?.addEventListener(
     "input",
     () => {
+
       if (
-        signupFirstName.value.trim().length >= 2
+        signupFirstName
+          .value
+          .trim()
+          .length >= 2
       ) {
+
         setFieldError(
           signupFirstName,
           false
@@ -518,12 +840,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   signupLastName?.addEventListener(
     "input",
     () => {
+
       if (
-        signupLastName.value.trim().length >= 2
+        signupLastName
+          .value
+          .trim()
+          .length >= 2
       ) {
+
         setFieldError(
           signupLastName,
           false
@@ -532,14 +860,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   signupEmail?.addEventListener(
     "input",
     () => {
+
       if (
         isValidEmail(
           signupEmail.value.trim()
         )
       ) {
+
         setFieldError(
           signupEmail,
           false
@@ -548,14 +879,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   signupPhone?.addEventListener(
     "input",
     () => {
+
       if (
         isValidPhone(
           signupPhone.value
         )
       ) {
+
         setFieldError(
           signupPhone,
           false
@@ -564,23 +898,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   signupPassword?.addEventListener(
     "input",
     () => {
+
       if (
-        signupPassword.value.length >= 6
+        signupPassword
+          .value
+          .length >= 6
       ) {
+
         setFieldError(
           signupPassword,
           false
         );
       }
 
+
       if (
         confirmPassword?.value &&
         signupPassword.value ===
           confirmPassword.value
       ) {
+
         setFieldError(
           confirmPassword,
           false
@@ -589,13 +930,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   confirmPassword?.addEventListener(
     "input",
     () => {
+
       const passwordsMatch =
-        confirmPassword.value.length >= 6 &&
+        confirmPassword
+          .value
+          .length >= 6 &&
         confirmPassword.value ===
           signupPassword?.value;
+
 
       setFieldError(
         confirmPassword,
@@ -604,34 +950,53 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
+
   /* =========================
-     Optional Phone Formatting
+     Phone Formatting
      ========================= */
 
   signupPhone?.addEventListener(
     "input",
     () => {
-      const digits = signupPhone.value
-        .replace(/\D/g, "")
-        .slice(0, 10);
+
+      const digits =
+        signupPhone.value
+          .replace(/\D/g, "")
+          .slice(0, 10);
+
 
       if (digits.length <= 3) {
-        signupPhone.value = digits;
+
+        signupPhone.value =
+          digits;
+
         return;
       }
+
 
       if (digits.length <= 6) {
+
         signupPhone.value =
-          `(${digits.slice(0, 3)}) ` +
-          digits.slice(3);
+          `(${digits.slice(
+            0,
+            3
+          )}) ${digits.slice(3)}`;
 
         return;
       }
 
+
       signupPhone.value =
-        `(${digits.slice(0, 3)}) ` +
-        `${digits.slice(3, 6)}-` +
+        `(${digits.slice(
+          0,
+          3
+        )}) ` +
+        `${digits.slice(
+          3,
+          6
+        )}-` +
         digits.slice(6);
     }
   );
+
 });
