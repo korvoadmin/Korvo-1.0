@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
         profile?.onboarding_complete
       ) {
         window.location.href =
-          "dashboard.html";
+          "professional-dashboard.html";
 
         return;
       }

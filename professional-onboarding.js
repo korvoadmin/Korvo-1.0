@@ -794,9 +794,10 @@ customServiceInput?.addEventListener(
     }
   }
 );
+
 professionalOnboardingForm?.addEventListener(
   "submit",
-  (event) => {
+  async (event) => {
     event.preventDefault();
 
     const professionalName =
@@ -837,6 +838,11 @@ professionalOnboardingForm?.addEventListener(
     const serviceAreas =
       getCheckedValues("areas");
 
+
+    /* =========================
+       Validate Form
+       ========================= */
+
     if (
       !professionalName ||
       !professionalPhone ||
@@ -851,6 +857,7 @@ professionalOnboardingForm?.addEventListener(
       return;
     }
 
+
     if (
       selectedServices.length === 0
     ) {
@@ -860,6 +867,7 @@ professionalOnboardingForm?.addEventListener(
 
       return;
     }
+
 
     if (
       serviceAreas.length === 0
@@ -871,60 +879,193 @@ professionalOnboardingForm?.addEventListener(
       return;
     }
 
-    const professionalProfile = {
-      id: `pro-${Date.now()}`,
 
-      name:
-        professionalName,
+    /* =========================
+       Require Supabase Login
+       ========================= */
 
-      businessName:
-        businessName,
+    if (
+      typeof korvoSupabase ===
+      "undefined"
+    ) {
+      alert(
+        "Korvo could not connect to your account. Please log in again."
+      );
 
-      phone:
-        professionalPhone,
+      window.location.href =
+        "login.html";
 
-      email:
-        professionalEmail,
+      return;
+    }
 
-      services:
-        [...selectedServices],
 
-      serviceAreas:
-        serviceAreas,
+    try {
 
-      experience:
-        experienceYears,
+      const {
+        data: userData,
+        error: userError
+      } =
+        await korvoSupabase
+          .auth
+          .getUser();
 
-      availability:
-        professionalAvailability,
 
-      bio:
-        professionalBio,
+      if (userError) {
+        throw userError;
+      }
 
-      verificationStatus:
-        "Not Verified",
 
-      onboardingComplete:
-        true,
+      const user =
+        userData?.user;
 
-      createdAt:
-        new Date().toISOString()
-    };
 
-    localStorage.setItem(
-      "korvoProfessionalProfile",
-      JSON.stringify(
-        professionalProfile
-      )
-    );
+      if (!user) {
 
-    localStorage.setItem(
-      "korvoMessagingRole",
-      "professional"
-    );
+        alert(
+          "Please create or log in to your Korvo professional account before completing onboarding."
+        );
 
-    window.location.href =
-      "professional-dashboard.html";
+        window.location.href =
+          "signup.html";
+
+        return;
+      }
+
+
+      /* =========================
+         Update Real Korvo Profile
+         ========================= */
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await korvoSupabase
+          .from("profiles")
+          .update({
+            phone:
+              professionalPhone,
+
+            email:
+              user.email ||
+              professionalEmail,
+
+            account_type:
+              "professional",
+
+            onboarding_complete:
+              true,
+
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq(
+            "id",
+            user.id
+          )
+          .select()
+          .single();
+
+
+      if (profileError) {
+        throw profileError;
+      }
+
+
+      /* =========================
+         Temporary Professional Data
+         =========================
+
+         Services, business name,
+         service areas, experience,
+         etc. still use localStorage
+         temporarily until we build
+         professional_profiles in
+         Supabase.
+      */
+
+      const professionalProfile = {
+        id:
+          user.id,
+
+        name:
+          professionalName,
+
+        businessName:
+          businessName,
+
+        phone:
+          professionalPhone,
+
+        email:
+          user.email ||
+          professionalEmail,
+
+        services:
+          [...selectedServices],
+
+        serviceAreas:
+          serviceAreas,
+
+        experience:
+          experienceYears,
+
+        availability:
+          professionalAvailability,
+
+        bio:
+          professionalBio,
+
+        verificationStatus:
+          "Not Verified",
+
+        onboardingComplete:
+          true,
+
+        accountType:
+          profile.account_type,
+
+        updatedAt:
+          new Date().toISOString()
+      };
+
+
+      localStorage.setItem(
+        "korvoProfessionalProfile",
+        JSON.stringify(
+          professionalProfile
+        )
+      );
+
+
+      localStorage.setItem(
+        "korvoMessagingRole",
+        "professional"
+      );
+
+
+      alert(
+        "Professional profile setup complete."
+      );
+
+
+      window.location.href =
+        "professional-dashboard.html";
+
+
+    } catch (error) {
+
+      console.error(
+        "Professional onboarding error:",
+        error
+      );
+
+
+      alert(
+        error.message ||
+        "Korvo could not save your professional profile. Please try again."
+      );
+    }
   }
 );
 
