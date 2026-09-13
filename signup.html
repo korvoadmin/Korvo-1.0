@@ -399,10 +399,39 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Korvo Supabase connection -->
-  <script src="supabase.js"></script>
+<script src="supabase.js"></script>
 
-  <!-- Korvo authentication logic -->
-  <script src="auth.js"></script>
+<!-- Automatically select account type from URL -->
+<script>
+  const signupParams =
+    new URLSearchParams(window.location.search);
+
+  const requestedAccountType =
+    signupParams.get("type");
+
+  if (
+    requestedAccountType === "customer" ||
+    requestedAccountType === "professional"
+  ) {
+    const accountTypeRadio =
+      document.querySelector(
+        `input[name="accountType"][value="${requestedAccountType}"]`
+      );
+
+    if (accountTypeRadio) {
+      accountTypeRadio.checked = true;
+
+      accountTypeRadio.dispatchEvent(
+        new Event("change", {
+          bubbles: true
+        })
+      );
+    }
+  }
+</script>
+
+<!-- Korvo authentication logic -->
+<script src="auth.js"></script>
 
 </body>
 </html>
