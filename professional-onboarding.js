@@ -109,6 +109,7 @@ const selectedServicesContainer =
   document.getElementById(
     "selectedServices"
   );
+
 const suggestServiceButton =
   document.getElementById(
     "suggestServiceButton"
@@ -128,6 +129,7 @@ const addCustomServiceButton =
   document.getElementById(
     "addCustomServiceButton"
   );
+
 const selectedServices = [];
 
 const serviceCatalog = [
@@ -232,7 +234,7 @@ const serviceCatalog = [
   { name: "Brush Removal", category: "Lawn & Outdoor" },
 
   // =========================
-  // Moving & Muscle
+  // Moving & Labor
   // =========================
 
   { name: "Moving Help", category: "Moving & Labor" },
@@ -250,8 +252,7 @@ const serviceCatalog = [
   { name: "Junk Hauling", category: "Moving & Labor" },
   { name: "Furniture Delivery", category: "Moving & Labor" },
   { name: "Appliance Moving", category: "Moving & Labor" },
-
-  // =========================
+    // =========================
   // Delivery & Errands
   // =========================
 
@@ -496,111 +497,110 @@ const serviceCatalog = [
   { name: "Bike Assembly", category: "Seasonal & Misc." },
   { name: "Home Gym Assembly", category: "Seasonal & Misc." },
 
-// =========================
-// Plumbing
-// =========================
+  // =========================
+  // Plumbing
+  // =========================
 
-{ name: "Plumber", category: "Plumbing" },
-{ name: "Plumbing Repair", category: "Plumbing" },
-{ name: "Emergency Plumbing", category: "Plumbing" },
-{ name: "Leaky Faucet Repair", category: "Plumbing" },
-{ name: "Pipe Repair", category: "Plumbing" },
-{ name: "Burst Pipe Repair", category: "Plumbing" },
-{ name: "Drain Cleaning", category: "Plumbing" },
-{ name: "Clogged Drain Repair", category: "Plumbing" },
-{ name: "Toilet Repair", category: "Plumbing" },
-{ name: "Toilet Installation", category: "Plumbing" },
-{ name: "Sink Repair", category: "Plumbing" },
-{ name: "Sink Installation", category: "Plumbing" },
-{ name: "Garbage Disposal Repair", category: "Plumbing" },
-{ name: "Garbage Disposal Installation", category: "Plumbing" },
-{ name: "Shower Repair", category: "Plumbing" },
-{ name: "Shower Installation", category: "Plumbing" },
-{ name: "Bathtub Plumbing", category: "Plumbing" },
-{ name: "Water Heater Repair", category: "Plumbing" },
-{ name: "Water Heater Installation", category: "Plumbing" },
-{ name: "Tankless Water Heater Installation", category: "Plumbing" },
-{ name: "Water Line Repair", category: "Plumbing" },
-{ name: "Sewer Line Repair", category: "Plumbing" },
-{ name: "Sewer Cleaning", category: "Plumbing" },
-{ name: "Leak Detection", category: "Plumbing" },
-{ name: "Outdoor Faucet Repair", category: "Plumbing" },
-{ name: "Dishwasher Plumbing Installation", category: "Plumbing" },
-{ name: "Refrigerator Water Line Installation", category: "Plumbing" },
+  { name: "Plumber", category: "Plumbing" },
+  { name: "Plumbing Repair", category: "Plumbing" },
+  { name: "Emergency Plumbing", category: "Plumbing" },
+  { name: "Leaky Faucet Repair", category: "Plumbing" },
+  { name: "Pipe Repair", category: "Plumbing" },
+  { name: "Burst Pipe Repair", category: "Plumbing" },
+  { name: "Drain Cleaning", category: "Plumbing" },
+  { name: "Clogged Drain Repair", category: "Plumbing" },
+  { name: "Toilet Repair", category: "Plumbing" },
+  { name: "Toilet Installation", category: "Plumbing" },
+  { name: "Sink Repair", category: "Plumbing" },
+  { name: "Sink Installation", category: "Plumbing" },
+  { name: "Garbage Disposal Repair", category: "Plumbing" },
+  { name: "Garbage Disposal Installation", category: "Plumbing" },
+  { name: "Shower Repair", category: "Plumbing" },
+  { name: "Shower Installation", category: "Plumbing" },
+  { name: "Bathtub Plumbing", category: "Plumbing" },
+  { name: "Water Heater Repair", category: "Plumbing" },
+  { name: "Water Heater Installation", category: "Plumbing" },
+  { name: "Tankless Water Heater Installation", category: "Plumbing" },
+  { name: "Water Line Repair", category: "Plumbing" },
+  { name: "Sewer Line Repair", category: "Plumbing" },
+  { name: "Sewer Cleaning", category: "Plumbing" },
+  { name: "Leak Detection", category: "Plumbing" },
+  { name: "Outdoor Faucet Repair", category: "Plumbing" },
+  { name: "Dishwasher Plumbing Installation", category: "Plumbing" },
+  { name: "Refrigerator Water Line Installation", category: "Plumbing" },
 
-// =========================
-// Restaurant & Hospitality
-// =========================
+  // =========================
+  // Restaurant & Hospitality
+  // =========================
 
-{ name: "Server", category: "Restaurant & Hospitality" },
-{ name: "Server Assistant", category: "Restaurant & Hospitality" },
-{ name: "Busser", category: "Restaurant & Hospitality" },
-{ name: "Food Runner", category: "Restaurant & Hospitality" },
-{ name: "Host", category: "Restaurant & Hospitality" },
-{ name: "Hostess", category: "Restaurant & Hospitality" },
-{ name: "Banquet Server", category: "Restaurant & Hospitality" },
-{ name: "Banquet Staff", category: "Restaurant & Hospitality" },
-{ name: "Bartender", category: "Restaurant & Hospitality" },
-{ name: "Barback", category: "Restaurant & Hospitality" },
-{ name: "Event Server", category: "Restaurant & Hospitality" },
-{ name: "Catering Server", category: "Restaurant & Hospitality" },
-{ name: "Restaurant Support Staff", category: "Restaurant & Hospitality" },
-{ name: "Dishwasher", category: "Restaurant & Hospitality" },
-{ name: "Kitchen Assistant", category: "Restaurant & Hospitality" },
+  { name: "Server", category: "Restaurant & Hospitality" },
+  { name: "Server Assistant", category: "Restaurant & Hospitality" },
+  { name: "Busser", category: "Restaurant & Hospitality" },
+  { name: "Food Runner", category: "Restaurant & Hospitality" },
+  { name: "Host", category: "Restaurant & Hospitality" },
+  { name: "Hostess", category: "Restaurant & Hospitality" },
+  { name: "Banquet Server", category: "Restaurant & Hospitality" },
+  { name: "Banquet Staff", category: "Restaurant & Hospitality" },
+  { name: "Bartender", category: "Restaurant & Hospitality" },
+  { name: "Barback", category: "Restaurant & Hospitality" },
+  { name: "Event Server", category: "Restaurant & Hospitality" },
+  { name: "Catering Server", category: "Restaurant & Hospitality" },
+  { name: "Restaurant Support Staff", category: "Restaurant & Hospitality" },
+  { name: "Dishwasher", category: "Restaurant & Hospitality" },
+  { name: "Kitchen Assistant", category: "Restaurant & Hospitality" },
 
-// =========================
-// Home Maintenance
-// =========================
+  // =========================
+  // Home Maintenance
+  // =========================
 
-{ name: "Home Maintenance", category: "Home Maintenance" },
-{ name: "Property Maintenance", category: "Home Maintenance" },
-{ name: "Apartment Maintenance", category: "Home Maintenance" },
-{ name: "Rental Property Maintenance", category: "Home Maintenance" },
-{ name: "Preventive Home Maintenance", category: "Home Maintenance" },
-{ name: "General Home Repairs", category: "Home Maintenance" },
-{ name: "Home Maintenance Inspection", category: "Home Maintenance" },
-{ name: "Seasonal Home Maintenance", category: "Home Maintenance" },
-{ name: "Rental Turnover Maintenance", category: "Home Maintenance" },
-{ name: "Air Filter Replacement", category: "Home Maintenance" },
-{ name: "Smoke Detector Installation", category: "Home Maintenance" },
-{ name: "Smoke Detector Battery Replacement", category: "Home Maintenance" },
-{ name: "Door Hardware Replacement", category: "Home Maintenance" },
-{ name: "Cabinet Hardware Replacement", category: "Home Maintenance" },
-{ name: "Minor Fixture Replacement", category: "Home Maintenance" },
+  { name: "Home Maintenance", category: "Home Maintenance" },
+  { name: "Property Maintenance", category: "Home Maintenance" },
+  { name: "Apartment Maintenance", category: "Home Maintenance" },
+  { name: "Rental Property Maintenance", category: "Home Maintenance" },
+  { name: "Preventive Home Maintenance", category: "Home Maintenance" },
+  { name: "General Home Repairs", category: "Home Maintenance" },
+  { name: "Home Maintenance Inspection", category: "Home Maintenance" },
+  { name: "Seasonal Home Maintenance", category: "Home Maintenance" },
+  { name: "Rental Turnover Maintenance", category: "Home Maintenance" },
+  { name: "Air Filter Replacement", category: "Home Maintenance" },
+  { name: "Smoke Detector Installation", category: "Home Maintenance" },
+  { name: "Smoke Detector Battery Replacement", category: "Home Maintenance" },
+  { name: "Door Hardware Replacement", category: "Home Maintenance" },
+  { name: "Cabinet Hardware Replacement", category: "Home Maintenance" },
+  { name: "Minor Fixture Replacement", category: "Home Maintenance" },
 
-// =========================
-// Security & Safety
-// =========================
+  // =========================
+  // Security & Safety
+  // =========================
 
-{ name: "Security Guard", category: "Security & Safety" },
-{ name: "Event Security", category: "Security & Safety" },
-{ name: "Private Event Security", category: "Security & Safety" },
-{ name: "Residential Security", category: "Security & Safety" },
-{ name: "Commercial Security", category: "Security & Safety" },
-{ name: "Security Patrol", category: "Security & Safety" },
-{ name: "Parking Lot Security", category: "Security & Safety" },
-{ name: "Construction Site Security", category: "Security & Safety" },
-{ name: "Security Camera Installation", category: "Security & Safety" },
-{ name: "Doorbell Camera Installation", category: "Security & Safety" },
-{ name: "Home Security System Installation", category: "Security & Safety" },
-{ name: "Access Control Installation", category: "Security & Safety" },
-{ name: "Security System Setup", category: "Security & Safety" },
+  { name: "Security Guard", category: "Security & Safety" },
+  { name: "Event Security", category: "Security & Safety" },
+  { name: "Private Event Security", category: "Security & Safety" },
+  { name: "Residential Security", category: "Security & Safety" },
+  { name: "Commercial Security", category: "Security & Safety" },
+  { name: "Security Patrol", category: "Security & Safety" },
+  { name: "Parking Lot Security", category: "Security & Safety" },
+  { name: "Construction Site Security", category: "Security & Safety" },
+  { name: "Security Camera Installation", category: "Security & Safety" },
+  { name: "Doorbell Camera Installation", category: "Security & Safety" },
+  { name: "Home Security System Installation", category: "Security & Safety" },
+  { name: "Access Control Installation", category: "Security & Safety" },
+  { name: "Security System Setup", category: "Security & Safety" },
 
-// =========================
-// Loss Prevention
-// =========================
+  // =========================
+  // Loss Prevention
+  // =========================
 
-{ name: "Loss Prevention", category: "Loss Prevention" },
-{ name: "Retail Loss Prevention", category: "Loss Prevention" },
-{ name: "Asset Protection", category: "Loss Prevention" },
-{ name: "Retail Asset Protection", category: "Loss Prevention" },
-{ name: "Store Security", category: "Loss Prevention" },
-{ name: "Inventory Loss Prevention", category: "Loss Prevention" },
-{ name: "Theft Prevention", category: "Loss Prevention" },
-{ name: "Event Loss Prevention", category: "Loss Prevention" }
+  { name: "Loss Prevention", category: "Loss Prevention" },
+  { name: "Retail Loss Prevention", category: "Loss Prevention" },
+  { name: "Asset Protection", category: "Loss Prevention" },
+  { name: "Retail Asset Protection", category: "Loss Prevention" },
+  { name: "Store Security", category: "Loss Prevention" },
+  { name: "Inventory Loss Prevention", category: "Loss Prevention" },
+  { name: "Theft Prevention", category: "Loss Prevention" },
+  { name: "Event Loss Prevention", category: "Loss Prevention" }
 
 ];
-
 function getCheckedValues(name) {
   return [
     ...document.querySelectorAll(
@@ -660,6 +660,7 @@ function renderSelectedServices() {
             }
 
             renderSelectedServices();
+
             renderServiceResults(
               serviceSearch.value
             );
@@ -819,6 +820,7 @@ document.addEventListener(
     }
   }
 );
+
 suggestServiceButton?.addEventListener(
   "click",
   () => {
@@ -882,11 +884,11 @@ customServiceInput?.addEventListener(
   (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
+
       addCustomService();
     }
   }
 );
-
 professionalOnboardingForm?.addEventListener(
   "submit",
   async (event) => {
@@ -930,7 +932,6 @@ professionalOnboardingForm?.addEventListener(
     const serviceAreas =
       getCheckedValues("areas");
 
-
     /* =========================
        Validate Form
        ========================= */
@@ -949,7 +950,6 @@ professionalOnboardingForm?.addEventListener(
       return;
     }
 
-
     if (
       selectedServices.length === 0
     ) {
@@ -960,7 +960,6 @@ professionalOnboardingForm?.addEventListener(
       return;
     }
 
-
     if (
       serviceAreas.length === 0
     ) {
@@ -970,7 +969,6 @@ professionalOnboardingForm?.addEventListener(
 
       return;
     }
-
 
     /* =========================
        Require Supabase Login
@@ -990,9 +988,7 @@ professionalOnboardingForm?.addEventListener(
       return;
     }
 
-
     try {
-
       const {
         data: userData,
         error: userError
@@ -1001,18 +997,14 @@ professionalOnboardingForm?.addEventListener(
           .auth
           .getUser();
 
-
       if (userError) {
         throw userError;
       }
 
-
       const user =
         userData?.user;
 
-
       if (!user) {
-
         alert(
           "Please create or log in to your Korvo professional account before completing onboarding."
         );
@@ -1023,9 +1015,65 @@ professionalOnboardingForm?.addEventListener(
         return;
       }
 
+      /* =========================
+         Save Professional Details
+         ========================= */
+
+      const professionalProfileData = {
+        id:
+          user.id,
+
+        business_name:
+          businessName || "",
+
+        bio:
+          professionalBio || "",
+
+        experience_years:
+          experienceYears,
+
+        availability:
+          professionalAvailability,
+
+        services:
+          [...selectedServices],
+
+        service_areas:
+          [...serviceAreas],
+
+        verification_status:
+          "Not Verified",
+
+        is_public:
+          true,
+
+        updated_at:
+          new Date().toISOString()
+      };
+
+      const {
+        data: savedProfessionalProfile,
+        error: professionalProfileError
+      } =
+        await korvoSupabase
+          .from(
+            "professional_profiles"
+          )
+          .upsert(
+            professionalProfileData,
+            {
+              onConflict: "id"
+            }
+          )
+          .select()
+          .single();
+
+      if (professionalProfileError) {
+        throw professionalProfileError;
+      }
 
       /* =========================
-         Update Real Korvo Profile
+         Update Main Korvo Profile
          ========================= */
 
       const {
@@ -1058,22 +1106,21 @@ professionalOnboardingForm?.addEventListener(
           .select()
           .single();
 
-
       if (profileError) {
         throw profileError;
       }
 
-
       /* =========================
-         Temporary Professional Data
+         Temporary Dashboard Cache
          =========================
 
-         Services, business name,
-         service areas, experience,
-         etc. still use localStorage
-         temporarily until we build
-         professional_profiles in
-         Supabase.
+         Keep this for now because
+         the current Professional
+         Dashboard still reads some
+         data from localStorage.
+
+         Supabase is now the real
+         saved professional profile.
       */
 
       const professionalProfile = {
@@ -1084,6 +1131,8 @@ professionalOnboardingForm?.addEventListener(
           professionalName,
 
         businessName:
+          savedProfessionalProfile
+            ?.business_name ||
           businessName,
 
         phone:
@@ -1094,21 +1143,33 @@ professionalOnboardingForm?.addEventListener(
           professionalEmail,
 
         services:
+          savedProfessionalProfile
+            ?.services ||
           [...selectedServices],
 
         serviceAreas:
-          serviceAreas,
+          savedProfessionalProfile
+            ?.service_areas ||
+          [...serviceAreas],
 
         experience:
+          savedProfessionalProfile
+            ?.experience_years ||
           experienceYears,
 
         availability:
+          savedProfessionalProfile
+            ?.availability ||
           professionalAvailability,
 
         bio:
+          savedProfessionalProfile
+            ?.bio ||
           professionalBio,
 
         verificationStatus:
+          savedProfessionalProfile
+            ?.verification_status ||
           "Not Verified",
 
         onboardingComplete:
@@ -1121,7 +1182,6 @@ professionalOnboardingForm?.addEventListener(
           new Date().toISOString()
       };
 
-
       localStorage.setItem(
         "korvoProfessionalProfile",
         JSON.stringify(
@@ -1129,29 +1189,23 @@ professionalOnboardingForm?.addEventListener(
         )
       );
 
-
       localStorage.setItem(
         "korvoMessagingRole",
         "professional"
       );
 
-
       alert(
         "Professional profile setup complete."
       );
 
-
       window.location.href =
         "professional-dashboard.html";
 
-
     } catch (error) {
-
       console.error(
         "Professional onboarding error:",
         error
       );
-
 
       alert(
         error.message ||
