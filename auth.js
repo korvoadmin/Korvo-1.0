@@ -689,20 +689,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
               options: {
 
-                data: {
+  emailRedirectTo:
+    "https://korvoadmin.github.io/Korvo-1.0/login.html",
 
-                  first_name:
-                    firstName,
+  data: {
 
-                  last_name:
-                    lastName,
+    first_name:
+      firstName,
 
-                  phone,
+    last_name:
+      lastName,
 
-                  account_type:
-                    accountType
-                }
-              }
+    phone,
+
+    account_type:
+      accountType
+  }
+}
             });
 
 
