@@ -1,3 +1,95 @@
+/* =========================
+   Professional Page Guard
+   ========================= */
+
+async function protectProfessionalOnboarding() {
+  if (
+    typeof korvoSupabase ===
+    "undefined"
+  ) {
+    window.location.href =
+      "login.html";
+
+    return;
+  }
+
+  try {
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase.auth.getUser();
+
+    if (
+      error ||
+      !data?.user
+    ) {
+      window.location.href =
+        "login.html";
+
+      return;
+    }
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await korvoSupabase
+        .from("profiles")
+        .select(
+          "account_type, onboarding_complete"
+        )
+        .eq(
+          "id",
+          data.user.id
+        )
+        .maybeSingle();
+
+    if (profileError) {
+      throw profileError;
+    }
+
+    /*
+       Only professional accounts
+       should use this page.
+    */
+
+    if (
+      profile?.account_type !==
+      "professional"
+    ) {
+      window.location.href =
+        "customer-dashboard.html";
+
+      return;
+    }
+
+    /*
+       Professionals who already
+       completed onboarding should
+       go straight to their dashboard.
+    */
+
+    if (
+      profile?.onboarding_complete
+    ) {
+      window.location.href =
+        "professional-dashboard.html";
+    }
+
+  } catch (error) {
+    console.error(
+      "Professional onboarding guard error:",
+      error
+    );
+
+    window.location.href =
+      "login.html";
+  }
+}
+
+protectProfessionalOnboarding();
+
 const professionalOnboardingForm =
   document.getElementById(
     "professionalOnboardingForm"
