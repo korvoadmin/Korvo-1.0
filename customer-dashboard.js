@@ -29,6 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
       "customerMenu"
     );
 
+  const customerLogoutButton =
+    document.getElementById(
+    "customerLogoutButton"
+  );
+
   const markAllReadButton =
     document.getElementById(
       "markAllReadButton"
@@ -787,6 +792,66 @@ reviewModal
     }
   );
 
+  customerLogoutButton
+  ?.addEventListener(
+    "click",
+    async (event) => {
+
+      event.preventDefault();
+
+      const confirmed =
+        confirm(
+          "Sign out of your Korvo account?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+
+        if (
+          typeof korvoSupabase ===
+          "undefined"
+        ) {
+          throw new Error(
+            "Supabase is not available."
+          );
+        }
+
+        const { error } =
+          await korvoSupabase
+            .auth
+            .signOut();
+
+        if (error) {
+          throw error;
+        }
+
+        localStorage.removeItem(
+          "korvoMessagingRole"
+        );
+
+        localStorage.removeItem(
+          "korvoOpenConversation"
+        );
+
+        window.location.href =
+          "index.html";
+
+      } catch (error) {
+
+        console.error(
+          "Customer sign out failed:",
+          error
+        );
+
+        alert(
+          "Korvo could not sign you out. Please try again."
+        );
+      }
+    }
+  );
 
   /* =========================
      Notifications
