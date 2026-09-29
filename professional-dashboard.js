@@ -1,6 +1,6 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
   /* =========================
      Elements
@@ -208,25 +208,268 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     Current Professional
-     ========================= */
+   Current Professional
+   ========================= */
 
-  const professionalProfile = {
-    name:
-      "Chris Custom Installations",
+let professionalProfile = {
+  name: "Korvo Professional",
+  type: "Professional",
+  profile: "profile.html",
+  initials: "KP",
+  rating: "New"
+};
 
-    type:
-      "Window Treatment Specialist",
 
-    profile:
-      "chris-profile.html",
+function createInitials(
+  firstName = "",
+  lastName = "",
+  businessName = ""
+) {
+  if (firstName || lastName) {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`
+      .toUpperCase();
+  }
 
-    initials:
-      "CC",
+  const businessWords =
+    businessName
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
 
-    rating:
-      "5.0"
-  };
+  if (businessWords.length >= 2) {
+    return (
+      businessWords[0].charAt(0) +
+      businessWords[1].charAt(0)
+    ).toUpperCase();
+  }
+
+  if (businessWords.length === 1) {
+    return businessWords[0]
+      .slice(0, 2)
+      .toUpperCase();
+  }
+
+  return "KP";
+}
+
+
+async function loadProfessionalProfile() {
+  try {
+
+    if (
+      typeof korvoSupabase === "undefined"
+    ) {
+      console.error(
+        "Supabase client is not available."
+      );
+
+      window.location.href =
+        "login.html";
+
+      return false;
+    }
+
+
+    const {
+      data: authData,
+      error: authError
+    } =
+      await korvoSupabase.auth.getUser();
+
+
+    if (
+      authError ||
+      !authData?.user
+    ) {
+      console.error(
+        "Professional authentication failed:",
+        authError
+      );
+
+      window.location.href =
+        "login.html";
+
+      return false;
+    }
+
+
+    const user =
+      authData.user;
+
+
+    const {
+      data: accountProfile,
+      error: accountError
+    } =
+      await korvoSupabase
+        .from("profiles")
+        .select(
+          "first_name, last_name, account_type, onboarding_complete"
+        )
+        .eq(
+          "id",
+          user.id
+        )
+        .single();
+
+
+    if (accountError) {
+      throw accountError;
+    }
+
+
+    if (
+      accountProfile.account_type !==
+      "professional"
+    ) {
+      window.location.href =
+        "customer-dashboard.html";
+
+      return false;
+    }
+
+
+    if (
+      !accountProfile.onboarding_complete
+    ) {
+      window.location.href =
+        "professional-onboarding.html";
+
+      return false;
+    }
+
+
+    const {
+      data: savedProfessionalProfile,
+      error: professionalError
+    } =
+      await korvoSupabase
+        .from("professional_profiles")
+        .select(
+          "business_name, services, profile_photo_url, verification_status"
+        )
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (professionalError) {
+      throw professionalError;
+    }
+
+
+    if (!savedProfessionalProfile) {
+      window.location.href =
+        "professional-onboarding.html";
+
+      return false;
+    }
+
+
+    const firstName =
+      accountProfile.first_name ||
+      "";
+
+    const lastName =
+      accountProfile.last_name ||
+      "";
+
+    const fullName =
+      `${firstName} ${lastName}`
+        .trim();
+
+    const businessName =
+      savedProfessionalProfile
+        .business_name
+        ?.trim() ||
+      "";
+
+    const services =
+      Array.isArray(
+        savedProfessionalProfile.services
+      )
+        ? savedProfessionalProfile.services
+        : [];
+
+
+    professionalProfile = {
+      name:
+        businessName ||
+        fullName ||
+        "Korvo Professional",
+
+      type:
+        services[0] ||
+        "Professional",
+
+      profile:
+        "profile.html",
+
+      initials:
+        createInitials(
+          firstName,
+          lastName,
+          businessName
+        ),
+
+      rating:
+        "New"
+    };
+
+
+    const profileAvatar =
+      document.querySelector(
+        ".profile-avatar"
+      );
+
+    const profileName =
+      document.querySelector(
+        ".profile-name"
+      );
+
+    const welcomeHeading =
+      document.querySelector(
+        ".welcome-section h1"
+      );
+
+
+    if (profileAvatar) {
+      profileAvatar.textContent =
+        professionalProfile.initials;
+    }
+
+
+    if (profileName) {
+      profileName.textContent =
+        businessName ||
+        firstName ||
+        professionalProfile.name;
+    }
+
+
+    if (welcomeHeading) {
+      welcomeHeading.textContent =
+        `Welcome back, ${
+          firstName ||
+          professionalProfile.name
+        }`;
+    }
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Could not load professional profile:",
+      error
+    );
+
+    return false;
+  }
+}
 
 
   /* =========================
@@ -2782,6 +3025,14 @@ article
      Initialize Dashboard
      ========================= */
 
+     const professionalLoaded =
+  await loadProfessionalProfile();
+
+  if (!professionalLoaded) {
+  return;
+  
+  }
+  
   renderJobs();
 
   renderSubmittedQuotes();
