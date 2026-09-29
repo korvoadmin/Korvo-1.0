@@ -3002,23 +3002,54 @@ article
 
 
   logoutButton
-    ?.addEventListener(
-      "click",
-      () => {
+  ?.addEventListener(
+    "click",
+    async () => {
 
-        const confirmed =
-          confirm(
-            "Log out of your Korvo professional account?"
-          );
+      const confirmed =
+        confirm(
+          "Log out of your Korvo professional account?"
+        );
 
+      if (!confirmed) {
+        return;
+      }
 
-        if (confirmed) {
-          window.location.href =
-            "index.html";
+      try {
+
+        const { error } =
+          await korvoSupabase
+            .auth
+            .signOut();
+
+        if (error) {
+          throw error;
         }
 
+        localStorage.removeItem(
+          "korvoMessagingRole"
+        );
+
+        localStorage.removeItem(
+          "korvoOpenConversation"
+        );
+
+        window.location.href =
+          "index.html";
+
+      } catch (error) {
+
+        console.error(
+          "Professional sign out failed:",
+          error
+        );
+
+        alert(
+          "Korvo could not sign you out. Please try again."
+        );
       }
-    );
+    }
+  );
 
 
   /* =========================
@@ -3032,7 +3063,7 @@ article
   return;
   
   }
-  
+
   renderJobs();
 
   renderSubmittedQuotes();
