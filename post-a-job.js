@@ -686,134 +686,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  /* ======================================
-     CREATE JOB
+    /* ======================================
+     REAL SUPABASE JOB POSTING
   ====================================== */
-
-  function createJob() {
-
-    const firstName =
-      document.getElementById(
-        "firstName"
-      ).value.trim();
-
-    const lastName =
-      document.getElementById(
-        "lastName"
-      ).value.trim();
-
-    const service =
-      document.querySelector(
-        'input[name="service"]:checked'
-      ).value;
-
-    const timeframe =
-      document.querySelector(
-        'input[name="timeframe"]:checked'
-      ).value;
-
-    const reference =
-      "KORVO-" +
-      Math.floor(
-        100000 +
-        Math.random() * 900000
-      );
-
-
-    return {
-
-      id: reference,
-
-      reference: reference,
-
-      title:
-        titleInput.value.trim(),
-
-      jobTitle:
-        titleInput.value.trim(),
-
-      service: service,
-
-      category:
-        normalizeCategory(service),
-
-      description:
-        descriptionInput.value.trim(),
-
-      location:
-        `${
-          document.getElementById(
-            "city"
-          ).value.trim()
-        }, ${
-          document.getElementById(
-            "zipCode"
-          ).value.trim()
-        }`,
-
-      city:
-        document.getElementById(
-          "city"
-        ).value.trim(),
-
-      zipCode:
-        document.getElementById(
-          "zipCode"
-        ).value.trim(),
-
-      budget:
-        document.getElementById(
-          "budget"
-        ).value,
-
-      budgetRange:
-        document.getElementById(
-          "budget"
-        ).value,
-
-      timeframe: timeframe,
-
-      date:
-        timeframe,
-
-      customer:
-        `${firstName} ${
-          lastName.charAt(0)
-        }.`,
-
-      customerName:
-        `${firstName} ${
-          lastName.charAt(0)
-        }.`,
-
-      firstName: firstName,
-
-      lastName: lastName,
-
-      email:
-        document.getElementById(
-          "email"
-        ).value.trim(),
-
-      phone:
-        document.getElementById(
-          "phone"
-        ).value.trim(),
-
-      status: "Open",
-
-      createdAt:
-        new Date().toISOString()
-
-    };
-
-  }
-
 
   function normalizeCategory(service) {
 
     const value =
-      service.toLowerCase();
+      String(service || "")
+        .toLowerCase();
 
     if (value.includes("clean"))
       return "cleaning";
@@ -827,8 +708,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (
       value.includes("lawn") ||
       value.includes("landscape")
-    )
+    ) {
       return "landscaping";
+    }
 
     if (value.includes("moving"))
       return "moving";
@@ -838,121 +720,450 @@ document.addEventListener("DOMContentLoaded", function () {
       value.includes("shade") ||
       value.includes("blind") ||
       value.includes("window")
-    )
+    ) {
       return "window treatments";
+    }
+
+    if (value.includes("plumb"))
+      return "plumbing";
+
+    if (value.includes("handyman"))
+      return "handyman";
+
+    if (
+      value.includes("pressure") ||
+      value.includes("washing")
+    ) {
+      return "pressure washing";
+    }
+
+    if (
+      value.includes("furniture") ||
+      value.includes("assembly")
+    ) {
+      return "furniture assembly";
+    }
+
+    if (
+      value.includes("detail")
+    ) {
+      return "mobile detailing";
+    }
 
     return "other";
-
   }
 
 
-  /* ======================================
-     SAVE JOB
-  ====================================== */
+  function parseBudgetRange(
+    budgetValue
+  ) {
 
-  function saveJob(job) {
+    switch (budgetValue) {
 
-    let jobs = [];
+      case "Under $100":
+        return {
+          budgetMin: 0,
+          budgetMax: 99
+        };
 
-    try {
+      case "$100 – $249":
+        return {
+          budgetMin: 100,
+          budgetMax: 249
+        };
 
-      jobs =
-        JSON.parse(
-          localStorage.getItem(
-            "korvoCustomerJobs"
+      case "$250 – $499":
+        return {
+          budgetMin: 250,
+          budgetMax: 499
+        };
+
+      case "$500 – $999":
+        return {
+          budgetMin: 500,
+          budgetMax: 999
+        };
+
+      case "$1,000 – $2,499":
+        return {
+          budgetMin: 1000,
+          budgetMax: 2499
+        };
+
+      case "$2,500 – $4,999":
+        return {
+          budgetMin: 2500,
+          budgetMax: 4999
+        };
+
+      case "$5,000 or more":
+        return {
+          budgetMin: 5000,
+          budgetMax: null
+        };
+
+      case "Need professional estimate":
+        return {
+          budgetMin: null,
+          budgetMax: null
+        };
+
+      default:
+        return {
+          budgetMin: null,
+          budgetMax: null
+        };
+    }
+  }
+
+
+  function generateJobReference() {
+
+    if (
+      window.crypto &&
+      typeof window.crypto.randomUUID ===
+        "function"
+    ) {
+
+      return (
+        "KORVO-" +
+        window.crypto
+          .randomUUID()
+          .replaceAll("-", "")
+          .slice(0, 8)
+          .toUpperCase()
+      );
+    }
+
+
+    return (
+      "KORVO-" +
+      Date.now()
+        .toString(36)
+        .slice(-8)
+        .toUpperCase()
+    );
+  }
+
+
+  function createJob(
+    customerId
+  ) {
+
+    const service =
+      document.querySelector(
+        'input[name="service"]:checked'
+      )?.value || "";
+
+    const timeframe =
+      document.querySelector(
+        'input[name="timeframe"]:checked'
+      )?.value || "";
+
+    const budgetValue =
+      document.getElementById(
+        "budget"
+      ).value;
+
+    const budget =
+      parseBudgetRange(
+        budgetValue
+      );
+
+    const preferredDate =
+      document.getElementById(
+        "preferredDate"
+      ).value;
+
+
+    return {
+
+      customer_id:
+        customerId,
+
+      title:
+        titleInput.value.trim(),
+
+      description:
+        descriptionInput.value.trim(),
+
+      category:
+        normalizeCategory(
+          service
+        ),
+
+      city:
+        document
+          .getElementById("city")
+          .value
+          .trim(),
+
+      state:
+        "GA",
+
+      budget_min:
+        budget.budgetMin,
+
+      budget_max:
+        budget.budgetMax,
+
+      preferred_date:
+        timeframe ===
+          "Specific date"
+          ? preferredDate || null
+          : null,
+
+      timeframe:
+        timeframe,
+
+      status:
+        "open",
+
+      reference:
+        generateJobReference()
+
+    };
+  }
+
+
+  async function saveJob(
+    job
+  ) {
+
+    /*
+      The reference column is UNIQUE.
+      In the extremely unlikely event
+      that a reference already exists,
+      Korvo tries again automatically.
+    */
+
+    let jobToSave = {
+      ...job
+    };
+
+
+    for (
+      let attempt = 0;
+      attempt < 3;
+      attempt++
+    ) {
+
+      const {
+        data,
+        error
+      } =
+        await korvoSupabase
+          .from("jobs")
+          .insert(
+            jobToSave
           )
-        ) || [];
+          .select()
+          .single();
 
-    } catch (error) {
 
-      jobs = [];
+      if (!error) {
+        return data;
+      }
 
+
+      if (
+        error.code === "23505"
+      ) {
+
+        jobToSave = {
+          ...jobToSave,
+
+          reference:
+            generateJobReference()
+        };
+
+        continue;
+      }
+
+
+      throw error;
     }
 
 
-    if (!Array.isArray(jobs)) {
-      jobs = [];
-    }
-
-
-    jobs.unshift(job);
-
-
-    localStorage.setItem(
-      "korvoCustomerJobs",
-      JSON.stringify(jobs)
+    throw new Error(
+      "Korvo could not generate a unique job reference."
     );
-
-
-    localStorage.setItem(
-      "korvoLatestJob",
-      JSON.stringify(job)
-    );
-
   }
 
 
   /* ======================================
      POST MY JOB
-
-     THIS IS THE IMPORTANT FIX
   ====================================== */
 
   form.addEventListener(
     "submit",
-    function (event) {
+
+    async function (event) {
 
       event.preventDefault();
 
-      console.log(
-        "Korvo Post My Job clicked"
-      );
 
+      if (
+        typeof korvoSupabase ===
+        "undefined"
+      ) {
 
-      const job =
-        createJob();
+        alert(
+          "Korvo could not connect to the server. Please refresh and try again."
+        );
 
-
-      saveJob(job);
-
-
-      if (jobReference) {
-        jobReference.textContent =
-          job.reference;
+        return;
       }
 
 
-      /*
-       Force the modal visible.
-       This avoids CSS-class mismatch issues.
-      */
-
-      successModal.style.display =
-        "flex";
-
-      successModal.style.visibility =
-        "visible";
-
-      successModal.style.opacity =
-        "1";
-
-      successModal.setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-      successModal.classList.add(
-        "active"
-      );
+      const originalButtonText =
+        submitButton.textContent;
 
 
-      document.body.style.overflow =
-        "hidden";
+      try {
+
+        submitButton.disabled =
+          true;
+
+        submitButton.textContent =
+          "Posting Job...";
+
+
+        /*
+          Get the real logged-in
+          Supabase customer.
+        */
+
+        const {
+          data: userData,
+          error: userError
+        } =
+          await korvoSupabase
+            .auth
+            .getUser();
+
+
+        if (userError) {
+          throw userError;
+        }
+
+
+        const user =
+          userData?.user;
+
+
+        if (!user) {
+
+          alert(
+            "Please log in to your Korvo customer account before posting a job."
+          );
+
+          window.location.href =
+            "login.html";
+
+          return;
+        }
+
+
+        /*
+          Create the database payload.
+        */
+
+        const job =
+          createJob(
+            user.id
+          );
+
+
+        /*
+          Insert the job into
+          public.jobs.
+        */
+
+        const savedJob =
+          await saveJob(
+            job
+          );
+
+
+        console.log(
+          "Korvo job saved:",
+          savedJob
+        );
+
+
+        if (jobReference) {
+
+          jobReference.textContent =
+            savedJob.reference;
+        }
+
+
+        /*
+          Show success modal.
+        */
+
+        successModal.style.display =
+          "flex";
+
+        successModal.style.visibility =
+          "visible";
+
+        successModal.style.opacity =
+          "1";
+
+
+        successModal.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+
+        successModal.classList.add(
+          "active"
+        );
+
+
+        document.body.style.overflow =
+          "hidden";
+
+
+      } catch (error) {
+
+        console.error(
+          "Korvo job posting failed:",
+          error
+        );
+
+
+        if (
+          error.code === "42501"
+        ) {
+
+          alert(
+            "Korvo could not post this job. Make sure you are signed in with a customer account."
+          );
+
+        } else {
+
+          alert(
+            "Korvo could not post your job. Please try again."
+          );
+        }
+
+      } finally {
+
+        submitButton.disabled =
+          false;
+
+        submitButton.textContent =
+          originalButtonText;
+      }
 
     }
   );
 
-
+  
   /* ======================================
      POST ANOTHER
   ====================================== */
