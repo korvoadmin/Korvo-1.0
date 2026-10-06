@@ -580,9 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
       )?.value;
 
     const contact =
-      document.querySelector(
-        'input[name="contactPreference"]:checked'
-      )?.value;
+  "Korvo Messages";
 
     const city =
       document.getElementById("city").value;
@@ -1163,7 +1161,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   );
 
-  
+
   /* ======================================
      POST ANOTHER
   ====================================== */

@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let pendingProfessional = "";
   let pendingQuoteId = "";
+  let submittedJobsCache = [];
 
 
   /* =========================
@@ -2175,16 +2176,96 @@ const messages = {
      ========================= */
 
   function getSubmittedJobs() {
-    const jobs =
-      safelyReadLocalStorage(
-        "korvoCustomerJobs",
-        []
+  return submittedJobsCache;
+}
+
+
+async function fetchSubmittedJobs() {
+
+  if (
+    typeof korvoSupabase ===
+    "undefined"
+  ) {
+    throw new Error(
+      "Supabase is not available."
+    );
+  }
+
+
+  const {
+    data: userData,
+    error: userError
+  } =
+    await korvoSupabase
+      .auth
+      .getUser();
+
+
+  if (userError) {
+    throw userError;
+  }
+
+
+  const user =
+    userData?.user;
+
+
+  if (!user) {
+
+    window.location.href =
+      "login.html";
+
+    return [];
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await korvoSupabase
+      .from("jobs")
+      .select(`
+        id,
+        customer_id,
+        title,
+        description,
+        category,
+        city,
+        state,
+        budget_min,
+        budget_max,
+        preferred_date,
+        timeframe,
+        status,
+        reference,
+        created_at
+      `)
+      .eq(
+        "customer_id",
+        user.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
       );
 
-    return Array.isArray(jobs)
-      ? jobs
-      : [];
+
+  if (error) {
+    throw error;
   }
+
+
+  submittedJobsCache =
+    Array.isArray(data)
+      ? data
+      : [];
+
+
+  return submittedJobsCache;
+}
 
 
   function formatPostedDate(
@@ -2214,7 +2295,70 @@ const messages = {
       }
     );
   }
+function formatJobBudget(
+  job
+) {
 
+  const minimum =
+    job.budget_min === null ||
+    job.budget_min === undefined
+      ? null
+      : Number(
+          job.budget_min
+        );
+
+  const maximum =
+    job.budget_max === null ||
+    job.budget_max === undefined
+      ? null
+      : Number(
+          job.budget_max
+        );
+
+
+  if (
+    minimum === null &&
+    maximum === null
+  ) {
+    return "Professional estimate requested";
+  }
+
+
+  if (
+    minimum === 0 &&
+    maximum !== null
+  ) {
+    return (
+      `Under $${(
+        maximum + 1
+      ).toLocaleString()}`
+    );
+  }
+
+
+  if (
+    minimum !== null &&
+    maximum === null
+  ) {
+    return (
+      `$${minimum.toLocaleString()} or more`
+    );
+  }
+
+
+  if (
+    minimum !== null &&
+    maximum !== null
+  ) {
+    return (
+      `$${minimum.toLocaleString()} – ` +
+      `$${maximum.toLocaleString()}`
+    );
+  }
+
+
+  return "Budget not specified";
+}
 
   function getJobIcon(
     serviceName
@@ -2292,7 +2436,7 @@ const messages = {
       );
 
     article.className =
-      "job-item";
+  "job-item generated-submitted-job";
 
 
     const service =
@@ -2319,8 +2463,9 @@ const messages = {
       "Customer project submitted through Korvo.";
 
     const budget =
-      job.budget ||
-      "Budget not specified";
+  formatJobBudget(
+    job
+  );
 
     const timeframe =
   job.timeframe ||
@@ -2333,14 +2478,13 @@ const reference =
   "KRV-000000";
 
     const customer =
-      job.customerName ||
-      job.customer ||
-      "Customer";
+  "You";
 
     const submittedAt =
-      job.submittedAt ||
-      job.createdAt ||
-      job.date;
+  job.created_at ||
+  job.submittedAt ||
+  job.createdAt ||
+  job.date;
 
 
     article.innerHTML = `
@@ -2853,82 +2997,191 @@ article
 
   return article;
 }
-  function loadSubmittedJobs() {
-  const submittedJobs =
-    getSubmittedJobs();
-
-  const activeJobs =
-    safelyReadLocalStorage(
-      "korvoActiveJobs",
-      []
-    );
+  async function loadSubmittedJobs() {
 
   if (!jobsList) {
     return;
   }
 
-  const visibleActiveJobs =
-  Array.isArray(activeJobs)
-    ? activeJobs.filter(
-        (job) =>
-          String(
-            job.status || "Active"
-          ).toLowerCase() !==
-          "completed"
-      )
-    : [];
 
-if (
-  visibleActiveJobs.length > 0
-) {
-  visibleActiveJobs
-    .slice()
-    .reverse()
-    .forEach((job) => {
-      jobsList.prepend(
-        createActiveJobCard(
-          job
-        )
+  try {
+
+    const submittedJobs =
+      await fetchSubmittedJobs();
+
+
+    /*
+      Remove old demo/static jobs.
+
+      From this point forward,
+      My Jobs shows actual Korvo
+      account data.
+    */
+
+    jobsList.innerHTML = "";
+
+
+    /*
+      Active jobs are still using
+      the prototype storage system.
+
+      We keep them working until
+      the Active Jobs backend is
+      migrated later.
+    */
+
+    const activeJobs =
+      safelyReadLocalStorage(
+        "korvoActiveJobs",
+        []
       );
-    });
-}
 
-  if (
-    submittedJobs.length === 0
-  ) {
-    return;
-  }
 
-  submittedJobs
-    .slice()
-    .reverse()
-    .forEach((job) => {
-      const isAlreadyActive =
-        Array.isArray(activeJobs) &&
-        activeJobs.some(
-          (activeJob) =>
-            String(
-              activeJob.jobId ||
-              activeJob.jobReference
-            ) ===
-            String(
-              job.id ||
-              job.jobId ||
-              job.reference ||
-              job.jobReference
+    const visibleActiveJobs =
+      Array.isArray(activeJobs)
+        ? activeJobs.filter(
+            (job) =>
+              String(
+                job.status ||
+                "Active"
+              ).toLowerCase() !==
+              "completed"
+          )
+        : [];
+
+
+    visibleActiveJobs
+      .slice()
+      .reverse()
+      .forEach(
+        (job) => {
+
+          jobsList.prepend(
+            createActiveJobCard(
+              job
             )
+          );
+
+        }
+      );
+
+
+    /*
+      Render real Supabase jobs.
+    */
+
+    submittedJobs
+      .slice()
+      .reverse()
+      .forEach(
+        (job) => {
+
+          const isAlreadyActive =
+            Array.isArray(
+              activeJobs
+            ) &&
+            activeJobs.some(
+              (activeJob) =>
+
+                String(
+                  activeJob.jobId ||
+                  activeJob.jobReference
+                ) ===
+                String(
+                  job.id ||
+                  job.reference
+                )
+
+            );
+
+
+          if (isAlreadyActive) {
+            return;
+          }
+
+
+          jobsList.prepend(
+            createSubmittedJobCard(
+              job
+            )
+          );
+
+        }
+      );
+
+
+    /*
+      Empty-state message.
+    */
+
+    if (
+      submittedJobs.length === 0 &&
+      visibleActiveJobs.length === 0
+    ) {
+
+      const emptyState =
+        document.createElement(
+          "div"
         );
 
-      if (isAlreadyActive) {
-        return;
-      }
 
-      jobsList.prepend(
-        createSubmittedJobCard(
-          job
-        )
+      emptyState.className =
+        "dashboard-empty-state";
+
+
+      emptyState.innerHTML = `
+        <p>
+          You have not posted any jobs yet.
+        </p>
+
+        <a
+          href="post-a-job.html"
+          class="primary-button"
+        >
+          Post Your First Job
+        </a>
+      `;
+
+
+      jobsList.appendChild(
+        emptyState
       );
-    });
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Unable to load customer jobs:",
+      error
+    );
+
+
+    jobsList.innerHTML = "";
+
+
+    const errorState =
+      document.createElement(
+        "div"
+      );
+
+
+    errorState.className =
+      "dashboard-empty-state";
+
+
+    errorState.innerHTML = `
+      <p>
+        Korvo could not load your jobs.
+        Please refresh the page and try again.
+      </p>
+    `;
+
+
+    jobsList.appendChild(
+      errorState
+    );
+  }
 }
 
 
@@ -3022,14 +3275,28 @@ if (completedJobsCount) {
      Initialize
      ========================= */
 
+  async function initializeDashboard() {
+
   loadNotificationState();
 
   loadSavedProfessionals();
 
-  loadSubmittedJobs();
-
   renderProfessionalQuotes();
 
+
+  /*
+    Load real Supabase jobs first
+    so dashboard statistics and
+    cards use current data.
+  */
+
+  await loadSubmittedJobs();
+
+
   loadDashboardStats();
+}
+
+
+initializeDashboard();
 
 });
