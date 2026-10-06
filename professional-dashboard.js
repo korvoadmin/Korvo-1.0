@@ -811,10 +811,8 @@ async function loadProfessionalProfile() {
      ========================= */
 
   function getCustomerJobs() {
-  function getCustomerJobs() {
   return customerJobs;
 }
-
 
 async function fetchCustomerJobs() {
 
