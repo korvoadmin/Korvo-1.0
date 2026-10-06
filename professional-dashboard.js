@@ -811,30 +811,68 @@ async function loadProfessionalProfile() {
      ========================= */
 
   function getCustomerJobs() {
-  try {
-    const savedJobs =
-      JSON.parse(
-        localStorage.getItem(
-          "korvoCustomerJobs"
-        )
+  function getCustomerJobs() {
+  return customerJobs;
+}
+
+
+async function fetchCustomerJobs() {
+
+  if (
+    typeof korvoSupabase ===
+    "undefined"
+  ) {
+    throw new Error(
+      "Supabase is not available."
+    );
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await korvoSupabase
+      .from("jobs")
+      .select(`
+        id,
+        title,
+        description,
+        category,
+        city,
+        state,
+        budget_min,
+        budget_max,
+        preferred_date,
+        timeframe,
+        status,
+        reference,
+        created_at
+      `)
+      .eq(
+        "status",
+        "open"
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
       );
 
-    return Array.isArray(savedJobs)
-      ? savedJobs
+
+  if (error) {
+    throw error;
+  }
+
+
+  customerJobs =
+    Array.isArray(data)
+      ? data
       : [];
 
-  } catch (error) {
-    console.error(
-      "Could not load customer jobs:",
-      error
-    );
 
-    
-
-
-
-      return [];
-  }
+  return customerJobs;
 }
   function getSubmittedQuotes() {
     try {
@@ -903,8 +941,7 @@ async function loadProfessionalProfile() {
   }
 
 
-  let customerJobs =
-    getCustomerJobs();
+  let customerJobs = [];
 
   let submittedQuotes =
     getSubmittedQuotes();
@@ -952,6 +989,115 @@ async function loadProfessionalProfile() {
     return `${city}, ${state}`;
   }
 
+  function formatJobBudget(
+  job
+) {
+
+  const minimum =
+    job.budget_min === null ||
+    job.budget_min === undefined
+      ? null
+      : Number(
+          job.budget_min
+        );
+
+  const maximum =
+    job.budget_max === null ||
+    job.budget_max === undefined
+      ? null
+      : Number(
+          job.budget_max
+        );
+
+
+  if (
+    minimum === null &&
+    maximum === null
+  ) {
+    return "Professional estimate requested";
+  }
+
+
+  if (
+    minimum === 0 &&
+    maximum !== null
+  ) {
+    return (
+      `Under $${(
+        maximum + 1
+      ).toLocaleString()}`
+    );
+  }
+
+
+  if (
+    minimum !== null &&
+    maximum === null
+  ) {
+    return (
+      `$${minimum.toLocaleString()} or more`
+    );
+  }
+
+
+  if (
+    minimum !== null &&
+    maximum !== null
+  ) {
+    return (
+      `$${minimum.toLocaleString()} – ` +
+      `$${maximum.toLocaleString()}`
+    );
+  }
+
+
+  return "Budget not listed";
+}
+
+
+function getJobSchedule(
+  job
+) {
+
+  if (
+    job.preferred_date
+  ) {
+
+    const parts =
+      String(
+        job.preferred_date
+      ).split("-");
+
+
+    if (
+      parts.length === 3
+    ) {
+
+      const date =
+        new Date(
+          Number(parts[0]),
+          Number(parts[1]) - 1,
+          Number(parts[2])
+        );
+
+
+      return date.toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        }
+      );
+    }
+  }
+
+
+  return (
+    job.timeframe ||
+    "Flexible"
+  );
+}
 
   function findJobById(jobId) {
     return customerJobs.find(
@@ -1087,15 +1233,14 @@ async function loadProfessionalProfile() {
         getJobLocation(job);
 
       const budget =
-        job.budget ||
-        job.budgetRange ||
-        "Budget not listed";
+        formatJobBudget(
+      job
+      );
 
       const date =
-        job.date ||
-        job.preferredDate ||
-        job.timeframe ||
-        "Flexible";
+  getJobSchedule(
+    job
+  );
 
       const description =
         job.description ||
@@ -1299,9 +1444,9 @@ async function loadProfessionalProfile() {
                 getJobLocation(job);
 
               const budget =
-                job.budget ||
-                job.budgetRange ||
-                "Not listed";
+  formatJobBudget(
+    job
+  );
 
 
               openInfoModal({
@@ -1341,15 +1486,14 @@ async function loadProfessionalProfile() {
                   },
 
                   {
-                    label:
-                      "Preferred Date",
+  label:
+    "Schedule",
 
-                    value:
-                      job.date ||
-                      job.preferredDate ||
-                      job.timeframe ||
-                      "Flexible"
-                  },
+  value:
+    getJobSchedule(
+      job
+    )
+},
 
                   {
                     label:
@@ -3059,19 +3203,68 @@ article
      const professionalLoaded =
   await loadProfessionalProfile();
 
-  if (!professionalLoaded) {
+
+if (!professionalLoaded) {
   return;
-  
-  }
+}
+
+
+let customerJobsLoaded =
+  true;
+
+
+try {
+
+  await fetchCustomerJobs();
+
+} catch (error) {
+
+  customerJobsLoaded =
+    false;
+
+  console.error(
+    "Could not load open Korvo jobs:",
+    error
+  );
+
+}
+
+
+if (customerJobsLoaded) {
 
   renderJobs();
 
-  renderSubmittedQuotes();
+} else if (
+  availableJobsList
+) {
 
-  renderActiveWork();
+  availableJobsList.innerHTML = `
+    <div class="empty-state">
 
-  updateDashboardCounters();
+      <div class="empty-state-icon">
+        ⚠️
+      </div>
 
-  updateNotificationCount();
+      <h3>
+        Jobs could not be loaded
+      </h3>
+
+      <p>
+        Refresh the page and try again.
+      </p>
+
+    </div>
+  `;
+
+}
+
+
+renderSubmittedQuotes();
+
+renderActiveWork();
+
+updateDashboardCounters();
+
+updateNotificationCount();
 
 });
