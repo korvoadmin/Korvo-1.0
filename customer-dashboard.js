@@ -1561,6 +1561,9 @@ reviewModal
           data-professional="${escapeHTML(
             professionalName
           )}"
+          data-quote-id="${escapeHTML(
+            quote.id || ""
+          )}"
         >
           Message
         </button>
@@ -1750,7 +1753,10 @@ reviewModal
 
 
           openProfessionalConversation(
-            professional
+            professional,
+            event.currentTarget
+              .dataset.quoteId ||
+            ""
           );
 
         }
@@ -2103,7 +2109,9 @@ reviewModal
      ========================= */
 
   function openProfessionalConversation(
-    professionalName = ""
+    professionalName = "",
+    quoteId = "",
+    activeJobId = ""
   ) {
     localStorage.setItem(
       "korvoMessagingRole",
@@ -2111,14 +2119,43 @@ reviewModal
     );
 
 
-    if (professionalName) {
+    localStorage.removeItem(
+      "korvoOpenQuoteId"
+    );
+
+    localStorage.removeItem(
+      "korvoOpenActiveJobId"
+    );
+
+    localStorage.removeItem(
+      "korvoOpenConversation"
+    );
+
+
+    if (quoteId) {
+      localStorage.setItem(
+        "korvoOpenQuoteId",
+        quoteId
+      );
+    }
+
+
+    if (activeJobId) {
+      localStorage.setItem(
+        "korvoOpenActiveJobId",
+        activeJobId
+      );
+    }
+
+
+    if (
+      !quoteId &&
+      !activeJobId &&
+      professionalName
+    ) {
       localStorage.setItem(
         "korvoOpenConversation",
         professionalName
-      );
-    } else {
-      localStorage.removeItem(
-        "korvoOpenConversation"
       );
     }
 
@@ -3237,6 +3274,9 @@ const reference =
             data-professional="${escapeHTML(
               professional
             )}"
+            data-active-job-id="${escapeHTML(
+              job.id || ""
+            )}"
           >
             Message Professional
           </button>
@@ -3304,6 +3344,10 @@ const reference =
           openProfessionalConversation(
             event.currentTarget
               .dataset.professional ||
+            "",
+            "",
+            event.currentTarget
+              .dataset.activeJobId ||
             ""
           );
 
