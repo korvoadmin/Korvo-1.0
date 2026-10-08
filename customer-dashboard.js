@@ -117,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let pendingProfessional = "";
   let pendingQuoteId = "";
   let submittedJobsCache = [];
+  let professionalQuotesCache = [];
 
 
   /* =========================
@@ -965,25 +966,88 @@ reviewModal
      ========================= */
 
   function getProfessionalQuotes() {
-    const quotes =
-      safelyReadLocalStorage(
-        "korvoProfessionalQuotes",
-        []
-      );
-
-    return Array.isArray(quotes)
-      ? quotes
-      : [];
+    return professionalQuotesCache;
   }
 
 
-  function saveProfessionalQuotes(
-    quotes
-  ) {
-    safelyWriteLocalStorage(
-      "korvoProfessionalQuotes",
-      quotes
-    );
+  async function fetchProfessionalQuotes() {
+
+    if (
+      typeof korvoSupabase ===
+      "undefined"
+    ) {
+      throw new Error(
+        "Supabase is not available."
+      );
+    }
+
+
+    const {
+      data: authData,
+      error: authError
+    } =
+      await korvoSupabase.auth.getUser();
+
+
+    if (
+      authError ||
+      !authData?.user
+    ) {
+      throw (
+        authError ||
+        new Error(
+          "Customer authentication is required."
+        )
+      );
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase
+        .from("quotes")
+        .select(`
+          id,
+          job_id,
+          customer_id,
+          professional_id,
+          amount,
+          timeframe,
+          message,
+          status,
+          job_title,
+          job_reference,
+          job_city,
+          job_state,
+          professional_name,
+          created_at
+        `)
+        .eq(
+          "customer_id",
+          authData.user.id
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    professionalQuotesCache =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    return professionalQuotesCache;
   }
 
 
@@ -1051,38 +1115,9 @@ reviewModal
   }
 
 
-  function updateQuoteStatus(
-    quoteId,
-    newStatus
-  ) {
-    const quotes =
-      getProfessionalQuotes();
-
-    const updatedQuotes =
-      quotes.map(
-        (quote) => {
-          if (
-            String(quote.id) ===
-            String(quoteId)
-          ) {
-            return {
-              ...quote,
-
-              status:
-                newStatus,
-
-              statusUpdatedAt:
-                new Date()
-                  .toISOString()
-            };
-          }
-
-          return quote;
-        }
-      );
-
-    saveProfessionalQuotes(
-      updatedQuotes
+  function updateQuoteStatus() {
+    console.warn(
+      "Real quote status updates will be connected in the next backend step."
     );
   }
 
@@ -1107,22 +1142,19 @@ reviewModal
 
 
     const professionalName =
+      quote.professional_name ||
       quote.professional ||
       "Korvo Professional";
 
     const professionalType =
       quote.professionalType ||
-      "Local Professional";
+      "Korvo Professional";
 
     const initials =
       quote.professionalInitials ||
       getInitials(
         professionalName
       );
-
-    const rating =
-      quote.professionalRating ||
-      "5.0";
 
     const profile =
       quote.professionalProfile ||
@@ -1150,16 +1182,20 @@ reviewModal
       status.toLowerCase();
 
     const jobTitle =
+      quote.job_title ||
       quote.jobTitle ||
       "Customer Project";
 
     const reference =
+      quote.job_reference ||
       quote.jobReference ||
+      quote.job_id ||
       quote.jobId ||
       "Not assigned";
 
     const createdDate =
       formatQuoteDate(
+        quote.created_at ||
         quote.createdAt
       );
 
@@ -1204,10 +1240,6 @@ reviewModal
               )}
             </h3>
 
-            <span class="verified-check">
-              ✓
-            </span>
-
           </div>
 
           <p>
@@ -1218,18 +1250,8 @@ reviewModal
 
           <div class="rating-row">
 
-            <span class="stars">
-              ★★★★★
-            </span>
-
-            <strong>
-              ${escapeHTML(
-                rating
-              )}
-            </strong>
-
             <span>
-              Verified Korvo Pro
+              Korvo professional
             </span>
 
           </div>
@@ -1315,9 +1337,8 @@ reviewModal
           data-quote-id="${escapeHTML(
             quote.id || ""
           )}"
-          ${quotePending
-            ? ""
-            : "disabled"}
+          disabled
+          title="Quote acceptance will be connected in the next backend step."
         >
           ${
             quoteAccepted
@@ -1338,9 +1359,8 @@ reviewModal
           data-quote-id="${escapeHTML(
             quote.id || ""
           )}"
-          ${quotePending
-            ? ""
-            : "disabled"}
+          disabled
+          title="Quote response will be connected in the next backend step."
         >
           ${
             quoteDeclined
@@ -1503,34 +1523,69 @@ reviewModal
       return;
     }
 
-    quotesList
-      .querySelectorAll(
-        ".generated-quote-item"
-      )
-      .forEach(
-        (item) =>
-          item.remove()
-      );
+
+    /*
+      Remove old static/demo quotes.
+
+      From this point forward,
+      Recent Quotes shows actual
+      Supabase quote data for the
+      signed-in customer.
+    */
+
+    quotesList.innerHTML = "";
+
 
     const quotes =
       getProfessionalQuotes();
 
 
-    quotes
-      .slice()
-      .reverse()
-      .forEach(
-        (quote) => {
-          const card =
-            createProfessionalQuoteCard(
-              quote
-            );
+    if (
+      quotes.length ===
+      0
+    ) {
 
-          quotesList.prepend(
-            card
-          );
-        }
+      const emptyState =
+        document.createElement(
+          "div"
+        );
+
+
+      emptyState.className =
+        "dashboard-empty-state";
+
+
+      emptyState.innerHTML = `
+        <p>
+          You have not received any quotes yet.
+        </p>
+      `;
+
+
+      quotesList.appendChild(
+        emptyState
       );
+
+
+      return;
+    }
+
+
+    quotes.forEach(
+      (quote) => {
+
+        const card =
+          createProfessionalQuoteCard(
+            quote
+          );
+
+
+        quotesList.appendChild(
+          card
+        );
+
+      }
+    );
   }
 
 
@@ -3231,7 +3286,6 @@ if (activeJobsCount) {
     if (quotesCount) {
       quotesCount.textContent =
         String(
-          2 +
           professionalQuotes.length
         );
     }
@@ -3281,13 +3335,36 @@ if (completedJobsCount) {
 
   loadSavedProfessionals();
 
+
+  /*
+    Load real Supabase quotes for
+    the signed-in customer before
+    rendering Recent Quotes.
+  */
+
+  try {
+
+    await fetchProfessionalQuotes();
+
+  } catch (error) {
+
+    console.error(
+      "Unable to load customer quotes:",
+      error
+    );
+
+    professionalQuotesCache = [];
+
+  }
+
+
   renderProfessionalQuotes();
 
 
   /*
-    Load real Supabase jobs first
-    so dashboard statistics and
-    cards use current data.
+    Load real Supabase jobs so
+    dashboard statistics and cards
+    use current account data.
   */
 
   await loadSubmittedJobs();
