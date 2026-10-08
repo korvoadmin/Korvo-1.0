@@ -2,1010 +2,1819 @@
 
 /* =========================
    Korvo Messages
+   Real Supabase Messaging
    ========================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* =========================
-     Messaging Role
-     ========================= */
-
-  const messagingRole =
-    localStorage.getItem("korvoMessagingRole") ||
-    "customer";
-
-  const isProfessional =
-    messagingRole === "professional";
-
-  const messageStorageKey =
-    isProfessional
-      ? "korvoProfessionalMessages"
-      : "korvoCustomerMessages";
-
-
-  /* =========================
-     Page Elements
-     ========================= */
-
-  const mobileMenuButton =
-    document.getElementById("mobileMenuButton");
-
-  const mobileNav =
-    document.getElementById("mobileNav");
-
-  const conversationSearch =
-    document.getElementById("conversationSearch");
-
-  const conversationList =
-    document.getElementById("conversationList");
-
-  const activeConversationName =
-    document.getElementById("activeConversationName");
-
-  const activeConversationStatus =
-    document.getElementById("activeConversationStatus");
-
-  const activeJobTitle =
-    document.getElementById("activeJobTitle");
-
-  const activeJobReference =
-    document.getElementById("activeJobReference");
-
-  const activeJobLocation =
-    document.getElementById("activeJobLocation");
-
-  const activeJobStatus =
-    document.getElementById("activeJobStatus");
-
-  const chatMessages =
-    document.getElementById("chatMessages");
-
-  const messageForm =
-    document.getElementById("messageForm");
-
-  const messageInput =
-    document.getElementById("messageInput");
-
-  const messageCharacterCount =
-    document.getElementById(
-      "messageCharacterCount"
-    );
-
-  const attachmentButton =
-    document.getElementById("attachmentButton");
-
-  const currentYear =
-    document.getElementById("currentYear");
-
-  const viewConversationProfile =
-    document.getElementById(
-      "viewConversationProfile"
-    );
-
-
-  /* =========================
-     Customer Conversations
-     ========================= */
-
-  const customerConversations = {
-
-    "chris-custom-installations": {
-      name: "Chris Custom Installations",
-      status: "Typically replies within an hour",
-
-      jobTitle:
-        "Install Motorized Shades",
-
-      jobReference:
-        "KRV-1001",
-
-      jobStatus:
-        "Quote Received",
-
-      location:
-        "Atlanta, GA",
-
-      profile:
-        "chris-profile.html",
-
-      senderName:
-        "Chris Custom Installations",
-
-      messages: [
-        {
-          type: "incoming",
-
-          text:
-            "Hi Chris, I saw your motorized shade installation request. I can complete the installation Friday afternoon.",
-
-          time:
-            "6:32 PM"
-        },
-
-        {
-          type: "outgoing",
-
-          text:
-            "Sounds good. Does your quote include programming the shades too?",
-
-          time:
-            "6:36 PM"
-        },
-
-        {
-          type: "incoming",
-
-          text:
-            "Yes. Installation, programming, testing and cleanup are included.",
-
-          time:
-            "6:39 PM"
-        }
-      ]
-    },
-
-
-    "prestige-cleaning": {
-      name:
-        "Prestige Estate Cleaning",
-
-      status:
-        "Usually replies the same day",
-
-      jobTitle:
-        "Deep Cleaning for Apartment",
-
-      jobReference:
-        "KRV-1002",
-
-      jobStatus:
-        "Quote Received",
-
-      location:
-        "Chamblee, GA",
-
-      profile:
-        "browse.html",
-
-      senderName:
-        "Prestige Estate Cleaning",
-
-      messages: [
-        {
-          type: "incoming",
-
-          text:
-            "Hi Chris, we reviewed your deep-cleaning request and can complete the project Saturday morning.",
-
-          time:
-            "Yesterday"
-        },
-
-        {
-          type: "outgoing",
-
-          text:
-            "Does the estimate include the kitchen and both bathrooms?",
-
-          time:
-            "Yesterday"
-        },
-
-        {
-          type: "incoming",
-
-          text:
-            "Yes. The estimate includes both bathrooms, the kitchen, floors, dusting and general cleanup.",
-
-          time:
-            "Yesterday"
-        }
-      ]
-    }
-
-  };
-
-
-  /* =========================
-     Professional Conversations
-     ========================= */
-
-  const professionalConversations = {
-
-    "sarah-m": {
-      name:
-        "Sarah M.",
-
-      status:
-        "Korvo Customer",
-
-      jobTitle:
-        "Motorized Shade Installation",
-
-      jobReference:
-        "KRV-1001",
-
-      jobStatus:
-        "Quote Submitted",
-
-      location:
-        "Buckhead, Atlanta",
-
-      profile:
-        "customer-dashboard.html",
-
-      senderName:
-        "Sarah M.",
-
-      messages: [
-        {
-          type: "outgoing",
-
-          text:
-            "Hi Sarah, I saw your motorized shade installation request. I can complete the installation Friday afternoon.",
-
-          time:
-            "6:32 PM"
-        },
-
-        {
-          type: "incoming",
-
-          text:
-            "Sounds good. Does your quote include programming the shades too?",
-
-          time:
-            "6:36 PM"
-        },
-
-        {
-          type: "outgoing",
-
-          text:
-            "Yes. Installation, programming, testing and cleanup are included.",
-
-          time:
-            "6:39 PM"
-        }
-      ]
-    },
-
-
-    "michael-r": {
-      name:
-        "Michael R.",
-
-      status:
-        "Korvo Customer",
-
-      jobTitle:
-        "Interior Painting",
-
-      jobReference:
-        "KRV-1003",
-
-      jobStatus:
-        "Quote Submitted",
-
-      location:
-        "Brookhaven, GA",
-
-      profile:
-        "customer-dashboard.html",
-
-      senderName:
-        "Michael R.",
-
-      messages: [
-        {
-          type: "incoming",
-
-          text:
-            "Hi, I had a question about the painting quote you submitted.",
-
-          time:
-            "Today"
-        },
-
-        {
-          type: "outgoing",
-
-          text:
-            "Absolutely. What would you like to know?",
-
-          time:
-            "Today"
-        }
-      ]
-    }
-
-  };
-
-
-  /* =========================
-     Active Conversation Set
-     ========================= */
-
-  const conversations =
-    isProfessional
-      ? professionalConversations
-      : customerConversations;
-
-
-  /* =========================
-     Active Conversation
-     ========================= */
-
-  let activeConversationId =
-    isProfessional
-      ? "sarah-m"
-      : "chris-custom-installations";
-
-
-  /* =========================
-     Open Requested Conversation
-     ========================= */
-
-  const requestedConversationName =
-    localStorage.getItem(
-      "korvoOpenConversation"
-    );
-
-  if (requestedConversationName) {
-
-    const matchingConversation =
-      Object.entries(conversations)
-        .find(
-          ([, conversation]) =>
-            conversation.name ===
-            requestedConversationName
-        );
-
-    if (matchingConversation) {
-
-      activeConversationId =
-        matchingConversation[0];
-
-    }
-
-    localStorage.removeItem(
-      "korvoOpenConversation"
-    );
-
-  }
-
-
-  /* =========================
-     Escape HTML
-     ========================= */
-
-  function escapeHTML(value) {
-
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll(
-        "'",
-        "&#039;"
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    /* =========================
+       Page Elements
+       ========================= */
+
+    const mobileMenuButton =
+      document.getElementById(
+        "mobileMenuButton"
       );
 
-  }
+    const mobileNav =
+      document.getElementById(
+        "mobileNav"
+      );
+
+    const conversationSearch =
+      document.getElementById(
+        "conversationSearch"
+      );
+
+    const conversationList =
+      document.getElementById(
+        "conversationList"
+      );
+
+    const conversationCount =
+      document.querySelector(
+        ".conversation-count"
+      );
+
+    const activeConversationName =
+      document.getElementById(
+        "activeConversationName"
+      );
+
+    const activeConversationStatus =
+      document.getElementById(
+        "activeConversationStatus"
+      );
+
+    const activeJobTitle =
+      document.getElementById(
+        "activeJobTitle"
+      );
+
+    const activeJobReference =
+      document.getElementById(
+        "activeJobReference"
+      );
+
+    const activeJobLocation =
+      document.getElementById(
+        "activeJobLocation"
+      );
+
+    const activeJobStatus =
+      document.getElementById(
+        "activeJobStatus"
+      );
+
+    const chatMessages =
+      document.getElementById(
+        "chatMessages"
+      );
+
+    const messageForm =
+      document.getElementById(
+        "messageForm"
+      );
+
+    const messageInput =
+      document.getElementById(
+        "messageInput"
+      );
+
+    const messageCharacterCount =
+      document.getElementById(
+        "messageCharacterCount"
+      );
+
+    const attachmentButton =
+      document.getElementById(
+        "attachmentButton"
+      );
+
+    const currentYear =
+      document.getElementById(
+        "currentYear"
+      );
+
+    const viewConversationProfile =
+      document.getElementById(
+        "viewConversationProfile"
+      );
+
+    const roleBadge =
+      document.getElementById(
+        "conversationRoleBadge"
+      );
+
+    const headerProfileButton =
+      document.querySelector(
+        ".profile-button"
+      );
+
+    const headerProfileAvatar =
+      document.querySelector(
+        ".profile-avatar"
+      );
+
+    const headerProfileName =
+      document.querySelector(
+        ".profile-name"
+      );
 
 
-  /* =========================
-     Local Storage
-     ========================= */
+    /* =========================
+       State
+       ========================= */
 
-  function readStoredMessages() {
+    let currentUser = null;
+    let currentProfile = null;
+    let isProfessional = false;
+    let conversations = [];
+    let messagesByConversation =
+      new Map();
+    let activeConversationId = "";
+    let refreshTimer = null;
 
-    try {
 
-      const stored =
-        JSON.parse(
-          localStorage.getItem(
-            messageStorageKey
-          )
+    /* =========================
+       Utilities
+       ========================= */
+
+    function escapeHTML(value) {
+
+      return String(
+        value ?? ""
+      )
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+        .replaceAll(
+          "'",
+          "&#039;"
         );
 
+    }
+
+
+    function getInitials(name) {
+
+      return String(
+        name || "Korvo"
+      )
+        .split(" ")
+        .filter(Boolean)
+        .map(
+          (word) =>
+            word.charAt(0)
+        )
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+
+    }
+
+
+    function formatMessageTime(
+      dateValue
+    ) {
+
+      const date =
+        new Date(
+          dateValue
+        );
+
+
       if (
-        stored &&
-        typeof stored === "object"
+        Number.isNaN(
+          date.getTime()
+        )
       ) {
+        return "";
+      }
 
-        Object.keys(stored)
-          .forEach(
-            (conversationId) => {
 
-              if (
-                conversations[
-                  conversationId
-                ] &&
-                Array.isArray(
-                  stored[
-                    conversationId
-                  ]
-                )
-              ) {
+      const now =
+        new Date();
 
-                conversations[
-                  conversationId
-                ].messages =
-                  stored[
-                    conversationId
-                  ];
 
-              }
+      const sameDate =
+        date.toDateString() ===
+        now.toDateString();
 
+
+      if (sameDate) {
+
+        return date
+          .toLocaleTimeString(
+            [],
+            {
+              hour:
+                "numeric",
+
+              minute:
+                "2-digit"
             }
           );
 
       }
 
-    } catch (error) {
 
-      console.error(
-        "Unable to load Korvo messages:",
-        error
-      );
+      return date
+        .toLocaleDateString(
+          "en-US",
+          {
+            month:
+              "short",
 
-    }
-
-  }
-
-
-  function saveMessages() {
-
-    try {
-
-      const messagesToSave = {};
-
-      Object.keys(
-        conversations
-      ).forEach(
-        (conversationId) => {
-
-          messagesToSave[
-            conversationId
-          ] =
-            conversations[
-              conversationId
-            ].messages;
-
-        }
-      );
-
-      localStorage.setItem(
-        messageStorageKey,
-        JSON.stringify(
-          messagesToSave
-        )
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Unable to save Korvo messages:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =========================
-     Render Conversation
-     ========================= */
-
-  function renderConversation(
-    conversationId
-  ) {
-
-    const conversation =
-      conversations[
-        conversationId
-      ];
-
-    if (!conversation) {
-      return;
-    }
-
-    activeConversationId =
-      conversationId;
-
-    activeConversationName.textContent =
-      conversation.name;
-
-    activeConversationStatus.textContent =
-      conversation.status;
-
-    activeJobTitle.textContent =
-      conversation.jobTitle;
-
-    activeJobReference.textContent =
-      conversation.jobReference;
-
-    activeJobLocation.textContent =
-      conversation.location;
-
-    activeJobStatus.textContent =
-      conversation.jobStatus;
-
-    viewConversationProfile.href =
-      conversation.profile;
-
-    renderMessages(
-      conversation
-    );
-
-    buildConversationList();
-
-  }
-
-
-  /* =========================
-     Render Messages
-     ========================= */
-
-  function renderMessages(
-    conversation
-  ) {
-
-    if (!chatMessages) {
-      return;
-    }
-
-    chatMessages.innerHTML = `
-      <div class="message-date-divider">
-        Recent
-      </div>
-    `;
-
-    conversation.messages.forEach(
-      (message) => {
-
-        const bubble =
-          document.createElement(
-            "article"
-          );
-
-        bubble.className =
-          `message-bubble ${message.type}`;
-
-        if (
-          message.type ===
-          "incoming"
-        ) {
-
-          bubble.innerHTML = `
-            <div class="message-sender">
-              ${escapeHTML(
-                conversation.senderName
-              )}
-            </div>
-
-            <p>
-              ${escapeHTML(
-                message.text
-              )}
-            </p>
-
-            <span class="message-time">
-              ${escapeHTML(
-                message.time
-              )}
-            </span>
-          `;
-
-        } else {
-
-          bubble.innerHTML = `
-            <p>
-              ${escapeHTML(
-                message.text
-              )}
-            </p>
-
-            <span class="message-time">
-              ${escapeHTML(
-                message.time
-              )}
-            </span>
-          `;
-
-        }
-
-        chatMessages.appendChild(
-          bubble
+            day:
+              "numeric"
+          }
         );
 
-      }
-    );
-
-    chatMessages.scrollTop =
-      chatMessages.scrollHeight;
-
-  }
-
-
-  /* =========================
-     Build Conversation List
-     ========================= */
-
-  function buildConversationList() {
-
-    if (!conversationList) {
-      return;
     }
 
-    conversationList.innerHTML = "";
 
-    Object.entries(
-      conversations
-    ).forEach(
-      ([conversationId, conversation]) => {
+    function formatStatus(
+      value
+    ) {
 
-        const button =
-          document.createElement(
-            "button"
+      const normalized =
+        String(
+          value || ""
+        )
+          .replaceAll(
+            "_",
+            " "
+          )
+          .trim();
+
+
+      if (!normalized) {
+        return "Korvo Conversation";
+      }
+
+
+      return normalized
+        .replace(
+          /\b\w/g,
+          (letter) =>
+            letter.toUpperCase()
+        );
+
+    }
+
+
+    function getOtherPartyName(
+      conversation
+    ) {
+
+      if (isProfessional) {
+        return "Korvo Customer";
+      }
+
+
+      return (
+        conversation
+          .professional_name ||
+        "Korvo Professional"
+      );
+
+    }
+
+
+    function getConversationMessages(
+      conversationId
+    ) {
+
+      return (
+        messagesByConversation
+          .get(
+            conversationId
+          ) ||
+        []
+      );
+
+    }
+
+
+    function setComposerEnabled(
+      enabled
+    ) {
+
+      if (messageInput) {
+        messageInput.disabled =
+          !enabled;
+      }
+
+
+      if (messageForm) {
+
+        const sendButton =
+          messageForm.querySelector(
+            'button[type="submit"]'
           );
 
-        button.type =
-          "button";
 
-        button.className =
-          "conversation-item";
-
-        if (
-          conversationId ===
-          activeConversationId
-        ) {
-
-          button.classList.add(
-            "active"
-          );
-
+        if (sendButton) {
+          sendButton.disabled =
+            !enabled;
         }
 
-        button.dataset.conversation =
-          conversationId;
+      }
 
-        const initials =
-          conversation.name
-            .split(" ")
-            .map(
-              (word) =>
-                word.charAt(0)
-            )
-            .slice(0, 2)
-            .join("")
-            .toUpperCase();
 
-        const latestMessage =
-          conversation.messages[
-            conversation.messages.length - 1
-          ];
+      if (attachmentButton) {
+        attachmentButton.disabled =
+          !enabled;
+      }
 
-        button.innerHTML = `
-          <div class="conversation-avatar">
-            ${escapeHTML(initials)}
-          </div>
+    }
 
-          <div class="conversation-preview">
 
-            <div class="conversation-preview-top">
+    /* =========================
+       Authentication
+       ========================= */
 
-              <strong>
-                ${escapeHTML(
-                  conversation.name
-                )}
-              </strong>
+    async function loadCurrentAccount() {
 
-              <span>
-                ${escapeHTML(
-                  latestMessage?.time ||
-                    ""
-                )}
-              </span>
+      if (
+        typeof korvoSupabase ===
+        "undefined"
+      ) {
+        throw new Error(
+          "Supabase is not available."
+        );
+      }
 
-            </div>
 
-            <p>
-              ${escapeHTML(
-                latestMessage?.text ||
-                  "Start a conversation..."
-              )}
-            </p>
+      const {
+        data: userData,
+        error: userError
+      } =
+        await korvoSupabase
+          .auth
+          .getUser();
 
-            <span class="conversation-job">
-              ${escapeHTML(
-                conversation.jobTitle
-              )}
-            </span>
 
-          </div>
-        `;
+      if (
+        userError ||
+        !userData?.user
+      ) {
 
-        button.addEventListener(
-          "click",
-          () => {
+        window.location.href =
+          "login.html";
 
-            renderConversation(
-              conversationId
+        return false;
+      }
+
+
+      currentUser =
+        userData.user;
+
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await korvoSupabase
+          .from(
+            "profiles"
+          )
+          .select(
+            "id, first_name, last_name, account_type"
+          )
+          .eq(
+            "id",
+            currentUser.id
+          )
+          .single();
+
+
+      if (profileError) {
+        throw profileError;
+      }
+
+
+      currentProfile =
+        profile;
+
+
+      isProfessional =
+        String(
+          profile.account_type ||
+          ""
+        ).toLowerCase() ===
+        "professional";
+
+
+      localStorage.setItem(
+        "korvoMessagingRole",
+        isProfessional
+          ? "professional"
+          : "customer"
+      );
+
+
+      updateHeaderForRole();
+
+
+      return true;
+    }
+
+
+    function updateHeaderForRole() {
+
+      const firstName =
+        currentProfile
+          ?.first_name ||
+        (
+          isProfessional
+            ? "Pro"
+            : "Customer"
+        );
+
+
+      const fullName =
+        [
+          currentProfile
+            ?.first_name,
+
+          currentProfile
+            ?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ") ||
+        firstName;
+
+
+      if (
+        headerProfileButton
+      ) {
+
+        headerProfileButton.href =
+          isProfessional
+            ? "professional-dashboard.html"
+            : "customer-dashboard.html";
+
+      }
+
+
+      if (
+        headerProfileAvatar
+      ) {
+
+        headerProfileAvatar.textContent =
+          getInitials(
+            fullName
+          );
+
+      }
+
+
+      if (
+        headerProfileName
+      ) {
+
+        headerProfileName.textContent =
+          firstName;
+
+      }
+
+    }
+
+
+    /* =========================
+       Backend Loading
+       ========================= */
+
+    async function fetchConversations() {
+
+      const {
+        data,
+        error
+      } =
+        await korvoSupabase
+          .from(
+            "conversations"
+          )
+          .select(
+            "id, quote_id, job_id, active_job_id, customer_id, professional_id, job_title, job_reference, job_city, job_state, professional_name, status, created_at, updated_at"
+          )
+          .order(
+            "updated_at",
+            {
+              ascending:
+                false
+            }
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      conversations =
+        Array.isArray(
+          data
+        )
+          ? data
+          : [];
+
+
+      return conversations;
+    }
+
+
+    async function fetchMessages() {
+
+      messagesByConversation =
+        new Map();
+
+
+      const conversationIds =
+        conversations.map(
+          (conversation) =>
+            conversation.id
+        );
+
+
+      if (
+        conversationIds.length ===
+        0
+      ) {
+        return;
+      }
+
+
+      const {
+        data,
+        error
+      } =
+        await korvoSupabase
+          .from(
+            "messages"
+          )
+          .select(
+            "id, conversation_id, sender_id, body, created_at"
+          )
+          .in(
+            "conversation_id",
+            conversationIds
+          )
+          .order(
+            "created_at",
+            {
+              ascending:
+                true
+            }
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      (
+        Array.isArray(data)
+          ? data
+          : []
+      )
+        .forEach(
+          (message) => {
+
+            const existing =
+              messagesByConversation
+                .get(
+                  message
+                    .conversation_id
+                ) ||
+              [];
+
+
+            existing.push(
+              message
+            );
+
+
+            messagesByConversation
+              .set(
+                message
+                  .conversation_id,
+                existing
+              );
+
+          }
+        );
+
+    }
+
+
+    async function loadInbox() {
+
+      await fetchConversations();
+      await fetchMessages();
+
+    }
+
+
+    /* =========================
+       Requested Conversation
+       ========================= */
+
+    function chooseInitialConversation() {
+
+      if (
+        conversations.length ===
+        0
+      ) {
+
+        activeConversationId =
+          "";
+
+        clearRequestedConversation();
+
+        return;
+      }
+
+
+      const requestedQuoteId =
+        localStorage.getItem(
+          "korvoOpenQuoteId"
+        );
+
+
+      const requestedActiveJobId =
+        localStorage.getItem(
+          "korvoOpenActiveJobId"
+        );
+
+
+      const legacyName =
+        localStorage.getItem(
+          "korvoOpenConversation"
+        );
+
+
+      let match = null;
+
+
+      if (requestedQuoteId) {
+
+        match =
+          conversations.find(
+            (conversation) =>
+              String(
+                conversation
+                  .quote_id
+              ) ===
+              String(
+                requestedQuoteId
+              )
+          );
+
+      }
+
+
+      if (
+        !match &&
+        requestedActiveJobId
+      ) {
+
+        match =
+          conversations.find(
+            (conversation) =>
+              String(
+                conversation
+                  .active_job_id ||
+                ""
+              ) ===
+              String(
+                requestedActiveJobId
+              )
+          );
+
+      }
+
+
+      if (
+        !match &&
+        legacyName &&
+        !isProfessional
+      ) {
+
+        match =
+          conversations.find(
+            (conversation) =>
+              String(
+                conversation
+                  .professional_name ||
+                ""
+              ) ===
+              String(
+                legacyName
+              )
+          );
+
+      }
+
+
+      if (
+        match
+      ) {
+
+        activeConversationId =
+          match.id;
+
+      } else if (
+        !conversations.some(
+          (conversation) =>
+            conversation.id ===
+            activeConversationId
+        )
+      ) {
+
+        activeConversationId =
+          conversations[0].id;
+
+      }
+
+
+      clearRequestedConversation();
+
+    }
+
+
+    function clearRequestedConversation() {
+
+      localStorage.removeItem(
+        "korvoOpenQuoteId"
+      );
+
+      localStorage.removeItem(
+        "korvoOpenActiveJobId"
+      );
+
+      localStorage.removeItem(
+        "korvoOpenConversation"
+      );
+
+    }
+
+
+    /* =========================
+       Render Conversation List
+       ========================= */
+
+    function buildConversationList() {
+
+      if (
+        !conversationList
+      ) {
+        return;
+      }
+
+
+      conversationList.innerHTML =
+        "";
+
+
+      if (
+        conversationCount
+      ) {
+
+        conversationCount.textContent =
+          String(
+            conversations.length
+          );
+
+      }
+
+
+      if (
+        conversations.length ===
+        0
+      ) {
+
+        conversationList.innerHTML =
+          '<div class="empty-state compact">' +
+            '<div class="empty-state-icon">💬</div>' +
+            '<h3>No conversations yet</h3>' +
+            '<p>Your Korvo job conversations will appear here.</p>' +
+          '</div>';
+
+
+        return;
+      }
+
+
+      conversations.forEach(
+        (conversation) => {
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.type =
+            "button";
+
+          button.className =
+            "conversation-item";
+
+
+          if (
+            conversation.id ===
+            activeConversationId
+          ) {
+
+            button.classList.add(
+              "active"
             );
 
           }
+
+
+          const otherParty =
+            getOtherPartyName(
+              conversation
+            );
+
+
+          const messages =
+            getConversationMessages(
+              conversation.id
+            );
+
+
+          const latestMessage =
+            messages[
+              messages.length - 1
+            ];
+
+
+          button.innerHTML =
+            '<div class="conversation-avatar">' +
+              escapeHTML(
+                getInitials(
+                  otherParty
+                )
+              ) +
+            '</div>' +
+
+            '<div class="conversation-preview">' +
+
+              '<div class="conversation-preview-top">' +
+                '<strong>' +
+                  escapeHTML(
+                    otherParty
+                  ) +
+                '</strong>' +
+
+                '<span>' +
+                  escapeHTML(
+                    latestMessage
+                      ? formatMessageTime(
+                          latestMessage
+                            .created_at
+                        )
+                      : ""
+                  ) +
+                '</span>' +
+              '</div>' +
+
+              '<p>' +
+                escapeHTML(
+                  latestMessage
+                    ?.body ||
+                  "Start the conversation..."
+                ) +
+              '</p>' +
+
+              '<span class="conversation-job">' +
+                escapeHTML(
+                  conversation
+                    .job_title ||
+                  "Korvo Job"
+                ) +
+              '</span>' +
+
+            '</div>';
+
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              activeConversationId =
+                conversation.id;
+
+
+              renderActiveConversation();
+              buildConversationList();
+
+            }
+          );
+
+
+          conversationList
+            .appendChild(
+              button
+            );
+
+        }
+      );
+
+    }
+
+
+    /* =========================
+       Render Active Conversation
+       ========================= */
+
+    function renderActiveConversation() {
+
+      const conversation =
+        conversations.find(
+          (item) =>
+            item.id ===
+            activeConversationId
         );
 
-        conversationList.appendChild(
-          button
+
+      if (
+        !conversation
+      ) {
+
+        renderNoConversation();
+
+        return;
+      }
+
+
+      const otherParty =
+        getOtherPartyName(
+          conversation
+        );
+
+
+      if (
+        activeConversationName
+      ) {
+
+        activeConversationName
+          .textContent =
+            otherParty;
+
+      }
+
+
+      if (
+        activeConversationStatus
+      ) {
+
+        activeConversationStatus
+          .textContent =
+            isProfessional
+              ? "Korvo Customer"
+              : "Korvo Professional";
+
+      }
+
+
+      if (
+        roleBadge
+      ) {
+
+        roleBadge.textContent =
+          isProfessional
+            ? "Korvo Customer"
+            : "Korvo Professional";
+
+      }
+
+
+      if (
+        activeJobTitle
+      ) {
+
+        activeJobTitle.textContent =
+          conversation
+            .job_title ||
+          "Korvo Job";
+
+      }
+
+
+      if (
+        activeJobReference
+      ) {
+
+        activeJobReference
+          .textContent =
+            conversation
+              .job_reference ||
+            conversation
+              .job_id ||
+            "Not assigned";
+
+      }
+
+
+      if (
+        activeJobLocation
+      ) {
+
+        activeJobLocation
+          .textContent =
+            [
+              conversation
+                .job_city,
+
+              conversation
+                .job_state
+            ]
+              .filter(Boolean)
+              .join(", ") ||
+            "Location unavailable";
+
+      }
+
+
+      if (
+        activeJobStatus
+      ) {
+
+        activeJobStatus
+          .textContent =
+            conversation
+              .active_job_id
+              ? "Active Job"
+              : "Quote Conversation";
+
+      }
+
+
+      if (
+        viewConversationProfile
+      ) {
+
+        if (isProfessional) {
+
+          viewConversationProfile
+            .style.display =
+              "none";
+
+        } else {
+
+          viewConversationProfile
+            .style.display =
+              "";
+
+          viewConversationProfile.href =
+            "browse.html";
+
+        }
+
+      }
+
+
+      renderMessages(
+        conversation
+      );
+
+
+      setComposerEnabled(
+        conversation.status ===
+        "active"
+      );
+
+    }
+
+
+    function renderNoConversation() {
+
+      if (
+        activeConversationName
+      ) {
+
+        activeConversationName
+          .textContent =
+            "No conversation selected";
+
+      }
+
+
+      if (
+        activeConversationStatus
+      ) {
+
+        activeConversationStatus
+          .textContent =
+            "Choose a conversation from your inbox.";
+
+      }
+
+
+      if (
+        roleBadge
+      ) {
+        roleBadge.textContent =
+          "Korvo";
+      }
+
+
+      if (
+        activeJobTitle
+      ) {
+        activeJobTitle.textContent =
+          "—";
+      }
+
+
+      if (
+        activeJobReference
+      ) {
+        activeJobReference.textContent =
+          "—";
+      }
+
+
+      if (
+        activeJobLocation
+      ) {
+        activeJobLocation.textContent =
+          "—";
+      }
+
+
+      if (
+        activeJobStatus
+      ) {
+        activeJobStatus.textContent =
+          "—";
+      }
+
+
+      if (
+        viewConversationProfile
+      ) {
+        viewConversationProfile
+          .style.display =
+            "none";
+      }
+
+
+      if (
+        chatMessages
+      ) {
+
+        chatMessages.innerHTML =
+          '<div class="empty-state compact">' +
+            '<div class="empty-state-icon">💬</div>' +
+            '<h3>No messages yet</h3>' +
+            '<p>Your conversation will appear here.</p>' +
+          '</div>';
+
+      }
+
+
+      setComposerEnabled(
+        false
+      );
+
+    }
+
+
+    function renderMessages(
+      conversation
+    ) {
+
+      if (
+        !chatMessages
+      ) {
+        return;
+      }
+
+
+      const messages =
+        getConversationMessages(
+          conversation.id
+        );
+
+
+      chatMessages.innerHTML =
+        '<div class="message-date-divider">Recent</div>';
+
+
+      if (
+        messages.length ===
+        0
+      ) {
+
+        const emptyMessage =
+          document.createElement(
+            "div"
+          );
+
+
+        emptyMessage.className =
+          "empty-state compact";
+
+
+        emptyMessage.innerHTML =
+          '<div class="empty-state-icon">💬</div>' +
+          '<h3>Start the conversation</h3>' +
+          '<p>Send the first message about this Korvo job.</p>';
+
+
+        chatMessages.appendChild(
+          emptyMessage
         );
 
       }
-    );
-
-  }
 
 
-  /* =========================
-     Conversation Search
-     ========================= */
+      messages.forEach(
+        (message) => {
 
-  if (conversationSearch) {
+          const outgoing =
+            message.sender_id ===
+            currentUser.id;
 
-    conversationSearch.addEventListener(
-      "input",
-      () => {
 
-        const searchValue =
-          conversationSearch.value
-            .trim()
-            .toLowerCase();
+          const bubble =
+            document.createElement(
+              "article"
+            );
 
-        const conversationItems =
-          conversationList
-            ?.querySelectorAll(
-              ".conversation-item"
-            ) || [];
 
-        conversationItems.forEach(
-          (item) => {
+          bubble.className =
+            "message-bubble " +
+            (
+              outgoing
+                ? "outgoing"
+                : "incoming"
+            );
 
-            const searchableText =
-              item.textContent
-                .toLowerCase();
 
-            const matches =
-              searchableText.includes(
-                searchValue
+          const senderHTML =
+            outgoing
+              ? ""
+              : (
+                  '<div class="message-sender">' +
+                    escapeHTML(
+                      getOtherPartyName(
+                        conversation
+                      )
+                    ) +
+                  '</div>'
+                );
+
+
+          bubble.innerHTML =
+            senderHTML +
+
+            '<p>' +
+              escapeHTML(
+                message.body
+              ) +
+            '</p>' +
+
+            '<span class="message-time">' +
+              escapeHTML(
+                formatMessageTime(
+                  message.created_at
+                )
+              ) +
+            '</span>';
+
+
+          chatMessages.appendChild(
+            bubble
+          );
+
+        }
+      );
+
+
+      chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+    }
+
+
+    /* =========================
+       Send Message
+       ========================= */
+
+    messageForm
+      ?.addEventListener(
+        "submit",
+        async (event) => {
+
+          event.preventDefault();
+
+
+          const text =
+            messageInput
+              ?.value
+              .trim() ||
+            "";
+
+
+          if (
+            !text ||
+            !activeConversationId ||
+            !currentUser
+          ) {
+            return;
+          }
+
+
+          const sendButton =
+            messageForm
+              .querySelector(
+                'button[type="submit"]'
               );
 
-            item.style.display =
-              matches
-                ? ""
-                : "none";
+
+          if (
+            sendButton
+          ) {
+
+            sendButton.disabled =
+              true;
+
+            sendButton.textContent =
+              "Sending...";
+
+          }
+
+
+          try {
+
+            const {
+              data: savedMessage,
+              error
+            } =
+              await korvoSupabase
+                .from(
+                  "messages"
+                )
+                .insert({
+                  conversation_id:
+                    activeConversationId,
+
+                  sender_id:
+                    currentUser.id,
+
+                  body:
+                    text
+                })
+                .select(
+                  "id, conversation_id, sender_id, body, created_at"
+                )
+                .single();
+
+
+            if (error) {
+              throw error;
+            }
+
+
+            const existing =
+              getConversationMessages(
+                activeConversationId
+              )
+                .slice();
+
+
+            existing.push(
+              savedMessage
+            );
+
+
+            messagesByConversation
+              .set(
+                activeConversationId,
+                existing
+              );
+
+
+            const conversation =
+              conversations.find(
+                (item) =>
+                  item.id ===
+                  activeConversationId
+              );
+
+
+            if (
+              conversation
+            ) {
+
+              conversation.updated_at =
+                savedMessage.created_at;
+
+            }
+
+
+            conversations.sort(
+              (a, b) =>
+                new Date(
+                  b.updated_at
+                ) -
+                new Date(
+                  a.updated_at
+                )
+            );
+
+
+            if (
+              messageInput
+            ) {
+
+              messageInput.value =
+                "";
+
+              messageInput.style.height =
+                "";
+
+            }
+
+
+            if (
+              messageCharacterCount
+            ) {
+              messageCharacterCount
+                .textContent =
+                  "0";
+            }
+
+
+            renderActiveConversation();
+            buildConversationList();
+
+
+          } catch (error) {
+
+            console.error(
+              "Message send failed:",
+              error
+            );
+
+
+            alert(
+              "Korvo could not send your message. Please try again."
+            );
+
+
+          } finally {
+
+            if (
+              sendButton
+            ) {
+
+              sendButton.disabled =
+                false;
+
+              sendButton.textContent =
+                "Send";
+
+            }
+
+          }
+
+        }
+      );
+
+
+    /* =========================
+       Inbox Refresh
+       ========================= */
+
+    async function refreshInbox() {
+
+      try {
+
+        const currentId =
+          activeConversationId;
+
+
+        await loadInbox();
+
+
+        if (
+          conversations.some(
+            (conversation) =>
+              conversation.id ===
+              currentId
+          )
+        ) {
+
+          activeConversationId =
+            currentId;
+
+        } else {
+
+          chooseInitialConversation();
+
+        }
+
+
+        buildConversationList();
+        renderActiveConversation();
+
+
+      } catch (error) {
+
+        console.error(
+          "Unable to refresh messages:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       Search
+       ========================= */
+
+    conversationSearch
+      ?.addEventListener(
+        "input",
+        () => {
+
+          const searchValue =
+            conversationSearch.value
+              .trim()
+              .toLowerCase();
+
+
+          const items =
+            conversationList
+              ?.querySelectorAll(
+                ".conversation-item"
+              ) ||
+            [];
+
+
+          items.forEach(
+            (item) => {
+
+              const matches =
+                item.textContent
+                  .toLowerCase()
+                  .includes(
+                    searchValue
+                  );
+
+
+              item.style.display =
+                matches
+                  ? ""
+                  : "none";
+
+            }
+          );
+
+        }
+      );
+
+
+    /* =========================
+       Composer Behavior
+       ========================= */
+
+    messageInput
+      ?.addEventListener(
+        "input",
+        () => {
+
+          if (
+            messageCharacterCount
+          ) {
+
+            messageCharacterCount
+              .textContent =
+                String(
+                  messageInput
+                    .value
+                    .length
+                );
+
+          }
+
+
+          messageInput.style.height =
+            "auto";
+
+
+          messageInput.style.height =
+            Math.min(
+              messageInput
+                .scrollHeight,
+              130
+            ) +
+            "px";
+
+        }
+      );
+
+
+    messageInput
+      ?.addEventListener(
+        "keydown",
+        (event) => {
+
+          if (
+            event.key ===
+              "Enter" &&
+            !event.shiftKey
+          ) {
+
+            event.preventDefault();
+
+            messageForm
+              ?.requestSubmit();
+
+          }
+
+        }
+      );
+
+
+    attachmentButton
+      ?.addEventListener(
+        "click",
+        () => {
+
+          alert(
+            "Photo attachments will be connected after the core messaging backend is verified."
+          );
+
+        }
+      );
+
+
+    /* =========================
+       Mobile Navigation
+       ========================= */
+
+    if (
+      mobileMenuButton &&
+      mobileNav
+    ) {
+
+      mobileMenuButton
+        .addEventListener(
+          "click",
+          () => {
+
+            mobileNav
+              .classList
+              .toggle(
+                "open"
+              );
+
+
+            const isOpen =
+              mobileNav
+                .classList
+                .contains(
+                  "open"
+                );
+
+
+            mobileMenuButton
+              .setAttribute(
+                "aria-expanded",
+                String(
+                  isOpen
+                )
+              );
+
+
+            mobileMenuButton
+              .textContent =
+                isOpen
+                  ? "×"
+                  : "☰";
 
           }
         );
 
-      }
-    );
-
-  }
+    }
 
 
-  /* =========================
-     Send Message
-     ========================= */
+    /* =========================
+       Footer
+       ========================= */
 
-  if (messageForm) {
+    if (
+      currentYear
+    ) {
 
-    messageForm.addEventListener(
-      "submit",
-      (event) => {
-
-        event.preventDefault();
-
-        const text =
-          messageInput.value
-            .trim();
-
-        if (!text) {
-          return;
-        }
-
-        const conversation =
-          conversations[
-            activeConversationId
-          ];
-
-        if (!conversation) {
-          return;
-        }
-
-        const newMessage = {
-
-          type:
-            "outgoing",
-
-          text,
-
-          time:
-            new Date()
-              .toLocaleTimeString(
-                [],
-                {
-                  hour:
-                    "numeric",
-
-                  minute:
-                    "2-digit"
-                }
-              )
-
-        };
-
-        conversation.messages.push(
-          newMessage
+      currentYear.textContent =
+        String(
+          new Date()
+            .getFullYear()
         );
 
-        saveMessages();
+    }
 
-        renderMessages(
-          conversation
+
+    /* =========================
+       Initialize
+       ========================= */
+
+    try {
+
+      const loaded =
+        await loadCurrentAccount();
+
+
+      if (!loaded) {
+        return;
+      }
+
+
+      await loadInbox();
+
+      chooseInitialConversation();
+
+      buildConversationList();
+      renderActiveConversation();
+
+
+      refreshTimer =
+        window.setInterval(
+          refreshInbox,
+          5000
         );
 
-        buildConversationList();
 
-        messageInput.value =
-          "";
+      window.addEventListener(
+        "beforeunload",
+        () => {
 
-        messageCharacterCount.textContent =
-          "0";
-
-        messageInput.style.height =
-          "";
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     Character Counter
-     ========================= */
-
-  if (messageInput) {
-
-    messageInput.addEventListener(
-      "input",
-      () => {
-
-        messageCharacterCount.textContent =
-          String(
-            messageInput.value.length
-          );
-
-        messageInput.style.height =
-          "auto";
-
-        messageInput.style.height =
-          `${Math.min(
-            messageInput.scrollHeight,
-            130
-          )}px`;
-
-      }
-    );
-
-
-    messageInput.addEventListener(
-      "keydown",
-      (event) => {
-
-        if (
-          event.key ===
-            "Enter" &&
-          !event.shiftKey
-        ) {
-
-          event.preventDefault();
-
-          messageForm.requestSubmit();
+          if (
+            refreshTimer
+          ) {
+            window.clearInterval(
+              refreshTimer
+            );
+          }
 
         }
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     Attachment Button
-     ========================= */
-
-  if (attachmentButton) {
-
-    attachmentButton.addEventListener(
-      "click",
-      () => {
-
-        alert(
-          "Photo attachments will be added when Korvo file uploads are connected to the backend."
-        );
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     Mobile Navigation
-     ========================= */
-
-  if (
-    mobileMenuButton &&
-    mobileNav
-  ) {
-
-    mobileMenuButton.addEventListener(
-      "click",
-      () => {
-
-        mobileNav.classList.toggle(
-          "open"
-        );
-
-        const isOpen =
-          mobileNav.classList.contains(
-            "open"
-          );
-
-        mobileMenuButton.setAttribute(
-          "aria-expanded",
-          String(isOpen)
-        );
-
-        mobileMenuButton.textContent =
-          isOpen
-            ? "×"
-            : "☰";
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     Footer Year
-     ========================= */
-
-  if (currentYear) {
-
-    currentYear.textContent =
-      String(
-        new Date().getFullYear()
       );
 
+
+    } catch (error) {
+
+      console.error(
+        "Korvo Messages failed to load:",
+        error
+      );
+
+
+      if (
+        conversationList
+      ) {
+
+        conversationList.innerHTML =
+          '<div class="empty-state compact">' +
+            '<div class="empty-state-icon">⚠️</div>' +
+            '<h3>Messages could not be loaded</h3>' +
+            '<p>Refresh the page and try again.</p>' +
+          '</div>';
+
+      }
+
+
+      renderNoConversation();
+
+    }
+
   }
-
-
-  /* =========================
-     Initialize
-     ========================= */
-
-  readStoredMessages();
-
-  buildConversationList();
-
-  renderConversation(
-    activeConversationId
-  );
-
-});
+);
