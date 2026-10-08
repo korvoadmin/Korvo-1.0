@@ -119,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let submittedJobsCache = [];
   let professionalQuotesCache = [];
   let activeJobsCache = [];
+  let reviewsCache = [];
 
 
   /* =========================
@@ -380,6 +381,137 @@ let shouldOpenReviewAfterInfo = false;
    Review Modal Functions
    ========================= */
 
+async function fetchCustomerReviews() {
+
+  if (
+    typeof korvoSupabase ===
+    "undefined"
+  ) {
+    throw new Error(
+      "Supabase is not available."
+    );
+  }
+
+
+  const {
+    data: userData,
+    error: userError
+  } =
+    await korvoSupabase.auth.getUser();
+
+
+  if (
+    userError ||
+    !userData?.user
+  ) {
+    throw (
+      userError ||
+      new Error(
+        "Customer authentication is required."
+      )
+    );
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await korvoSupabase
+      .from("reviews")
+      .select(`
+        id,
+        active_job_id,
+        job_id,
+        customer_id,
+        professional_id,
+        rating,
+        comment,
+        job_title,
+        job_reference,
+        professional_name,
+        created_at
+      `)
+      .eq(
+        "customer_id",
+        userData.user.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+    throw error;
+  }
+
+
+  reviewsCache =
+    Array.isArray(data)
+      ? data
+      : [];
+
+
+  return reviewsCache;
+}
+
+
+function hasReviewForJob(
+  jobId
+) {
+
+  return reviewsCache.some(
+    (review) =>
+      String(
+        review.job_id ||
+        ""
+      ) ===
+      String(
+        jobId ||
+        ""
+      )
+  );
+
+}
+
+
+async function submitJobReview(
+  jobId,
+  rating,
+  comment
+) {
+
+  const {
+    data,
+    error
+  } =
+    await korvoSupabase.rpc(
+      "submit_job_review",
+      {
+        p_job_id:
+          jobId,
+
+        p_rating:
+          rating,
+
+        p_comment:
+          comment
+      }
+    );
+
+
+  if (error) {
+    throw error;
+  }
+
+
+  return data;
+}
+
+
 function openReviewModal() {
   if (!reviewModal) {
     return;
@@ -507,7 +639,7 @@ reviewModal
   submitReviewButton
   ?.addEventListener(
     "click",
-    () => {
+    async () => {
 
       if (
         selectedReviewRating === 0
@@ -527,77 +659,28 @@ reviewModal
         );
 
 
-      if (!pendingReview) {
+      if (
+        !pendingReview ||
+        !pendingReview.jobId
+      ) {
+
         closeReviewModal();
 
-        openInfoModal({
-          eyebrow: "REVIEW ERROR",
 
-          title: "Review Not Found",
+        openInfoModal({
+          eyebrow:
+            "REVIEW ERROR",
+
+          title:
+            "Review Not Found",
 
           message:
             "Korvo could not find the completed job connected to this review."
         });
 
+
         return;
       }
-
-
-      const reviews =
-        safelyReadLocalStorage(
-          "korvoReviews",
-          []
-        );
-
-
-      const reviewList =
-        Array.isArray(reviews)
-          ? reviews
-          : [];
-
-
-      reviewList.push({
-        id:
-          `review-${Date.now()}`,
-
-        jobId:
-          pendingReview.jobId ||
-          "",
-
-        jobReference:
-          pendingReview.jobReference ||
-          "",
-
-        jobTitle:
-          pendingReview.jobTitle ||
-          "Completed Korvo Job",
-
-        professional:
-          pendingReview.professional ||
-          "Korvo Professional",
-
-        rating:
-          selectedReviewRating,
-
-        comment:
-          reviewComment
-            ? reviewComment.value.trim()
-            : "",
-
-        createdAt:
-          new Date().toISOString()
-      });
-
-
-      safelyWriteLocalStorage(
-        "korvoReviews",
-        reviewList
-      );
-
-
-      localStorage.removeItem(
-        "korvoPendingReview"
-      );
 
 
       const reviewedProfessional =
@@ -605,51 +688,115 @@ reviewModal
         "this professional";
 
 
-      closeReviewModal();
+      submitReviewButton.disabled =
+        true;
+
+      submitReviewButton.textContent =
+        "Submitting...";
 
 
-      openInfoModal({
-        eyebrow:
-          "REVIEW SUBMITTED",
+      try {
 
-        title:
-          "Thank You!",
+        await submitJobReview(
+          pendingReview.jobId,
+          selectedReviewRating,
+          reviewComment
+            ? reviewComment.value.trim()
+            : ""
+        );
 
-        message:
-          `Your review for ${reviewedProfessional} has been submitted.`,
 
-        success:
-          true,
+        await fetchCustomerReviews();
 
-        details: [
-          {
-            label:
-              "Rating",
 
-            value:
-              `${selectedReviewRating} out of 5 stars`
-          },
+        localStorage.removeItem(
+          "korvoPendingReview"
+        );
 
-          {
-            label:
-              "Professional",
 
-            value:
-              reviewedProfessional
-          },
+        closeReviewModal();
 
-          {
-            label:
-              "Status",
 
-            value:
-              "Review submitted"
-          }
-        ]
-      });
+        await loadSubmittedJobs();
+
+        loadDashboardStats();
+
+
+        openInfoModal({
+          eyebrow:
+            "REVIEW SUBMITTED",
+
+          title:
+            "Thank You!",
+
+          message:
+            `Your review for ${reviewedProfessional} has been securely saved to Korvo.`,
+
+          success:
+            true,
+
+          details: [
+            {
+              label:
+                "Rating",
+
+              value:
+                `${selectedReviewRating} out of 5 stars`
+            },
+
+            {
+              label:
+                "Professional",
+
+              value:
+                reviewedProfessional
+            },
+
+            {
+              label:
+                "Status",
+
+              value:
+                "Review submitted"
+            }
+          ]
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Review submission failed:",
+          error
+        );
+
+
+        openInfoModal({
+          eyebrow:
+            "REVIEW ERROR",
+
+          title:
+            "Could Not Submit Review",
+
+          message:
+            error?.message ||
+            "Korvo could not save your review. Please try again."
+        });
+
+
+      } finally {
+
+        submitReviewButton.disabled =
+          false;
+
+        submitReviewButton.textContent =
+          "Submit Review";
+
+      }
 
     }
   );
+
 
   function showDemoMessage(message) {
     openInfoModal({
@@ -2955,6 +3102,20 @@ const reference =
       "pending_confirmation";
 
 
+    const isCompleted =
+      rawStatus ===
+      "completed";
+
+
+    const reviewAlreadySubmitted =
+      isCompleted &&
+      hasReviewForJob(
+        job.job_id ||
+        job.jobId ||
+        ""
+      );
+
+
     article.innerHTML = `
       <div class="job-icon">
         ✅
@@ -3047,6 +3208,29 @@ const reference =
               : ""
           }
 
+          ${
+            isCompleted
+              ? reviewAlreadySubmitted
+                ? `
+                  <button
+                    type="button"
+                    class="small-secondary-button"
+                    disabled
+                  >
+                    ★ Review Submitted
+                  </button>
+                `
+                : `
+                  <button
+                    type="button"
+                    class="small-primary-button leave-review-button"
+                  >
+                    ★ Leave Review
+                  </button>
+                `
+              : ""
+          }
+
           <button
             type="button"
             class="small-primary-button active-job-message-button"
@@ -3069,6 +3253,44 @@ const reference =
 
       </div>
     `;
+
+
+    article
+      .querySelector(
+        ".leave-review-button"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+
+          safelyWriteLocalStorage(
+            "korvoPendingReview",
+            {
+              jobId:
+                job.job_id ||
+                job.jobId ||
+                "",
+
+              jobReference:
+                reference,
+
+              jobTitle:
+                title,
+
+              professional,
+
+              completedAt:
+                job.completed_at ||
+                new Date()
+                  .toISOString()
+            }
+          );
+
+
+          openReviewModal();
+
+        }
+      );
 
 
     article
@@ -3342,8 +3564,6 @@ const reference =
 
             return (
               status !==
-                "completed" &&
-              status !==
                 "cancelled"
             );
 
@@ -3592,6 +3812,28 @@ const reference =
 
 
   renderProfessionalQuotes();
+
+
+  /*
+    Load real reviews before jobs
+    so completed jobs can show the
+    correct review action.
+  */
+
+  try {
+
+    await fetchCustomerReviews();
+
+  } catch (error) {
+
+    console.error(
+      "Unable to load customer reviews:",
+      error
+    );
+
+    reviewsCache = [];
+
+  }
 
 
   /*
