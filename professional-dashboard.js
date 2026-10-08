@@ -940,33 +940,101 @@ async function fetchCustomerJobs() {
 
 
   function getActiveJobs() {
-    try {
-      const activeJobs =
-        JSON.parse(
-          localStorage.getItem(
-            "korvoActiveJobs"
-          )
+    return activeJobsCache;
+  }
+
+
+  async function fetchProfessionalActiveJobs() {
+
+    if (!currentProfessionalId) {
+      throw new Error(
+        "Professional account is not available."
+      );
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase
+        .from("active_jobs")
+        .select(`
+          id,
+          job_id,
+          quote_id,
+          customer_id,
+          professional_id,
+          amount,
+          timeframe,
+          status,
+          job_title,
+          job_reference,
+          job_city,
+          job_state,
+          professional_name,
+          accepted_at,
+          professional_completed_at,
+          completed_at
+        `)
+        .eq(
+          "professional_id",
+          currentProfessionalId
+        )
+        .order(
+          "accepted_at",
+          {
+            ascending: false
+          }
         );
 
-      return Array.isArray(
-        activeJobs
-      )
-        ? activeJobs
+
+    if (error) {
+      throw error;
+    }
+
+
+    activeJobsCache =
+      Array.isArray(data)
+        ? data
         : [];
-    } catch (error) {
-      console.error(
-        "Could not load active jobs:",
-        error
+
+
+    return activeJobsCache;
+  }
+
+
+  async function requestJobCompletion(
+    activeJobId
+  ) {
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase.rpc(
+        "professional_request_job_completion",
+        {
+          p_active_job_id:
+            activeJobId
+        }
       );
 
-      return [];
+
+    if (error) {
+      throw error;
     }
+
+
+    return data;
   }
 
 
   let customerJobs = [];
 
   let submittedQuotes = [];
+
+  let activeJobsCache = [];
 
 
   /* =========================
@@ -2274,55 +2342,46 @@ function getJobSchedule(
      ========================= */
 
   function getProfessionalJobsWon() {
-
-  const activeJobs =
-    getActiveJobs();
-
-  return activeJobs.filter(
-    (job) =>
-      String(
-        job.professional ||
-        ""
-      ).toLowerCase() ===
-      professionalProfile.name
-        .toLowerCase()
-  );
-
-}
+    return getActiveJobs();
+  }
 
 
-function getProfessionalActiveJobs() {
+  function getProfessionalActiveJobs() {
 
-  return getProfessionalJobsWon().filter(
-    (job) =>
-      String(
-        job.status ||
-        "Active"
-      ).toLowerCase() !==
-      "completed"
-  );
+    return getProfessionalJobsWon()
+      .filter(
+        (job) => {
 
-}
+          const status =
+            String(
+              job.status ||
+              "active"
+            ).toLowerCase();
 
 
-  function openCustomerConversation(
-    customerName = ""
-  ) {
+          return (
+            status !== "completed" &&
+            status !== "cancelled"
+          );
+
+        }
+      );
+
+  }
+
+
+  function openCustomerConversation() {
+
     localStorage.setItem(
       "korvoMessagingRole",
       "professional"
     );
 
-    if (customerName) {
-      localStorage.setItem(
-        "korvoOpenConversation",
-        customerName
-      );
-    } else {
-      localStorage.removeItem(
-        "korvoOpenConversation"
-      );
-    }
+
+    localStorage.removeItem(
+      "korvoOpenConversation"
+    );
+
 
     window.location.href =
       "messages.html";
@@ -2338,21 +2397,31 @@ function getProfessionalActiveJobs() {
         "article"
       );
 
+
     article.className =
       "job-card active-work-card";
 
 
     const title =
+      job.job_title ||
       job.jobTitle ||
       "Active Korvo Job";
 
+
     const customer =
-      job.customer ||
       "Korvo Customer";
 
+
     const location =
+      [
+        job.job_city,
+        job.job_state
+      ]
+        .filter(Boolean)
+        .join(", ") ||
       job.location ||
       "Atlanta, GA";
+
 
     const amount =
       Number(
@@ -2360,22 +2429,43 @@ function getProfessionalActiveJobs() {
         0
       );
 
+
     const timeframe =
       job.timeframe ||
       "Flexible";
 
+
     const reference =
+      job.job_reference ||
       job.jobReference ||
+      job.job_id ||
       job.jobId ||
       "KRV-UNASSIGNED";
 
-    const status =
-  job.status ||
-  "Active";
 
-const isPendingCustomerConfirmation =
-  status ===
-  "Pending Customer Confirmation";
+    const rawStatus =
+      String(
+        job.status ||
+        "active"
+      ).toLowerCase();
+
+
+    const statusLabel =
+      rawStatus ===
+      "pending_confirmation"
+        ? "Pending Customer Confirmation"
+        : rawStatus ===
+          "completed"
+          ? "Completed"
+          : rawStatus ===
+            "cancelled"
+            ? "Cancelled"
+            : "Active";
+
+
+    const isPendingCustomerConfirmation =
+      rawStatus ===
+      "pending_confirmation";
 
 
     article.innerHTML = `
@@ -2385,7 +2475,7 @@ const isPendingCustomerConfirmation =
 
           <p class="eyebrow">
             ${escapeHTML(
-              status
+              statusLabel
             )}
           </p>
 
@@ -2449,45 +2539,42 @@ const isPendingCustomerConfirmation =
 
       <div class="job-actions">
 
-  <button
-    type="button"
-    class="primary-button active-work-message-button"
-    data-customer="${escapeHTML(
-      customer
-    )}"
-  >
-    Message Customer
-  </button>
+        <button
+          type="button"
+          class="primary-button active-work-message-button"
+        >
+          Message Customer
+        </button>
 
-  <button
-    type="button"
-    class="secondary-button active-work-view-button"
-  >
-    View Job
-  </button>
+        <button
+          type="button"
+          class="secondary-button active-work-view-button"
+        >
+          View Job
+        </button>
 
-  ${
-  isPendingCustomerConfirmation
-    ? `
-      <button
-        type="button"
-        class="secondary-button"
-        disabled
-      >
-        ⏳ Waiting for Customer Confirmation
-      </button>
-    `
-    : `
-      <button
-        type="button"
-        class="primary-button mark-work-complete-button"
-      >
-        ✓ Mark Work Complete
-      </button>
-    `
-}
+        ${
+          isPendingCustomerConfirmation
+            ? `
+              <button
+                type="button"
+                class="secondary-button"
+                disabled
+              >
+                ⏳ Waiting for Customer Confirmation
+              </button>
+            `
+            : `
+              <button
+                type="button"
+                class="primary-button mark-work-complete-button"
+              >
+                ✓ Mark Work Complete
+              </button>
+            `
+        }
 
-</div>
+      </div>
     `;
 
 
@@ -2497,13 +2584,9 @@ const isPendingCustomerConfirmation =
       )
       ?.addEventListener(
         "click",
-        (event) => {
+        () => {
 
-          openCustomerConversation(
-            event.currentTarget
-              .dataset.customer ||
-            ""
-          );
+          openCustomerConversation();
 
         }
       );
@@ -2524,7 +2607,7 @@ const isPendingCustomerConfirmation =
             title,
 
             message:
-              `This job was accepted by ${customer} and is now active.`,
+              "This customer accepted your Korvo quote and the job is now active.",
 
             details: [
               {
@@ -2572,7 +2655,7 @@ const isPendingCustomerConfirmation =
                   "Status",
 
                 value:
-                  status
+                  statusLabel
               }
             ]
           });
@@ -2580,132 +2663,129 @@ const isPendingCustomerConfirmation =
         }
       );
 
-article
-  .querySelector(
-    ".mark-work-complete-button"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
 
-      const allActiveJobs =
-        getActiveJobs();
+    article
+      .querySelector(
+        ".mark-work-complete-button"
+      )
+      ?.addEventListener(
+        "click",
+        async (event) => {
 
-      const jobIndex =
-        allActiveJobs.findIndex(
-          (activeJob) =>
-            String(
-              activeJob.id ||
-              activeJob.jobId ||
-              activeJob.jobReference
-            ) ===
-            String(
-              job.id ||
-              job.jobId ||
-              job.jobReference
-            )
-        );
+          const confirmed =
+            confirm(
+              `Mark "${title}" as complete and send it to the customer for confirmation?`
+            );
 
-      if (jobIndex === -1) {
 
-        openInfoModal({
-          eyebrow:
-            "JOB ERROR",
-
-          title:
-            "Job Not Found",
-
-          message:
-            "Korvo could not find this active job. Refresh the dashboard and try again."
-        });
-
-        return;
-      }
-
-      const confirmed =
-        confirm(
-          `Mark "${title}" as complete and send it to ${customer} for confirmation?`
-        );
-
-      if (!confirmed) {
-        return;
-      }
-
-      allActiveJobs[jobIndex] = {
-        ...allActiveJobs[jobIndex],
-
-        status:
-          "Pending Customer Confirmation",
-
-        professionalCompletedAt:
-          new Date().toISOString()
-      };
-
-      localStorage.setItem(
-        "korvoActiveJobs",
-        JSON.stringify(
-          allActiveJobs
-        )
-      );
-
-      renderActiveWork();
-
-      updateDashboardCounters();
-
-      addNotification(
-        `${title} was submitted for customer confirmation.`
-      );
-
-      openInfoModal({
-        eyebrow:
-          "WORK SUBMITTED",
-
-        title:
-          "Sent to Customer",
-
-        message:
-          `${customer} can now review and confirm that the work is complete.`,
-
-        success:
-          true,
-
-        details: [
-          {
-            label:
-              "Job",
-
-            value:
-              title
-          },
-
-          {
-            label:
-              "Customer",
-
-            value:
-              customer
-          },
-
-          {
-            label:
-              "Reference",
-
-            value:
-              reference
-          },
-
-          {
-            label:
-              "Status",
-
-            value:
-              "Pending Customer Confirmation"
+          if (!confirmed) {
+            return;
           }
-        ]
-      });
 
-    }
-  );
+
+          const button =
+            event.currentTarget;
+
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Submitting...";
+
+
+          try {
+
+            await requestJobCompletion(
+              job.id
+            );
+
+
+            await fetchProfessionalActiveJobs();
+
+            renderActiveWork();
+
+            updateDashboardCounters();
+
+
+            addNotification(
+              `${title} was submitted for customer confirmation.`
+            );
+
+
+            openInfoModal({
+              eyebrow:
+                "WORK SUBMITTED",
+
+              title:
+                "Sent to Customer",
+
+              message:
+                "The customer can now review and confirm that the work is complete.",
+
+              success:
+                true,
+
+              details: [
+                {
+                  label:
+                    "Job",
+
+                  value:
+                    title
+                },
+
+                {
+                  label:
+                    "Reference",
+
+                  value:
+                    reference
+                },
+
+                {
+                  label:
+                    "Status",
+
+                  value:
+                    "Pending Customer Confirmation"
+                }
+              ]
+            });
+
+          } catch (error) {
+
+            console.error(
+              "Could not submit job completion:",
+              error
+            );
+
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "✓ Mark Work Complete";
+
+
+            openInfoModal({
+              eyebrow:
+                "JOB ERROR",
+
+              title:
+                "Could Not Submit Completion",
+
+              message:
+                error?.message ||
+                "Korvo could not update this active job. Refresh and try again."
+            });
+
+          }
+
+        }
+      );
+
+
     return article;
   }
 
@@ -2750,25 +2830,23 @@ article
         </div>
       `;
 
+
       return;
     }
 
 
-    activeJobs
-      .slice()
-      .reverse()
-      .forEach(
-        (job) => {
+    activeJobs.forEach(
+      (job) => {
 
-          activeWorkList
-            .appendChild(
-              createActiveWorkCard(
-                job
-              )
-            );
+        activeWorkList
+          .appendChild(
+            createActiveWorkCard(
+              job
+            )
+          );
 
-        }
-      );
+      }
+    );
 
   }
 
@@ -2782,74 +2860,40 @@ article
     customerJobs =
       getCustomerJobs();
 
+
     submittedQuotes =
       getSubmittedQuotes();
-
-    const activeJobs =
-      getProfessionalActiveJobs();
 
 
     if (availableJobsCount) {
 
-  const activeJobs =
-    getActiveJobs();
+      availableJobsCount.textContent =
+        String(
+          customerJobs.length
+        );
 
-  const availableJobTotal =
-    customerJobs.filter(
-      (job) => {
-
-        const jobId =
-          getJobId(job);
-
-        const jobReference =
-          getJobReference(job);
-
-        const isAlreadyActive =
-          activeJobs.some(
-            (activeJob) =>
-              String(
-                activeJob.jobId ||
-                activeJob.id ||
-                ""
-              ) ===
-                String(jobId) ||
-              String(
-                activeJob.jobReference ||
-                activeJob.reference ||
-                ""
-              ) ===
-                String(jobReference)
-          );
-
-        return !isAlreadyActive;
-      }
-    ).length;
-
-  availableJobsCount.textContent =
-    String(
-      availableJobTotal
-    );
-}
+    }
 
 
     if (submittedQuotesCount) {
+
       submittedQuotesCount.textContent =
         String(
           submittedQuotes.length
         );
+
     }
 
 
     if (jobsWonCount) {
 
-  const jobsWon =
-    getProfessionalJobsWon();
+      jobsWonCount.textContent =
+        String(
+          getProfessionalJobsWon()
+            .length
+        );
 
-  jobsWonCount.textContent =
-    String(
-      jobsWon.length
-    );
-}
+    }
 
   }
 
@@ -3374,6 +3418,22 @@ try {
   );
 
   submittedQuotes = [];
+
+}
+
+
+try {
+
+  await fetchProfessionalActiveJobs();
+
+} catch (error) {
+
+  console.error(
+    "Could not load active professional jobs:",
+    error
+  );
+
+  activeJobsCache = [];
 
 }
 
