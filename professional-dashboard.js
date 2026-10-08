@@ -2370,7 +2370,9 @@ function getJobSchedule(
   }
 
 
-  function openCustomerConversation() {
+  function openCustomerConversation(
+    activeJobId = ""
+  ) {
 
     localStorage.setItem(
       "korvoMessagingRole",
@@ -2381,6 +2383,22 @@ function getJobSchedule(
     localStorage.removeItem(
       "korvoOpenConversation"
     );
+
+    localStorage.removeItem(
+      "korvoOpenQuoteId"
+    );
+
+    localStorage.removeItem(
+      "korvoOpenActiveJobId"
+    );
+
+
+    if (activeJobId) {
+      localStorage.setItem(
+        "korvoOpenActiveJobId",
+        activeJobId
+      );
+    }
 
 
     window.location.href =
@@ -2586,7 +2604,9 @@ function getJobSchedule(
         "click",
         () => {
 
-          openCustomerConversation();
+          openCustomerConversation(
+            job.id || ""
+          );
 
         }
       );
