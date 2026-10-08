@@ -219,6 +219,8 @@ let professionalProfile = {
   rating: "New"
 };
 
+let currentProfessionalId = "";
+
 
 function createInitials(
   firstName = "",
@@ -295,6 +297,9 @@ async function loadProfessionalProfile() {
 
     const user =
       authData.user;
+
+    currentProfessionalId =
+      user.id;
 
 
     const {
@@ -873,44 +878,64 @@ async function fetchCustomerJobs() {
   return customerJobs;
 }
   function getSubmittedQuotes() {
-    try {
-      const quotes =
-        JSON.parse(
-          localStorage.getItem(
-            "korvoProfessionalQuotes"
-          )
-        );
-
-      return Array.isArray(quotes)
-        ? quotes
-        : [];
-    } catch (error) {
-      console.error(
-        "Could not load submitted quotes:",
-        error
-      );
-
-      return [];
-    }
+    return submittedQuotes;
   }
 
 
-  function saveSubmittedQuotes(
-    quotes
-  ) {
-    try {
-      localStorage.setItem(
-        "korvoProfessionalQuotes",
-        JSON.stringify(
-          quotes
-        )
-      );
-    } catch (error) {
-      console.error(
-        "Could not save submitted quotes:",
-        error
+  async function fetchSubmittedQuotes() {
+
+    if (!currentProfessionalId) {
+      throw new Error(
+        "Professional account is not available."
       );
     }
+
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase
+        .from("quotes")
+        .select(`
+          id,
+          job_id,
+          professional_id,
+          amount,
+          timeframe,
+          message,
+          status,
+          job_title,
+          job_reference,
+          job_city,
+          job_state,
+          professional_name,
+          created_at
+        `)
+        .eq(
+          "professional_id",
+          currentProfessionalId
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    submittedQuotes =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    return submittedQuotes;
   }
 
 
@@ -941,8 +966,7 @@ async function fetchCustomerJobs() {
 
   let customerJobs = [];
 
-  let submittedQuotes =
-    getSubmittedQuotes();
+  let submittedQuotes = [];
 
 
   /* =========================
@@ -1680,7 +1704,7 @@ function getJobSchedule(
 
   quoteForm?.addEventListener(
     "submit",
-    (event) => {
+    async (event) => {
 
       event.preventDefault();
 
@@ -1707,6 +1731,23 @@ function getJobSchedule(
 
           message:
             "Korvo could not find this job. Refresh the dashboard and try again."
+        });
+
+        return;
+      }
+
+
+      if (!currentProfessionalId) {
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ERROR",
+
+          title:
+            "Professional Account Required",
+
+          message:
+            "Korvo could not verify your professional account. Sign in again and try again."
         });
 
         return;
@@ -1741,11 +1782,60 @@ function getJobSchedule(
       }
 
 
+      const timeframe =
+        quoteTimeframe?.value ||
+        "";
+
+
+      if (!timeframe) {
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ERROR",
+
+          title:
+            "Choose a Timeframe",
+
+          message:
+            "Select an estimated completion time before submitting your quote."
+        });
+
+        return;
+      }
+
+
+      const message =
+        quoteMessage?.value
+          .trim() ||
+        "";
+
+
+      if (!message) {
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ERROR",
+
+          title:
+            "Add a Message",
+
+          message:
+            "Tell the customer what is included in your quote."
+        });
+
+        quoteMessage?.focus();
+
+        return;
+      }
+
+
       const existingQuote =
         submittedQuotes.find(
           (quote) =>
             String(
-              quote.jobId
+              quote.job_id ||
+              quote.jobId ||
+              ""
             ) ===
             String(
               jobId
@@ -1771,6 +1861,7 @@ function getJobSchedule(
                 "Job",
 
               value:
+                existingQuote.job_title ||
                 existingQuote.jobTitle ||
                 "Customer Project"
             },
@@ -1781,7 +1872,7 @@ function getJobSchedule(
 
               value:
                 existingQuote.status ||
-                "Pending"
+                "pending"
             }
           ]
         });
@@ -1790,157 +1881,185 @@ function getJobSchedule(
       }
 
 
-      const quote = {
-
-        id:
-          `quote-${Date.now()}`,
-
-        jobId,
-
-        jobReference:
-          getJobReference(
-            job
-          ),
-
-        jobTitle:
-          job.title ||
-          job.jobTitle ||
-          "Customer Project",
-
-        customer:
-          job.customer ||
-          job.customerName ||
-          "Korvo Customer",
-
-        location:
-          getJobLocation(
-            job
-          ),
-
-        professional:
-          professionalProfile.name,
-
-        professionalType:
-          professionalProfile.type,
-
-        professionalProfile:
-          professionalProfile.profile,
-
-        professionalInitials:
-          professionalProfile.initials,
-
-        professionalRating:
-          professionalProfile.rating,
-
-        amount,
-
-        timeframe:
-          quoteTimeframe?.value ||
-          "Flexible",
-
-        message:
-          quoteMessage?.value
-            .trim() ||
-          "",
-
-        status:
-          "Pending",
-
-        createdAt:
-          new Date()
-            .toISOString()
-
-      };
+      const submitButton =
+        quoteForm.querySelector(
+          'button[type="submit"]'
+        );
 
 
-      submittedQuotes.unshift(
-        quote
-      );
+      if (submitButton) {
+        submitButton.disabled =
+          true;
+
+        submitButton.textContent =
+          "Submitting...";
+      }
 
 
-      saveSubmittedQuotes(
-        submittedQuotes
-      );
+      try {
+
+        const {
+          data: savedQuote,
+          error
+        } =
+          await korvoSupabase
+            .from("quotes")
+            .insert({
+              job_id:
+                jobId,
+
+              professional_id:
+                currentProfessionalId,
+
+              amount,
+
+              timeframe,
+
+              message
+            })
+            .select(`
+              id,
+              job_id,
+              professional_id,
+              amount,
+              timeframe,
+              message,
+              status,
+              job_title,
+              job_reference,
+              job_city,
+              job_state,
+              professional_name,
+              created_at
+            `)
+            .single();
 
 
-      renderSubmittedQuotes();
-
-      renderActiveWork();
-
-      updateDashboardCounters();
+        if (error) {
+          throw error;
+        }
 
 
-      addNotification(
-        `Quote submitted for ${quote.jobTitle}.`
-      );
+        submittedQuotes.unshift(
+          savedQuote
+        );
 
 
-      closeQuoteModal();
+        renderSubmittedQuotes();
+
+        renderActiveWork();
+
+        updateDashboardCounters();
 
 
-      openInfoModal({
-        eyebrow:
-          "QUOTE SENT",
+        addNotification(
+          `Quote submitted for ${savedQuote.job_title}.`
+        );
 
-        title:
-          "Quote Submitted!",
 
-        message:
-          "Your quote has been sent to the customer and is now being tracked in Submitted Quotes.",
+        closeQuoteModal();
 
-        success:
-          true,
 
-        details: [
-          {
-            label:
-              "Job",
+        openInfoModal({
+          eyebrow:
+            "QUOTE SENT",
 
-            value:
-              quote.jobTitle
-          },
+          title:
+            "Quote Submitted!",
 
-          {
-            label:
-              "Reference",
+          message:
+            "Your quote has been securely saved to Korvo and sent to the customer.",
 
-            value:
-              quote.jobReference
-          },
+          success:
+            true,
 
-          {
-            label:
-              "Customer",
+          details: [
+            {
+              label:
+                "Job",
 
-            value:
-              quote.customer
-          },
+              value:
+                savedQuote.job_title
+            },
 
-          {
-            label:
-              "Your Quote",
+            {
+              label:
+                "Reference",
 
-            value:
-              `$${amount.toLocaleString()}`
-          },
+              value:
+                savedQuote.job_reference ||
+                "Not assigned"
+            },
 
-          {
-            label:
-              "Timeframe",
+            {
+              label:
+                "Your Quote",
 
-            value:
-              quote.timeframe
-          },
+              value:
+                `$${Number(
+                  savedQuote.amount
+                ).toLocaleString()}`
+            },
 
-          {
-            label:
-              "Status",
+            {
+              label:
+                "Timeframe",
 
-            value:
-              quote.status
-          }
-        ]
-      });
+              value:
+                savedQuote.timeframe
+            },
+
+            {
+              label:
+                "Status",
+
+              value:
+                "Pending"
+            }
+          ]
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Quote submission failed:",
+          error
+        );
+
+
+        const duplicateQuote =
+          error?.code ===
+          "23505";
+
+
+        openInfoModal({
+          eyebrow:
+            "QUOTE ERROR",
+
+          title:
+            duplicateQuote
+              ? "Quote Already Submitted"
+              : "Could Not Submit Quote",
+
+          message:
+            duplicateQuote
+              ? "You already submitted a quote for this job."
+              : "Korvo could not save your quote. Please try again."
+        });
+
+
+      } finally {
+
+        if (submitButton) {
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            "Submit Quote";
+        }
+
+      }
 
     }
   );
@@ -1955,10 +2074,6 @@ function getJobSchedule(
     if (!submittedQuotesList) {
       return;
     }
-
-
-    submittedQuotes =
-      getSubmittedQuotes();
 
 
     submittedQuotesList.innerHTML =
@@ -2001,12 +2116,14 @@ function getJobSchedule(
             "article"
           );
 
+
         quoteCard.className =
           "quote-card";
 
 
         const createdDate =
           new Date(
+            quote.created_at ||
             quote.createdAt
           );
 
@@ -2032,9 +2149,28 @@ function getJobSchedule(
                 );
 
 
+        const status =
+          String(
+            quote.status ||
+            "pending"
+          );
+
+
         const quoteStatus =
-          quote.status ||
-          "Pending";
+          status.charAt(0)
+            .toUpperCase() +
+          status.slice(1);
+
+
+        const location =
+          quote.location ||
+          [
+            quote.job_city,
+            quote.job_state
+          ]
+            .filter(Boolean)
+            .join(", ") ||
+          "Atlanta, GA";
 
 
         quoteCard.innerHTML = `
@@ -2050,20 +2186,17 @@ function getJobSchedule(
 
               <h3>
                 ${escapeHTML(
+                  quote.job_title ||
                   quote.jobTitle ||
                   "Customer Project"
                 )}
               </h3>
 
               <p>
-                ${escapeHTML(
-                  quote.customer ||
-                  "Korvo Customer"
-                )}
+                Korvo Customer
                 ·
                 ${escapeHTML(
-                  quote.location ||
-                  "Atlanta, GA"
+                  location
                 )}
               </p>
 
@@ -2084,8 +2217,9 @@ function getJobSchedule(
             <span>
               🆔
               ${escapeHTML(
+                quote.job_reference ||
                 quote.jobReference ||
-                quote.jobId ||
+                quote.job_id ||
                 "Not assigned"
               )}
             </span>
@@ -3224,6 +3358,22 @@ try {
     "Could not load open Korvo jobs:",
     error
   );
+
+}
+
+
+try {
+
+  await fetchSubmittedQuotes();
+
+} catch (error) {
+
+  console.error(
+    "Could not load submitted quotes:",
+    error
+  );
+
+  submittedQuotes = [];
 
 }
 
