@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let pendingQuoteId = "";
   let submittedJobsCache = [];
   let professionalQuotesCache = [];
+  let activeJobsCache = [];
 
 
   /* =========================
@@ -1115,10 +1116,43 @@ reviewModal
   }
 
 
-  function updateQuoteStatus() {
-    console.warn(
-      "Real quote status updates will be connected in the next backend step."
-    );
+  async function respondToQuote(
+    quoteId,
+    action
+  ) {
+
+    if (
+      typeof korvoSupabase ===
+      "undefined"
+    ) {
+      throw new Error(
+        "Supabase is not available."
+      );
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase.rpc(
+        "respond_to_quote",
+        {
+          p_quote_id:
+            quoteId,
+
+          p_action:
+            action
+        }
+      );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    return data;
   }
 
 
@@ -1337,8 +1371,9 @@ reviewModal
           data-quote-id="${escapeHTML(
             quote.id || ""
           )}"
-          disabled
-          title="Quote acceptance will be connected in the next backend step."
+          ${quotePending
+            ? ""
+            : "disabled"}
         >
           ${
             quoteAccepted
@@ -1359,13 +1394,16 @@ reviewModal
           data-quote-id="${escapeHTML(
             quote.id || ""
           )}"
-          disabled
-          title="Quote response will be connected in the next backend step."
+          ${quotePending
+            ? ""
+            : "disabled"}
         >
           ${
             quoteDeclined
               ? "Declined"
-              : "Decline Quote"
+              : quoteAccepted
+                ? "Quote Accepted"
+                : "Decline Quote"
           }
         </button>
 
@@ -1394,8 +1432,6 @@ reviewModal
     `;
 
 
-    /* Accept Quote */
-
     article
       .querySelector(
         ".generated-accept-quote-button"
@@ -1403,22 +1439,24 @@ reviewModal
       ?.addEventListener(
         "click",
         (event) => {
+
           const button =
             event.currentTarget;
+
 
           if (button.disabled) {
             return;
           }
 
+
           openAcceptQuoteModal(
             button.dataset.professional,
             button.dataset.quoteId
           );
+
         }
       );
 
-
-    /* Decline Quote */
 
     article
       .querySelector(
@@ -1426,74 +1464,129 @@ reviewModal
       )
       ?.addEventListener(
         "click",
-        (event) => {
+        async (event) => {
+
           const button =
             event.currentTarget;
+
 
           if (button.disabled) {
             return;
           }
 
+
           const quoteId =
             button.dataset.quoteId;
+
 
           const professional =
             button.dataset.professional ||
             "this professional";
 
 
-          updateQuoteStatus(
-            quoteId,
-            "Declined"
-          );
+          const confirmed =
+            confirm(
+              `Decline the quote from ${professional}?`
+            );
 
 
-          renderProfessionalQuotes();
+          if (!confirmed) {
+            return;
+          }
 
-          loadDashboardStats();
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Declining...";
 
 
-          openInfoModal({
-            eyebrow:
-              "QUOTE DECLINED",
+          try {
 
-            title:
-              "Quote Declined",
+            await respondToQuote(
+              quoteId,
+              "decline"
+            );
 
-            message:
-              "This quote has been declined and the professional-side status has been updated.",
 
-            details: [
-              {
-                label:
-                  "Professional",
+            await fetchProfessionalQuotes();
 
-                value:
-                  professional
-              },
+            renderProfessionalQuotes();
 
-              {
-                label:
-                  "Status",
+            await loadSubmittedJobs();
 
-                value:
-                  "Declined"
-              },
+            loadDashboardStats();
 
-              {
-                label:
-                  "Next Step",
 
-                value:
-                  "You can review another quote"
-              }
-            ]
-          });
+            openInfoModal({
+              eyebrow:
+                "QUOTE DECLINED",
+
+              title:
+                "Quote Declined",
+
+              message:
+                "The quote was declined and the professional-side status is now updated in Korvo.",
+
+              details: [
+                {
+                  label:
+                    "Professional",
+
+                  value:
+                    professional
+                },
+
+                {
+                  label:
+                    "Status",
+
+                  value:
+                    "Declined"
+                },
+
+                {
+                  label:
+                    "Next Step",
+
+                  value:
+                    "You can review another quote"
+                }
+              ]
+            });
+
+          } catch (error) {
+
+            console.error(
+              "Could not decline quote:",
+              error
+            );
+
+
+            openInfoModal({
+              eyebrow:
+                "QUOTE ERROR",
+
+              title:
+                "Could Not Decline Quote",
+
+              message:
+                error?.message ||
+                "Korvo could not update this quote. Please refresh and try again."
+            });
+
+
+            await fetchProfessionalQuotes()
+              .catch(() => {});
+
+            renderProfessionalQuotes();
+
+          }
+
         }
       );
 
-
-    /* Message Professional */
 
     article
       .querySelector(
@@ -1502,14 +1595,17 @@ reviewModal
       ?.addEventListener(
         "click",
         (event) => {
+
           const professional =
             event.currentTarget
               .dataset.professional ||
             "";
 
+
           openProfessionalConversation(
             professional
           );
+
         }
       );
 
@@ -1519,21 +1615,14 @@ reviewModal
 
 
   function renderProfessionalQuotes() {
+
     if (!quotesList) {
       return;
     }
 
 
-    /*
-      Remove old static/demo quotes.
-
-      From this point forward,
-      Recent Quotes shows actual
-      Supabase quote data for the
-      signed-in customer.
-    */
-
-    quotesList.innerHTML = "";
+    quotesList.innerHTML =
+      "";
 
 
     const quotes =
@@ -1574,14 +1663,10 @@ reviewModal
     quotes.forEach(
       (quote) => {
 
-        const card =
+        quotesList.appendChild(
           createProfessionalQuoteCard(
             quote
-          );
-
-
-        quotesList.appendChild(
-          card
+          )
         );
 
       }
@@ -1603,6 +1688,7 @@ reviewModal
     pendingQuoteId =
       quoteId;
 
+
     if (
       selectedProfessionalName
     ) {
@@ -1611,10 +1697,12 @@ reviewModal
           professionalName;
     }
 
+
     acceptQuoteModal
       ?.classList.remove(
         "hidden"
       );
+
 
     document.body.classList.add(
       "modal-open"
@@ -1623,38 +1711,21 @@ reviewModal
 
 
   function closeAcceptModal() {
+
     acceptQuoteModal
       ?.classList.add(
         "hidden"
       );
 
+
     document.body.classList.remove(
       "modal-open"
     );
 
+
     pendingProfessional = "";
     pendingQuoteId = "";
   }
-
-
-  /* Static demo quote buttons */
-
-  document
-    .querySelectorAll(
-      ".accept-quote-button"
-    )
-    .forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          openAcceptQuoteModal(
-            button.dataset.professional ||
-            "this professional",
-            ""
-          );
-        }
-      );
-    });
 
 
   closeAcceptQuoteModal
@@ -1675,12 +1746,14 @@ reviewModal
     ?.addEventListener(
       "click",
       (event) => {
+
         if (
           event.target ===
           acceptQuoteModal
         ) {
           closeAcceptModal();
         }
+
       }
     );
 
@@ -1688,10 +1761,11 @@ reviewModal
   confirmAcceptQuoteButton
     ?.addEventListener(
       "click",
-      () => {
+      async () => {
 
         if (
-          !pendingProfessional
+          !pendingProfessional ||
+          !pendingQuoteId
         ) {
           return;
         }
@@ -1704,157 +1778,120 @@ reviewModal
           pendingQuoteId;
 
 
-        const acceptedQuotes =
-          safelyReadLocalStorage(
-            "korvoAcceptedQuotes",
-            []
+        confirmAcceptQuoteButton.disabled =
+          true;
+
+        confirmAcceptQuoteButton.textContent =
+          "Accepting...";
+
+
+        try {
+
+          await respondToQuote(
+            acceptedQuoteId,
+            "accept"
           );
 
 
-        acceptedQuotes.push({
-          quoteId:
-            acceptedQuoteId,
+          await fetchProfessionalQuotes();
 
-          professional:
-            acceptedProfessional,
-
-          acceptedAt:
-            new Date()
-              .toISOString(),
-
-          status:
-            "accepted"
-        });
+          renderProfessionalQuotes();
 
 
-        safelyWriteLocalStorage(
-          "korvoAcceptedQuotes",
-          acceptedQuotes
-        );
+          await loadSubmittedJobs();
+
+          loadDashboardStats();
 
 
-        if (acceptedQuoteId) {
-          updateQuoteStatus(
-            acceptedQuoteId,
-            "Accepted"
+          closeAcceptModal();
+
+
+          openInfoModal({
+            eyebrow:
+              "QUOTE ACCEPTED",
+
+            title:
+              "Professional Selected!",
+
+            message:
+              "Your quote has been accepted and Korvo created an active job for this professional.",
+
+            success:
+              true,
+
+            details: [
+              {
+                label:
+                  "Professional",
+
+                value:
+                  acceptedProfessional
+              },
+
+              {
+                label:
+                  "Status",
+
+                value:
+                  "Accepted"
+              },
+
+              {
+                label:
+                  "Job",
+
+                value:
+                  "Active"
+              },
+
+              {
+                label:
+                  "Next Step",
+
+                value:
+                  "Continue the conversation in Korvo Messages"
+              }
+            ]
+          });
+
+        } catch (error) {
+
+          console.error(
+            "Could not accept quote:",
+            error
           );
+
+
+          closeAcceptModal();
+
+
+          openInfoModal({
+            eyebrow:
+              "QUOTE ERROR",
+
+            title:
+              "Could Not Accept Quote",
+
+            message:
+              error?.message ||
+              "Korvo could not accept this quote. Refresh the dashboard and try again."
+          });
+
+
+          await fetchProfessionalQuotes()
+            .catch(() => {});
+
+          renderProfessionalQuotes();
+
+        } finally {
+
+          confirmAcceptQuoteButton.disabled =
+            false;
+
+          confirmAcceptQuoteButton.textContent =
+            "Confirm Quote";
+
         }
-      const acceptedQuote =
-  getProfessionalQuotes().find(
-    (quote) =>
-      String(quote.id) ===
-      String(acceptedQuoteId)
-  );
-
-if (acceptedQuote) {
-  const activeJobs =
-    safelyReadLocalStorage(
-      "korvoActiveJobs",
-      []
-    );
-
-  const alreadyActive =
-    activeJobs.some(
-      (job) =>
-        String(job.quoteId) ===
-        String(acceptedQuoteId)
-    );
-
-  if (!alreadyActive) {
-    activeJobs.push({
-      id:
-        `active-${Date.now()}`,
-
-      quoteId:
-        acceptedQuote.id,
-
-      jobId:
-        acceptedQuote.jobId,
-
-      jobReference:
-        acceptedQuote.jobReference,
-
-      jobTitle:
-        acceptedQuote.jobTitle,
-
-      customer:
-        acceptedQuote.customer,
-
-      location:
-        acceptedQuote.location,
-
-      professional:
-        acceptedQuote.professional,
-
-      professionalProfile:
-        acceptedQuote.professionalProfile,
-
-      amount:
-        acceptedQuote.amount,
-
-      timeframe:
-        acceptedQuote.timeframe,
-
-      status:
-        "Active",
-
-      acceptedAt:
-        new Date().toISOString()
-    });
-
-    safelyWriteLocalStorage(
-      "korvoActiveJobs",
-      activeJobs
-    );
-  }
-}
-
-        closeAcceptModal();
-
-        renderProfessionalQuotes();
-
-        loadDashboardStats();
-
-
-        openInfoModal({
-          eyebrow:
-            "QUOTE ACCEPTED",
-
-          title:
-            "Professional Selected!",
-
-          message:
-            "Your Korvo quote has been accepted and saved.",
-
-          success:
-            true,
-
-          details: [
-            {
-              label:
-                "Professional",
-
-              value:
-                acceptedProfessional
-            },
-
-            {
-              label:
-                "Status",
-
-              value:
-                "Accepted"
-            },
-
-            {
-              label:
-                "Next Step",
-
-              value:
-                "Continue the conversation in Korvo Messages"
-            }
-          ]
-        });
 
       }
     );
@@ -2718,526 +2755,519 @@ const reference =
     return article;
   }
 
-  function createActiveJobCard(
-  job
-) {
-  const article =
-    document.createElement(
-      "article"
-    );
+  async function fetchCustomerActiveJobs() {
 
-  article.className =
-    "job-item active-job-item";
-
-  const title =
-    job.jobTitle ||
-    "Active Korvo Job";
-
-  const location =
-    job.location ||
-    "Atlanta, GA";
-
-  const professional =
-    job.professional ||
-    "Korvo Professional";
-
-  const amount =
-    Number(
-      job.amount || 0
-    );
-
-  const reference =
-    job.jobReference ||
-    job.jobId ||
-    "KRV-000000";
-
-  const timeframe =
-    job.timeframe ||
-    "Flexible";
-  const status =
-  job.status ||
-  "Active";
-
-const isPendingCustomerConfirmation =
-  status ===
-  "Pending Customer Confirmation";
-  article.innerHTML = `
-    <div class="job-icon">
-      ✅
-    </div>
-
-    <div class="job-main">
-
-      <div class="job-title-row">
-
-        <div>
-          <h3>
-            ${escapeHTML(title)}
-          </h3>
-
-          <p>
-            ${escapeHTML(location)}
-          </p>
-        </div>
-
-        <span class="status-badge ${
-  isPendingCustomerConfirmation
-    ? "waiting"
-    : "completed"
-}">
-  ${
-    isPendingCustomerConfirmation
-      ? "Completion Requested"
-      : "Active"
-  }
-</span>
-
-      </div>
-
-      <p class="job-description">
-  ${
-    isPendingCustomerConfirmation
-      ? `${escapeHTML(
-          professional
-        )} has marked this job complete. Review the work and confirm completion.`
-      : `Assigned to <strong>${escapeHTML(
-          professional
-        )}</strong>`
-  }
-</p>
-
-      <div class="job-footer">
-
-        <span>
-          💰 $${amount.toLocaleString()}
-        </span>
-
-        <span>
-          📅 ${escapeHTML(
-            timeframe
-          )}
-        </span>
-
-        <span>
-          🆔 ${escapeHTML(
-            reference
-          )}
-        </span>
-
-      </div>
-
-      <div class="job-actions">
-      ${
-  isPendingCustomerConfirmation
-    ? `
-      <button
-        type="button"
-        class="small-primary-button confirm-completion-button"
-      >
-        ✓ Confirm Completion
-      </button>
-    `
-    : ""
-}
-        <button
-          type="button"
-          class="small-primary-button active-job-message-button"
-          data-professional="${escapeHTML(
-            professional
-          )}"
-        >
-          Message Professional
-        </button>
-
-        <button
-          type="button"
-          class="small-secondary-button active-job-view-button"
-        >
-          View Job
-        </button>
-
-      </div>
-
-    </div>
-  `;
-article
-  .querySelector(
-    ".confirm-completion-button"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-
-      const allActiveJobs =
-        safelyReadLocalStorage(
-          "korvoActiveJobs",
-          []
-        );
-
-      const jobIndex =
-        allActiveJobs.findIndex(
-          (activeJob) =>
-            String(
-              activeJob.id ||
-              activeJob.jobId ||
-              activeJob.jobReference
-            ) ===
-            String(
-              job.id ||
-              job.jobId ||
-              job.jobReference
-            )
-        );
-
-      if (jobIndex === -1) {
-        openInfoModal({
-          eyebrow: "JOB ERROR",
-          title: "Job Not Found",
-          message:
-            "Korvo could not find this active job. Refresh the dashboard and try again."
-        });
-
-        return;
-      }
-
-      const confirmed =
-        confirm(
-          `Confirm that "${title}" has been completed by ${professional}?`
-        );
-
-      if (!confirmed) {
-        return;
-      }
-
-      allActiveJobs[jobIndex] = {
-        ...allActiveJobs[jobIndex],
-
-        status: "Completed",
-
-        completedAt:
-          new Date().toISOString()
-      };
-
-      safelyWriteLocalStorage(
-        "korvoActiveJobs",
-        allActiveJobs
+    if (
+      typeof korvoSupabase ===
+      "undefined"
+    ) {
+      throw new Error(
+        "Supabase is not available."
       );
-
-      article.remove();
-
-      loadDashboardStats();
-    safelyWriteLocalStorage(
-  "korvoPendingReview",
-  {
-    jobId:
-      job.id ||
-      job.jobId ||
-      "",
-
-    jobReference:
-      reference,
-
-    jobTitle:
-      title,
-
-    professional:
-      professional,
-
-    completedAt:
-      new Date().toISOString()
-  }
-);
-
-    shouldOpenReviewAfterInfo = true;
-
-      openInfoModal({
-        eyebrow: "JOB COMPLETED",
-
-        title: "Completion Confirmed!",
-
-        message:
-          `${professional}'s work has been marked complete.`,
-
-        success: true,
-
-        details: [
-          {
-            label: "Job",
-            value: title
-          },
-          {
-            label: "Professional",
-            value: professional
-          },
-          {
-            label: "Reference",
-            value: reference
-          },
-          {
-  label: "Next Step",
-  value: "Leave a review for this professional"
-}
-        ]
-      });
-
     }
-  );
-  article
-    .querySelector(
-      ".active-job-message-button"
-    )
-    ?.addEventListener(
-      "click",
-      (event) => {
-        openProfessionalConversation(
-          event.currentTarget
-            .dataset.professional ||
-          ""
-        );
-      }
-    );
-
-  article
-    .querySelector(
-      ".active-job-view-button"
-    )
-    ?.addEventListener(
-      "click",
-      () => {
-        openInfoModal({
-          eyebrow:
-            "ACTIVE JOB",
-
-          title,
-
-          message:
-            `This job is assigned to ${professional}.`,
-
-          details: [
-            {
-              label:
-                "Reference",
-
-              value:
-                reference
-            },
-
-            {
-              label:
-                "Professional",
-
-              value:
-                professional
-            },
-
-            {
-              label:
-                "Amount",
-
-              value:
-                `$${amount.toLocaleString()}`
-            },
-
-            {
-              label:
-                "Status",
-
-              value:
-                "Active"
-            }
-          ]
-        });
-      }
-    );
-
-  return article;
-}
-  async function loadSubmittedJobs() {
-
-  if (!jobsList) {
-    return;
-  }
 
 
-  try {
-
-    const submittedJobs =
-      await fetchSubmittedJobs();
-
-
-    /*
-      Remove old demo/static jobs.
-
-      From this point forward,
-      My Jobs shows actual Korvo
-      account data.
-    */
-
-    jobsList.innerHTML = "";
+    const {
+      data: userData,
+      error: userError
+    } =
+      await korvoSupabase.auth.getUser();
 
 
-    /*
-      Active jobs are still using
-      the prototype storage system.
-
-      We keep them working until
-      the Active Jobs backend is
-      migrated later.
-    */
-
-    const activeJobs =
-      safelyReadLocalStorage(
-        "korvoActiveJobs",
-        []
+    if (
+      userError ||
+      !userData?.user
+    ) {
+      throw (
+        userError ||
+        new Error(
+          "Customer authentication is required."
+        )
       );
+    }
 
 
-    const visibleActiveJobs =
-      Array.isArray(activeJobs)
-        ? activeJobs.filter(
-            (job) =>
-              String(
-                job.status ||
-                "Active"
-              ).toLowerCase() !==
-              "completed"
-          )
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase
+        .from("active_jobs")
+        .select(`
+          id,
+          job_id,
+          quote_id,
+          customer_id,
+          professional_id,
+          amount,
+          timeframe,
+          status,
+          job_title,
+          job_reference,
+          job_city,
+          job_state,
+          professional_name,
+          accepted_at,
+          professional_completed_at,
+          completed_at
+        `)
+        .eq(
+          "customer_id",
+          userData.user.id
+        )
+        .order(
+          "accepted_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    activeJobsCache =
+      Array.isArray(data)
+        ? data
         : [];
 
 
-    visibleActiveJobs
-      .slice()
-      .reverse()
-      .forEach(
-        (job) => {
+    return activeJobsCache;
+  }
 
-          jobsList.prepend(
-            createActiveJobCard(
-              job
-            )
+
+  function createActiveJobCard(
+    job
+  ) {
+
+    const article =
+      document.createElement(
+        "article"
+      );
+
+
+    article.className =
+      "job-item active-job-item";
+
+
+    const title =
+      job.job_title ||
+      job.jobTitle ||
+      "Active Korvo Job";
+
+
+    const location =
+      [
+        job.job_city,
+        job.job_state
+      ]
+        .filter(Boolean)
+        .join(", ") ||
+      job.location ||
+      "Atlanta, GA";
+
+
+    const professional =
+      job.professional_name ||
+      job.professional ||
+      "Korvo Professional";
+
+
+    const amount =
+      Number(
+        job.amount || 0
+      );
+
+
+    const reference =
+      job.job_reference ||
+      job.jobReference ||
+      job.job_id ||
+      job.jobId ||
+      "KRV-000000";
+
+
+    const timeframe =
+      job.timeframe ||
+      "Flexible";
+
+
+    const rawStatus =
+      String(
+        job.status ||
+        "active"
+      ).toLowerCase();
+
+
+    const statusLabel =
+      rawStatus ===
+      "pending_confirmation"
+        ? "Completion Requested"
+        : rawStatus ===
+          "completed"
+          ? "Completed"
+          : rawStatus ===
+            "cancelled"
+            ? "Cancelled"
+            : "Active";
+
+
+    article.innerHTML = `
+      <div class="job-icon">
+        ✅
+      </div>
+
+
+      <div class="job-main">
+
+        <div class="job-title-row">
+
+          <div>
+
+            <h3>
+              ${escapeHTML(
+                title
+              )}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                location
+              )}
+            </p>
+
+          </div>
+
+
+          <span class="status-badge ${
+            rawStatus ===
+            "pending_confirmation"
+              ? "waiting"
+              : "completed"
+          }">
+            ${escapeHTML(
+              statusLabel
+            )}
+          </span>
+
+        </div>
+
+
+        <p class="job-description">
+          Assigned to
+          <strong>
+            ${escapeHTML(
+              professional
+            )}
+          </strong>
+        </p>
+
+
+        <div class="job-footer">
+
+          <span>
+            💰 $${amount.toLocaleString()}
+          </span>
+
+          <span>
+            📅
+            ${escapeHTML(
+              timeframe
+            )}
+          </span>
+
+          <span>
+            🆔
+            ${escapeHTML(
+              reference
+            )}
+          </span>
+
+        </div>
+
+
+        <div class="job-actions">
+
+          <button
+            type="button"
+            class="small-primary-button active-job-message-button"
+            data-professional="${escapeHTML(
+              professional
+            )}"
+          >
+            Message Professional
+          </button>
+
+
+          <button
+            type="button"
+            class="small-secondary-button active-job-view-button"
+          >
+            View Job
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+
+    article
+      .querySelector(
+        ".active-job-message-button"
+      )
+      ?.addEventListener(
+        "click",
+        (event) => {
+
+          openProfessionalConversation(
+            event.currentTarget
+              .dataset.professional ||
+            ""
           );
 
         }
       );
 
 
-    /*
-      Render real Supabase jobs.
-    */
+    article
+      .querySelector(
+        ".active-job-view-button"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
 
-    submittedJobs
-      .slice()
-      .reverse()
-      .forEach(
-        (job) => {
+          openInfoModal({
+            eyebrow:
+              "ACTIVE JOB",
 
-          const isAlreadyActive =
-            Array.isArray(
-              activeJobs
-            ) &&
-            activeJobs.some(
-              (activeJob) =>
+            title,
 
-                String(
-                  activeJob.jobId ||
-                  activeJob.jobReference
-                ) ===
-                String(
-                  job.id ||
-                  job.reference
-                )
+            message:
+              `This job is assigned to ${professional}.`,
 
+            details: [
+              {
+                label:
+                  "Reference",
+
+                value:
+                  reference
+              },
+
+              {
+                label:
+                  "Professional",
+
+                value:
+                  professional
+              },
+
+              {
+                label:
+                  "Amount",
+
+                value:
+                  `$${amount.toLocaleString()}`
+              },
+
+              {
+                label:
+                  "Timeframe",
+
+                value:
+                  timeframe
+              },
+
+              {
+                label:
+                  "Status",
+
+                value:
+                  statusLabel
+              }
+            ]
+          });
+
+        }
+      );
+
+
+    return article;
+  }
+
+
+  async function loadSubmittedJobs() {
+
+    if (!jobsList) {
+      return;
+    }
+
+
+    try {
+
+      const [
+        submittedJobs,
+        activeJobs
+      ] =
+        await Promise.all([
+          fetchSubmittedJobs(),
+          fetchCustomerActiveJobs()
+        ]);
+
+
+      jobsList.innerHTML =
+        "";
+
+
+      const visibleActiveJobs =
+        activeJobs.filter(
+          (job) => {
+
+            const status =
+              String(
+                job.status ||
+                "active"
+              ).toLowerCase();
+
+
+            return (
+              status !==
+                "completed" &&
+              status !==
+                "cancelled"
             );
 
-
-          if (isAlreadyActive) {
-            return;
           }
+        );
 
 
-          jobsList.prepend(
-            createSubmittedJobCard(
-              job
-            )
+      visibleActiveJobs
+        .slice()
+        .reverse()
+        .forEach(
+          (job) => {
+
+            jobsList.prepend(
+              createActiveJobCard(
+                job
+              )
+            );
+
+          }
+        );
+
+
+      submittedJobs
+        .slice()
+        .reverse()
+        .forEach(
+          (job) => {
+
+            const isAlreadyActive =
+              activeJobs.some(
+                (activeJob) =>
+                  String(
+                    activeJob.job_id ||
+                    activeJob.jobId ||
+                    ""
+                  ) ===
+                  String(
+                    job.id ||
+                    ""
+                  )
+              );
+
+
+            if (isAlreadyActive) {
+              return;
+            }
+
+
+            jobsList.prepend(
+              createSubmittedJobCard(
+                job
+              )
+            );
+
+          }
+        );
+
+
+      if (
+        submittedJobs.length === 0 &&
+        visibleActiveJobs.length === 0
+      ) {
+
+        const emptyState =
+          document.createElement(
+            "div"
           );
 
-        }
+
+        emptyState.className =
+          "dashboard-empty-state";
+
+
+        emptyState.innerHTML = `
+          <p>
+            You have not posted any jobs yet.
+          </p>
+
+          <a
+            href="post-a-job.html"
+            class="primary-button"
+          >
+            Post Your First Job
+          </a>
+        `;
+
+
+        jobsList.appendChild(
+          emptyState
+        );
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Unable to load customer jobs:",
+        error
       );
 
 
-    /*
-      Empty-state message.
-    */
+      jobsList.innerHTML =
+        "";
 
-    if (
-      submittedJobs.length === 0 &&
-      visibleActiveJobs.length === 0
-    ) {
 
-      const emptyState =
+      const errorState =
         document.createElement(
           "div"
         );
 
 
-      emptyState.className =
+      errorState.className =
         "dashboard-empty-state";
 
 
-      emptyState.innerHTML = `
+      errorState.innerHTML = `
         <p>
-          You have not posted any jobs yet.
+          Korvo could not load your jobs.
+          Please refresh the page and try again.
         </p>
-
-        <a
-          href="post-a-job.html"
-          class="primary-button"
-        >
-          Post Your First Job
-        </a>
       `;
 
 
       jobsList.appendChild(
-        emptyState
+        errorState
       );
+
     }
-
-
-  } catch (error) {
-
-    console.error(
-      "Unable to load customer jobs:",
-      error
-    );
-
-
-    jobsList.innerHTML = "";
-
-
-    const errorState =
-      document.createElement(
-        "div"
-      );
-
-
-    errorState.className =
-      "dashboard-empty-state";
-
-
-    errorState.innerHTML = `
-      <p>
-        Korvo could not load your jobs.
-        Please refresh the page and try again.
-      </p>
-    `;
-
-
-    jobsList.appendChild(
-      errorState
-    );
   }
-}
 
 
   /* =========================
@@ -3245,42 +3275,39 @@ article
      ========================= */
 
   function loadDashboardStats() {
-  const submittedJobs =
-    getSubmittedJobs();
 
-  const professionalQuotes =
-    getProfessionalQuotes();
-
-  const acceptedQuotes =
-    safelyReadLocalStorage(
-      "korvoAcceptedQuotes",
-      []
-    );
-
-  const activeJobs =
-    safelyReadLocalStorage(
-      "korvoActiveJobs",
-      []
-    );
+    const professionalQuotes =
+      getProfessionalQuotes();
 
 
     const activeJobTotal =
-  Array.isArray(activeJobs)
-    ? activeJobs.filter(
-        (job) =>
-          String(
-            job.status || "Active"
-          ).toLowerCase() !==
-          "completed"
-      ).length
-    : 0;
+      activeJobsCache.filter(
+        (job) => {
 
-if (activeJobsCount) {
-  activeJobsCount.textContent =
-    String(
-      activeJobTotal
-    );
-}
+          const status =
+            String(
+              job.status ||
+              "active"
+            ).toLowerCase();
+
+
+          return (
+            status !==
+              "completed" &&
+            status !==
+              "cancelled"
+          );
+
+        }
+      ).length;
+
+
+    if (activeJobsCount) {
+      activeJobsCount.textContent =
+        String(
+          activeJobTotal
+        );
+    }
 
 
     if (quotesCount) {
@@ -3292,23 +3319,23 @@ if (activeJobsCount) {
 
 
     const completedJobTotal =
-  Array.isArray(activeJobs)
-    ? activeJobs.filter(
+      activeJobsCache.filter(
         (job) =>
           String(
-            job.status || ""
+            job.status ||
+            ""
           ).toLowerCase() ===
           "completed"
-      ).length
-    : 0;
+      ).length;
 
-if (completedJobsCount) {
-  completedJobsCount.textContent =
-    String(
-      18 +
-      completedJobTotal
-    );
-}
+
+    if (completedJobsCount) {
+      completedJobsCount.textContent =
+        String(
+          completedJobTotal
+        );
+    }
+
   }
 
 
