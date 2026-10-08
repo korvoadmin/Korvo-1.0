@@ -2838,6 +2838,42 @@ const reference =
   }
 
 
+  async function confirmCustomerJobCompletion(
+    activeJobId
+  ) {
+
+    if (
+      typeof korvoSupabase ===
+      "undefined"
+    ) {
+      throw new Error(
+        "Supabase is not available."
+      );
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await korvoSupabase.rpc(
+        "customer_confirm_job_completion",
+        {
+          p_active_job_id:
+            activeJobId
+        }
+      );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    return data;
+  }
+
+
   function createActiveJobCard(
     job
   ) {
@@ -2914,6 +2950,11 @@ const reference =
             : "Active";
 
 
+    const isPendingConfirmation =
+      rawStatus ===
+      "pending_confirmation";
+
+
     article.innerHTML = `
       <div class="job-icon">
         ✅
@@ -2956,12 +2997,15 @@ const reference =
 
 
         <p class="job-description">
-          Assigned to
-          <strong>
-            ${escapeHTML(
-              professional
-            )}
-          </strong>
+          ${
+            isPendingConfirmation
+              ? `${escapeHTML(
+                  professional
+                )} marked this job complete. Review the work and confirm completion.`
+              : `Assigned to <strong>${escapeHTML(
+                  professional
+                )}</strong>`
+          }
         </p>
 
 
@@ -2989,6 +3033,19 @@ const reference =
 
 
         <div class="job-actions">
+
+          ${
+            isPendingConfirmation
+              ? `
+                <button
+                  type="button"
+                  class="small-primary-button confirm-completion-button"
+                >
+                  ✓ Confirm Completion
+                </button>
+              `
+              : ""
+          }
 
           <button
             type="button"
@@ -3027,6 +3084,155 @@ const reference =
               .dataset.professional ||
             ""
           );
+
+        }
+      );
+
+
+    article
+      .querySelector(
+        ".confirm-completion-button"
+      )
+      ?.addEventListener(
+        "click",
+        async (event) => {
+
+          const confirmed =
+            confirm(
+              `Confirm that "${title}" has been completed by ${professional}?`
+            );
+
+
+          if (!confirmed) {
+            return;
+          }
+
+
+          const button =
+            event.currentTarget;
+
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Confirming...";
+
+
+          try {
+
+            await confirmCustomerJobCompletion(
+              job.id
+            );
+
+
+            safelyWriteLocalStorage(
+              "korvoPendingReview",
+              {
+                jobId:
+                  job.job_id ||
+                  "",
+
+                jobReference:
+                  reference,
+
+                jobTitle:
+                  title,
+
+                professional,
+
+                completedAt:
+                  new Date()
+                    .toISOString()
+              }
+            );
+
+
+            await loadSubmittedJobs();
+
+            loadDashboardStats();
+
+
+            shouldOpenReviewAfterInfo =
+              true;
+
+
+            openInfoModal({
+              eyebrow:
+                "JOB COMPLETED",
+
+              title:
+                "Completion Confirmed!",
+
+              message:
+                `${professional}'s work has been marked complete.`,
+
+              success:
+                true,
+
+              details: [
+                {
+                  label:
+                    "Job",
+
+                  value:
+                    title
+                },
+
+                {
+                  label:
+                    "Professional",
+
+                  value:
+                    professional
+                },
+
+                {
+                  label:
+                    "Reference",
+
+                  value:
+                    reference
+                },
+
+                {
+                  label:
+                    "Next Step",
+
+                  value:
+                    "Leave a review for this professional"
+                }
+              ]
+            });
+
+          } catch (error) {
+
+            console.error(
+              "Could not confirm job completion:",
+              error
+            );
+
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "✓ Confirm Completion";
+
+
+            openInfoModal({
+              eyebrow:
+                "JOB ERROR",
+
+              title:
+                "Could Not Confirm Completion",
+
+              message:
+                error?.message ||
+                "Korvo could not complete this job. Refresh and try again."
+            });
+
+          }
 
         }
       );
