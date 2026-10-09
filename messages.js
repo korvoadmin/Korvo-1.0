@@ -312,6 +312,121 @@ document.addEventListener(
     }
 
 
+    function getUnreadCount(
+      conversation
+    ) {
+
+      if (
+        !conversation ||
+        !currentUser
+      ) {
+        return 0;
+      }
+
+
+      const lastReadValue =
+        isProfessional
+          ? conversation
+              .professional_last_read_at
+          : conversation
+              .customer_last_read_at;
+
+
+      const lastReadTime =
+        lastReadValue
+          ? new Date(
+              lastReadValue
+            ).getTime()
+          : 0;
+
+
+      return getConversationMessages(
+        conversation.id
+      )
+        .filter(
+          (message) => {
+
+            if (
+              message.sender_id ===
+              currentUser.id
+            ) {
+              return false;
+            }
+
+
+            const messageTime =
+              new Date(
+                message.created_at
+              ).getTime();
+
+
+            return (
+              Number.isFinite(
+                messageTime
+              ) &&
+              messageTime >
+                lastReadTime
+            );
+
+          }
+        )
+        .length;
+
+    }
+
+
+    async function markConversationRead(
+      conversation
+    ) {
+
+      if (
+        !conversation ||
+        getUnreadCount(
+          conversation
+        ) === 0
+      ) {
+        return;
+      }
+
+
+      const {
+        error
+      } =
+        await korvoSupabase.rpc(
+          "mark_conversation_read",
+          {
+            p_conversation_id:
+              conversation.id
+          }
+        );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      const now =
+        new Date()
+          .toISOString();
+
+
+      if (isProfessional) {
+        conversation
+          .professional_last_read_at =
+            now;
+      } else {
+        conversation
+          .customer_last_read_at =
+            now;
+      }
+
+
+      buildConversationList();
+
+    }
+
+
     function setComposerEnabled(
       enabled
     ) {
@@ -513,7 +628,7 @@ document.addEventListener(
             "conversations"
           )
           .select(
-            "id, quote_id, job_id, active_job_id, customer_id, professional_id, job_title, job_reference, job_city, job_state, professional_name, status, created_at, updated_at"
+            "id, quote_id, job_id, active_job_id, customer_id, professional_id, job_title, job_reference, job_city, job_state, professional_name, status, customer_last_read_at, professional_last_read_at, created_at, updated_at"
           )
           .order(
             "updated_at",
@@ -870,6 +985,12 @@ document.addEventListener(
             ];
 
 
+          const unreadCount =
+            getUnreadCount(
+              conversation
+            );
+
+
           button.innerHTML =
             '<div class="conversation-avatar">' +
               escapeHTML(
@@ -916,7 +1037,22 @@ document.addEventListener(
                 ) +
               '</span>' +
 
-            '</div>';
+            '</div>' +
+
+            (
+              unreadCount > 0
+                ? '<span class="conversation-unread-dot" title="' +
+                    escapeHTML(
+                      unreadCount +
+                      (
+                        unreadCount === 1
+                          ? " unread message"
+                          : " unread messages"
+                      )
+                    ) +
+                  '"></span>'
+                : ""
+            );
 
 
           button.addEventListener(
@@ -1105,6 +1241,21 @@ document.addEventListener(
         conversation.status ===
         "active"
       );
+
+
+      markConversationRead(
+        conversation
+      )
+        .catch(
+          (error) => {
+
+            console.error(
+              "Unable to mark conversation read:",
+              error
+            );
+
+          }
+        );
 
     }
 
