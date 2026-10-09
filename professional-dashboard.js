@@ -2348,23 +2348,21 @@ function getJobSchedule(
 
   function getProfessionalActiveJobs() {
 
+    /*
+      The Jobs Won section should keep
+      showing accepted jobs even after
+      they are completed so pros can
+      reopen the job and its messages.
+    */
+
     return getProfessionalJobsWon()
       .filter(
-        (job) => {
-
-          const status =
-            String(
-              job.status ||
-              "active"
-            ).toLowerCase();
-
-
-          return (
-            status !== "completed" &&
-            status !== "cancelled"
-          );
-
-        }
+        (job) =>
+          String(
+            job.status ||
+            "active"
+          ).toLowerCase() !==
+          "cancelled"
       );
 
   }
@@ -2486,6 +2484,16 @@ function getJobSchedule(
       "pending_confirmation";
 
 
+    const isCompleted =
+      rawStatus ===
+      "completed";
+
+
+    const isActive =
+      rawStatus ===
+      "active";
+
+
     article.innerHTML = `
       <div class="job-card-header">
 
@@ -2582,14 +2590,26 @@ function getJobSchedule(
                 ⏳ Waiting for Customer Confirmation
               </button>
             `
-            : `
-              <button
-                type="button"
-                class="primary-button mark-work-complete-button"
-              >
-                ✓ Mark Work Complete
-              </button>
-            `
+            : isCompleted
+              ? `
+                <button
+                  type="button"
+                  class="secondary-button"
+                  disabled
+                >
+                  ✓ Job Completed
+                </button>
+              `
+              : isActive
+                ? `
+                  <button
+                    type="button"
+                    class="primary-button mark-work-complete-button"
+                  >
+                    ✓ Mark Work Complete
+                  </button>
+                `
+                : ""
         }
 
       </div>
@@ -2627,7 +2647,11 @@ function getJobSchedule(
             title,
 
             message:
-              "This customer accepted your Korvo quote and the job is now active.",
+              isCompleted
+                ? "This Korvo job has been completed. You can still open the customer conversation from this job."
+                : isPendingCustomerConfirmation
+                  ? "You marked this job complete and it is waiting for customer confirmation."
+                  : "This customer accepted your Korvo quote and the job is active.",
 
             details: [
               {
