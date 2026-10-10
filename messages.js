@@ -1523,32 +1523,44 @@ document.addEventListener(
           try {
 
             const {
-              data: savedMessage,
+              data: sendResult,
               error
             } =
-              await korvoSupabase
-                .from(
-                  "messages"
-                )
-                .insert({
-                  conversation_id:
+              await korvoSupabase.rpc(
+                "send_korvo_message",
+                {
+                  p_conversation_id:
                     activeConversationId,
 
-                  sender_id:
-                    currentUser.id,
-
-                  body:
+                  p_body:
                     text
-                })
-                .select(
-                  "id, conversation_id, sender_id, body, created_at"
-                )
-                .single();
+                }
+              );
 
 
             if (error) {
               throw error;
             }
+
+
+            if (
+              !sendResult ||
+              sendResult.status !==
+                "sent"
+            ) {
+
+              alert(
+                sendResult?.message ||
+                "Korvo could not send this message."
+              );
+
+              return;
+
+            }
+
+
+            const savedMessage =
+              sendResult.message;
 
 
             const existing =
