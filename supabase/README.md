@@ -80,8 +80,14 @@ The professional feed omits opportunities involving blocked users. Historical
 participant records remain readable; the feed's `can_quote` is the current
 actionability flag, not a payment or booking confirmation.
 
-Frontend work is still pending: dashboard opportunity cards, View/Pass controls,
-new notification rendering, and an Invite button beside customer recommendations.
+Professional frontend integration is implemented in `professional-opportunities.js`
+and the professional dashboard: ranked current cards, invitation labels, History,
+View/Pass actions, the existing quote form, persisted notifications and unread counts.
+The interface rechecks the feed and authorized job details before opening a quote.
+The current feed covers the latest 100 opportunities; the bell shows the latest 50
+notifications and a separate total unread count. Refresh reloads both, and opening
+the bell reloads notifications. There is no realtime subscription or polling.
+The customer recommendation interface and Invite button are still pending.
 There is no email, SMS, or push transport, no contact unlock, and no automatic
 backfill of previously posted jobs in this migration.
 
@@ -103,6 +109,13 @@ The post-change security advisor reported no new findings compared with the
 baseline. Existing advisories on older functions/tables and Auth password
 protection remain outside this change; this is not a full launch security audit.
 
-Next product step: connect the professional dashboard and customer recommendations
-to these APIs, then test the flows through the actual signed-in web UI. The
-matching/eligibility and alert/invitation backend layers are now implemented.
+Professional dashboard validation: 29 isolated Chromium browser checks passed,
+including the existing quote form, failure handling, notification read persistence,
+HTML escaping, duplicate clicks, unchanged unmatched-job quoting, and mobile layout.
+A read-only authenticated-role query also confirmed the live feed and notifications
+are accessible to the existing test professional (both currently empty). Browser
+tests use simulated API responses; a real signed-in end-to-end acceptance test and
+frontend deployment are still pending. See `../tests/README.md` to run the browser checks.
+
+Next product step: connect customer recommendations and invitations, then perform
+the complete customer-to-professional flow through the signed-in web UI.
