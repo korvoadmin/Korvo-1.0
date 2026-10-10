@@ -738,6 +738,23 @@ button {
   margin-top: 16px;
 }
 
+/* Matched opportunities use the same cards and controls as open jobs. */
+#matchedOpportunitiesSection, #notificationsSection { scroll-margin-top: 95px; }
+.opportunity-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.opportunity-status { color: var(--muted); margin: 14px 0; font-size: 0.9rem; }
+.opportunity-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.opportunity-badge { border-radius: 8px; padding: 4px 9px; background: rgba(59, 130, 246, 0.12); color: #b9cff5; font-size: 0.78rem; font-weight: 700; }
+.opportunity-badge.invited { background: rgba(33, 208, 122, 0.12); color: var(--green); }
+.opportunity-card .job-actions { flex-wrap: wrap; }
+.opportunity-card .opportunity-reason { margin-top: 12px; }
+.opportunity-card { overflow-wrap: anywhere; }
+.opportunity-card:focus { outline: 2px solid var(--green); outline-offset: 3px; }
+#matchedOpportunitiesSection button:disabled { cursor: not-allowed; opacity: 0.55; }
+#matchedOpportunitiesSection :focus-visible, #notificationsSection :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.notification-content { min-width: 0; overflow-wrap: anywhere; }
+.notification-content .text-button { display: block; margin-top: 8px; text-align: left; }
+.notification-status { color: var(--muted); font-size: 0.85rem; }
+
 /* =========================
    Empty States
    ========================= */

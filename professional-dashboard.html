@@ -315,6 +315,26 @@
 
         <div class="dashboard-main">
 
+          <section class="dashboard-card" id="matchedOpportunitiesSection" aria-labelledby="matchedOpportunitiesHeading">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">YOUR OPPORTUNITIES</p>
+                <h2 id="matchedOpportunitiesHeading">Matched for You</h2>
+                <p>Jobs matched to your services and invitations from customers.</p>
+              </div>
+              <button type="button" class="secondary-button" id="refreshOpportunitiesButton">Refresh</button>
+            </div>
+            <div class="opportunity-toolbar filter-controls">
+              <label for="opportunityFilter">Show</label>
+              <select id="opportunityFilter">
+                <option value="current">Current opportunities</option>
+                <option value="history">History</option>
+              </select>
+            </div>
+            <p id="opportunityStatus" class="opportunity-status" role="status" aria-live="polite">Loading your opportunities…</p>
+            <div class="jobs-list" id="matchedOpportunitiesList" aria-busy="true"></div>
+          </section>
+
 
           <!-- Available Customer Jobs -->
 
@@ -726,27 +746,7 @@
               id="notificationsList"
             >
 
-              <article class="notification-item unread">
-
-                <span class="notification-icon">
-                  💼
-                </span>
-
-                <div>
-
-                  <p>
-                    New customer jobs will appear here.
-                  </p>
-
-                  <span>
-                    Just now
-                  </span>
-
-                </div>
-
-                <span class="unread-dot"></span>
-
-              </article>
+              <p role="status">Loading notifications…</p>
 
             </div>
 
@@ -1039,6 +1039,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
+  <script src="professional-opportunities.js"></script>
   <script src="professional-dashboard.js"></script>
 
 </body>

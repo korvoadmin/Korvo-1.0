@@ -29,31 +29,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       "mobileNav"
     );
 
-  const notificationButton =
-    document.getElementById(
-      "notificationButton"
-    );
-
-  const notificationCount =
-    document.getElementById(
-      "notificationCount"
-    );
-
-  const notificationsSection =
-    document.getElementById(
-      "notificationsSection"
-    );
-
-  const notificationsList =
-    document.getElementById(
-      "notificationsList"
-    );
-
-  const markAllReadButton =
-    document.getElementById(
-      "markAllReadButton"
-    );
-
   const availableJobsList =
     document.getElementById(
       "availableJobsList"
@@ -1029,6 +1004,8 @@ async function fetchCustomerJobs() {
     return data;
   }
 
+
+  let opportunityDashboard = null;
 
   let customerJobs = [];
 
@@ -2015,14 +1992,11 @@ function getJobSchedule(
 
         renderSubmittedQuotes();
 
+        opportunityDashboard?.reload();
+
         renderActiveWork();
 
         updateDashboardCounters();
-
-
-        addNotification(
-          `Quote submitted for ${savedQuote.job_title}.`
-        );
 
 
         closeQuoteModal();
@@ -2752,9 +2726,7 @@ function getJobSchedule(
             updateDashboardCounters();
 
 
-            addNotification(
-              `${title} was submitted for customer confirmation.`
-            );
+            opportunityDashboard?.refreshNotifications();
 
 
             openInfoModal({
@@ -3063,139 +3035,6 @@ function getJobSchedule(
     );
 
   }
-
-
-  /* =========================
-     Notifications
-     ========================= */
-
-  function addNotification(
-    message
-  ) {
-
-    if (!notificationsList) {
-      return;
-    }
-
-
-    const notification =
-      document.createElement(
-        "article"
-      );
-
-
-    notification.className =
-      "notification-item unread";
-
-
-    notification.innerHTML = `
-      <span class="notification-icon">
-        💼
-      </span>
-
-      <div>
-
-        <p>
-          ${escapeHTML(
-            message
-          )}
-        </p>
-
-        <span>
-          Just now
-        </span>
-
-      </div>
-
-      <span class="unread-dot"></span>
-    `;
-
-
-    notificationsList.prepend(
-      notification
-    );
-
-
-    updateNotificationCount();
-  }
-
-
-  function updateNotificationCount() {
-
-    if (!notificationCount) {
-      return;
-    }
-
-
-    const unread =
-      document.querySelectorAll(
-        ".notification-item.unread"
-      ).length;
-
-
-    notificationCount.textContent =
-      String(
-        unread
-      );
-
-  }
-
-
-  if (
-    notificationButton &&
-    notificationsSection
-  ) {
-
-    notificationButton
-      .addEventListener(
-        "click",
-        () => {
-
-          notificationsSection
-            .scrollIntoView({
-              behavior:
-                "smooth",
-
-              block:
-                "center"
-            });
-
-        }
-      );
-
-  }
-
-
-  markAllReadButton
-    ?.addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(
-            ".notification-item.unread"
-          )
-          .forEach(
-            (notification) => {
-
-              notification
-                .classList.remove(
-                  "unread"
-                );
-
-              notification
-                .querySelector(
-                  ".unread-dot"
-                )
-                ?.remove();
-
-            }
-          );
-
-        updateNotificationCount();
-
-      }
-    );
 
 
   /* =========================
@@ -3517,6 +3356,25 @@ renderActiveWork();
 
 updateDashboardCounters();
 
-updateNotificationCount();
+opportunityDashboard = window.createKorvoOpportunities({
+  client: korvoSupabase,
+  professionalId: currentProfessionalId,
+  escapeHTML,
+  formatBudget: formatJobBudget,
+  getSchedule: getJobSchedule,
+  showDetails: (options) => {
+    openInfoModal(options);
+    infoModalDoneButton?.focus();
+  },
+  showQuote: (job) => {
+    // The opportunity API contains summary fields; cache the freshly authorized
+    // job details so the existing form submits the canonical job UUID.
+    const index = customerJobs.findIndex((entry) => String(entry.id) === String(job.id));
+    if (index === -1) customerJobs.push(job);
+    else customerJobs[index] = job;
+    openQuoteModal(job.id);
+  }
+});
+await opportunityDashboard.reload();
 
 });
