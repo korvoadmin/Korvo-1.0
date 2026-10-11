@@ -45,10 +45,20 @@ select pg_temp.assert_ok(not exists(select 1 from public.job_opportunities where
 select pg_temp.assert_ok((select count(*)=5 from public.notifications where job_id=(select id from opportunity_test_ids where name='job') and type='matched_job'),'one notification per automatic match');
 
 set local role authenticated;
+do $$ declare v jsonb; begin
+  v:=public.customer_job_professionals((select id from opportunity_test_ids where name='job'));
+  perform pg_temp.assert_ok(v->'job'->>'id'=(select id::text from opportunity_test_ids where name='job'),'customer view selects owned job');
+  perform pg_temp.assert_ok(jsonb_array_length(v->'recommendations')=7,'customer recommendations include service matches only');
+  perform pg_temp.assert_ok(jsonb_array_length(v->'activity')=5,'customer view includes automatic match activity');
+  perform pg_temp.assert_ok((v->>'invitations_used')::integer=0 and (v->>'invitation_limit')::integer=5,'customer invitation limits reflect configuration');
+  perform pg_temp.assert_ok(jsonb_array_length(v->'recommendations'->0->'services')=1,'customer view includes selected services');
+  perform pg_temp.assert_ok(not exists(select 1 from jsonb_array_elements(v->'recommendations') p, lateral jsonb_object_keys(p) k where k not in ('professional_id','business_name','services','verification_status','completed_jobs','review_count','average_rating','preferred_area_match','can_quote','has_quote')),'recommendations expose only approved public fields');
+end; $$;
 select pg_temp.assert_ok((public.refresh_job_opportunities((select id from opportunity_test_ids where name='job'))->>'created')::integer=0,'refresh retries are idempotent');
 select pg_temp.assert_ok((select count(*)=5 from public.job_opportunities where job_id=(select id from opportunity_test_ids where name='job')),'customer can read own opportunity status');
 select pg_temp.assert_ok((public.invite_professional_to_job((select id from opportunity_test_ids where name='job'),(select id from opportunity_test_ids where name='pro1'))->>'already_invited')::boolean=false,'customer invites an existing recommended match');
 select pg_temp.assert_ok((public.invite_professional_to_job((select id from opportunity_test_ids where name='job'),(select id from opportunity_test_ids where name='pro1'))->>'already_invited')::boolean=true,'repeated invitation is idempotent');
+select pg_temp.assert_ok((public.customer_job_professionals((select id from opportunity_test_ids where name='job'))->>'invitations_used')::integer=1,'customer view updates invitation count');
 
 select set_config('request.jwt.claim.sub',(select id::text from opportunity_test_ids where name='pro1'),true);
 select set_config('request.jwt.claims',jsonb_build_object('sub',(select id from opportunity_test_ids where name='pro1'),'role','authenticated')::text,true);
@@ -78,6 +88,13 @@ end; $$;
 select set_config('request.jwt.claim.sub',(select id::text from opportunity_test_ids where name='other'),true);
 select set_config('request.jwt.claims',jsonb_build_object('sub',(select id from opportunity_test_ids where name='other'),'role','authenticated')::text,true);
 select pg_temp.assert_ok((select count(*)=0 from public.job_opportunities),'unrelated customer RLS isolation');
+do $$ begin
+  begin
+    perform public.customer_job_professionals((select id from opportunity_test_ids where name='job'));
+    raise exception 'Other customer read recommendations';
+  exception when insufficient_privilege then perform pg_temp.assert_ok(true,'customer recommendation view rejects another owner'); end;
+end; $$;
+
 do $$ begin
   begin
     perform public.invite_professional_to_job((select id from opportunity_test_ids where name='job'),(select id from opportunity_test_ids where name='pro2'));
@@ -157,6 +174,12 @@ select public.respond_to_quote((select id from public.quotes where job_id=(selec
 select pg_temp.assert_ok(not exists(select 1 from public.job_opportunities where job_id=(select id from opportunity_test_ids where name='job') and status in ('offered','viewed')),'accepted job closes unresponded opportunities');
 select pg_temp.assert_ok((select status='passed' from public.job_opportunities where professional_id=(select id from opportunity_test_ids where name='pro1')),'closure preserves pass history');
 select pg_temp.assert_ok((public.refresh_job_opportunities((select id from opportunity_test_ids where name='job'))->>'reason')='job_not_open','closed job cannot generate alerts');
+do $$ declare v jsonb; begin
+  v:=public.customer_job_professionals((select id from opportunity_test_ids where name='job'));
+  perform pg_temp.assert_ok(jsonb_array_length(v->'recommendations')=0 and not (v->>'can_invite')::boolean,'closed customer job has no invite recommendations');
+  perform pg_temp.assert_ok(exists(select 1 from jsonb_array_elements(v->'activity') x where x->>'status'='quoted' and x->>'quote_id' is not null),'customer response history links real quote');
+end; $$;
+
 
 -- Isolate a fresh service for daily throttling and block checks.
 reset role;
@@ -199,6 +222,11 @@ do $$ begin
     perform pg_temp.assert_ok(true,'block prevents invitation');
   end;
 end; $$;
+do $$ declare v jsonb; begin
+  v:=public.customer_job_professionals((select id from opportunity_test_ids where name='daily1'));
+  perform pg_temp.assert_ok(jsonb_array_length(v->'recommendations')=0,'blocked professional excluded from customer recommendations');
+  perform pg_temp.assert_ok(not exists(select 1 from jsonb_array_elements(v->'activity') x where x->>'business_name' is not null),'blocked professional identity hidden in activity');
+end; $$;
 select set_config('request.jwt.claim.sub',(select id::text from opportunity_test_ids where name='pro8'),true);
 select set_config('request.jwt.claims',jsonb_build_object('sub',(select id from opportunity_test_ids where name='pro8'),'role','authenticated')::text,true);
 select pg_temp.assert_ok((select count(*)=0 from public.my_job_opportunities(100)),'blocked opportunity hidden from actionable feed');
@@ -227,6 +255,7 @@ select pg_temp.assert_ok(not has_function_privilege('authenticated','korvo_oppor
 select pg_temp.assert_ok(not has_table_privilege('anon','public.job_opportunities','SELECT'),'anonymous opportunity read denied');
 select pg_temp.assert_ok((select require_service_match_for_quote=false from public.job_matching_config where id=true),'strict quote matching setting preserved');
 select pg_temp.assert_ok(not exists(select 1 from public.job_service_match_rules where requires_verified_identity or requires_verified_background or requires_verified_license),'verification requirements preserved');
+select pg_temp.assert_ok(not has_function_privilege('anon','public.customer_job_professionals(uuid)','EXECUTE'),'anonymous customer recommendation execution denied');
 select count(*) as tests_passed,jsonb_agg(name order by name) as checks from opportunity_test_results;
 
 rollback;

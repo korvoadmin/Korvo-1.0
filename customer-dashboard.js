@@ -120,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let professionalQuotesCache = [];
   let activeJobsCache = [];
   let reviewsCache = [];
+  let customerProfessionals = null;
 
 
   /* =========================
@@ -2936,6 +2937,8 @@ const reference =
       );
 
 
+    appendProfessionalAction(article, job.id);
+
     return article;
   }
 
@@ -3568,6 +3571,8 @@ const reference =
       );
 
 
+    appendProfessionalAction(article, job.job_id);
+
     return article;
   }
 
@@ -3702,7 +3707,11 @@ const reference =
       }
 
 
+      await customerProfessionals?.setJobs(submittedJobs);
+
     } catch (error) {
+
+      customerProfessionals?.jobLoadError();
 
       console.error(
         "Unable to load customer jobs:",
@@ -3892,6 +3901,33 @@ const reference =
   loadDashboardStats();
 }
 
+
+function appendProfessionalAction(article, jobId) {
+  if (!jobId) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "small-secondary-button job-professionals-button";
+  button.textContent = "Professionals & Responses";
+  button.addEventListener("click", () => customerProfessionals?.selectJob(String(jobId)));
+  article.querySelector(".job-actions")?.appendChild(button);
+}
+
+customerProfessionals = window.createKorvoCustomerProfessionals({
+  client: korvoSupabase,
+  escapeHTML,
+  refreshJobs: loadSubmittedJobs,
+  viewQuote: async (quoteId) => {
+    await fetchProfessionalQuotes();
+    renderProfessionalQuotes();
+    loadDashboardStats();
+    const card = Array.from(quotesList.querySelectorAll(".quote-item"))
+      .find(item => item.dataset.quoteId === String(quoteId));
+    if (!card) throw new Error("Quote no longer available");
+    card.tabIndex = -1;
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    card.focus({ preventScroll: true });
+  }
+});
 
 initializeDashboard();
 
