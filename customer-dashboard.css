@@ -573,6 +573,26 @@ textarea {
   gap: 24px;
 }
 
+#customerProfessionalsSection { scroll-margin-top: 95px; }
+.recommendations-description, .recommendations-status { color: var(--muted); font-size: 0.9rem; margin: 14px 0; }
+.recommendations-job-label { display: block; margin: 18px 0 6px; font-weight: 700; }
+#recommendationsJob { width: 100%; min-width: 0; background: #0a1b2a; color: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-overflow: ellipsis; }
+.customer-professionals-list { display: grid; gap: 14px; }
+.customer-professional-card, .customer-opportunity-row { min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: rgba(6, 19, 31, 0.45); overflow-wrap: anywhere; }
+.customer-professional-card h3, .customer-opportunity-row h4 { color: white; }
+.customer-professional-card p, .customer-opportunity-row p { color: var(--muted); margin-top: 8px; font-size: 0.88rem; }
+.customer-professional-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.customer-professional-facts span { background: rgba(57, 202, 144, 0.09); border-radius: 7px; padding: 5px 8px; font-size: 0.78rem; }
+.customer-professional-card .primary-button { margin-top: 12px; }
+.opportunity-activity-heading { margin-top: 26px; }
+.customer-opportunity-row .text-link { display: inline-block; margin-top: 12px; }
+#customerProfessionalsSection button:disabled { opacity: 0.55; cursor: not-allowed; }
+#customerProfessionalsSection :focus-visible, .quote-item:focus { outline: 2px solid var(--primary); outline-offset: 3px; }
+@media (max-width: 600px) {
+  #customerProfessionalsSection .card-heading { align-items: flex-start; flex-direction: column; }
+  .customer-professional-card .primary-button { width: 100%; }
+}
+
 .dashboard-sidebar {
   position: sticky;
   top: 98px;

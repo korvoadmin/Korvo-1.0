@@ -87,7 +87,8 @@ The interface rechecks the feed and authorized job details before opening a quot
 The current feed covers the latest 100 opportunities; the bell shows the latest 50
 notifications and a separate total unread count. Refresh reloads both, and opening
 the bell reloads notifications. There is no realtime subscription or polling.
-The customer recommendation interface and Invite button are still pending.
+The customer recommendation interface and Invite button are implemented (see the
+October 11 checkpoint below).
 There is no email, SMS, or push transport, no contact unlock, and no automatic
 backfill of previously posted jobs in this migration.
 
@@ -114,8 +115,43 @@ including the existing quote form, failure handling, notification read persisten
 HTML escaping, duplicate clicks, unchanged unmatched-job quoting, and mobile layout.
 A read-only authenticated-role query also confirmed the live feed and notifications
 are accessible to the existing test professional (both currently empty). Browser
-tests use simulated API responses; a real signed-in end-to-end acceptance test and
-frontend deployment are still pending. See `../tests/README.md` to run the browser checks.
+tests use simulated API responses. The professional frontend was deployed on
+October 10; the October 11 checkpoint adds real signed-in acceptance coverage.
+See `../tests/README.md` to run the browser checks.
 
-Next product step: connect customer recommendations and invitations, then perform
-the complete customer-to-professional flow through the signed-in web UI.
+## October 11: customer recommendations and response tracking
+
+Applied migration `20261011073403_customer_job_professionals` adds the owner-only
+`customer_job_professionals({p_job_id})` RPC. It returns the job, up to 25 recommended
+professionals, the job's opportunity history, current invitation usage/limit, and
+whether the customer can invite. Public fields include business name, selected
+services, verification status, rating/review count, completed jobs and preferred-area
+match. Private contact/profile fields are not returned. Blocked professionals are
+excluded from recommendations; hidden/inactive/blocked identities are omitted from
+historical names. The public function is SECURITY INVOKER with authenticated-only
+grants; its private implementation explicitly requires ownership.
+
+`customer-professionals.js` connects that view to a per-job selector, Invite to Quote,
+and Invited/Viewed/Passed/Quoted/Closed activity. Each job card opens its own view;
+View Quote refreshes and focuses the real quote in Recent Quotes. Closed jobs retain
+history without invitation buttons. Invitations recheck current state before using
+the existing invite RPC. A failed follow-up read never changes a confirmed send
+into a claimed failure. Job switching ignores stale asynchronous responses.
+
+Validation at this checkpoint:
+- 56 rollback SQL checks passed before and after the new migration, including the
+  original alert lifecycle plus ownership, field whitelist, blocked identities,
+  invitation counters and real quote links.
+- 26 isolated customer browser checks passed; mobile layout visually reviewed.
+- 8 real signed-in browser acceptance checks passed against Supabase Auth and the
+  live Data API using locally served dashboard source: authenticated job posting,
+  automatic matching, invitation, professional viewing, quote submission, customer
+  quote acceptance, and the resulting active job.
+- The temporary accounts used unique test services. All test accounts, profiles,
+  jobs, opportunities and notifications were removed after global sign-out. The
+  database returned to the previous two profiles, one job and zero notifications.
+- No new security advisor findings compared with the pre-change baseline.
+
+The customer panel refreshes on job selection, its Refresh button, invitation
+completion and existing job/quote lifecycle reloads. It does not poll or subscribe
+to realtime updates. Payment processing and contact unlock are outside this change.

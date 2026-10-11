@@ -395,6 +395,21 @@
               </div>
 
             </section>
+            <section class="dashboard-card" id="customerProfessionalsSection" aria-labelledby="customerProfessionalsHeading">
+              <div class="card-heading">
+                <div><p class="section-label">Find your professional</p><h2 id="customerProfessionalsHeading">Recommended for Your Job</h2></div>
+                <button type="button" class="small-secondary-button" id="refreshCustomerProfessionals">Refresh</button>
+              </div>
+              <p class="recommendations-description">Compare service matches and invite a professional to quote. An invitation does not book the job or charge you.</p>
+              <label class="recommendations-job-label" for="recommendationsJob">Choose your job</label>
+              <select id="recommendationsJob" disabled><option value="">Loading your jobs…</option></select>
+              <p id="customerProfessionalsStatus" class="recommendations-status" role="status" aria-live="polite">Loading…</p>
+              <div id="customerRecommendationsList" class="customer-professionals-list" aria-busy="true"></div>
+              <h3 class="opportunity-activity-heading">Invitations &amp; Responses</h3>
+              <p class="recommendations-description">Track automatic match alerts and invitations for the selected job.</p>
+              <div id="customerOpportunityActivity" class="customer-professionals-list"></div>
+            </section>
+
             <!-- My Jobs -->
 
             <section class="dashboard-card">
@@ -1321,6 +1336,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
+  <script src="customer-professionals.js"></script>
   <script src="customer-dashboard.js"></script>
 
 </body>
