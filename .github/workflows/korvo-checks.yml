@@ -1,0 +1,42 @@
+name: Korvo regression checks
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: korvo-checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  isolated-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Unit and source-security checks
+        run: node --experimental-transform-types --test tests/*.test.mjs
+      - name: Install isolated browser test dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/korvo-tools" --no-audit --no-fund playwright@1.56.1
+          node "$RUNNER_TEMP/korvo-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Dashboard, payment and recovery browser checks
+        run: |
+          export NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules"
+          node tests/professional-opportunities.browser.cjs
+          node tests/customer-professionals.browser.cjs
+          node tests/stripe-connect.browser.cjs
+          node tests/marketplace-payments.browser.cjs
+          node tests/password-recovery.browser.cjs
+      - name: Validate opt-in integration runners
+        run: python -m py_compile tests/sandbox-*-acceptance.py
+
+# No deployment, credentials, live Stripe calls or privileged database writes.
+# Actual sandbox integration runners require explicitly provisioned private fixtures.

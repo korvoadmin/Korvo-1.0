@@ -9,7 +9,11 @@ function fixture(options = {}) {
     details_submitted: false, charges_enabled: false, payouts_enabled: false, capabilities: {}, ...options.account };
   const createClient = (_url, key) => key === 'anon-fixture' ? {
     auth: { getUser: async () => options.invalidSession ? { error: {} } : { data: { user: { id: 'pro-fixture', email: 'fixture@example.invalid' } } } }
-  } : { from(table) {
+  } : { rpc: async (name,args) => {
+    assert.equal(name,'marketplace_apply_event');
+    assert.equal(args.p_snapshot.professional_id,'pro-fixture');
+    writes.push({kind:'update',values:args.p_snapshot});return {data:{processed:true}};
+  }, from(table) {
     let kind = 'select', values, filters = [];
     const query = {
       select() { return this; }, eq(k, v) { filters.push([k, v]); return this; },
@@ -20,6 +24,7 @@ function fixture(options = {}) {
         if (table === 'profiles') return { data: { id: 'pro-fixture', account_type: options.customer ? 'customer' : 'professional',
           is_active: !options.inactive, onboarding_complete: !options.incomplete } };
         if (table === 'professional_profiles') return { data: options.noPro ? null : { id: 'pro-fixture' } };
+        if (table === 'stripe_connect_provisions') return {data:{token:'provision-fixture',created_at:new Date().toISOString()}};
         assert.equal(table, 'professional_stripe_accounts');
         if (kind !== 'upsert') assert.ok(filters.some(([k, v]) => k === 'professional_id' && v === 'pro-fixture'));
         if (options.dbLookupFailure && kind === 'select') return { error: { code: '42501' } };
@@ -58,7 +63,7 @@ test('creates v2 sandbox recipient, persists ID before link, and reuses mapping 
   assert.equal(result.status, 200); assert.equal(result.data.sandbox, true); assert.equal(result.cache, 'no-store');
   assert.ok(result.data.onboarding_url.startsWith('https://accounts.stripe.com/'));
   assert.deepEqual(f.calls.map(c => c.path), ['/v2/core/accounts', '/v1/accounts/acct_fixture', '/v2/core/account_links']);
-  assert.equal(f.calls[0].headers['Idempotency-Key'], 'korvo-connect-v2-pro-fixture');
+  assert.equal(f.calls[0].headers['Idempotency-Key'], 'korvo-connect-v2-provision-fixture');
   assert.equal(f.calls[0].body.contact_email, 'fixture@example.invalid');
   assert.equal(f.calls[0].body.configuration.recipient.capabilities.stripe_balance.stripe_transfers.requested, true);
   assert.equal(f.calls[2].body.use_case.account_onboarding.return_url, 'https://korvoadmin.github.io/Korvo-1.0/professional-dashboard.html?stripe=return');
