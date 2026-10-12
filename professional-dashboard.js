@@ -129,66 +129,84 @@ document.addEventListener("DOMContentLoaded", async () => {
       "servicesButton"
     );
 
-const connectStripeButton =
-  document.getElementById("connectStripeButton");
+  const connectStripeButton = document.getElementById("connectStripeButton");
+  const stripeStatus = document.getElementById("stripeConnectStatus");
 
-connectStripeButton?.addEventListener("click", async () => {
-  const button = connectStripeButton;
-  const originalText = button.innerHTML;
-
-  button.disabled = true;
-  button.textContent = "Connecting to Stripe...";
-
-  try {
-    if (typeof korvoSupabase === "undefined") {
-      throw new Error("Supabase is unavailable.");
-    }
-
-    const {
-      data: { session },
-      error: sessionError
-    } = await korvoSupabase.auth.getSession();
-
-    if (sessionError || !session?.access_token) {
-      throw new Error("Please log in again to continue.");
-    }
-
-    const { data, error } =
-      await korvoSupabase.functions.invoke(
-        "create-connect-onboarding",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${session.access_token}`
-          },
-          body: {}
-        }
-      );
-
+  async function callStripeConnect(action) {
+    if (typeof korvoSupabase === "undefined") throw new Error("Supabase is unavailable.");
+    const { data: { session }, error: sessionError } = await korvoSupabase.auth.getSession();
+    if (sessionError || !session?.access_token) throw new Error("Please log in again to continue.");
+    const { data, error } = await korvoSupabase.functions.invoke("create-connect-onboarding", {
+      method: "POST", headers: { Authorization: `Bearer ${session.access_token}` }, body: { action }
+    });
     if (error) {
-      throw new Error(
-        "Stripe onboarding could not be started. Check the function logs."
-      );
+      let detail;
+      try { detail = await error.context?.json(); } catch {}
+      const messages = {
+        LOGIN_REQUIRED: "Please log in again to continue.",
+        PROFESSIONAL_REQUIRED: "Complete your active professional profile before connecting Stripe.",
+        SANDBOX_KEY_REQUIRED: "Stripe sandbox configuration needs attention from Korvo.",
+        SERVER_CONFIGURATION_MISSING: "Stripe configuration needs attention from Korvo.",
+        DATABASE_ERROR: "Korvo could not save or retrieve your Stripe connection.",
+        STRIPE_REQUEST_FAILED: "Stripe could not complete this step. Korvo needs to review the connection.",
+      };
+      const reference = typeof detail?.request_id === "string"
+        && /^[a-f0-9-]{36}$/.test(detail.request_id) ? ` Reference: ${detail.request_id}` : "";
+      throw new Error((messages[detail?.code] || "Stripe onboarding could not be started. Please try again.") + reference);
     }
-
-    const onboardingUrl = data?.onboarding_url;
-
-    if (
-      typeof onboardingUrl !== "string" ||
-      !onboardingUrl.startsWith("https://connect.stripe.com/")
-    ) {
-      throw new Error("Stripe returned an invalid onboarding link.");
-    }
-
-    window.location.assign(onboardingUrl);
-  } catch (error) {
-    console.error("Stripe onboarding error:", error);
-    alert(error.message || "Unable to connect Stripe.");
-  } finally {
-    button.disabled = false;
-    button.innerHTML = originalText;
+    return data;
   }
-});
+
+  async function refreshStripeStatus() {
+    if (!stripeStatus) return;
+    try {
+      const data = await callStripeConnect("status");
+      const labels = {
+        not_connected: "Stripe sandbox is not connected yet.",
+        pending: "Stripe sandbox: onboarding still needs information.",
+        in_progress: "Stripe sandbox: verification is in progress.",
+        restricted: "Stripe sandbox: action is required in Stripe.",
+        complete: "Stripe sandbox setup is complete. Real payouts are not enabled."
+      };
+      stripeStatus.textContent = labels[data?.status] || "Stripe status is unavailable.";
+    } catch (error) { stripeStatus.textContent = error.message || "Stripe status could not be refreshed."; }
+  }
+
+  async function startStripeOnboarding() {
+    if (!connectStripeButton || connectStripeButton.disabled) return;
+    const originalText = connectStripeButton.innerHTML;
+    connectStripeButton.disabled = true;
+    connectStripeButton.textContent = "Connecting to Stripe...";
+    try {
+      const data = await callStripeConnect("start");
+      const target = new URL(data?.onboarding_url);
+      if (target.protocol !== "https:" || !["connect.stripe.com", "accounts.stripe.com"].includes(target.hostname)
+        || target.username || target.password || data?.sandbox !== true) {
+        throw new Error("Stripe returned an invalid sandbox onboarding link.");
+      }
+      window.location.assign(target.href);
+    } catch (error) {
+      const message = error.message || "Unable to connect Stripe.";
+      if (stripeStatus) stripeStatus.textContent = message;
+      alert(message);
+    } finally {
+      connectStripeButton.disabled = false;
+      connectStripeButton.innerHTML = originalText;
+    }
+  }
+  connectStripeButton?.addEventListener("click", startStripeOnboarding);
+  if (stripeStatus) {
+    const stripeReturn = new URLSearchParams(window.location.search).get("stripe");
+    if (stripeReturn === "refresh") {
+      const clean = new URL(window.location.href);
+      clean.searchParams.delete("stripe");
+      window.history.replaceState(null, "", clean);
+      void startStripeOnboarding();
+    } else {
+      // A return URL is not proof of completion. Ask Stripe for the current status.
+      void refreshStripeStatus();
+    }
+  }
 
   const accountSettingsButton =
     document.getElementById(

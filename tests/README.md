@@ -48,3 +48,15 @@ Afterward, administratively remove only these fixtures by their recorded UUIDs:
 their jobs first, then their `public.profiles`, then `auth.users`. The profile-to-Auth
 foreign key does not cascade. Verify fixture removal and delete the credential file,
 even when a test fails. The runner does not perform privileged cleanup itself.
+
+## Stripe Connect sandbox checks
+
+```sh
+node --experimental-transform-types --test tests/stripe-connect.test.mjs
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/stripe-connect.browser.cjs
+```
+
+Run `supabase/tests/connect_eligibility.sql` as an administrative rollback-only SQL
+check. The function and browser suites above use isolated fixtures and do not call
+Stripe. See `docs/stripe-connect-diagnostic.md` for the real sandbox acceptance
+results, deployment scope, security findings, and manual verification steps.

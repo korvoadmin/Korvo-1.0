@@ -155,3 +155,14 @@ Validation at this checkpoint:
 The customer panel refreshes on job selection, its Refresh button, invitation
 completion and existing job/quote lifecycle reloads. It does not poll or subscribe
 to realtime updates. Payment processing and contact unlock are outside this change.
+
+## Stripe Connect diagnostic follow-up — October 12, 2026
+
+Applied `20261012055154_secure_connect_professional_eligibility.sql` and deployed
+`create-connect-onboarding` version 5 with JWT verification enabled. The focused
+fix uses Stripe Accounts v2 in sandbox mode, enforces professional eligibility,
+keeps mappings backend-only, and refreshes status from Stripe on dashboard visits
+and returns. See `docs/stripe-connect-diagnostic.md` for evidence, verification,
+cleanup, and remaining webhook/payment/security work. The broader uncommitted
+security/performance migrations were not applied and need rebasing against the
+new Stripe tables and service-role requirements before resuming that work.
