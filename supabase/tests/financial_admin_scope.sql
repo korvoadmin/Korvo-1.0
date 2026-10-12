@@ -372,7 +372,9 @@ do $$declare stmt text;begin
  foreach stmt in array array['select korvo_api_private.admin_decide_payment_review(null,null,null)','select korvo_api_private.admin_set_professional_membership(null,null,null)','select korvo_api_private.admin_release_professional_job_usage(null,null)'] loop
   begin execute stmt;raise exception 'Expected field validation';
   exception when insufficient_privilege then raise exception 'Owner incorrectly denied';
-  when raise_exception then insert into role_check_results values('owner reaches validation '||stmt);end;
+  when raise_exception then
+   if sqlerrm ilike '%admin%required%' or sqlerrm='Expected field validation' then raise;end if;
+   insert into role_check_results values('owner reaches validation '||stmt);end;
  end loop;
 end;$$;
 reset role;

@@ -45,10 +45,13 @@ Unapplied: `supabase/proposals/20261012160000_harden_korvo_api_permissions.sql`.
 Do not move it into automatic migrations or split/deploy it to bypass the approval
 rejection. Authorization deployment requires approval and a fresh complete suite.
 
-GitHub publication status is recorded in the commit/PR accompanying this report.
-Main/Pages publication has not been authorized or performed by this sprint.
-GitHub CI has been configured; its remote result must be checked independently of
-the passing local commands.
+Development source published as commit `ce54e3801fcf75ccbbf06fc62254d9c88d0bb602`,
+draft PR https://github.com/korvoadmin/Korvo-1.0/pull/4 . The local source tree matches
+the published tree exactly. Main/Pages publication has not been performed.
+Remote CI run `38276893555` completed successfully: unit/source checks, all five
+browser suites and Python runner compilation passed. This verifies the published
+code commit independently of the local commands; documentation/test follow-ups have
+their own CI runs.
 
 ## Files changed
 
@@ -73,7 +76,7 @@ report. Existing diagnostic retained.
 
 The following three newly created users have zero remaining Auth sessions, inactive
 Korvo profiles, and reversible Auth bans; the professional is hidden from discovery.
-Credentials/signing test files are temporary and must be removed at handoff.
+Temporary credential and signing test files were removed at handoff.
 Existing users were preserved. No test user, job, Stripe account or upload was deleted.
 
 - Customer `d754ed3b-d42d-4ffd-9719-a24ec4f3b41a`
