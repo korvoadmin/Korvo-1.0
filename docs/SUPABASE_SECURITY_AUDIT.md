@@ -187,7 +187,7 @@ submitted details false, payouts false, transfers inactive. The existing profess
 last status-check timestamp is null, so completed onboarding cannot be claimed.
 No account was changed to manufacture success.
 
-The separate disabled gig foundation has 41 isolated PostgreSQL checks: all eight
+The separate disabled gig foundation has 45 isolated PostgreSQL checks: all eight
 private tables have RLS, anon/authenticated access denied, gates false, employee
 publication blocked, and duplicate/capacity/overlap/compensation guards verified.
 No new schema, grant, function or policy was applied to Supabase. Concurrent

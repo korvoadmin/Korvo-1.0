@@ -38,7 +38,7 @@ merge, new Edge deployment or persistent database migration occurred this sprint
 | Unit/source/security/handler suites | **101 passed**, zero failures | Includes 69 existing checks and 32 new gig checks; mocked handlers are not provider completion |
 | Existing dashboard/payment/recovery browser suites | **98 passed** | Isolated SDK/API fixtures; not full live hosted checkout |
 | Gig browser suite | **17 passed** | Local estimator; widths 375/768/1280; no backend writes |
-| Isolated PostgreSQL gig schema | **41 passed** | PGlite roles/RLS/triggers; no real concurrent sessions |
+| Isolated PostgreSQL gig schema | **45 passed** | PGlite roles/RLS/triggers; no real concurrent sessions |
 | Deployed project payment database suite | **38 passed** | Transaction rolled back all fixtures |
 | Deployed matching/opportunity database suite | **56 passed** | Transaction rolled back all fixtures |
 | Updated complete security proposal rehearsal | **134 passed** | Full proposal/fixtures rolled back; authorization changes not deployed |
@@ -50,7 +50,7 @@ Initial unit invocation lacked the existing `--experimental-transform-types` fla
 it failed on TypeScript parameter properties. Running the repository's documented
 command passed; no Edge code change was needed. Browser install retried a broken
 CDN archive successfully. The isolated database harness initially attempted to create
-an existing public schema; corrected before its 41-check passing run.
+an existing public schema; corrected before its 45-check passing run.
 
 ## Security and deployment
 
@@ -71,8 +71,11 @@ Unapplied proposals:
 - `20261013002039_gig_foundation_disabled.sql`: isolated private schema, not in
   automatic migrations, awaiting endpoint/concurrency/category/deployment review.
 
-GitHub development publication and CI evidence are recorded with the accompanying
-commit/PR. Branch remains `codex/sandbox-marketplace-sprint`, draft PR #4. Main/Pages
+Development code was published in commit `56abf1cc38ae0703b5b72489b1b7a62c7c00fa1d`,
+draft PR https://github.com/korvoadmin/Korvo-1.0/pull/4 . Its source tree matches the
+local committed tree. GitHub CI run `38327881536` passed all configured checks.
+A follow-up adds four explicit RLS checks (45 isolated checks pass locally) and its
+remote CI must be verified separately. Branch remains `codex/sandbox-marketplace-sprint`. Main/Pages
 is unchanged. No Supabase migration or Edge Function was deployed this sprint.
 
 ## Files

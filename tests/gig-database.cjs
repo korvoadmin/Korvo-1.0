@@ -5,7 +5,7 @@ const assert=require('node:assert/strict');
 (async()=>{
  const db=new PGlite();let checks=0;
  const ok=(v,label)=>{assert.ok(v,label);checks++;console.log('PASS '+label);};
- const denied=async(sql,label)=>{let failed=false;try{await db.exec(sql);}catch{failed=true;}ok(failed,label);};
+ const denied=async(sql,label,code)=>{let failed=false;try{await db.exec(sql);}catch(e){if(code)assert.equal(e.code,code,label);failed=true;}ok(failed,label);};
  const c='10000000-0000-0000-0000-000000000001', w='10000000-0000-0000-0000-000000000002', w2='10000000-0000-0000-0000-000000000003';
  const g='20000000-0000-0000-0000-000000000001', g2='20000000-0000-0000-0000-000000000002';
  try {
@@ -27,6 +27,14 @@ const assert=require('node:assert/strict');
    await denied('update korvo_gigs_private.settings set publishing_enabled=true',role+' cannot enable bookings');
    await denied('insert into korvo_gigs_private.worker_profiles(worker_id) values(\''+w+'\')',role+' cannot impersonate worker');
    await db.exec('reset role');
+  }
+  // Defense in depth: prove RLS still filters/rejects even after a hypothetical
+  // accidental client grant. These grants exist only in the disposable database.
+  for(const role of ['anon','authenticated']) {
+   await db.exec(`grant usage on schema korvo_gigs_private to ${role};grant select,insert on korvo_gigs_private.settings to ${role};set role ${role}`);
+   ok((await db.query('select * from korvo_gigs_private.settings')).rows.length===0,role+' RLS hides existing settings after hypothetical grant');
+   await denied('insert into korvo_gigs_private.settings(singleton) values(true)',role+' RLS rejects settings insertion after hypothetical grant','42501');
+   await db.exec(`reset role;revoke all on schema korvo_gigs_private from ${role};revoke all on korvo_gigs_private.settings from ${role}`);
   }
   await db.exec(`set role service_role;
    insert into korvo_gigs_private.business_profiles values('${c}','Fixture restaurant','restaurant','Atlanta');
