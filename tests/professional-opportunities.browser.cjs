@@ -59,6 +59,8 @@ function installClient() {
       if (this.table === 'quotes') {
         if (this.insertValue) {
           if (f.failQuote) return { data: null, error: { message: 'Quotes require an open job' } };
+          if(f.emptyQuote)return {data:null,error:null};
+          if(f.wrongQuote)return {data:{id:'wrong',job_id:'other',professional_id:'other'},error:null};
           const row = { ...this.insertValue, id: 'q1', job_title: 'Saved quote job', status: 'pending', created_at: date };
           f.quotes.push(row);
           const item = f.feed.find(item => item.job_id === row.job_id);
@@ -203,7 +205,15 @@ function installClient() {
     await page.locator('#quoteForm button[type="submit"]').click();
     await page.locator('#infoModalTitle').filter({ hasText: 'Could Not Submit Quote' }).waitFor();
     check(await page.evaluate(() => fixture.feed[5].opportunity_status === 'viewed' && fixture.quotes.length === 1), 'server quote rejection never produces quoted history');
-    await closeInfo(); await page.locator('#cancelQuoteButton').click();
+    await closeInfo();
+    for(const field of ['emptyQuote','wrongQuote']) {
+      await page.evaluate(field=>{fixture.failQuote=false;fixture[field]=true;},field);
+      await page.locator('#quoteForm button[type="submit"]').click();
+      await page.locator('#infoModalTitle').filter({hasText:'Could Not Submit Quote'}).waitFor();
+      check(await page.evaluate(()=>fixture.quotes.length===1),field+' response cannot create a false quoted cache entry');
+      await closeInfo();await page.evaluate(field=>fixture[field]=false,field);
+    }
+    await page.locator('#cancelQuoteButton').click();
     await page.evaluate(() => { fixture.failQuote = false; fixture.failDetails = true; });
     await card('o6').locator('[data-action="view"]').click(); await ready();
     check((await page.locator('#infoModalTitle').textContent()).includes('unavailable'), 'denied job detail read shows an error rather than cached private details');

@@ -60,6 +60,7 @@ function installClient() {
         return { data: { invited: true, already_invited: already, opportunity_id: row.opportunity_id }, error: null };
       }
       if (name === 'respond_to_quote') {
+        if(f.emptyRespond)return {data:null,error:null};
         const quote = f.quotes.find(q => q.id === args.p_quote_id);
         quote.status = args.p_action === 'accept' ? 'accepted' : 'declined';
         if (args.p_action === 'accept') {
@@ -67,7 +68,7 @@ function installClient() {
           s.activity.forEach(row => { if (['offered','viewed'].includes(row.status)) row.status = 'closed'; });
           f.active.push({ id: 'a1', job_id: quote.job_id, customer_id: 'customer', professional_name: quote.professional_name, amount: quote.amount, status: 'pending_confirmation', job_title: quote.job_title });
         }
-        return { data: {}, error: null };
+        return { data: {quote_id:args.p_quote_id,quote_status:quote.status,active_job_id:args.p_action==='accept'?'a1':null}, error: null };
       }
       if(name==='customer_confirm_job_completion') {
         if(f.emptyCompletion)return {data:null,error:null};
@@ -142,6 +143,12 @@ function installClient() {
     await page.evaluate(() => { fixture.failJobs = false; }); await refresh();
     await page.locator('#jobsList .job-professionals-button').first().click(); await ready();
     check(await page.locator('#recommendationsJob').inputValue() === 'j1', 'job card action opens its own recommendations');
+    await page.evaluate(()=>fixture.emptyRespond=true);
+    await page.locator('#quotesList .generated-accept-quote-button').click();
+    await page.locator('#confirmAcceptQuoteButton').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not Accept'));
+    check(await page.evaluate(()=>fixture.active.length===0),'empty quote response never claims an active job was created');
+    await page.locator('#infoModalDoneButton').click();await page.evaluate(()=>fixture.emptyRespond=false);
     await page.locator('#quotesList .generated-accept-quote-button').click();
     await page.locator('#confirmAcceptQuoteButton').click();
     await page.waitForFunction(() => fixture.snapshots.j1.job.status === 'active'); await ready();

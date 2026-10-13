@@ -1300,6 +1300,9 @@ reviewModal
     }
 
 
+    const expected = action === "accept" ? "accepted" : "declined";
+    if (data?.quote_id !== quoteId || data.quote_status !== expected || (action === "accept" && !data.active_job_id))
+      throw new Error("Quote response was not confirmed by Korvo. Refresh before retrying.");
     return data;
   }
 

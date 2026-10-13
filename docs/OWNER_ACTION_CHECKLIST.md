@@ -19,7 +19,7 @@ that the engineer can run are tracked separately and must not be assigned to Chr
 | H9 | Hourly/fixed gig fee is 12% on top of 100% worker gross; $18 × 6h → $108 + $12.96 | Chris confirmed; `GIG_PRICING_POLICY.md`; pricing/roster regressions |
 | H10 | Updated full authorization rollback rehearsal completed | 134 checks passed October 13; fixtures and DDL rolled back; migration remains unapplied |
 | H11 | Broader mission preserved: projects, hospitality shifts, property services and everyday gigs | Disabled category/pricing/workflow foundation; no employee wages routed to Connect |
-| H12 | Project UI workflow reliability improved and tested | 39 posting/onboarding/messaging browser checks; nine new dashboard completion checks; 20 deployed lifecycle checks rolled back. No production publication. |
+| H12 | Project UI workflow reliability improved and tested | 39 posting/onboarding/messaging browser checks; nine new dashboard completion checks and three quote-response checks; 20 deployed lifecycle checks rolled back. No production publication. |
 
 The earlier 88/12 deduction instruction and fee-only deposit flow are superseded.
 Do not ask Chris to reconfirm H1, H3 or H9. No processing-fee payer has been selected.

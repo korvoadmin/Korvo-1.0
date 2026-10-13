@@ -2065,6 +2065,9 @@ function getJobSchedule(
         }
 
 
+        if (!savedQuote?.id || savedQuote.job_id !== jobId || savedQuote.professional_id !== currentProfessionalId)
+          throw new Error("Quote save was not confirmed. Refresh before retrying.");
+
         submittedQuotes.unshift(
           savedQuote
         );

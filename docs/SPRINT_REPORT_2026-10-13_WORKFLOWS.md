@@ -35,6 +35,10 @@ remain unchanged. No persistent migration, real payment, refund or transfer occu
     follow-up read failed. It now reports the saved request and keeps resubmission
     disabled until refresh. Professional submission still awaits customer confirmation.
 
+11. Quote creation and acceptance/decline now require matching saved quote IDs,
+    ownership/status fields and a confirmed active-job reference for acceptance. Empty
+    or mismatched responses cannot corrupt quote caches or claim an active job exists.
+
 No cancellation fine, automatic refund, price increase, wage/tip deduction, employee
 payroll route or contractor payout was enabled.
 
@@ -44,10 +48,10 @@ payroll route or contractor payout was enabled.
 | --- | --- | --- |
 | Unit/handler/pricing/Connect/release/source suites | 101 passed | Pricing, signatures/retries, sandbox guards, no transfer execution |
 | Posting/onboarding/messaging browser suite | 39 passed | Actual pages; isolated Auth/API; failures, races, account checks and mobile |
-| Professional dashboard browser suite | 34 passed | Includes five new completion/failed-refresh checks |
-| Customer dashboard browser suite | 30 passed | Includes four new completion checks |
+| Professional dashboard browser suite | 36 passed | Five completion/failed-refresh checks plus empty/wrong quote-response checks |
+| Customer dashboard browser suite | 31 passed | Four completion checks plus empty acceptance-response check |
 | Connect/payment/recovery/gig browser suites | 8 / 19 / 16 / 17 passed | Existing payment and disabled-gig protections preserved |
-| All seven browser suites | 163 passed total | Mock API/UI tests; not a new provider acceptance run |
+| All seven browser suites | 166 passed total | Mock API/UI tests; not a new provider acceptance run |
 | Isolated PostgreSQL gig schema | 45 passed | Unapplied schema, grants/RLS/gates/sequential scheduling |
 | New deployed lifecycle database suite | 20 passed | Correct actor, unfinished work, duplicate transitions/reviews, cancellation/no-show issue holds; rolled back |
 | Source syntax, diff whitespace, Python runners | Passed | Final source checks |
@@ -82,8 +86,10 @@ GitHub regression workflow, test README, owner checklist, security audit and bet
 Added: `tests/workflow-reliability.browser.cjs`, `supabase/tests/project_lifecycle.sql`
 and this report. No new database migration or Edge Function deployment.
 
-Development commit/PR and remote CI results are recorded in the accompanying GitHub
-PR. Source-tree equality is verified before publication. Do not merge into main or
+Initial workflow commit `b7b874c2adffc933ec939a6204cab35151ffd8ee` passed remote CI
+run `38429064286`. Draft PR: https://github.com/korvoadmin/Korvo-1.0/pull/5 . A focused
+quote-response follow-up passed both affected browser suites locally; its remote CI is
+checked separately in the PR. Source-tree equality is verified before publication. Do not merge into main or
 publish Pages without owner approval.
 
 ## Remaining blockers and next three priorities
