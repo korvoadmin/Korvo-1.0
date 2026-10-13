@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("postAnotherButton");
 
   let currentStep = 1;
+  let isPosting = false;
 
   /* ======================================
      SHOW CURRENT STEP
@@ -999,7 +1000,11 @@ document.addEventListener("DOMContentLoaded", function () {
     async function (event) {
 
       event.preventDefault();
-
+      if (isPosting) return;
+      for (let step = 1; step <= 4; step++) {
+        if (!validateStep(step)) { currentStep = step; showStep(step); return; }
+      }
+      if (currentStep !== 5) { currentStep = 5; updateReview(); showStep(5); return; }
 
       if (
         typeof korvoSupabase ===
@@ -1016,6 +1021,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const originalButtonText =
         submitButton.textContent;
+      const draft = createJob(null);
+      isPosting = true;
 
 
       try {
@@ -1063,14 +1070,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
+        const { data: account, error: accountError } = await korvoSupabase.from("profiles")
+          .select("account_type, is_active").eq("id", user.id).maybeSingle();
+        if (accountError) throw accountError;
+        if (account?.account_type !== "customer" || account.is_active !== true) {
+          const denied = new Error("CUSTOMER_ACCOUNT_REQUIRED"); denied.code = "42501"; throw denied;
+        }
+
         /*
           Create the database payload.
         */
 
-        const job =
-          createJob(
-            user.id
-          );
+        const job = { ...draft, customer_id: user.id };
 
 
         /*
@@ -1084,10 +1095,7 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
 
-        console.log(
-          "Korvo job saved:",
-          savedJob
-        );
+        if (!savedJob?.id || !savedJob.reference) throw new Error("JOB_SAVE_NOT_CONFIRMED");
 
 
         if (jobReference) {
@@ -1150,7 +1158,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
       } finally {
-
+        isPosting = false;
         submitButton.disabled =
           false;
 

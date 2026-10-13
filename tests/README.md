@@ -114,3 +114,22 @@ creates a disposable isolated PostgreSQL schema with mock account profiles/roles
 it checks grants/RLS/gates and sequential reservations. It does not replace real
 concurrent PostgreSQL, Supabase Auth or hosted payroll/payment acceptance. The SQL
 proposal stays outside automatic migrations, and no gig booking is enabled.
+
+## Project workflow reliability
+
+```sh
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/workflow-reliability.browser.cjs
+```
+
+Loads actual posting/onboarding/messaging HTML/CSS/JavaScript with isolated Auth/API
+fixtures. Covers submit validation, consent, active account separation, duplicate
+clicks, delayed-response thread isolation, per-conversation drafts, failed/empty saves,
+cache failures and mobile widths. Expanded dashboard suites cover verified completion
+responses and successful-write/failed-refresh recovery. No real message is sent.
+
+`supabase/tests/project_lifecycle.sql` is an administrative transaction rehearsal
+against the deployed database. It creates synthetic Auth/profile/job/review/issue
+fixtures and SQL-only paid snapshots, performs assertions, then rolls everything back.
+Run only through an administrative connection in the authorized sandbox project. It
+must never be used to manufacture payment success for a real job. It needs no API keys,
+creates no real Stripe charge/refund/transfer and grants no access to auth.sessions.

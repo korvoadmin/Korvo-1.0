@@ -1080,6 +1080,7 @@ async function fetchCustomerJobs() {
     }
 
 
+    if (data?.active_job_id !== activeJobId || data.status !== "pending_confirmation") throw new Error("Completion was not confirmed by Korvo. Refresh and try again.");
     return data;
   }
 
@@ -2064,6 +2065,9 @@ function getJobSchedule(
         }
 
 
+        if (!savedQuote?.id || savedQuote.job_id !== jobId || savedQuote.professional_id !== currentProfessionalId)
+          throw new Error("Quote save was not confirmed. Refresh before retrying.");
+
         submittedQuotes.unshift(
           savedQuote
         );
@@ -2770,6 +2774,7 @@ function getJobSchedule(
       ?.addEventListener(
         "click",
         async (event) => {
+          if (event.currentTarget.disabled) return;
 
           const confirmed =
             confirm(
@@ -2800,11 +2805,16 @@ function getJobSchedule(
             );
 
 
-            await fetchProfessionalActiveJobs();
-
-            renderActiveWork();
-
-            updateDashboardCounters();
+            let refreshFailed = false;
+            try {
+              await fetchProfessionalActiveJobs();
+              renderActiveWork();
+              updateDashboardCounters();
+            } catch {
+              refreshFailed = true;
+              button.textContent = "Submitted — refresh to update";
+              // The RPC committed. A failed read must not permit resubmission.
+            }
 
 
             opportunityDashboard?.refreshNotifications();
@@ -2818,7 +2828,9 @@ function getJobSchedule(
                 "Sent to Customer",
 
               message:
-                "The customer can now review and confirm that the work is complete.",
+                refreshFailed
+                  ? "Your completion request was saved. Refresh the dashboard to reload its status. The customer can review and confirm the work."
+                  : "The customer can now review and confirm that the work is complete.",
 
               success:
                 true,

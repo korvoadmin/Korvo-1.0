@@ -28,6 +28,7 @@ function installClient() {
     failQuote: false, failDetails: false, authenticated: true
   };
   const f = window.fixture;
+  f.activeJobs = [{id:"active-1",job_id:"j2",professional_id:"pro-1",customer_id:"customer",amount:500,status:"active",job_title:"Completion fixture",job_reference:"KRV-COMP",job_city:"Atlanta",accepted_at:date}];
   f.jobs = f.feed.map(item => ({ id: item.job_id, title: item.title,
     description: `Full customer description for ${item.job_id}`, category: item.category,
     city: item.city, state: item.state, budget_min: 200, budget_max: 400,
@@ -58,6 +59,8 @@ function installClient() {
       if (this.table === 'quotes') {
         if (this.insertValue) {
           if (f.failQuote) return { data: null, error: { message: 'Quotes require an open job' } };
+          if(f.emptyQuote)return {data:null,error:null};
+          if(f.wrongQuote)return {data:{id:'wrong',job_id:'other',professional_id:'other'},error:null};
           const row = { ...this.insertValue, id: 'q1', job_title: 'Saved quote job', status: 'pending', created_at: date };
           f.quotes.push(row);
           const item = f.feed.find(item => item.job_id === row.job_id);
@@ -66,6 +69,7 @@ function installClient() {
         }
         rows = f.quotes;
       }
+      if (this.table === 'active_jobs') { if(f.failActiveRead) return {error:{message:'Offline'}}; rows=f.activeJobs; }
       if (this.table === 'notifications') {
         if (f.failNotifications) return { error: { message: 'Offline' } };
         rows = f.notifications;
@@ -80,6 +84,12 @@ function installClient() {
     from: table => new Query(table),
     rpc: async (name, args) => {
       f.calls.push({ rpc: name, args });
+      if (name === 'professional_request_job_completion') {
+        if(f.emptyCompletion)return {data:null,error:null};
+        f.activeJobs[0].status='pending_confirmation';
+        if(f.failAfterCompletion)f.failActiveRead=true;
+        return {data:{active_job_id:args.p_active_job_id,status:'pending_confirmation'},error:null};
+      }
       if (name === 'my_job_opportunities') return f.failFeed ? { error: { message: 'Offline' } } : { data: copy(f.feed), error: null };
       if (name !== 'respond_to_job_opportunity') throw new Error(`Unexpected RPC: ${name}`);
       if (f.failResponse) return { error: { message: 'Not authorized' } };
@@ -195,7 +205,15 @@ function installClient() {
     await page.locator('#quoteForm button[type="submit"]').click();
     await page.locator('#infoModalTitle').filter({ hasText: 'Could Not Submit Quote' }).waitFor();
     check(await page.evaluate(() => fixture.feed[5].opportunity_status === 'viewed' && fixture.quotes.length === 1), 'server quote rejection never produces quoted history');
-    await closeInfo(); await page.locator('#cancelQuoteButton').click();
+    await closeInfo();
+    for(const field of ['emptyQuote','wrongQuote']) {
+      await page.evaluate(field=>{fixture.failQuote=false;fixture[field]=true;},field);
+      await page.locator('#quoteForm button[type="submit"]').click();
+      await page.locator('#infoModalTitle').filter({hasText:'Could Not Submit Quote'}).waitFor();
+      check(await page.evaluate(()=>fixture.quotes.length===1),field+' response cannot create a false quoted cache entry');
+      await closeInfo();await page.evaluate(field=>fixture[field]=false,field);
+    }
+    await page.locator('#cancelQuoteButton').click();
     await page.evaluate(() => { fixture.failQuote = false; fixture.failDetails = true; });
     await card('o6').locator('[data-action="view"]').click(); await ready();
     check((await page.locator('#infoModalTitle').textContent()).includes('unavailable'), 'denied job detail read shows an error rather than cached private details');
@@ -205,6 +223,18 @@ function installClient() {
     check(await page.evaluate(() => fixture.calls.filter(call => call.rpc === 'respond_to_job_opportunity').length === 1), 'repeated clicks issue only one response request');
     await closeInfo();
     await page.reload(); await ready();
+    await page.evaluate(()=>fixture.emptyCompletion=true);
+    page.once('dialog',d=>d.accept());await page.locator('.mark-work-complete-button').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not'));
+    check(await page.locator('.mark-work-complete-button').isEnabled(),'empty completion RPC cannot claim success and restores control');
+    await closeInfo();await page.evaluate(()=>{fixture.emptyCompletion=false;fixture.failAfterCompletion=true;fixture.calls=[];});
+    page.once('dialog',d=>d.accept());await page.locator('.mark-work-complete-button').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Sent to Customer'));
+    check((await page.locator('#infoModalMessage').innerText()).includes('was saved'),'committed completion stays successful after refresh failure');
+    check(await page.locator('.mark-work-complete-button').isDisabled(),'failed post-save refresh cannot enable duplicate completion');
+    check(await page.evaluate(()=>fixture.calls.filter(c=>c.rpc==='professional_request_job_completion').length===1),'completion targets one server transition');
+    check(await page.evaluate(()=>fixture.activeJobs[0].status==='pending_confirmation'),'professional request does not self-confirm customer completion');
+    await closeInfo();
     await page.setViewportSize({ width: 375, height: 812 });
     await page.locator('#matchedOpportunitiesSection').scrollIntoViewIfNeeded();
     check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile layout has no horizontal overflow');

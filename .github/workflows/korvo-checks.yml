@@ -36,6 +36,7 @@ jobs:
           node tests/marketplace-payments.browser.cjs
           node tests/password-recovery.browser.cjs
           node tests/gig-foundation.browser.cjs
+          node tests/workflow-reliability.browser.cjs
       - name: Isolated gig database permissions and scheduling
         run: NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules" node tests/gig-database.cjs
       - name: Validate opt-in integration runners

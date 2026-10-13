@@ -193,3 +193,28 @@ publication blocked, and duplicate/capacity/overlap/compensation guards verified
 No new schema, grant, function or policy was applied to Supabase. Concurrent
 multi-session reservations and future endpoint authorization remain unverified.
 See `GIG_MARKETPLACE_FOUNDATION.md` and `SPRINT_REPORT_2026-10-13.md`.
+
+## October 13 workflow follow-up
+
+Security Advisor was rerun: 7 policyless-table notices, 1 anonymous and 52 authenticated
+SECURITY DEFINER warnings, and leaked-password protection remain. No authorization
+migration, database grant, Edge Function or production frontend was deployed.
+Client role checks improve normal UI behavior; they do not remediate direct Data API
+permissions or replace RLS. Broad hardening still needs explicit approval.
+
+New source fixes bind delayed message results and drafts to their original conversation,
+validate saved-message identity, stage inbox reads before replacing caches, suppress
+in-flight duplicate writes and verify server completion responses. Job posting rechecks
+all steps/consent and current active customer profile. Onboarding checks current active
+professional profile, stops sending role/verification changes, and tolerates cache errors
+only after confirmed database saves.
+
+101 unit/handler/source checks, 166 isolated browser checks and 45 isolated gig database
+checks passed. The new deployed project lifecycle SQL suite passed 20 checks and rolled
+back its fixtures: wrong-party/incomplete/duplicate completion/review, cancellation and
+no-show disputes with held original allocations and no automatic refund or penalty.
+The fixture's paid states are SQL snapshots, not new Stripe payments. Browser suites use
+mock Auth/API responses, not real emails or provider onboarding. Both directly inspected
+sandbox Stripe accounts still report details false, payouts false and transfers inactive.
+Durable cross-reload job/message idempotency and completion evidence remain unfinished.
+See `SPRINT_REPORT_2026-10-13_WORKFLOWS.md`.
