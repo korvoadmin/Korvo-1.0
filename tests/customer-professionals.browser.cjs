@@ -65,9 +65,14 @@ function installClient() {
         if (args.p_action === 'accept') {
           const s = f.snapshots[quote.job_id]; s.job.status = 'active'; s.can_invite = false; s.recommendations = [];
           s.activity.forEach(row => { if (['offered','viewed'].includes(row.status)) row.status = 'closed'; });
-          f.active.push({ id: 'a1', job_id: quote.job_id, customer_id: 'customer', professional_name: quote.professional_name, amount: quote.amount, status: 'active', job_title: quote.job_title });
+          f.active.push({ id: 'a1', job_id: quote.job_id, customer_id: 'customer', professional_name: quote.professional_name, amount: quote.amount, status: 'pending_confirmation', job_title: quote.job_title });
         }
         return { data: {}, error: null };
+      }
+      if(name==='customer_confirm_job_completion') {
+        if(f.emptyCompletion)return {data:null,error:null};
+        f.active[0].status='completed';f.jobs.find(j=>j.id===f.active[0].job_id).status='completed';
+        return {data:{active_job_id:args.p_active_job_id,status:'completed'},error:null};
       }
       throw new Error(`Unexpected RPC ${name}`);
     }
@@ -142,6 +147,16 @@ function installClient() {
     await page.waitForFunction(() => fixture.snapshots.j1.job.status === 'active'); await ready();
     await page.locator('#infoModalDoneButton').click();
     check(await page.locator('.customer-professional-card').count() === 0 && (await page.locator('#customerProfessionalsStatus').textContent()).includes('closed'), 'accepting real quote flow refreshes recommendation closure');
+    await page.evaluate(()=>fixture.emptyCompletion=true);
+    page.once('dialog',d=>d.accept());await page.locator('.confirm-completion-button').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not'));
+    check(await page.locator('.confirm-completion-button').isEnabled(),'empty customer completion does not claim saved work');
+    await page.locator('#infoModalDoneButton').click();await page.evaluate(()=>{fixture.emptyCompletion=false;fixture.calls=[];});
+    page.once('dialog',d=>d.accept());await page.locator('.confirm-completion-button').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Completion Confirmed'));
+    check(await page.evaluate(()=>fixture.calls.filter(c=>c.name==='customer_confirm_job_completion').length===1),'customer confirmation performs one completion RPC');
+    check(await page.evaluate(()=>fixture.active[0].status==='completed'),'customer completion uses confirmed server state');
+    check(await page.locator('.confirm-completion-button').count()===0,'completed job no longer offers repeat confirmation');
     await page.reload(); await ready();
     await page.setViewportSize({ width: 375, height: 812 });
     check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile dashboard does not overflow horizontally');

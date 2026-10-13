@@ -18,7 +18,7 @@ or live/transfer enablement is inferred.
 | P0 | Professional trade eligibility/trust policy | License/background/identity category rules not silently enabled; owner defines beta scope |
 | P1 | Payment/recovery Pages publication | Browser-tested development code; main/Pages deployment not yet done |
 | P1 | Membership billing | Confirmed catalog: one free job, $29.99/3, $49.99/6, $89.99/unlimited; Stripe Billing lifecycle still needed |
-| P1 | Mobile and workflow regressions | Six isolated browser suites passed; real API messaging/completion/storage passed; full UI/provider chain still needs final acceptance |
+| P1 | Mobile and workflow regressions | Seven isolated browser suites passed; real API messaging/completion/storage passed; 20 additional deployed lifecycle checks passed; full UI/provider chain still needs final acceptance |
 | P1 | Monitoring and operational reconciliation | Use runbook; automatic alerts/admin queue and daily aging review still needed |
 | P1 | Leaked-password protection and session policy | Paid feature requires owner approval; Remember-me persistence needs implementation |
 | P0 for shifts | Hospitality/employment/category clearance | All shift booking/payment disabled; employer, payroll, insurance, age/alcohol/local requirements unresolved |
@@ -64,3 +64,13 @@ hospitality and general work are preserved in the new disabled foundation. Exist
 project onboarding/quotes/payments are unchanged. A project-only cleared beta may
 precede shift launch; employee staffing must not inherit contractor Connect payments.
 The development estimator and unapplied schema are not a functioning shift marketplace.
+
+## Workflow follow-up
+
+Development source now fixes job-submit validation/duplicate clicks, professional
+onboarding permissions/cache recovery, conversation response/draft isolation and
+completion-response validation. A successful professional completion request remains
+saved even when the follow-up dashboard read fails. These changes are tested, not
+published to main/Pages. Source-price records and unapproved penalty/refund rules are
+unchanged. Ordinary completion evidence and project photo attachments are still not
+integrated; the photo controls must not be described as a working upload feature.

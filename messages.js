@@ -136,6 +136,10 @@ document.addEventListener(
       new Map();
     let activeConversationId = "";
     let refreshTimer = null;
+    let isSending = false;
+    let inboxRequestVersion = 0;
+    let refreshInFlight = false;
+    const draftsByConversation = new Map();
 
 
     /* =========================
@@ -447,7 +451,7 @@ document.addEventListener(
 
         if (sendButton) {
           sendButton.disabled =
-            !enabled;
+            !enabled || isSending;
         }
 
       }
@@ -644,26 +648,21 @@ document.addEventListener(
       }
 
 
-      conversations =
-        Array.isArray(
+      return Array.isArray(
           data
         )
           ? data
           : [];
 
-
-      return conversations;
     }
 
 
-    async function fetchMessages() {
-
-      messagesByConversation =
-        new Map();
+    async function fetchMessages(nextConversations) {
+      const nextMessages = new Map();
 
 
       const conversationIds =
-        conversations.map(
+        nextConversations.map(
           (conversation) =>
             conversation.id
         );
@@ -673,7 +672,7 @@ document.addEventListener(
         conversationIds.length ===
         0
       ) {
-        return;
+        return nextMessages;
       }
 
 
@@ -715,7 +714,7 @@ document.addEventListener(
           (message) => {
 
             const existing =
-              messagesByConversation
+              nextMessages
                 .get(
                   message
                     .conversation_id
@@ -728,7 +727,7 @@ document.addEventListener(
             );
 
 
-            messagesByConversation
+            nextMessages
               .set(
                 message
                   .conversation_id,
@@ -738,13 +737,19 @@ document.addEventListener(
           }
         );
 
+      return nextMessages;
     }
 
 
     async function loadInbox() {
 
-      await fetchConversations();
-      await fetchMessages();
+      const version = ++inboxRequestVersion;
+      const nextConversations = await fetchConversations();
+      const nextMessages = await fetchMessages(nextConversations);
+      if (version !== inboxRequestVersion) return false;
+      conversations = nextConversations;
+      messagesByConversation = nextMessages;
+      return true;
 
     }
 
@@ -753,6 +758,16 @@ document.addEventListener(
        Requested Conversation
        ========================= */
 
+    function selectConversation(id) {
+      if (id === activeConversationId) return;
+      if (activeConversationId && messageInput) draftsByConversation.set(activeConversationId, messageInput.value);
+      activeConversationId = id;
+      if (messageInput) {
+        messageInput.value = draftsByConversation.get(id) || "";
+        messageInput.dispatchEvent(new Event("input"));
+      }
+    }
+
     function chooseInitialConversation() {
 
       if (
@@ -760,8 +775,7 @@ document.addEventListener(
         0
       ) {
 
-        activeConversationId =
-          "";
+        selectConversation("");
 
         clearRequestedConversation();
 
@@ -854,8 +868,7 @@ document.addEventListener(
         match
       ) {
 
-        activeConversationId =
-          match.id;
+        selectConversation(match.id);
 
       } else if (
         !conversations.some(
@@ -865,8 +878,7 @@ document.addEventListener(
         )
       ) {
 
-        activeConversationId =
-          conversations[0].id;
+        selectConversation(conversations[0].id);
 
       }
 
@@ -1059,8 +1071,7 @@ document.addEventListener(
             "click",
             () => {
 
-              activeConversationId =
-                conversation.id;
+              selectConversation(conversation.id);
 
 
               renderActiveConversation();
@@ -1482,7 +1493,7 @@ document.addEventListener(
         async (event) => {
 
           event.preventDefault();
-
+          if (isSending) return;
 
           const text =
             messageInput
@@ -1500,6 +1511,13 @@ document.addEventListener(
           }
 
 
+          const conversationId = activeConversationId;
+          const draftText = messageInput.value;
+          draftsByConversation.set(conversationId, draftText);
+          const selected = conversations.find(item => item.id === conversationId);
+          if (selected?.status !== "active") return;
+          isSending = true;
+          ++inboxRequestVersion; // Invalidate reads started before this send.
           const sendButton =
             messageForm
               .querySelector(
@@ -1530,7 +1548,7 @@ document.addEventListener(
                 "send_korvo_message",
                 {
                   p_conversation_id:
-                    activeConversationId,
+                    conversationId,
 
                   p_body:
                     text
@@ -1561,23 +1579,23 @@ document.addEventListener(
 
             const savedMessage =
               sendResult.message;
+            if (!savedMessage?.id || savedMessage.conversation_id !== conversationId || savedMessage.sender_id !== currentUser.id)
+              throw new Error("MESSAGE_SAVE_NOT_CONFIRMED");
 
 
             const existing =
               getConversationMessages(
-                activeConversationId
+                conversationId
               )
                 .slice();
 
 
-            existing.push(
-              savedMessage
-            );
+            if (!existing.some(item => item.id === savedMessage.id)) existing.push(savedMessage);
 
 
             messagesByConversation
               .set(
-                activeConversationId,
+                conversationId,
                 existing
               );
 
@@ -1586,7 +1604,7 @@ document.addEventListener(
               conversations.find(
                 (item) =>
                   item.id ===
-                  activeConversationId
+                  conversationId
               );
 
 
@@ -1611,8 +1629,9 @@ document.addEventListener(
             );
 
 
+            if (draftsByConversation.get(conversationId) === draftText) draftsByConversation.delete(conversationId);
             if (
-              messageInput
+              activeConversationId === conversationId && messageInput?.value === draftText
             ) {
 
               messageInput.value =
@@ -1625,7 +1644,7 @@ document.addEventListener(
 
 
             if (
-              messageCharacterCount
+              activeConversationId === conversationId && messageInput?.value === "" && messageCharacterCount
             ) {
               messageCharacterCount
                 .textContent =
@@ -1633,7 +1652,7 @@ document.addEventListener(
             }
 
 
-            renderActiveConversation();
+            if (activeConversationId === conversationId) renderActiveConversation();
             buildConversationList();
 
 
@@ -1651,13 +1670,13 @@ document.addEventListener(
 
 
           } finally {
-
+            isSending = false;
+            ++inboxRequestVersion;
             if (
               sendButton
             ) {
 
-              sendButton.disabled =
-                false;
+              sendButton.disabled = conversations.find(item => item.id === activeConversationId)?.status !== "active";
 
               sendButton.textContent =
                 "Send";
@@ -1675,14 +1694,11 @@ document.addEventListener(
        ========================= */
 
     async function refreshInbox() {
-
+      if (refreshInFlight || isSending) return;
+      refreshInFlight = true;
       try {
-
-        const currentId =
-          activeConversationId;
-
-
-        await loadInbox();
+        if (!await loadInbox()) return;
+        const currentId = activeConversationId;
 
 
         if (
@@ -1693,8 +1709,7 @@ document.addEventListener(
           )
         ) {
 
-          activeConversationId =
-            currentId;
+          selectConversation(currentId);
 
         } else {
 
@@ -1713,8 +1728,7 @@ document.addEventListener(
           "Unable to refresh messages:",
           error
         );
-
-      }
+      } finally { refreshInFlight = false; }
 
     }
 
@@ -1773,6 +1787,7 @@ document.addEventListener(
       ?.addEventListener(
         "input",
         () => {
+          if (activeConversationId) draftsByConversation.set(activeConversationId, messageInput.value);
 
           if (
             messageCharacterCount

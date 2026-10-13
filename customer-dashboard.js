@@ -1918,6 +1918,7 @@ reviewModal
       async () => {
 
         if (
+          confirmAcceptQuoteButton.disabled ||
           !pendingProfessional ||
           !pendingQuoteId
         ) {
@@ -3057,6 +3058,7 @@ const reference =
     }
 
 
+    if (data?.active_job_id !== activeJobId || data.status !== "completed") throw new Error("Completion was not confirmed by Korvo. Refresh and try again.");
     return data;
   }
 
@@ -3367,6 +3369,7 @@ const reference =
       ?.addEventListener(
         "click",
         async (event) => {
+          if (event.currentTarget.disabled) return;
 
           const confirmed =
             confirm(

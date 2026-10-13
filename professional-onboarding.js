@@ -889,10 +889,12 @@ customServiceInput?.addEventListener(
     }
   }
 );
+let isSavingOnboarding = false;
 professionalOnboardingForm?.addEventListener(
   "submit",
   async (event) => {
     event.preventDefault();
+    if (isSavingOnboarding) return;
 
     const professionalName =
       document.getElementById(
@@ -988,6 +990,11 @@ professionalOnboardingForm?.addEventListener(
       return;
     }
 
+    const submitButton = professionalOnboardingForm.querySelector('button[type="submit"]');
+    const originalText = submitButton?.textContent;
+    isSavingOnboarding = true;
+    if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Saving profile..."; }
+    let setupSaved = false;
     try {
       const {
         data: userData,
@@ -1015,6 +1022,12 @@ professionalOnboardingForm?.addEventListener(
         return;
       }
 
+      const { data: account, error: accountError } = await korvoSupabase.from("profiles")
+        .select("account_type, onboarding_complete, is_active").eq("id", user.id).maybeSingle();
+      if (accountError) throw accountError;
+      if (account?.account_type !== "professional" || account.is_active !== true) throw new Error("PROFESSIONAL_ACCOUNT_REQUIRED");
+      if (account.onboarding_complete) { window.location.href = "professional-dashboard.html"; return; }
+
       /* =========================
          Save Professional Details
          ========================= */
@@ -1024,7 +1037,7 @@ professionalOnboardingForm?.addEventListener(
           user.id,
 
         business_name:
-          businessName || "",
+          businessName || professionalName,
 
         bio:
           professionalBio || "",
@@ -1040,9 +1053,6 @@ professionalOnboardingForm?.addEventListener(
 
         service_areas:
           [...serviceAreas],
-
-        verification_status:
-          "Not Verified",
 
         is_public:
           true,
@@ -1090,9 +1100,6 @@ professionalOnboardingForm?.addEventListener(
               user.email ||
               professionalEmail,
 
-            account_type:
-              "professional",
-
             onboarding_complete:
               true,
 
@@ -1109,6 +1116,9 @@ professionalOnboardingForm?.addEventListener(
       if (profileError) {
         throw profileError;
       }
+
+      if (!savedProfessionalProfile?.id || profile?.account_type !== "professional" || !profile.onboarding_complete) throw new Error("PROFILE_SAVE_NOT_CONFIRMED");
+      setupSaved = true;
 
       /* =========================
          Temporary Dashboard Cache
@@ -1182,6 +1192,7 @@ professionalOnboardingForm?.addEventListener(
           new Date().toISOString()
       };
 
+      try {
       localStorage.setItem(
         "korvoProfessionalProfile",
         JSON.stringify(
@@ -1193,6 +1204,8 @@ professionalOnboardingForm?.addEventListener(
         "korvoMessagingRole",
         "professional"
       );
+
+      } catch { /* Optional browser cache must not undo a confirmed server save. */ }
 
       alert(
         "Professional profile setup complete."
@@ -1207,10 +1220,10 @@ professionalOnboardingForm?.addEventListener(
         error
       );
 
-      alert(
-        error.message ||
-        "Korvo could not save your professional profile. Please try again."
-      );
+      alert("Korvo could not save your professional profile. Make sure you are signed in with a professional account and try again.");
+    } finally {
+      isSavingOnboarding = false;
+      if (submitButton && !setupSaved) { submitButton.disabled = false; submitButton.textContent = originalText; }
     }
   }
 );
