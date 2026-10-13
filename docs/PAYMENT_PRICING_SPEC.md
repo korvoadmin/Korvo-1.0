@@ -65,3 +65,11 @@ Canonical calculation: `supabase/functions/_shared/pricing.mjs`.
 Required $100/$500/$1,000 and boundary regressions: `tests/payment-pricing.test.mjs`.
 Consumers must validate persisted snapshots against this specification rather than
 recalculate from browser-supplied totals.
+
+## Shift and everyday-gig extension
+
+The confirmed 100% gross plus 12% on top policy also applies to hourly/fixed gigs.
+See `GIG_PRICING_POLICY.md`: $18/hour × 6 payable hours = $108 worker gross, $12.96
+Korvo fee and $120.96 subtotal, before other applicable costs. Roster totals sum
+independently rounded worker allocations. Tips are excluded from the fee. Employee
+wages require reviewed payroll and cannot use the contractor Connect route.

@@ -99,3 +99,18 @@ new Checkout session. Workflow evidence records remain retained for approved cle
 
 Recovery browser tests use an isolated Auth fixture. Actual email delivery, redirect
 allowlisting, and one-time token consumption remain separate acceptance requirements.
+
+## Disabled gig foundation
+
+```sh
+node --experimental-transform-types --test tests/*.test.mjs
+npm install --prefix /tmp/korvo-ui-tests --no-audit --no-fund playwright@1.56.1 @electric-sql/pglite@0.3.14
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/gig-foundation.browser.cjs
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/gig-database.cjs
+```
+
+The gig browser runner serves local source and performs no backend writes. PGlite
+creates a disposable isolated PostgreSQL schema with mock account profiles/roles;
+it checks grants/RLS/gates and sequential reservations. It does not replace real
+concurrent PostgreSQL, Supabase Auth or hosted payroll/payment acceptance. The SQL
+proposal stays outside automatic migrations, and no gig booking is enabled.

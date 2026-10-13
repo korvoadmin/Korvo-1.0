@@ -1,4 +1,4 @@
-# Korvo Supabase security audit — October 12, 2026
+# Korvo Supabase security audit — updated October 13, 2026
 
 Project: `waaglkephsbxdlleuutr`. Stripe account context was verified as Korvo
 sandbox (`livemode: false`). No live charge, transfer or bank payout was initiated.
@@ -136,7 +136,7 @@ proof/evidence is still separate unfinished work; issue evidence does not fulfil
 | Deployed matching/invitation SQL suite | 56 passed after deployed payment/hold changes; rolled back |
 | Initial complete authorization proposal rehearsal | 131 passed; rolled back; not deployed |
 | Additional financial-admin scope rehearsal | 6 passed; rolled back; not deployed |
-| Updated combined authorization suite | Three support-role checks added (134 intended). Repeat full execution returned `Invalid or expired requestState` twice; **not verified as a complete updated run** |
+| Updated combined authorization suite | **134 passed October 13** in the complete rollback rehearsal, including support-role financial denial; no proposal deployed |
 | Actual deployed Checkout/API runner | 26 checks passed across $100/$500/$1,000 before completing charges |
 | Actual deployed Connect/API runner | 11 checks passed; one mapping; incomplete flags stay false |
 | Actual webhook HTTP suite | 8 passed, repeated after v5 deployment; signed unknown test event deduplicated |
@@ -166,3 +166,30 @@ client access. No blanket automatic downgrade script is provided for sensitive g
 
 Closed beta remains blocked by unresolved authorization work, financial policy,
 verified Connect completion, release/refund/admin integration and final end-to-end gates.
+
+## October 13 checkpoint
+
+The updated full 134-check authorization rehearsal passed. The earlier expired-request
+failures no longer block test verification. The broad migration remains unapplied as
+Chris explicitly requested; these are proposed fixes, not deployed security remediation.
+The deployed payment/matching regressions passed again (38 + 56, all rolled back).
+
+Fresh advisors remain: seven policyless backend tables, one anonymous definer,
+52 authenticated definers and leaked-password protection; performance has 33 RLS
+initplan findings and 62 unused indexes. No ERROR findings were returned. Counts
+of definers are warnings to audit, not proof of 53 exploitable functions. Do not
+blindly delete low-traffic indexes; no unindexed-FK warning returned. Existing
+critical/high authorization gates remain until reviewed changes are approved/applied.
+Remediation links remain in the advisor inventory above.
+
+Both mapped Stripe accounts were read directly in sandbox and remain incomplete:
+submitted details false, payouts false, transfers inactive. The existing professional's
+last status-check timestamp is null, so completed onboarding cannot be claimed.
+No account was changed to manufacture success.
+
+The separate disabled gig foundation has 41 isolated PostgreSQL checks: all eight
+private tables have RLS, anon/authenticated access denied, gates false, employee
+publication blocked, and duplicate/capacity/overlap/compensation guards verified.
+No new schema, grant, function or policy was applied to Supabase. Concurrent
+multi-session reservations and future endpoint authorization remain unverified.
+See `GIG_MARKETPLACE_FOUNDATION.md` and `SPRINT_REPORT_2026-10-13.md`.

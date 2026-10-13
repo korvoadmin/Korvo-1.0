@@ -1,6 +1,6 @@
 # Korvo 1.0 Owner Action & Testing Checklist
 
-Updated during the October 12, 2026 development sprint. Active items below require
+Updated during the October 13, 2026 development sprint. Active items below require
 owner judgment, account access, or explicit authorization. Development and tests
 that the engineer can run are tracked separately and must not be assigned to Chris.
 
@@ -16,9 +16,12 @@ that the engineer can run are tracked separately and must not be assigned to Chr
 | H6 | Membership catalog preserved: one free job, $29.99/3 jobs, $49.99/6 jobs, $89.99/unlimited | Prior confirmed pricing and current database catalog agree; do not ask Chris to select prices again |
 | H7 | Genuine sandbox customer charges, decline/retry, partial/full refund, cancellation return and late issue hold verified | Deployed functions/provider/database checks; all contractor allocations remain held |
 | H8 | Real participant messaging, completion, feedback and private evidence isolation verified | 29 actual Auth/API/Storage checks; synthetic accounts globally signed out and deactivated |
+| H9 | Hourly/fixed gig fee is 12% on top of 100% worker gross; $18 × 6h → $108 + $12.96 | Chris confirmed; `GIG_PRICING_POLICY.md`; pricing/roster regressions |
+| H10 | Updated full authorization rollback rehearsal completed | 134 checks passed October 13; fixtures and DDL rolled back; migration remains unapplied |
+| H11 | Broader mission preserved: projects, hospitality shifts, property services and everyday gigs | Disabled category/pricing/workflow foundation; no employee wages routed to Connect |
 
 The earlier 88/12 deduction instruction and fee-only deposit flow are superseded.
-Do not ask Chris to reconfirm H1 or H3. No processing-fee payer has been selected.
+Do not ask Chris to reconfirm H1, H3 or H9. No processing-fee payer has been selected.
 
 ## A. Decisions required
 
@@ -31,6 +34,9 @@ Do not ask Chris to reconfirm H1 or H3. No processing-fee payer has been selecte
 | D5 / P1 | When should reserved membership usage be restored after an approved pre-work cancellation: support review or automatic once-only restoration? | Recommend support review for initial beta: catches repeated cancellations, but requires operator work. Automatic restoration is simpler but needs explicit eligibility/replay rules. Prices and job allowances are already confirmed in H6; existing reservation at acceptance remains unchanged. | Automated allowance restoration and final membership cancellation terms; Stripe Billing integration can proceed independently with the existing catalog. |
 | D6 / P0 | Which trade categories require license/identity/background verification in Atlanta beta? | Start with explicitly approved categories and documented requirements; avoid labeling unverified providers as verified. More verification narrows launch supply and introduces review cost. | Public beta eligibility, trust badges, verification policy. |
 | D7 / P0 | Which support contact/channel and final customer/professional terms should beta users receive? | Recommend one monitored support route and clearly published payment/cancellation/privacy terms. Simple to operate, but Chris must approve contact details and customer promises; no address or guarantee will be invented. | Published policy pages, support escalation and closed-beta invitations. |
+| D8 / P0 for shifts | Employment model: host business employs/pays workers, qualified staffing partner employs them, or Korvo becomes an employer/staffing operator? | Keep the initial beta limited to cleared project categories while reviewing a host-employer or qualified-partner arrangement. These can reduce implementation scope; contracts do not eliminate joint-employer obligations. Korvo-employer operation adds payroll, insurance, tax and staffing responsibilities. Obtain Georgia employment/payroll review before selecting. | Employee shift booking, payroll adapter, employer contracts and tax responsibilities. No arrangement is selected by the engineer. |
+| D9 / P0 for hospitality | Which shift categories/locations and age range may launch after legal and insurance clearance? Options: approved adult general gigs first, cleared hospitality roles next, or defer all shifts. | Defer public shift booking until written category/model/insurance clearance. It slows expansion but avoids implying alcohol/minor eligibility or unverified coverage. Bartending/minor work stays disabled. | Category allowlist, alcohol-role permits/training, youth restrictions, insurance and local registrations. See `HOSPITALITY_COMPLIANCE_REVIEW.md`. |
+| D10 / P0 for employee shifts | How are employer payroll/insurance costs charged and what reviewed overtime/tip/time-correction arrangement applies? Options depend on D8: host payroll, partner payroll or Korvo payroll with separately disclosed business costs. | Show known costs separately and unknown costs as unresolved; preserve full gross and tips. Use the selected employer's reviewed payroll/time process. Extra business costs require transparency and assent; no wage deductions are inferred. | Final shift receipts, payable-time/payroll integration and employee cancellation handling. Processing costs remain the separate D1 decision. |
 
 ## B. Manual tests that automation could not finish reliably
 
@@ -52,16 +58,17 @@ documents, SSNs, bank details, or payment methods to a synthetic sandbox rehears
 | A3 / P1 | Paid Supabase upgrade to enable leaked-password protection | Owner approves plan/cost; engineer verifies protection after upgrade. No upgrade has been purchased. |
 | A4 / P1 | Deleting retained synthetic Korvo users/test records or Stripe sandbox accounts | Exact fixture inventory, global sign-out, and scoped cleanup proposal; preserve existing users. |
 | A5 / P0 | Major cancellation/no-show penalties or changes to customer pricing | D1/D2 decision, precise displayed terms, acceptance evidence and test cases. |
-| A6 / P0 | Broad Supabase authorization hardening proposal | Automatic approval review rejected its live deployment because it changes privileges, policies, triggers and many production functions. Proposal: `supabase/proposals/20261012160000_harden_korvo_api_permissions.sql`. Initial full rehearsal passed 131 checks; additional financial-role checks passed six focused checks. A complete updated rehearsal must pass before deployment; repeat attempts encountered expired MCP request state. Approval does not waive testing. |
+| A6 / P0 | Broad Supabase authorization hardening proposal | Automatic approval review rejected its live deployment because it changes privileges, policies, triggers and many production functions. Proposal: `supabase/proposals/20261012160000_harden_korvo_api_permissions.sql`. Updated complete rehearsal passed all 134 checks October 13; DDL/fixtures rolled back. Chris explicitly instructed that this migration remain unapplied pending approval. Preserve a privilege snapshot and rerun relevant tests/advisors after any approved deployment. |
 | A7 / P0 | Enabling actual contractor transfers, even in sandbox | Chris explicitly requires approval. Verify owner/admin authorization, payment, completion evidence, fresh Connect status, issue/refund/dispute holds, balance/reserve, durable idempotency and reconciliation first. Current evaluator cannot execute transfers. |
 | A8 / P0 | Merge/publish the development payment/recovery frontend to main/Pages | Reviewable development changes, passing checks and final linked policy/error copy. No main merge or Pages publication is implied by a development push. |
+| A9 / P0 for shifts | Apply the isolated gig schema or enable any public shift booking/payroll/payment feature | Review `supabase/proposals/20261013002039_gig_foundation_disabled.sql`, real concurrent PostgreSQL tests, authenticated endpoint/privacy tests and D8–D10 legal/insurance/payroll clearance. Current preview/schema are development-only and all gates stay disabled. |
 
 ## Dependencies and engineering status
 
 Engineering tasks, automated results and unresolved technical checks are maintained
 in `SUPABASE_SECURITY_AUDIT.md` and `CLOSED_BETA_READINESS.md`; they are not manual
 assignments for Chris. The earlier usage-review interruption is not an active blocker.
-A6 is a separate explicit authorization-deployment rejection and remains unresolved.
+A6 remains an explicit authorization requirement; its updated regression checkpoint is now complete. A9 depends on D8–D10 and verified engineering gates. No new manual gig tests are assigned: pricing, workflow, permissions and mobile tests were automated.
 Real-money beta remains blocked by financial policy, verified onboarding, security
 and release/admin integration. M2 depends on A8 and callback/email configuration;
 A7 depends on D1–D4 and release safeguards; A1 depends on all money-handling gates.
