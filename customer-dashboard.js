@@ -3298,6 +3298,8 @@ const reference =
     `;
 
 
+    window.KorvoPayments?.attach({container: article.querySelector('.job-main') || article, client: korvoSupabase, activeJobId: job.id, role: 'customer', jobStatus: rawStatus});
+
     article
       .querySelector(
         ".leave-review-button"

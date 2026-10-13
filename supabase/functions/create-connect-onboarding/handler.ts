@@ -1,3 +1,4 @@
+import { accountStatus } from '../_shared/connect.mjs';
 // Sandbox-only Connect onboarding. Never accept a professional/account ID from the client.
 const siteUrl = "https://korvoadmin.github.io/Korvo-1.0";
 const cors = {
@@ -13,19 +14,7 @@ class Failure extends Error {
     public upstreamCode?: string, public stripeRequestId?: string, public fieldDiagnostic?: string) { super(code); }
 }
 
-export function accountStatus(account: any) {
-  const complete = account.details_submitted === true && account.payouts_enabled === true
-    && account.capabilities?.transfers === "active";
-  const disabled = account.requirements?.disabled_reason;
-  const restricted = disabled && disabled !== "requirements.pending_verification";
-  return {
-    onboarding_status: complete ? "complete" : restricted ? "restricted"
-      : account.details_submitted ? "in_progress" : "pending",
-    charges_enabled: account.charges_enabled === true,
-    payouts_enabled: account.payouts_enabled === true,
-    details_submitted: account.details_submitted === true,
-  };
-}
+export { accountStatus };
 
 export function createHandler({ createClient, env, fetch: request = globalThis.fetch,
   log = (value: unknown) => console.error(JSON.stringify(value)) }: {
@@ -101,6 +90,15 @@ export function createHandler({ createClient, env, fetch: request = globalThis.f
       if (!accountId && action === "status") return json({ status: "not_connected", sandbox: true });
       if (!accountId) {
         if (!user.email) throw new Failure("CONTACT_EMAIL_REQUIRED", 400);
+        stage = "provisioning_reservation";
+        const reserve = await admin.from("stripe_connect_provisions")
+          .upsert({ professional_id: user.id }, { onConflict: "professional_id", ignoreDuplicates: true });
+        if (reserve.error) throw new Failure("DATABASE_ERROR", 500, undefined, reserve.error.code);
+        const provision = await admin.from("stripe_connect_provisions").select("token,created_at")
+          .eq("professional_id", user.id).single();
+        if (provision.error || !provision.data) throw new Failure("DATABASE_ERROR", 500);
+        if (Date.now() - new Date(provision.data.created_at).getTime() > 29 * 86400000)
+          throw new Failure("ACCOUNT_RECONCILIATION_REQUIRED", 409);
         stage = "stripe_account_create";
         const account = await stripe("v2/core/accounts", {
           contact_email: user.email,
@@ -108,7 +106,7 @@ export function createHandler({ createClient, env, fetch: request = globalThis.f
           defaults: { responsibilities: { fees_collector: "application", losses_collector: "application" } },
           configuration: { recipient: { capabilities: { stripe_balance: { stripe_transfers: { requested: true } } } } },
           metadata: { korvo_professional_id: user.id },
-        }, `korvo-connect-v2-${user.id}`);
+        }, `korvo-connect-v2-${provision.data.token}`);
         accountId = account.id;
         if (!/^acct_[A-Za-z0-9]+$/.test(accountId ?? "")) throw new Failure("STRIPE_ACCOUNT_INVALID", 502);
         stage = "account_save";
@@ -125,6 +123,7 @@ export function createHandler({ createClient, env, fetch: request = globalThis.f
       }
       if (!/^acct_[A-Za-z0-9]+$/.test(accountId)) throw new Failure("STRIPE_ACCOUNT_INVALID", 500);
       stage = "stripe_account_status";
+      const checkedAt = new Date().toISOString();
       // Stripe explicitly supports retrieving v2 accounts through the v1 API. This preserves
       // the existing DB flags without storing identity, bank details or requirement payloads.
       const account = await stripe(`v1/accounts/${accountId}`);
@@ -132,8 +131,11 @@ export function createHandler({ createClient, env, fetch: request = globalThis.f
         throw new Failure("STRIPE_ACCOUNT_OWNER_MISMATCH", 403);
       const snapshot = accountStatus(account);
       stage = "status_save";
-      const savedStatus = await admin.from("professional_stripe_accounts").update({ ...snapshot,
-        updated_at: new Date().toISOString() }).eq("professional_id", user.id).eq("stripe_account_id", accountId);
+      const savedStatus = await admin.rpc("marketplace_apply_event", {
+        p_event_id: "evt_korvo_status_" + crypto.randomUUID(), p_type: "korvo.status.refresh",
+        p_snapshot: { kind: "connect", livemode: false, account_id: accountId,
+          professional_id: user.id, checked_at: checkedAt, ...snapshot },
+      });
       if (savedStatus.error) throw new Failure("DATABASE_ERROR", 500, undefined, savedStatus.error.code);
       if (action === "status") return json({ status: snapshot.onboarding_status, ...snapshot, sandbox: true });
 

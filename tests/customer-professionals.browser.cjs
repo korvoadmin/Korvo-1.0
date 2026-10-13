@@ -84,7 +84,7 @@ function installClient() {
     const u = new URL(route.request().url());
     const file = u.pathname.slice(1);
     if (u.hostname !== 'korvo.test' || file === 'supabase.js') return route.fulfill({ body: '', contentType: 'application/javascript' });
-    if (!['customer-dashboard.html','customer-dashboard.css','customer-dashboard.js','customer-professionals.js'].includes(file)) return route.fulfill({ status: 404, body: '' });
+    if (!['customer-dashboard.html','customer-dashboard.css','customer-dashboard.js','customer-professionals.js','marketplace-payments.js'].includes(file)) return route.fulfill({ status: 404, body: '' });
     await route.fulfill({ body: await fs.readFile(path.join(root,file)), contentType: file.endsWith('.html') ? 'text/html' : file.endsWith('.css') ? 'text/css' : 'application/javascript' });
   });
   let checks = 0;

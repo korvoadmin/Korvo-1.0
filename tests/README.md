@@ -44,10 +44,11 @@ NODE_PATH=/tmp/korvo-ui-tests/node_modules \
   node tests/customer-professionals.acceptance.cjs
 ```
 
-Afterward, administratively remove only these fixtures by their recorded UUIDs:
-their jobs first, then their `public.profiles`, then `auth.users`. The profile-to-Auth
-foreign key does not cascade. Verify fixture removal and delete the credential file,
-even when a test fails. The runner does not perform privileged cleanup itself.
+Afterward, sign fixtures out globally, retain and deactivate the recorded synthetic
+users, and remove only the temporary credential file. Deleting users, jobs, uploads
+or Stripe accounts requires Chris's explicit approval under the current sprint rules.
+Record fixture IDs in the sprint report; never commit credentials. Run runners using
+the same accounts sequentially because global sign-out invalidates other test sessions.
 
 ## Stripe Connect sandbox checks
 
@@ -60,3 +61,56 @@ Run `supabase/tests/connect_eligibility.sql` as an administrative rollback-only 
 check. The function and browser suites above use isolated fixtures and do not call
 Stripe. See `docs/stripe-connect-diagnostic.md` for the real sandbox acceptance
 results, deployment scope, security findings, and manual verification steps.
+
+## Payment and recovery regression checks
+
+```sh
+node --experimental-transform-types --test tests/*.test.mjs
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/marketplace-payments.browser.cjs
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/password-recovery.browser.cjs
+```
+
+The GitHub `Korvo regression checks` workflow runs isolated unit/source and five
+browser suites. It does not deploy or use Stripe/Supabase secrets. SQL integration
+tests run with administrative access and roll back all fixture changes.
+
+The `supabase/proposals` authorization migration is deliberately outside the normal
+migration directory. It was rejected by automatic approval review and must not be
+applied, split, or automatically moved into migrations without explicit approval.
+
+Opt-in real sandbox runners require private administrator-provisioned fixture files:
+
+```sh
+KORVO_ACCEPTANCE_FIXTURE=/private/fixture.json python tests/sandbox-payment-acceptance.py
+KORVO_ACCEPTANCE_FIXTURE=/private/fixture.json python tests/sandbox-connect-acceptance.py
+NODE_PATH=/tmp/korvo-ui-tests/node_modules KORVO_ACCEPTANCE_FIXTURE=/private/fixture.json node tests/stripe-checkout-hosted.browser.cjs
+KORVO_WEBHOOK_SIGNING_FIXTURE=/private/signing-fixture.json python tests/sandbox-webhook-acceptance.py
+KORVO_ACCEPTANCE_FIXTURE=/private/fixture.json python tests/sandbox-workflow-acceptance.py
+```
+
+Provision synthetic `@example.invalid` users and a unique `Korvo acceptance <UUID>`
+service. Payment preparation requires enough fixture membership capacity for three
+accepted quotes. The hosted runner accepts only the recorded sandbox session and
+documented Stripe test cards; `KORVO_TEST_QUOTE=1000 KORVO_TEST_CARD_SCENARIO=decline`
+tests insufficient funds; `KORVO_TEST_CARD_SCENARIO=cancel` tests returning unpaid.
+Verify provider and database state separately after hosted success. Never run these
+against real users, live Stripe, or previously refunded/closed fixtures expecting a
+new Checkout session. Workflow evidence records remain retained for approved cleanup.
+
+Recovery browser tests use an isolated Auth fixture. Actual email delivery, redirect
+allowlisting, and one-time token consumption remain separate acceptance requirements.
+
+## Disabled gig foundation
+
+```sh
+node --experimental-transform-types --test tests/*.test.mjs
+npm install --prefix /tmp/korvo-ui-tests --no-audit --no-fund playwright@1.56.1 @electric-sql/pglite@0.3.14
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/gig-foundation.browser.cjs
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/gig-database.cjs
+```
+
+The gig browser runner serves local source and performs no backend writes. PGlite
+creates a disposable isolated PostgreSQL schema with mock account profiles/roles;
+it checks grants/RLS/gates and sequential reservations. It does not replace real
+concurrent PostgreSQL, Supabase Auth or hosted payroll/payment acceptance. The SQL
+proposal stays outside automatic migrations, and no gig booking is enabled.

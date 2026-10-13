@@ -9,6 +9,8 @@ language plpgsql as $$ begin
   if p_ok is distinct from true then raise exception 'FAILED: %',p_name; end if;
   insert into opportunity_test_results values(p_name);
 end; $$;
+grant execute on function pg_temp.assert_ok(boolean,text) to authenticated,anon;
+
 
 do $$
 declare v_customer uuid:=gen_random_uuid(); v_other uuid:=gen_random_uuid();

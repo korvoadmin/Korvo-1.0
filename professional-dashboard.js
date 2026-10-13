@@ -2669,6 +2669,8 @@ function getJobSchedule(
     `;
 
 
+    window.KorvoPayments?.attach({container: article.querySelector('.job-main') || article, client: korvoSupabase, activeJobId: job.id, role: 'professional', jobStatus: rawStatus});
+
     article
       .querySelector(
         ".active-work-message-button"
