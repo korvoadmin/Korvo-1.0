@@ -97,3 +97,14 @@ and hosted regression completion before deployment.
 2. Finish reviewed Edge image decoder, evidence UI and hosted participant acceptance.
 3. Finish completed Connect synchronization and admin/refund/release reconciliation,
    after owner role and financial policy decisions; keep execution disabled.
+
+## Publication checkpoint
+
+Implementation commit `e5d28e7` is local on
+`codex/completion-evidence-refund-review`, based on the actual fetched PR #5 commit
+`39e446d4`. Automatic approval review rejected the branch push, stating that the
+payload could contain sensitive code/documentation and the GitHub destination was
+not explicitly approved. No alternate upload or push was attempted. Publication
+and remote CI are therefore unverified; no new draft PR was created. Existing PRs
+#4/#5 are unchanged. Explicit authorization to push this branch is needed before
+retrying. The code/tests and report remain committed locally.

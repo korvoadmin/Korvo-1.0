@@ -87,6 +87,12 @@ adapters/UI, legacy-job rollout and relevant regression tests must be complete b
 requesting deployment approval. No additional manual tests are assigned to Chris.
 D1–D4 are unchanged; refund recommendations cannot execute refunds or clear holds.
 
+Publication approval: automatic review blocked pushing the current local branch
+`codex/completion-evidence-refund-review` to `korvoadmin/Korvo-1.0`, citing potential
+sensitive code/documentation and an unapproved destination. Chris must explicitly
+authorize this branch push before a retry. This is separate from any merge, security
+deployment or financial activation. Remote CI has not run for this local work.
+
 ## Update procedure
 
 Update this file with each development commit. Move completed owner items into
