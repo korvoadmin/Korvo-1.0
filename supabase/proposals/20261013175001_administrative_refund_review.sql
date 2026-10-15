@@ -75,14 +75,27 @@ end;$$;
 
 create function korvo_refunds_private.decide(p_review uuid,p_state text,p_note text) returns jsonb
 language plpgsql security definer set search_path='' as $$
-declare uid uuid:=korvo_refunds_private.admin_actor();r korvo_refunds_private.reviews%rowtype;
+declare uid uuid:=korvo_refunds_private.admin_actor();r korvo_refunds_private.reviews%rowtype;p public.marketplace_payments%rowtype;
 begin
  if p_state is null or p_state not in('needs_information','recommended','rejected')
   or p_note is null or length(btrim(p_note)) not between 10 and 2000 then raise exception 'Invalid review decision';end if;
+ select * into strict r from korvo_refunds_private.reviews where id=p_review;
+ -- Same lock order as request: payment before review. Serialize with webhooks.
+ select * into strict p from public.marketplace_payments where id=r.payment_id for update;
  select * into strict r from korvo_refunds_private.reviews where id=p_review for update;
  if r.state=p_state and r.review_note=p_note then
   return jsonb_build_object('id',r.id,'state',r.state,'execution_enabled',false);end if;
  if r.state in('recommended','rejected') then raise exception 'Review already finalized';end if;
+ if p_state='recommended' then
+  if p.status not in('paid','partially_refunded') or p.release_status<>'held' or not p.requires_review then
+   raise exception 'Payment changed; held paid payment under review required';end if;
+  if p.refunded_total_cents<>p.professional_refunded_cents+p.platform_fee_refunded_cents then
+   raise exception 'Existing provider refund allocation needs reconciliation';end if;
+  if r.professional_cents>p.professional_gross_cents-p.professional_refunded_cents
+   or r.platform_fee_cents>p.platform_fee_cents-p.platform_fee_refunded_cents
+   or r.professional_cents+r.platform_fee_cents>p.customer_total_cents-p.refunded_total_cents then
+   raise exception 'Payment changed; proposed refund exceeds remaining allocation';end if;
+ end if;
  update korvo_refunds_private.reviews set state=p_state,review_note=p_note,reviewed_by=uid,reviewed_at=now() where id=r.id;
  insert into korvo_refunds_private.audit(review_id,actor_id,action,note) values(r.id,uid,p_state,p_note);
  -- Even rejection never clears a payment hold or authorizes a contractor transfer.

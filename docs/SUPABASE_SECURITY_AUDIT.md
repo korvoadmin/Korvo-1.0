@@ -246,3 +246,12 @@ No customer payment record or original quote allocation was changed.
 Full scope, deployment risks and unresolved engineering gates:
 `SPRINT_REPORT_2026-10-14_EVIDENCE_CONTROLS.md` and
 `supabase/proposals/security-review/README.md`. Beta status remains blocked.
+
+## October 15 publication and retry checks
+
+Audited development source is published in draft PR #6; initial GitHub CI passed.
+No deployment occurred. Additional reservation-key and stale-refund-recommendation
+checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessions,
+storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
+Connect completion, financial policy and transfer gates remain unchanged. Details:
+`SPRINT_REPORT_2026-10-15_PUBLICATION.md`.

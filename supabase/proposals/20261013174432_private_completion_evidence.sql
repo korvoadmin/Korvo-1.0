@@ -4,7 +4,7 @@ create schema korvo_evidence_private;
 revoke all on schema korvo_evidence_private from public,anon,authenticated,service_role;
 grant usage on schema korvo_evidence_private to authenticated,service_role;
 create table korvo_evidence_private.photos (
- id uuid primary key default gen_random_uuid(),active_job_id uuid not null references public.active_jobs(id),
+ id uuid primary key default gen_random_uuid(),request_key uuid not null unique,active_job_id uuid not null references public.active_jobs(id),
  professional_id uuid not null references public.profiles(id),
  storage_path text not null unique,file_name text not null check(length(file_name) between 1 and 120),
  declared_mime text not null check(declared_mime in('image/jpeg','image/png','image/webp')),
@@ -29,23 +29,30 @@ grant select on korvo_evidence_private.photos to service_role;
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
  values('project-completion-evidence','project-completion-evidence',false,10485760,array['image/jpeg','image/png','image/webp']);
 
-create function korvo_evidence_private.reserve(p_job uuid,p_name text,p_mime text,p_bytes bigint) returns jsonb
+create function korvo_evidence_private.reserve(p_job uuid,p_name text,p_mime text,p_bytes bigint,p_key uuid) returns jsonb
 language plpgsql security definer set search_path='' as $$
 declare uid uuid:=korvo_payments_private.actor();j public.active_jobs%rowtype;p korvo_evidence_private.photos%rowtype;eid uuid:=gen_random_uuid();
 begin
  select * into strict j from public.active_jobs where id=p_job for update;
- if j.professional_id<>uid or j.status<>'active' or not exists(select 1 from public.profiles where id=uid and account_type='professional') then
+ if j.professional_id<>uid or not exists(select 1 from public.profiles where id=uid and account_type='professional') then
   raise exception 'Active assigned professional required' using errcode='42501';end if;
- if p_mime is null or p_mime not in('image/jpeg','image/png','image/webp') or p_bytes is null or p_bytes not between 1 and 10485760
+ if p_key is null or p_mime is null or p_mime not in('image/jpeg','image/png','image/webp') or p_bytes is null or p_bytes not between 1 and 10485760
   or p_name is null or length(btrim(p_name)) not between 1 and 120 or p_name ~ '[/\\]' then raise exception 'Invalid completion photo';end if;
+ select * into p from korvo_evidence_private.photos where request_key=p_key;
+ if found then
+  if p.active_job_id<>p_job or p.professional_id<>uid or p.file_name<>p_name or p.declared_mime<>p_mime or p.declared_bytes<>p_bytes then
+   raise exception 'Photo request key conflicts with original reservation';end if;
+  return jsonb_build_object('id',p.id,'bucket','project-completion-evidence','storage_path',p.storage_path,'file_status',p.file_status);
+ end if;
+ if j.status<>'active' then raise exception 'Active assigned professional required' using errcode='42501';end if;
  if (select count(*) from korvo_evidence_private.photos where active_job_id=p_job and file_status<>'abandoned')>=5 then
   raise exception 'Maximum five completion photos';end if;
- insert into korvo_evidence_private.photos(id,active_job_id,professional_id,storage_path,file_name,declared_mime,declared_bytes)
- values(eid,p_job,uid,p_job::text||'/'||uid::text||'/'||eid::text,p_name,p_mime,p_bytes) returning * into p;
+ insert into korvo_evidence_private.photos(id,request_key,active_job_id,professional_id,storage_path,file_name,declared_mime,declared_bytes)
+ values(eid,p_key,p_job,uid,p_job::text||'/'||uid::text||'/'||eid::text,p_name,p_mime,p_bytes) returning * into p;
  return jsonb_build_object('id',p.id,'bucket','project-completion-evidence','storage_path',p.storage_path,'file_status',p.file_status);
 end;$$;
-create function public.completion_reserve_photo(p_active_job_id uuid,p_file_name text,p_mime text,p_bytes bigint) returns jsonb
-language sql security invoker set search_path='' as $$select korvo_evidence_private.reserve(p_active_job_id,p_file_name,p_mime,p_bytes);$$;
+create function public.completion_reserve_photo(p_active_job_id uuid,p_file_name text,p_mime text,p_bytes bigint,p_request_key uuid default gen_random_uuid()) returns jsonb
+language sql security invoker set search_path='' as $$select korvo_evidence_private.reserve(p_active_job_id,p_file_name,p_mime,p_bytes,p_request_key);$$;
 
 create function korvo_evidence_private.summary(p_job uuid) returns jsonb
 language plpgsql security definer set search_path='' as $$
@@ -138,9 +145,9 @@ end;$$;
 create trigger completion_photo_gate before update of status on public.active_jobs for each row execute function korvo_evidence_private.guard_completion();
 
 revoke all on all functions in schema korvo_evidence_private from public,anon,authenticated,service_role;
-grant execute on function korvo_evidence_private.reserve(uuid,text,text,bigint),korvo_evidence_private.summary(uuid),korvo_evidence_private.abandon(uuid),korvo_evidence_private.authorize_verification(uuid),korvo_evidence_private.acknowledge(uuid),korvo_evidence_private.can_read(text),korvo_evidence_private.can_upload(text) to authenticated;
+grant execute on function korvo_evidence_private.reserve(uuid,text,text,bigint,uuid),korvo_evidence_private.summary(uuid),korvo_evidence_private.abandon(uuid),korvo_evidence_private.authorize_verification(uuid),korvo_evidence_private.acknowledge(uuid),korvo_evidence_private.can_read(text),korvo_evidence_private.can_upload(text) to authenticated;
 grant execute on function korvo_evidence_private.validate_file(uuid,text,bigint,text) to service_role;
-revoke all on function public.completion_reserve_photo(uuid,text,text,bigint),public.completion_evidence_summary(uuid),public.completion_abandon_photo(uuid),public.completion_authorize_verification(uuid),public.completion_validate_file(uuid,text,bigint,text),public.completion_acknowledge_photos(uuid) from public,anon,authenticated,service_role;
-grant execute on function public.completion_reserve_photo(uuid,text,text,bigint),public.completion_evidence_summary(uuid),public.completion_abandon_photo(uuid),public.completion_authorize_verification(uuid),public.completion_acknowledge_photos(uuid) to authenticated;
+revoke all on function public.completion_reserve_photo(uuid,text,text,bigint,uuid),public.completion_evidence_summary(uuid),public.completion_abandon_photo(uuid),public.completion_authorize_verification(uuid),public.completion_validate_file(uuid,text,bigint,text),public.completion_acknowledge_photos(uuid) from public,anon,authenticated,service_role;
+grant execute on function public.completion_reserve_photo(uuid,text,text,bigint,uuid),public.completion_evidence_summary(uuid),public.completion_abandon_photo(uuid),public.completion_authorize_verification(uuid),public.completion_acknowledge_photos(uuid) to authenticated;
 grant execute on function public.completion_validate_file(uuid,text,bigint,text) to service_role;
 notify pgrst,'reload schema';

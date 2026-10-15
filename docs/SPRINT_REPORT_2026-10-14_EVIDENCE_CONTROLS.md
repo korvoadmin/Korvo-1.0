@@ -98,7 +98,7 @@ and hosted regression completion before deployment.
 3. Finish completed Connect synchronization and admin/refund/release reconciliation,
    after owner role and financial policy decisions; keep execution disabled.
 
-## Publication checkpoint
+## Publication checkpoint (historical; resolved October 15)
 
 Implementation commit `e5d28e7` is local on
 `codex/completion-evidence-refund-review`, based on the actual fetched PR #5 commit
@@ -108,3 +108,7 @@ not explicitly approved. No alternate upload or push was attempted. Publication
 and remote CI are therefore unverified; no new draft PR was created. Existing PRs
 #4/#5 are unchanged. Explicit authorization to push this branch is needed before
 retrying. The code/tests and report remain committed locally.
+
+Superseded publication status: owner approved the audited push October 15. Draft
+PR #6 now contains the byte-identical published source; initial remote CI passed.
+See `SPRINT_REPORT_2026-10-15_PUBLICATION.md` for hashes, audit scope and follow-up.

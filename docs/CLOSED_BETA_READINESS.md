@@ -86,3 +86,12 @@ The security scope/dependency and rollback plan is in proposals/security-review/
 a tested postcommit restore remains required before authorized deployment. No current
 owner decision, transfer gate, Connect completion gate or employment gate was cleared.
 See SPRINT_REPORT_2026-10-14_EVIDENCE_CONTROLS.md for precise test boundaries.
+
+## October 15 publication and retry checks
+
+Audited development source is published in draft PR #6; initial GitHub CI passed.
+No deployment occurred. Additional reservation-key and stale-refund-recommendation
+checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessions,
+storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
+Connect completion, financial policy and transfer gates remain unchanged. Details:
+`SPRINT_REPORT_2026-10-15_PUBLICATION.md`.

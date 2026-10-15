@@ -1,6 +1,6 @@
 # Korvo 1.0 Owner Action & Testing Checklist
 
-Updated during the October 14, 2026 evidence/control sprint. Active items below require
+Updated during the October 15, 2026 publication/control sprint. Active items below require
 owner judgment, account access, or explicit authorization. Development and tests
 that the engineer can run are tracked separately and must not be assigned to Chris.
 
@@ -87,11 +87,17 @@ adapters/UI, legacy-job rollout and relevant regression tests must be complete b
 requesting deployment approval. No additional manual tests are assigned to Chris.
 D1–D4 are unchanged; refund recommendations cannot execute refunds or clear holds.
 
-Publication approval: automatic review blocked pushing the current local branch
-`codex/completion-evidence-refund-review` to `korvoadmin/Korvo-1.0`, citing potential
-sensitive code/documentation and an unapproved destination. Chris must explicitly
-authorize this branch push before a retry. This is separate from any merge, security
-deployment or financial activation. Remote CI has not run for this local work.
+## October 15 publication approval resolved
+
+The owner explicitly approved the audited development-branch push. Outgoing commits
+and intermediate file versions were reviewed; no private credentials or sensitive
+real test records were found. Published in draft PR #6; initial GitHub CI passed.
+This resolves branch-publication approval only. A6/A7/A8 and separate evidence/refund
+deployment approvals remain unchanged. No new manual test is assigned to the owner.
+
+The evidence reservation now supports stable request keys; refund recommendations
+recheck current payment state/allocations. The expanded isolated SQL suite passes
+91 checks. Hosted integration and actual concurrent sessions remain engineering work.
 
 ## Update procedure
 

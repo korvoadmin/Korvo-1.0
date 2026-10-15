@@ -40,7 +40,12 @@ const assert=require('node:assert/strict');
   for(const uid of [c,other,admin]){await as(uid);await denied(reserve(),'nonassigned '+uid.slice(-1)+' cannot reserve photo','42501');}
   await as('','anon');await denied(reserve(),'anonymous cannot reserve','42501');
   await as(w);await denied(reserve('text/html'),'HTML declaration rejected');await denied(reserve('image/png',10485761),'oversize rejected');await denied(reserve('image/png',100,'../escape.png'),'path traversal rejected');
-  const photo=(await row(reserve())).result;
+  const photoKey='50000000-0000-0000-0000-000000000001';
+  const stableReserve=`select public.completion_reserve_photo('${j}','fixture.png','image/png',100,'${photoKey}') result`;
+  const photo=(await row(stableReserve)).result;
+  ok((await row(stableReserve)).result.id===photo.id,'reservation retries reuse original id and path');
+  await denied(`select public.completion_reserve_photo('${j}','changed.png','image/png',100,'${photoKey}')`,'same reservation key cannot change file');
+  await denied(`select public.completion_reserve_photo('${j}','fixture.png','image/png',100,null)`,'null request key rejected');
   await db.exec(`insert into storage.objects(bucket_id,name) values('project-completion-evidence','${photo.storage_path}')`);ok(true,'assigned professional uploads reserved path');
   await denied(`insert into storage.objects(bucket_id,name) values('project-completion-evidence','${j}/${w}/unreserved')`,'unreserved upload rejected','42501');
   await as(other);await denied(`select public.completion_authorize_verification('${photo.id}')`,'cross-account verifier authorization denied','42501');
@@ -63,10 +68,16 @@ const assert=require('node:assert/strict');
   await db.exec('reset role');await denied(`update public.active_jobs set status='pending_confirmation' where id='${j}'`,'unresolved reservation blocks submission');
   await as(w);await db.exec(`select public.completion_abandon_photo('${pending.id}')`);ok(true,'owner abandons unused reservation');
   await denied(`select public.completion_abandon_photo('${photo.id}')`,'validated photo cannot be abandoned');
+  const extras=[];for(let n=0;n<4;n++)extras.push((await row(reserve('image/png',100,'extra'+n+'.png'))).result);
+  await denied(reserve(),'sixth active photo rejected');
+  ok((await row(stableReserve)).result.id===photo.id,'idempotent retry works at five-photo capacity');
+  for(const extra of extras)await db.exec(`select public.completion_abandon_photo('${extra.id}')`);
   await db.exec('reset role');await denied(`update public.active_jobs set status='completed' where id='${j}'`,'direct completion bypass rejected');
   await db.exec(`update public.active_jobs set status='pending_confirmation' where id='${j}'`);ok(true,'verified evidence allows completion submission');
   await denied(`update public.active_jobs set status='completed' where id='${j}'`,'customer review required');
   await as(w);await denied(`select public.completion_acknowledge_photos('${j}')`,'professional cannot acknowledge for customer','42501');
+  ok((await row(stableReserve)).result.file_status==='validated','retry recovers validated reservation after submission');
+  await denied(reserve(),'new photo cannot be reserved after submission','42501');
   await as(c);await db.exec(`select public.completion_acknowledge_photos('${j}')`);ok(true,'customer acknowledges verified evidence');
   await db.exec('reset role');await db.exec(`update public.active_jobs set status='completed' where id='${j}'`);ok(true,'reviewed evidence allows customer completion');
   const request=(pro=50000,fee=6000,k=key,reason='Customer cancellation review')=>`select public.admin_request_marketplace_refund_review('${pay}','${k}',${pro},${fee},'${reason}') result`;
@@ -78,6 +89,20 @@ const assert=require('node:assert/strict');
   await denied(request(50000,6000,'40000000-0000-0000-0000-000000000002'),'second open refund request rejected','23505');
   ok((await row('select public.admin_marketplace_refund_queue() result')).result.length===1,'admin can inspect bounded queue');
   await db.exec(`select public.admin_review_marketplace_refund('${review.id}','needs_information','Please provide additional evidence')`);ok(true,'review can request information');
+  const recommend=`select public.admin_review_marketplace_refund('${review.id}','recommended','Evidence supports owner review')`;
+  for(const [change,label] of [
+   ["status='disputed'",'disputed payment cannot be recommended'],
+   ["status='refunded',refunded_total_cents=56000,professional_refunded_cents=50000,platform_fee_refunded_cents=6000",'fully refunded payment cannot be recommended'],
+   ["release_status='processing'",'transfer preparation blocks recommendation'],
+   ["requires_review=false",'missing payment hold blocks recommendation'],
+   ["refunded_total_cents=100",'unallocated provider refund blocks recommendation'],
+   ["status='partially_refunded',refunded_total_cents=100,professional_refunded_cents=100",'stale proposed allocation cannot be recommended']]){
+   await db.exec('reset role');await db.exec(`update public.marketplace_payments set ${change} where id='${pay}'`);await as(admin);
+   await denied(recommend,label);
+   await db.exec('reset role');
+   ok((await row(`select state from korvo_refunds_private.reviews where id='${review.id}'`)).state==='needs_information',label+' leaves review unchanged');
+   await db.exec(`update public.marketplace_payments set status='paid',release_status='held',requires_review=true,refunded_total_cents=0,professional_refunded_cents=0,platform_fee_refunded_cents=0 where id='${pay}'`);await as(admin);
+  }
   await db.exec(`select public.admin_review_marketplace_refund('${review.id}','recommended','Evidence supports owner review')`);ok(true,'review recommendation recorded');
   await db.exec(`select public.admin_review_marketplace_refund('${review.id}','recommended','Evidence supports owner review')`);ok(true,'decision retry idempotent');
   await denied(`select public.admin_review_marketplace_refund('${review.id}','rejected','Changed decision without a new review')`,'terminal recommendation cannot silently change');
