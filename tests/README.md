@@ -150,9 +150,9 @@ synthetic profiles, admin flags, Storage tables and an actor stub. It tests data
 permissions, transitions and idempotency, not real Auth session validation or hosted
 Storage. The decoder suite fully decodes local PNG/JPEG/WebP fixtures with Sharp.
 Sharp is a test adapter, not an Edge-compatible deployment choice. The server core
-requires a trusted full decoder and fails closed without one. A JWT-authenticated
-Edge adapter, actual hosted uploads, UI integration and postdeployment regression
-checks remain unfinished. No proposal is in automatic migrations.
+requires a trusted full decoder and fails closed without one. A JWT-authenticated Edge adapter and dashboard integration are staged and locally
+tested. Actual hosted uploads, managed runtime/Storage acceptance and postdeployment
+regression remain unfinished. No proposal is in automatic migrations.
 
 ## Authoritative master launch register
 
@@ -178,3 +178,30 @@ Recovery snapshots and generated inverses contain operational definitions and MU
 stay outside Git with restricted permissions. The CLI writes a reviewed script only;
 it never connects to or mutates Supabase. Full hosted inverse/Storage/Edge/concurrent
 acceptance are separate from these local results. See the A6 and evidence rollout docs.
+
+## Launch blocker sprint: financial accounting and current-schema recovery
+
+`financial-ledger.cjs` executes actual disabled ledger/review SQL in disposable PGlite
+(36 assertions). `financial-reconciliation.test.mjs` covers trusted GET-only provider
+facts, full versus partial legacy refund allocations, timeouts, duplicate matches and
+pagination. Refund objects can omit livemode: trusted API context must establish sandbox.
+No runner licenses a provider retry, executes a refund or changes payment holds.
+
+`security-current-schema.cjs /private/catalog.json` is opt-in and LOCAL ONLY. Obtain the
+read-only SNAPSHOT_QUERY and CLONE_QUERY results privately, combine as `{before,clone}`,
+store outside Git mode 0600. The clone reads no user rows; confirmed public membership
+catalog and synthetic account fixtures are setup. Thirteen current-schema assertions
+and the 134-check role matrix pass. Never upload this snapshot as a CI artifact.
+Managed Supabase roles/Storage/extension behavior remain separate qualification.
+
+The `financial-concurrency` CI job uses an immutable PostgreSQL image in a disposable
+local service. `financial-concurrency.cjs` and `gig-concurrency.cjs` require CI=true,
+localhost and the dedicated test database; there is no production connection option.
+They verify actual blocked independent sessions, duplicate preparation/observations,
+capacity, overlap and transaction rollback. Activity polling must be outside the
+blocking transaction so statistics snapshots refresh. Full native results are in the
+latest sprint report, not inferred from these scripts existing.
+
+`evidence-deno-runtime.mjs` runs the actual adapter through local Deno HTTP with real
+JPEG/PNG/WebP pixels and fixture Auth/Storage. It is not hosted Edge acceptance. See CI
+for the bounded loopback-only network/read permissions and pinned decoder binary.

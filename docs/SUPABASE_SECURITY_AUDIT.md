@@ -307,3 +307,9 @@ preflight remain before A6. No hosted DDL was run. New ledger RPCs are staged: o
 admin only for reservation/read; service only for observations; no money execution or
 client write grants, support financial authority, hold clearance or automatic counters.
 Actual local Deno/WASM HTTP decoding passes six cases; hosted A10 remains open.
+
+Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
+(10 financial + 7 gig), including observed blocked overlap, once-only reservation/
+receipts, capacity and worker conflict protection, and transaction rollback. This
+resolves the container-local environment blocker for these cases. Broader crash/
+deadlock and managed Supabase endpoint tests remain; no hosted settings changed.

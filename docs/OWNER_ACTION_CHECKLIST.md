@@ -181,3 +181,9 @@ A6/A8/A10 remain unapproved; no actual refund, transfer or live payment is autho
 M1/M2 exact existing manual steps remain, with no request for identity/bank credentials.
 
 Current authoritative counts after this sprint: 144 tasks: 21 Complete, 36 In Progress, 32 Blocked, 17 Not Started, 38 Needs Verification.
+
+Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
+(10 financial + 7 gig), including observed blocked overlap, once-only reservation/
+receipts, capacity and worker conflict protection, and transaction rollback. This
+resolves the container-local environment blocker for these cases. Broader crash/
+deadlock and managed Supabase endpoint tests remain; no hosted settings changed.

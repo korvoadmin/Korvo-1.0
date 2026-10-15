@@ -50,7 +50,7 @@ and 12% added on top, and all four confirmed membership tiers, remain unchanged.
 | Static home/profile/directory rendering | Nine local Chromium views (home/profile/directory), widths 375/768/1280; no overflow |
 | Local Deno HTTP + actual WASM | Six passing; Auth/Storage fixtures; hosted limits untested |
 | Deno entrypoint type-check | Passing on Deno 2.5.6 |
-| Native PostgreSQL CI | Dedicated disposable service added; real overlapping finance/gig tests await remote execution below |
+| Native PostgreSQL CI | 17 passing real overlapping tests on disposable PostgreSQL 17.11 (10 finance + 7 gig); not managed Supabase |
 
 Previously passing unaffected suites are retained from CI 38761257051; they were not
 repeated locally just for a new report. Full CI reruns are the branch publication gate.
@@ -100,5 +100,28 @@ and private fresh snapshot; do not repeat 134 isolated checks unless schema/scop
 
 ## GitHub publication and CI
 
-Pending audited development-branch publication and remote job review. Update this
-checkpoint with actual published commit/run/results before reporting success.
+Published audited development commits `7fcb7d76468638b50ccefc1214b6efd458c476c0` and
+`db28fb62d08ab7c7b53a88d66d6fbaffbc8558d4` in draft PR #7; main and PRs #4–#6
+remain unmerged. Local equivalents: `1b64644` and `023ec1a`; fetched trees match.
+Outgoing 35 initial versions + 10 follow-up versions were checked for secrets,
+external credentials, private keys, personal email/identity records and provider
+account IDs. Private catalog/provider responses and snapshots stay outside Git.
+The only database password is a public disposable CI-only fixture, not a service credential.
+
+First CI 38778273140 passed all isolated regressions, but the new native observer
+initially failed because activity statistics were read within a long transaction.
+Moved observer polling to an independent autocommit connection; pinned the tested
+PostgreSQL image digest and reran affected branch CI. Run 38778541325 at db28fb6
+passes the native job: all eight finance sessions and both competing gig sessions
+were observed waiting concurrently; exactly one result wins where required; duplicate
+receipts append once; terminal success survives late pending and aborts leave no rows.
+Both jobs in run 38778541325 PASSED. Logs confirm 163 unit/source/document tests,
+200 browser checks, 45 isolated gig SQL, 100 evidence/refund SQL, 36 ledger SQL,
+11 recovery/writer, six actual WASM decoder, seven Sharp decoder and six Deno HTTP
+checks; Deno type-check and integration-runner syntax checks pass. Native concurrency
+adds 17 tests. These are separate layers, not a single hosted acceptance total.
+https://github.com/korvoadmin/Korvo-1.0/actions/runs/38778541325
+
+Private opt-in current-schema replay is not uploaded/run in GitHub: local 13 + 134
+results are separate from CI. Reuse those verified results unless schema/scope changes.
+The exact public release manifest remains valid; report-only changes do not alter it.

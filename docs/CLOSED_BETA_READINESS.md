@@ -144,3 +144,9 @@ feature is claimed. Money-handling beta/public launch remain NO-GO. Updated mast
 counts below are synchronized after the final sprint checks.
 
 Current authoritative counts after this sprint: 144 tasks: 21 Complete, 36 In Progress, 32 Blocked, 17 Not Started, 38 Needs Verification.
+
+Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
+(10 financial + 7 gig), including observed blocked overlap, once-only reservation/
+receipts, capacity and worker conflict protection, and transaction rollback. This
+resolves the container-local environment blocker for these cases. Broader crash/
+deadlock and managed Supabase endpoint tests remain; no hosted settings changed.
