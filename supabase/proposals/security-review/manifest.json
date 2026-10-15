@@ -1,0 +1,58 @@
+{
+  "approval_required": true,
+  "deployment_allowed": false,
+  "source": "supabase/proposals/20261012160000_harden_korvo_api_permissions.sql",
+  "source_sha256": "da9d19e45419c99187976caeb289d1abd2fa722ec12155541607ec8ec477bc56",
+  "statements": 464,
+  "packages": [
+    {
+      "order": 1,
+      "name": "foundation",
+      "file": "20261013174905_review_security_foundation.sql",
+      "statements": 8,
+      "sha256": "8114ecfcab63c2431f9e20dab3d22be57415dc69c9449235f8766924d2518aae"
+    },
+    {
+      "order": 2,
+      "name": "administrative_apis",
+      "file": "20261013174912_review_security_administrative_apis.sql",
+      "statements": 132,
+      "sha256": "804a69e5ce8d7c9de6721ef5550edf4363e07b73d79f5f1978142c89e88beb28"
+    },
+    {
+      "order": 3,
+      "name": "customer_and_discovery_apis",
+      "file": "20261013174919_review_security_customer_and_discovery_apis.sql",
+      "statements": 146,
+      "sha256": "3de09040d2c1bf510aa0e9af735f453b93fba9ed4a2ea9f90c010e20d74e3513"
+    },
+    {
+      "order": 4,
+      "name": "professional_and_trust_apis",
+      "file": "20261013174929_review_security_professional_and_trust_apis.sql",
+      "statements": 66,
+      "sha256": "104f82159e94058f2789496feb3407df071b5eab651ec590494e56a5d15bd3b3"
+    },
+    {
+      "order": 5,
+      "name": "quotes_messages_and_private_details",
+      "file": "20261013174936_review_security_quotes_messages_and_private_details.sql",
+      "statements": 42,
+      "sha256": "cefd4677011001fccbc864cbcd56ae395c35405af6ae44dd1f28cfbbf588f2a6"
+    },
+    {
+      "order": 6,
+      "name": "backend_permissions_and_rls",
+      "file": "20261013174944_review_security_backend_permissions_and_rls.sql",
+      "statements": 57,
+      "sha256": "697debd19ac8331680dffc045519ed94ddea67f686377d373aebc63e3f94ae57"
+    },
+    {
+      "order": 7,
+      "name": "profile_job_and_transfer_guards",
+      "file": "20261013174951_review_security_profile_job_and_transfer_guards.sql",
+      "statements": 13,
+      "sha256": "db3167a383a4a1db98002d4426f208063148b3c84117e51576f15ff64e6199fb"
+    }
+  ]
+}

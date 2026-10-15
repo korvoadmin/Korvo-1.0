@@ -1,6 +1,6 @@
 # Korvo 1.0 Owner Action & Testing Checklist
 
-Updated during the October 13, 2026 development sprint. Active items below require
+Updated during the October 15, 2026 publication/control sprint. Active items below require
 owner judgment, account access, or explicit authorization. Development and tests
 that the engineer can run are tracked separately and must not be assigned to Chris.
 
@@ -73,6 +73,31 @@ A6 remains an explicit authorization requirement; its updated regression checkpo
 Real-money beta remains blocked by financial policy, verified onboarding, security
 and release/admin integration. M2 depends on A8 and callback/email configuration;
 A7 depends on D1–D4 and release safeguards; A1 depends on all money-handling gates.
+
+## October 14 review checkpoint
+
+A6 now has seven byte-equivalent, ordered review files under
+`supabase/proposals/security-review/` and a deployment/rollback plan. They remain
+unapplied and do not constitute independently approved migrations. A verified
+prechange snapshot and tested inverse are engineering prerequisites, not owner tests.
+
+Completion evidence and administrative refund review proposals now pass isolated
+SQL tests. Approving A6 does not approve these separate proposals. Their hosted
+adapters/UI, legacy-job rollout and relevant regression tests must be complete before
+requesting deployment approval. No additional manual tests are assigned to Chris.
+D1–D4 are unchanged; refund recommendations cannot execute refunds or clear holds.
+
+## October 15 publication approval resolved
+
+The owner explicitly approved the audited development-branch push. Outgoing commits
+and intermediate file versions were reviewed; no private credentials or sensitive
+real test records were found. Published in draft PR #6; initial GitHub CI passed.
+This resolves branch-publication approval only. A6/A7/A8 and separate evidence/refund
+deployment approvals remain unchanged. No new manual test is assigned to the owner.
+
+The evidence reservation now supports stable request keys; refund recommendations
+recheck current payment state/allocations. The expanded isolated SQL suite passes
+91 checks. Hosted integration and actual concurrent sessions remain engineering work.
 
 ## Update procedure
 

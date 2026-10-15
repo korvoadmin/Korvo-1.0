@@ -218,3 +218,40 @@ mock Auth/API responses, not real emails or provider onboarding. Both directly i
 sandbox Stripe accounts still report details false, payouts false and transfers inactive.
 Durable cross-reload job/message idempotency and completion evidence remain unfinished.
 See `SPRINT_REPORT_2026-10-13_WORKFLOWS.md`.
+
+## October 14, 2026 follow-up (read-only live inspection; local proposals)
+
+Security advisor remains at seven INFO RLS-without-policy, one anonymous and 52
+authenticated SECURITY DEFINER warnings plus leaked-password-protection warning.
+Performance is separate: 33 auth initplan warnings, 62 unused-index information
+findings. Existing Storage policies scope access to project-issue-evidence only.
+No live policy, function, grant or migration changed. Relevant remediation links:
+https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy ,
+https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable ,
+https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable .
+
+Seven ordered review files preserve the canonical authorization proposal exactly
+(464 statements; byte/hash test passed). These are review scopes, not independently
+authorized deployments. Full 134-check prior rehearsal is retained; no duplicate
+hosted run is claimed. Broad deployment remains gated by A6 and a tested inverse.
+
+New evidence proposal fixed NULL verification metadata and direct-completion bypasses
+in its draft. New admin-refund proposal requires active database admin + actor checks,
+holds payments, rejects over-allocation and conflicting retries, records audit events
+and cannot execute refunds. 72 isolated database, 117 unit/source and seven full local
+decoder checks passed. Auth actor and Storage fixtures are simulated; a production
+Edge decoder, hosted sessions/uploads, concurrent sessions and UI remain unverified.
+No customer payment record or original quote allocation was changed.
+
+Full scope, deployment risks and unresolved engineering gates:
+`SPRINT_REPORT_2026-10-14_EVIDENCE_CONTROLS.md` and
+`supabase/proposals/security-review/README.md`. Beta status remains blocked.
+
+## October 15 publication and retry checks
+
+Audited development source is published in draft PR #6; initial GitHub CI passed.
+No deployment occurred. Additional reservation-key and stale-refund-recommendation
+checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessions,
+storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
+Connect completion, financial policy and transfer gates remain unchanged. Details:
+`SPRINT_REPORT_2026-10-15_PUBLICATION.md`.

@@ -76,7 +76,9 @@ tests run with administrative access and roll back all fixture changes.
 
 The `supabase/proposals` authorization migration is deliberately outside the normal
 migration directory. It was rejected by automatic approval review and must not be
-applied, split, or automatically moved into migrations without explicit approval.
+applied or automatically moved into migrations without explicit approval. Chris later
+authorized review-only splitting: ordered packages remain under proposals/security-review
+and are not independent deployment approvals.
 
 Opt-in real sandbox runners require private administrator-provisioned fixture files:
 
@@ -133,3 +135,21 @@ fixtures and SQL-only paid snapshots, performs assertions, then rolls everything
 Run only through an administrative connection in the authorized sandbox project. It
 must never be used to manufacture payment success for a real job. It needs no API keys,
 creates no real Stripe charge/refund/transfer and grants no access to auth.sessions.
+
+## Completion evidence and administrative refund review (unapplied)
+
+```sh
+npm install --prefix /tmp/korvo-ui-tests --no-audit --no-fund @electric-sql/pglite@0.3.14 sharp@0.34.5
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/evidence-refund-database.cjs
+NODE_PATH=/tmp/korvo-ui-tests/node_modules node tests/completion-evidence-decoder.cjs
+node --experimental-transform-types --test tests/*.test.mjs
+```
+
+The database runner executes the actual proposals in disposable PostgreSQL with
+synthetic profiles, admin flags, Storage tables and an actor stub. It tests database
+permissions, transitions and idempotency, not real Auth session validation or hosted
+Storage. The decoder suite fully decodes local PNG/JPEG/WebP fixtures with Sharp.
+Sharp is a test adapter, not an Edge-compatible deployment choice. The server core
+requires a trusted full decoder and fails closed without one. A JWT-authenticated
+Edge adapter, actual hosted uploads, UI integration and postdeployment regression
+checks remain unfinished. No proposal is in automatic migrations.

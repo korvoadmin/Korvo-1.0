@@ -74,3 +74,24 @@ saved even when the follow-up dashboard read fails. These changes are tested, no
 published to main/Pages. Source-price records and unapproved penalty/refund rules are
 unchanged. Ordinary completion evidence and project photo attachments are still not
 integrated; the photo controls must not be described as a working upload feature.
+
+## October 14 evidence/control checkpoint
+
+Still not ready for money-handling closed beta. New private evidence and admin refund
+review SQL passed 72 isolated database checks; the verifier core and security package
+checks are part of 117 passing unit/source tests. Seven real local decoder checks
+passed. All new proposals remain unapplied. Completion-photo UI/Edge integration and
+hosted acceptance remain development work. Refund recommendations cannot move money.
+The security scope/dependency and rollback plan is in proposals/security-review/README.md;
+a tested postcommit restore remains required before authorized deployment. No current
+owner decision, transfer gate, Connect completion gate or employment gate was cleared.
+See SPRINT_REPORT_2026-10-14_EVIDENCE_CONTROLS.md for precise test boundaries.
+
+## October 15 publication and retry checks
+
+Audited development source is published in draft PR #6; initial GitHub CI passed.
+No deployment occurred. Additional reservation-key and stale-refund-recommendation
+checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessions,
+storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
+Connect completion, financial policy and transfer gates remain unchanged. Details:
+`SPRINT_REPORT_2026-10-15_PUBLICATION.md`.
