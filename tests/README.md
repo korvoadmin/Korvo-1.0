@@ -165,3 +165,16 @@ node --test tests/launch-checklist.test.mjs
 Markdown is the sole task/status register. The checker validates 14 sections, IDs,
 counts, evidence/dependencies and stable owner links; count synchronization writes only
 when the full register is valid. These documentation tests are not product acceptance.
+
+## Execution sprint evidence/recovery/refund tests
+
+Install pinned `@imagemagick/magick-wasm@0.0.44` alongside the existing isolated tools.
+Run `evidence-wasm-decoder.cjs`, `security-recovery.cjs`,
+`completion-evidence.browser.cjs` and `admin-refunds.browser.cjs` with NODE_PATH set
+to that tools directory. Unit discovery includes `evidence-endpoint.test.mjs`.
+CI also type-checks the staged endpoint with Deno 2.5.6 and the pinned Supabase SDK.
+
+Recovery snapshots and generated inverses contain operational definitions and MUST
+stay outside Git with restricted permissions. The CLI writes a reviewed script only;
+it never connects to or mutates Supabase. Full hosted inverse/Storage/Edge/concurrent
+acceptance are separate from these local results. See the A6 and evidence rollout docs.

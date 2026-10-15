@@ -86,6 +86,7 @@ function installClient() {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.addInitScript(installClient);
+  await page.addInitScript(()=>{window.KorvoEvidence={attach:()=>({beforeComplete:async()=>{if(window.fixture.evidenceDenied)throw Error('Photo review required');window.fixture.evidenceChecked=true;}})};});
   await page.route('**/*', async route => {
     const u = new URL(route.request().url());
     const file = u.pathname.slice(1);
@@ -159,6 +160,11 @@ function installClient() {
     await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not'));
     check(await page.locator('.confirm-completion-button').isEnabled(),'empty customer completion does not claim saved work');
     await page.locator('#infoModalDoneButton').click();await page.evaluate(()=>{fixture.emptyCompletion=false;fixture.calls=[];});
+    await page.evaluate(()=>fixture.evidenceDenied=true);page.once('dialog',d=>d.accept());await page.locator('.confirm-completion-button').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not'));
+    check(await page.evaluate(()=>fixture.calls.every(c=>c.name!=='customer_confirm_job_completion')),'dashboard blocks customer RPC when photo preflight fails');
+    await page.locator('#infoModalDoneButton').click();await page.evaluate(()=>fixture.evidenceDenied=false);
+
     page.once('dialog',d=>d.accept());await page.locator('.confirm-completion-button').click();
     await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Completion Confirmed'));
     check(await page.evaluate(()=>fixture.calls.filter(c=>c.name==='customer_confirm_job_completion').length===1),'customer confirmation performs one completion RPC');

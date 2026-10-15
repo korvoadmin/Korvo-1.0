@@ -3,6 +3,18 @@
 create schema korvo_evidence_private;
 revoke all on schema korvo_evidence_private from public,anon,authenticated,service_role;
 grant usage on schema korvo_evidence_private to authenticated,service_role;
+-- Rollout: existing jobs are not silently enrolled/backfilled. New jobs opt in through
+-- an insert trigger after this approved migration. Legacy release still needs review.
+create table korvo_evidence_private.requirements (
+ active_job_id uuid primary key references public.active_jobs(id),enrolled_at timestamptz not null default now()
+);
+alter table korvo_evidence_private.requirements enable row level security;
+create policy deny_client_rows on korvo_evidence_private.requirements for all to anon,authenticated using(false) with check(false);
+revoke all on korvo_evidence_private.requirements from public,anon,authenticated,service_role;
+grant select on korvo_evidence_private.requirements to service_role;
+create function korvo_evidence_private.enroll_new_job() returns trigger language plpgsql security definer set search_path='' as $$
+begin insert into korvo_evidence_private.requirements(active_job_id) values(new.id);return new;end;$$;
+create trigger enroll_completion_evidence after insert on public.active_jobs for each row execute function korvo_evidence_private.enroll_new_job();
 create table korvo_evidence_private.photos (
  id uuid primary key default gen_random_uuid(),request_key uuid not null unique,active_job_id uuid not null references public.active_jobs(id),
  professional_id uuid not null references public.profiles(id),
@@ -64,7 +76,7 @@ begin
   'file_status',p.file_status,'customer_reviewed',p.customer_reviewed_by=j.customer_id) order by p.created_at),'[]') into photos
  from korvo_evidence_private.photos p where p.active_job_id=p_job and p.file_status<>'abandoned'
   and (uid=j.professional_id or p.file_status='validated');
- return jsonb_build_object('active_job_id',j.id,'status',j.status,'role',case when uid=j.professional_id then 'professional' else 'customer' end,'photos',photos);
+ return jsonb_build_object('active_job_id',j.id,'required',exists(select 1 from korvo_evidence_private.requirements where active_job_id=j.id),'status',j.status,'role',case when uid=j.professional_id then 'professional' else 'customer' end,'photos',photos);
 end;$$;
 create function public.completion_evidence_summary(p_active_job_id uuid) returns jsonb
 language sql security invoker set search_path='' as $$select korvo_evidence_private.summary(p_active_job_id);$$;
@@ -132,6 +144,7 @@ create policy completion_upload on storage.objects for insert to authenticated w
 
 create function korvo_evidence_private.guard_completion() returns trigger language plpgsql security definer set search_path='' as $$
 begin
+ if not exists(select 1 from korvo_evidence_private.requirements where active_job_id=new.id) then return new;end if;
  if new.status='pending_confirmation' and old.status='active' then
   if not exists(select 1 from korvo_evidence_private.photos where active_job_id=new.id and file_status='validated')
    or exists(select 1 from korvo_evidence_private.photos where active_job_id=new.id and file_status='reserved') then raise exception 'Validate or abandon all completion photos before submitting';end if;

@@ -25,8 +25,13 @@ jobs:
         run: node --experimental-transform-types --test tests/*.test.mjs
       - name: Install isolated browser test dependencies
         run: |
-          npm install --prefix "$RUNNER_TEMP/korvo-tools" --no-audit --no-fund playwright@1.56.1 @electric-sql/pglite@0.3.14 sharp@0.34.5
+          npm install --prefix "$RUNNER_TEMP/korvo-tools" --no-audit --no-fund playwright@1.56.1 @electric-sql/pglite@0.3.14 sharp@0.34.5 @imagemagick/magick-wasm@0.0.44 deno@2.5.6 @supabase/supabase-js@2.117.3
           node "$RUNNER_TEMP/korvo-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Type-check staged evidence Edge entrypoint
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund --prefix supabase/functions/verify-completion-photo
+          echo '{"nodeModulesDir":"manual","compilerOptions":{"checkJs":false}}' > "$RUNNER_TEMP/korvo-tools/deno.json"
+          "$RUNNER_TEMP/korvo-tools/node_modules/.bin/deno" check --config "$RUNNER_TEMP/korvo-tools/deno.json" supabase/functions/verify-completion-photo/index.ts
       - name: Dashboard, payment and recovery browser checks
         run: |
           export NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules"
@@ -37,6 +42,8 @@ jobs:
           node tests/password-recovery.browser.cjs
           node tests/gig-foundation.browser.cjs
           node tests/workflow-reliability.browser.cjs
+          node tests/completion-evidence.browser.cjs
+          node tests/admin-refunds.browser.cjs
       - name: Isolated gig database permissions and scheduling
         run: NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules" node tests/gig-database.cjs
       - name: Isolated completion evidence and refund review
@@ -44,6 +51,8 @@ jobs:
           export NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules"
           node tests/evidence-refund-database.cjs
           node tests/completion-evidence-decoder.cjs
+          node tests/evidence-wasm-decoder.cjs
+          node tests/security-recovery.cjs
       - name: Validate opt-in integration runners
         run: python -m py_compile tests/sandbox-*-acceptance.py
 

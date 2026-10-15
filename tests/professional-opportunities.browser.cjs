@@ -111,6 +111,7 @@ function installClient() {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.addInitScript(installClient);
+  await page.addInitScript(()=>{window.KorvoEvidence={attach:()=>({beforeComplete:async()=>{if(window.fixture.evidenceDenied)throw Error('Photo review required');window.fixture.evidenceChecked=true;}})};});
   await page.route('**/*', async route => {
     const url = new URL(route.request().url());
     const file = url.pathname.slice(1);
@@ -227,7 +228,11 @@ function installClient() {
     page.once('dialog',d=>d.accept());await page.locator('.mark-work-complete-button').click();
     await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not'));
     check(await page.locator('.mark-work-complete-button').isEnabled(),'empty completion RPC cannot claim success and restores control');
-    await closeInfo();await page.evaluate(()=>{fixture.emptyCompletion=false;fixture.failAfterCompletion=true;fixture.calls=[];});
+
+    await closeInfo();await page.evaluate(()=>{fixture.emptyCompletion=false;fixture.evidenceDenied=true;fixture.calls=[];});page.once('dialog',d=>d.accept());await page.locator('.mark-work-complete-button').click();
+    await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Could Not'));
+    check(await page.evaluate(()=>fixture.calls.every(c=>c.rpc!=='professional_request_job_completion')),'dashboard blocks professional RPC when photo preflight fails');
+    await closeInfo();await page.evaluate(()=>{fixture.evidenceDenied=false;fixture.emptyCompletion=false;fixture.failAfterCompletion=true;fixture.calls=[];});
     page.once('dialog',d=>d.accept());await page.locator('.mark-work-complete-button').click();
     await page.waitForFunction(()=>document.getElementById('infoModalTitle').textContent.includes('Sent to Customer'));
     check((await page.locator('#infoModalMessage').innerText()).includes('was saved'),'committed completion stays successful after refresh failure');

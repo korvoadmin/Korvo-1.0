@@ -35,6 +35,16 @@ const assert=require('node:assert/strict');
    values('${pay}','${j}','${c}','${w}',50000,50000,6000,56000,'paid')`);
   await db.exec(await fs.readFile('supabase/proposals/20261013174432_private_completion_evidence.sql','utf8'));
   await db.exec(await fs.readFile('supabase/proposals/20261013175001_administrative_refund_review.sql','utf8'));
+  ok((await row(`select public.completion_evidence_summary('${j}') result`).catch(()=>({result:null}))).result===null,'unsigned evidence summary denied');
+  await as(w);ok((await row(`select public.completion_evidence_summary('${j}') result`)).result.required===false,'preexisting job is explicitly legacy');await db.exec('reset role');
+  await db.exec(`update public.active_jobs set status='pending_confirmation' where id='${j}';update public.active_jobs set status='completed' where id='${j}';update public.active_jobs set status='active' where id='${j}'`);ok(true,'legacy completion not stranded by new photo gate');
+  await db.exec(`insert into korvo_evidence_private.requirements(active_job_id) values('${j}')`);
+  const newJob='20000000-0000-0000-0000-000000000002';
+  await db.exec(`insert into public.active_jobs values('${newJob}','${c}','${w}','active')`);
+  ok((await row(`select count(*)::int n from korvo_evidence_private.requirements where active_job_id='${newJob}'`)).n===1,'new jobs automatically enrolled');
+  await denied(`update public.active_jobs set status='pending_confirmation' where id='${newJob}'`,'new job cannot bypass evidence');
+  await as(w);await denied(`delete from korvo_evidence_private.requirements where active_job_id='${newJob}'`,'professional cannot opt out of evidence','42501');await db.exec('reset role');
+
   ok((await row("select public from storage.buckets where id='project-completion-evidence'")).public===false,'evidence bucket is private');
   const reserve=(mime='image/png',size=100,name='fixture.png')=>`select public.completion_reserve_photo('${j}','${name}','${mime}',${size}) result`;
   for(const uid of [c,other,admin]){await as(uid);await denied(reserve(),'nonassigned '+uid.slice(-1)+' cannot reserve photo','42501');}

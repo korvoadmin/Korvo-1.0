@@ -112,3 +112,17 @@ are absent. There is no complete hosted evidence/refund/release acceptance chain
 Do not infer readiness from the number of passing tests or Completed audit rows.
 A cleared project cohort can precede separately cleared shifts only with D11 scope
 and explicit release approvals. D1–D4/D6/D7 and relevant legal/insurance checks remain.
+
+## Execution checkpoint — October 15
+
+Master now: 144 tasks; 21 Complete, 31 In Progress, 35 Blocked, 18 Not Started,
+39 Needs Verification. The newly completed item is the narrowly scoped legacy-job
+rollout DESIGN (EVI-009), not an enabled evidence/payment feature.
+
+Staged photo endpoint, real WASM decoder, dashboard upload/customer-review controls,
+refund-review page, read-only reconciliation inventory and drift-guarded security
+inverse are tested locally. UI/server flags stay off. Actual hosted Edge/Storage/JWT
+acceptance, full Supabase inverse and native concurrent PostgreSQL remain unverified.
+The native test environment cannot map a non-root user; fixtures do not replace that proof.
+No A6/A8/A10 rollout, actual transfer, automatic refund or live payment occurred.
+Money-handling beta remains NO-GO; see the master history and execution sprint report.

@@ -26,4 +26,4 @@ test('authorization failure never downloads privileged file',async()=>{const f=f
 test('storage failure never records validation',async()=>{const f=fixture({downloadError:true});await assert.rejects(verifyStoredCompletionPhoto(f),/Stored photo/);assert.equal(f.calls.length,2);});
 test('database attestation failure is not success',async()=>assert.rejects(verifyStoredCompletionPhoto(fixture({saveError:true})),/not confirmed/));
 test('empty attestation response is not success',async()=>assert.rejects(verifyStoredCompletionPhoto(fixture({emptySave:true})),/not confirmed/));
-test('authorized verified file is attested once',async()=>{const f=fixture();assert.deepEqual(await verifyStoredCompletionPhoto(f),{id,file_status:'validated'});assert.deepEqual(f.calls,['completion_authorize_verification','download','completion_validate_file']);});
+test('authorized verified file is attested once',async()=>{const f=fixture();const r=await verifyStoredCompletionPhoto(f);assert.equal(r.id,id);assert.equal(r.file_status,'validated');assert.match(r.sha256,/^[a-f0-9]{64}$/);assert.deepEqual(f.calls,['completion_authorize_verification','download','completion_validate_file']);});

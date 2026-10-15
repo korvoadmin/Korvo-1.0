@@ -269,3 +269,25 @@ restriction. Added it and support-role request/read/recommendation denials; 94 i
 SQL checks now pass. This fixes the development prototype, not live permissions.
 126 unit/source/document checks pass locally. Actual hosted session/Storage and true
 concurrency are still unverified. No production state changed for this audit.
+
+## Execution checkpoint — October 15
+
+Read-only live catalog snapshot: 105 functions, 44 relations, 48 policies and 40 triggers;
+no non-owner ACL grant chains found. Protected mode-0600 snapshot is outside Git and
+must be regenerated/stored securely before any approved rollout. No live DDL applied.
+The new inverse tool restored original metadata/behavior and retained fixture rows in
+seven isolated assertions, refusing drift/repeat execution. Full current-hosted-schema
+inverse qualification remains open, so A6 deployment is still blocked.
+
+New completion Edge handler bounds requests, validates caller/ownership, uses a pinned
+integrity-checked WASM decoder, and requires service-only attestation. Nine request
+security checks, six actual WASM decode checks and Deno type-check pass locally.
+The proposed new-job enrollment gate denies client opt-out and preserves legacy jobs;
+100 isolated SQL checks pass. Hosted limits, dependency outage/cold-start and real
+Auth/Storage acceptance remain unverified. Approval A10 is separate from A6.
+
+Server-backed refund UI uses owner/admin queue authorization, stable request keys,
+explicit notes and nonexecuting recommendations; support remains denied. Read-only
+monitoring found one unresolved refund allocation (held), zero pricing invariant
+failures and no ambiguous transfer state. No refund allocation was guessed or mutated.
+See A6_SECURITY_DEPLOYMENT_APPROVAL.md, COMPLETION_EVIDENCE_ROLLOUT.md and the execution report.

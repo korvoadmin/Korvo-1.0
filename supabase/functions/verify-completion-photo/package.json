@@ -1,0 +1,1 @@
+{"name":"korvo-completion-evidence","private":true,"type":"module","dependencies":{"@supabase/supabase-js":"2.117.3","@imagemagick/magick-wasm":"0.0.44"}}

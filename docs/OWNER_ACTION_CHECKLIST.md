@@ -131,3 +131,28 @@ incomplete, blank live recovery and unapplied evidence/refund/security/gig propo
 Five Stripe sandbox accounts exist; two ready accounts are unmapped and do not clear M1.
 The new refund prototype's support-role gap was corrected and tested locally; it remains
 undeployed. D11/D12 and A10 clarify real owner gates; no engineering tests were reassigned.
+
+## Execution sprint — October 15
+
+Master IDs unchanged. Completion photo Edge/dashboard code and refund-review UI are
+now locally tested and default-off, with no production publication or schema deployment.
+The tested EVI-009 design preserves existing active jobs and enrolls new ones after
+approved rollout. A10 must approve that cohort boundary, compatible UI-first release,
+legacy paid-job support review and hosted acceptance; no transfer is implied.
+
+A6 now has read-only snapshot/inverse tooling, a protected current catalog snapshot
+and seven isolated metadata recovery assertions. The full current-Supabase inverse
+rehearsal is still engineering work, not a manual task for Chris; A6 is not deployed.
+Actual multi-session testing is blocked by the container UID restrictions. No paid
+provisioning decision is requested while other independent work remains available.
+
+M1 remains the existing exact hosted setup test: both mapped account-owner metadata
+values match, but payouts/transfers remain disabled. No active signed-in synthetic
+professional fixture/valid hosted link is available in this checkpoint, so hosted
+completion was not rerun by manufacturing more users or changing existing mappings.
+Use sandbox test data only and provide the final Korvo/Stripe completion status, not
+bank/identity details. Engineer verifies synchronization after that status is reached.
+
+Read-only reconciliation finds one existing sandbox refund with unresolved component
+allocation. It remains held; D2 and financial reconciliation must specify the actual
+professional/fee split rather than an automated guess. D1–D4 are unchanged.

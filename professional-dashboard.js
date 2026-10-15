@@ -2674,6 +2674,7 @@ function getJobSchedule(
 
 
     window.KorvoPayments?.attach({container: article.querySelector('.job-main') || article, client: korvoSupabase, activeJobId: job.id, role: 'professional', jobStatus: rawStatus});
+    const evidencePanel = window.KorvoEvidence?.attach({container: article.querySelector('.job-main') || article, client: korvoSupabase, activeJobId: job.id, role: 'professional'});
 
     article
       .querySelector(
@@ -2800,6 +2801,7 @@ function getJobSchedule(
 
           try {
 
+            await evidencePanel?.beforeComplete();
             await requestJobCompletion(
               job.id
             );

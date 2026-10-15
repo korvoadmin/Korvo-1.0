@@ -10,7 +10,7 @@ test('validator rejects stale task totals',()=>assert.equal(check(text.replace(/
 test('validator rejects unknown dependency',()=>assert.equal(check(text.replace('| SEC-005, LEG-001, LEG-002 |','| MISSING-999 |')).valid,false));
 test('validator rejects duplicate IDs',()=>assert.equal(check(text.replace('| WEB-002 | P0','| WEB-001 | P0')).valid,false));
 test('validator rejects unregistered owner approval',()=>assert.equal(check(text.replace('Approval A8; final policy copy D7','Approval A99; final policy copy D7')).valid,false));
-test('validator rejects missing evidence registry key',()=>assert.equal(check(text.replace('| E16 | tests/evidence-refund-database.cjs;','| E99 | tests/evidence-refund-database.cjs;')).valid,false));
+test('validator rejects missing evidence registry key',()=>assert.equal(check(text.replace(/^\| E07 \|.*$/m,'')).valid,false));
 test('validator rejects missing required section',()=>assert.equal(check(text.replace('## 14. Public-launch readiness','## Public-launch readiness')).valid,false));
 test('repository mission preserves projects, shifts and everyday gigs without enabling payments',()=>{const r=fs.readFileSync(new URL('../README.md',import.meta.url),'utf8');assert.match(r,/projects, shifts and everyday gigs/);assert.match(r,/KORVO_MASTER_LAUNCH_CHECKLIST\.md/);assert.match(r,/remain disabled/);});
 
