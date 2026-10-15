@@ -38,13 +38,13 @@
     },
     {
       "source": "customer-dashboard.html",
-      "line": 1044,
+      "line": 1036,
       "target": "contact.html",
       "reason": "missing"
     },
     {
       "source": "customer-dashboard.html",
-      "line": 1292,
+      "line": 1284,
       "target": "#",
       "reason": "placeholder"
     },

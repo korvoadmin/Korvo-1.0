@@ -88,7 +88,7 @@
     },
     {
       "path": "browse.html",
-      "sha256": "3c34948398c089d46982916655509962cb0cb6285c803c444b7d1aa8268877be"
+      "sha256": "62082ef3bddefda1109ba6633159587432c0e4cfbfb79335cad68d005401f8e1"
     },
     {
       "path": "browse.js",
@@ -96,7 +96,7 @@
     },
     {
       "path": "chris-profile.html",
-      "sha256": "60aada4106e9bebc3c41dfdf17cfbac0c4cd92005e3f995e15a3a41d1feac031"
+      "sha256": "23f84057afbf97a1160c862a8ffbe849d02e7c2129cd20d918dfa412c5cb87eb"
     },
     {
       "path": "completion-evidence.js",
@@ -104,11 +104,15 @@
     },
     {
       "path": "customer-dashboard.html",
-      "sha256": "40232508e3bbb89b25a413e9ba17125e33cc937113fc9167752bc0f86bf45d65"
+      "sha256": "a43eaa1b788640107432076edb528d27d0a0ba3dc591d238be536efe543fe9e8"
     },
     {
       "path": "customer-dashboard.js",
       "sha256": "d13dd8ab7c59224d791ef8fc8fa65a7c919a40c99ed7aa1906684a60b9c227e2"
+    },
+    {
+      "path": "dashboard.html",
+      "sha256": "3b2d43c80a76f93fc27a51f3c352ca8311b950c2d93f57ba49600e2fada1c1e9"
     },
     {
       "path": "forgot-password.html",
@@ -133,6 +137,10 @@
     {
       "path": "messages.js",
       "sha256": "60003459dc9d8e5ddb5e0d6cc161e51b4e97090d7782fc27cf39153f2f84e2df"
+    },
+    {
+      "path": "mission.html",
+      "sha256": "6abb295cca49537d59ce9af11085cd2f30545eb3c9d9ad03ad4d021c927c9267"
     },
     {
       "path": "password-recovery.js",

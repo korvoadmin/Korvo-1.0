@@ -13,7 +13,7 @@ const blocker=await pool.connect();await blocker.query('begin');await blocker.qu
 // All eight transactions must actually wait on the same held payment lock.
 const concurrent=Array.from({length:8},(_,i)=>transaction(i%2?admin:owner,async c=>(await c.query('select public.admin_prepare_refund_ledger($1) result',[review])).rows[0].result));
 let waiting=0;const deadline=Date.now()+5000;
-while(Date.now()<deadline){const r=await blocker.query("select count(*)::int n from pg_stat_activity where datname=current_database() and wait_event_type='Lock' and query like '%admin_prepare_refund_ledger%'");waiting=r.rows[0].n;if(waiting===8)break;await new Promise(r=>setTimeout(r,30));}
+while(Date.now()<deadline){const r=await pool.query("select count(*)::int n from pg_stat_activity where datname=current_database() and wait_event_type='Lock' and query like '%admin_prepare_refund_ledger%'");waiting=r.rows[0].n;if(waiting===8)break;await new Promise(r=>setTimeout(r,30));}
 try{ok(waiting===8,'eight independent sessions overlap and wait on payment lock');}finally{await blocker.query('commit');blocker.release();}
 const operations=await Promise.all(concurrent);const op=operations[0];
 ok(new Set(operations.map(o=>o.id)).size===1,'concurrent preparation creates exactly one operation');
