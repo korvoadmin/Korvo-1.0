@@ -10,6 +10,40 @@ concurrency:
   group: korvo-checks-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  financial-concurrency:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: korvo_finance_test
+          POSTGRES_PASSWORD: korvo-isolated-ci-only
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: '5432'
+      PGUSER: postgres
+      PGPASSWORD: korvo-isolated-ci-only
+      PGDATABASE: korvo_finance_test
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm install --prefix "$RUNNER_TEMP/korvo-native-tools" --no-audit --no-fund pg@8.16.3
+      - name: Actual multi-session financial lock and duplicate tests
+        run: NODE_PATH="$RUNNER_TEMP/korvo-native-tools/node_modules" node tests/financial-concurrency.cjs
+      - name: Actual multi-session gig capacity and overlap tests
+        run: NODE_PATH="$RUNNER_TEMP/korvo-native-tools/node_modules" node tests/gig-concurrency.cjs
   isolated-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -32,6 +66,7 @@ jobs:
           npm ci --ignore-scripts --no-audit --no-fund --prefix supabase/functions/verify-completion-photo
           echo '{"nodeModulesDir":"manual","compilerOptions":{"checkJs":false}}' > "$RUNNER_TEMP/korvo-tools/deno.json"
           "$RUNNER_TEMP/korvo-tools/node_modules/.bin/deno" check --config "$RUNNER_TEMP/korvo-tools/deno.json" supabase/functions/verify-completion-photo/index.ts
+          "$RUNNER_TEMP/korvo-tools/node_modules/.bin/deno" run --config "$RUNNER_TEMP/korvo-tools/deno.json" --allow-read --allow-net=127.0.0.1 tests/evidence-deno-runtime.mjs "$RUNNER_TEMP/korvo-tools/node_modules/@imagemagick/magick-wasm/dist/x86/magick.wasm"
       - name: Dashboard, payment and recovery browser checks
         run: |
           export NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules"
@@ -53,6 +88,7 @@ jobs:
           node tests/completion-evidence-decoder.cjs
           node tests/evidence-wasm-decoder.cjs
           node tests/security-recovery.cjs
+          node tests/financial-ledger.cjs
       - name: Validate opt-in integration runners
         run: python -m py_compile tests/sandbox-*-acceptance.py
 

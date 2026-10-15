@@ -291,3 +291,19 @@ explicit notes and nonexecuting recommendations; support remains denied. Read-on
 monitoring found one unresolved refund allocation (held), zero pricing invariant
 failures and no ambiguous transfer state. No refund allocation was guessed or mutated.
 See A6_SECURITY_DEPLOYMENT_APPROVAL.md, COMPLETION_EVIDENCE_ROLLOUT.md and the execution report.
+
+## Current-schema isolated qualification — October 15 launch blocker sprint
+
+Read-only current catalog export contains no customer rows. Empty isolated replay
+reconstructs 72 dependency tables/26 helpers plus all 105 scoped functions, 44 relations,
+48 policies and 40 triggers. Seven exact packages, 134 authorization checks and 13
+recovery/drift/row-preservation assertions pass. Fixed OID-dependent ACL/default
+fingerprint ordering; stable names now allow identical snapshots across clusters.
+Existing 11 recovery/writer checks also pass. Raw snapshots remain outside Git, 0600.
+
+This does not qualify managed Supabase roles, Storage service, extension behavior,
+network JWT/session access or production rollback. Fresh durable backup and managed
+preflight remain before A6. No hosted DDL was run. New ledger RPCs are staged: owner/
+admin only for reservation/read; service only for observations; no money execution or
+client write grants, support financial authority, hold clearance or automatic counters.
+Actual local Deno/WASM HTTP decoding passes six cases; hosted A10 remains open.

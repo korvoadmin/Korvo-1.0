@@ -63,3 +63,11 @@ page fixtures each verify photo-preflight denial prevents the completion RPC. Ex
 isolated SQL: 100 checks including legacy completion, new enrollment and opt-out denial.
 Endpoint: 9 request/auth/stream/ownership tests; production WASM adapter: 6 full-image
 checks. These are local/fixture tests, not real hosted JWT/Storage/Edge acceptance.
+
+## Latest runtime checkpoint
+
+Six actual local Deno 2.5.6 HTTP tests now pass valid/corrupt JPEG/PNG/WebP using the
+production WASM adapter and checked binary. Auth/Storage are fixtures; actual managed
+Edge resource/cold-start/CDN and signed-URL acceptance are not proven. The exact A10
+review scope, rollout prerequisites and populated-data rollback limits are documented
+in A10_SANDBOX_ROLLOUT_APPROVAL.md and LAUNCH_RELEASE_MANIFEST.json.

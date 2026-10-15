@@ -1,11 +1,13 @@
 (function(global){'use strict';const el=(tag,text)=>{const x=document.createElement(tag);if(text)x.textContent=text;return x;};
- global.KorvoRefundReview={attach({container,client,enabled=global.KORVO_REFUND_REVIEW_ENABLED===true}){
+ global.KorvoRefundReview={attach({container,client,enabled=global.KORVO_REFUND_REVIEW_ENABLED===true,ledgerEnabled=global.KORVO_FINANCIAL_LEDGER_ENABLED===true}){
   const status=el('p',enabled?'Checking financial access…':'Refund review is not enabled.');status.setAttribute('role','status');container.append(status);const content=el('section');container.append(content);let authorized=false,busy=false;const keys=new Map();
   const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(value);
   const money=c=>Number.isSafeInteger(c)&&c>=0?'$'+(c/100).toFixed(2):'Unavailable';
   async function load(){
    authorized=false;content.replaceChildren();const user=await client.auth.getUser();if(user.error||!user.data?.user)throw Error('Sign in with an authorized financial account.');
    const response=await client.rpc('admin_marketplace_refund_queue');if(response.error||!Array.isArray(response.data))throw Error('Financial access denied or review queue unavailable.');
+   let operations=[];
+   if(ledgerEnabled){const ledger=await client.rpc('admin_financial_operation_queue');if(ledger.error||!Array.isArray(ledger.data))throw Error('Financial operation queue unavailable. Refresh to reconcile.');operations=ledger.data;}
    authorized=true;status.textContent='Financial review queue. All recommendations require separate authorized processing.';
    const refresh=el('button','Refresh reviews');refresh.type='button';refresh.onclick=()=>{if(!busy)load().catch(e=>{status.textContent=e.message;});};content.append(refresh);
    const form=el('form');const fields={};
@@ -35,7 +37,21 @@
        catch(e){status.textContent=e.message;}finally{busy=false;button.disabled=false;}
       };card.append(button);
      }
-    }content.append(card);
+    }
+    if(ledgerEnabled&&review.state==='recommended'&&!operations.some(o=>o.review_id===review.id)){
+     const prepare=el('button','Reserve reviewed refund in ledger');prepare.type='button';
+     prepare.onclick=async()=>{if(!authorized||busy)return;busy=true;prepare.disabled=true;
+      try{const r=await client.rpc('admin_prepare_refund_ledger',{p_review_id:review.id});
+       if(r.error||!uuid(r.data?.id)||r.data.review_id!==review.id||r.data.kind!=='refund'||r.data.execution_enabled!==false)throw Error('Ledger reservation not confirmed. Refresh to reconcile.');
+       let reloadFailed=false;try{await load();}catch{reloadFailed=true;}status.textContent=reloadFailed?'Ledger reservation saved; refresh to reconcile. No refund executed.':'Ledger reservation saved. No refund executed.';
+      }catch(e){status.textContent=e.message;}finally{busy=false;prepare.disabled=false;}
+     };card.append(prepare);
+    }
+    content.append(card);
+   }
+   if(ledgerEnabled){const section=el('section');section.append(el('h2','Financial operations requiring reconciliation'));
+    for(const operation of operations){const card=el('article');card.append(el('h3','Operation '+operation.id),el('p','State: '+operation.state),el('p','Attention: '+operation.attention_reason),el('p','Professional: '+money(operation.professional_cents)+'; Korvo fee: '+money(operation.platform_fee_cents)));section.append(card);}
+    content.append(section);
    }
   }
   return {ready:enabled?load().catch(e=>{authorized=false;content.replaceChildren();status.textContent=e.message;}):Promise.resolve(),refresh:load};

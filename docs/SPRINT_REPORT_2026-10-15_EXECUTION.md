@@ -127,3 +127,9 @@ A final writer hardening adds canonical-parent path checks and private-directory
 ownership/mode requirements, with 11 passing recovery/writer assertions (including
 symlink-parent, public-directory and overwrite denials). Its separate CI result is
 recorded in the PR. Protected snapshots stayed outside Git; no secret/record upload.
+
+## Successor handoff
+
+Continue from SPRINT_REPORT_2026-10-15_LAUNCH_BLOCKERS.md for the subsequent
+ledger/current-schema recovery/Deno-runtime/controlled-release sprint. Earlier totals
+above are preserved historical checkpoints; authoritative statuses remain in the master.

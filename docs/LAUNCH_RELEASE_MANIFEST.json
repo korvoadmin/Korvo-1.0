@@ -1,0 +1,173 @@
+{
+  "deployment_authorized": false,
+  "main_baseline": "46e226a89272cbc32dd5dffb8b68ca0e6f72f348",
+  "A6": [
+    {
+      "path": "supabase/proposals/20261012160000_harden_korvo_api_permissions.sql",
+      "sha256": "da9d19e45419c99187976caeb289d1abd2fa722ec12155541607ec8ec477bc56"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174905_review_security_foundation.sql",
+      "sha256": "8114ecfcab63c2431f9e20dab3d22be57415dc69c9449235f8766924d2518aae"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174912_review_security_administrative_apis.sql",
+      "sha256": "804a69e5ce8d7c9de6721ef5550edf4363e07b73d79f5f1978142c89e88beb28"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174919_review_security_customer_and_discovery_apis.sql",
+      "sha256": "3de09040d2c1bf510aa0e9af735f453b93fba9ed4a2ea9f90c010e20d74e3513"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174929_review_security_professional_and_trust_apis.sql",
+      "sha256": "104f82159e94058f2789496feb3407df071b5eab651ec590494e56a5d15bd3b3"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174936_review_security_quotes_messages_and_private_details.sql",
+      "sha256": "cefd4677011001fccbc864cbcd56ae395c35405af6ae44dd1f28cfbbf588f2a6"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174944_review_security_backend_permissions_and_rls.sql",
+      "sha256": "697debd19ac8331680dffc045519ed94ddea67f686377d373aebc63e3f94ae57"
+    },
+    {
+      "path": "supabase/proposals/security-review/20261013174951_review_security_profile_job_and_transfer_guards.sql",
+      "sha256": "db3167a383a4a1db98002d4426f208063148b3c84117e51576f15ff64e6199fb"
+    }
+  ],
+  "A10": [
+    {
+      "path": "supabase/proposals/20261013174432_private_completion_evidence.sql",
+      "sha256": "6743c175399f3d29c8f5b55aee6a351d5f7cf38737c35b313f20be2711226285"
+    },
+    {
+      "path": "supabase/proposals/20261013175001_administrative_refund_review.sql",
+      "sha256": "221f9a3abc198351ef2509857a26edc6ed1da1c8b010253615659daf7ab98468"
+    },
+    {
+      "path": "supabase/proposals/financial_operation_ledger.sql",
+      "sha256": "fdd7a80db357eaf1dc48a2d8cb2d70032a2189b2ec9780fc04e40307e2f0395a"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/decoder.mjs",
+      "sha256": "8286d61b127f63cf5ad460f1da3de6759e6a6f3aabf56ac49e8574665bda919a"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/handler.mjs",
+      "sha256": "ea9d6cac3966ead5d6efa9d270b1dfa6d24b7304f1e1b05d17dc7df00c4fe9e9"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/index.ts",
+      "sha256": "57433981ff4b2dd3cb386890ef3df2c75670fb10bd41c10e67b365fc98390b3c"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/package-lock.json",
+      "sha256": "f8ac1dca7b9135a2a2bf0c862f3c6f72c46a428b133ae2ff3ff03563d6c1af77"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/package.json",
+      "sha256": "16b05e40420bdcebfd0e90c4848fdba41c9444ca1ed9abb7e7dac462e1d49ed0"
+    },
+    {
+      "path": "supabase/functions/_shared/completion-evidence.mjs",
+      "sha256": "2cbb71b2144ef9199714c467eb736d108b4476e76e8192ac33b6121bbfe83a09"
+    },
+    {
+      "path": "supabase/functions/_shared/financial-reconciliation.mjs",
+      "sha256": "34ee1f3de79768cf815d2b0ffb520a96e1836c77f11e3013e5d883e0057cba0a"
+    }
+  ],
+  "A8": [
+    {
+      "path": "admin-refunds.html",
+      "sha256": "128973ea63b718c2531692b760431f7e4e2fcf3ad261c43fc3e5837db0f282b2"
+    },
+    {
+      "path": "admin-refunds.js",
+      "sha256": "709352258cc83d6fc3fb3a10d8cbc0842722f6046eac81047769ac268c9021e3"
+    },
+    {
+      "path": "browse.html",
+      "sha256": "3c34948398c089d46982916655509962cb0cb6285c803c444b7d1aa8268877be"
+    },
+    {
+      "path": "browse.js",
+      "sha256": "e0cc9aaade3d83feda5a76ea0b735f8a9ab3461096f2999c28c57268a995bf8d"
+    },
+    {
+      "path": "chris-profile.html",
+      "sha256": "60aada4106e9bebc3c41dfdf17cfbac0c4cd92005e3f995e15a3a41d1feac031"
+    },
+    {
+      "path": "completion-evidence.js",
+      "sha256": "525aa854d842c9a9dfebb5971767e989e785da6a401f1037f9e1e10254ffb37b"
+    },
+    {
+      "path": "customer-dashboard.html",
+      "sha256": "40232508e3bbb89b25a413e9ba17125e33cc937113fc9167752bc0f86bf45d65"
+    },
+    {
+      "path": "customer-dashboard.js",
+      "sha256": "d13dd8ab7c59224d791ef8fc8fa65a7c919a40c99ed7aa1906684a60b9c227e2"
+    },
+    {
+      "path": "forgot-password.html",
+      "sha256": "ee28a597b9853ee1c26a64827899ceb847a6d196075990e053e524f68a91fe31"
+    },
+    {
+      "path": "gig-foundation.html",
+      "sha256": "f74ff1442ee1fe990855a47fecf3bfe9f74fa7c1c95cb2069a7a6fd13156ce5c"
+    },
+    {
+      "path": "gig-foundation.js",
+      "sha256": "dc150fb90d8dc0615a96db5b131567dd1cdb2859e0912bcbd306deddd3cc1716"
+    },
+    {
+      "path": "index.html",
+      "sha256": "dee5abc8aafc1c3ad83db397782e548d9dedd483488d801a5e958a4403cd9fe6"
+    },
+    {
+      "path": "marketplace-payments.js",
+      "sha256": "892232b5a622f6a87517bfced8a75acc276f0b01665e6070c78622dfd67bad80"
+    },
+    {
+      "path": "messages.js",
+      "sha256": "60003459dc9d8e5ddb5e0d6cc161e51b4e97090d7782fc27cf39153f2f84e2df"
+    },
+    {
+      "path": "password-recovery.js",
+      "sha256": "ecb35288663a14f4cdffe89ab5cb9c45fca87b77c0052db5d44eeed4ffcecd8c"
+    },
+    {
+      "path": "post-a-job.html",
+      "sha256": "aa762127fc0e1bbc3aa6fcea3001578efd3efd0513b0e0b43fa384e922f135ce"
+    },
+    {
+      "path": "post-a-job.js",
+      "sha256": "e85a6352b6d71b45652e0e4328e1fc8966ca0180258261641bfdcdf0bee22b83"
+    },
+    {
+      "path": "professional-dashboard.html",
+      "sha256": "aa9aaf4e9ddbaa928a05039b114eab7da1047e981f546e76d6d05651e8d6e8cb"
+    },
+    {
+      "path": "professional-dashboard.js",
+      "sha256": "15577ae19f2860d394b859552f0b601d68141a1ddae29b7c02268a031683ffa6"
+    },
+    {
+      "path": "professional-onboarding.js",
+      "sha256": "2b031e0c6895f007fc91cbbc987d23dafc24ab7b9e520a6e5a1fa2c31980cda2"
+    },
+    {
+      "path": "reset-password.html",
+      "sha256": "1731a3cfeca608f9ddcfdab058b0bda835cd0c2ba60a6d1970a11284fad645c7"
+    }
+  ],
+  "flags_default_off": [
+    "COMPLETION_EVIDENCE_ENABLED",
+    "KORVO_COMPLETION_EVIDENCE_ENABLED",
+    "KORVO_REFUND_REVIEW_ENABLED",
+    "KORVO_FINANCIAL_LEDGER_ENABLED"
+  ],
+  "money_execution_enabled": false
+}

@@ -126,3 +126,21 @@ acceptance, full Supabase inverse and native concurrent PostgreSQL remain unveri
 The native test environment cannot map a non-root user; fixtures do not replace that proof.
 No A6/A8/A10 rollout, actual transfer, automatic refund or live payment occurred.
 Money-handling beta remains NO-GO; see the master history and execution sprint report.
+
+## Launch blocker elimination — October 15
+
+See SPRINT_REPORT_2026-10-15_LAUNCH_BLOCKERS.md for current implementation/evidence.
+Current-schema isolated security packages/inverse and 134-role matrix pass; this is
+not a managed hosted rollback. Disabled durable refund ledger, read-only provider
+reconciliation and admin operation queue are locally tested. Full sandbox refund
+aggregate is proven, but database component correction remains unapplied. Actual
+local Deno decoder HTTP passes; hosted Supabase Auth/Storage/runtime is still pending.
+Native multi-session finance/gig CI is a separate layer, never deployed proof.
+
+A6/A8/A10 review scopes are pinned in LAUNCH_RELEASE_MANIFEST.json. Frontend has nine
+missing links and 17 placeholders; support/policies and real recovery/email remain
+launch gates despite truthful sample labels. No new complete hosted journey or money
+feature is claimed. Money-handling beta/public launch remain NO-GO. Updated master
+counts below are synchronized after the final sprint checks.
+
+Current authoritative counts after this sprint: 144 tasks: 21 Complete, 36 In Progress, 32 Blocked, 17 Not Started, 38 Needs Verification.

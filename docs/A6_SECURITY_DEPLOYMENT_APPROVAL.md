@@ -23,7 +23,7 @@ It reads no customer rows, Vault values, Auth sessions or credentials.
 
 A read-only live snapshot captured 105 functions, 44 relations (43 public plus Storage
 objects), 48 policies and 40 triggers. No non-owner grant chains were present.
-Fingerprint: f4d7f0804482f37092e2524b6522cca5. The protected snapshot is outside Git,
+The original fingerprint was superseded by portable name-based ACL ordering. The protected snapshot is outside Git,
 mode 0600 in a mode-0700 scratch directory. Regenerate it immediately before any
 approved deployment; temporary scratch storage is not a durable deployment backup.
 Do not publish snapshots or generated inverses: definitions/ACLs are operational data.
@@ -51,20 +51,36 @@ prechange drift refusal, exact metadata restoration, row preservation, original 
 behavior and repeat-rollback refusal. Test changes cover wrappers, private functions,
 policy edits, triggers, table grants and global function defaults.
 
-This is NOT a full current-Supabase-schema rehearsal. Before requesting final A6:
+The latest sprint now verifies the actual current scoped schema in an EMPTY isolated
+clone: 105 functions, 44 scoped relations, 48 policies and 40 triggers; 72 dependency
+tables and 26 helper definitions are exported without customer rows. The four confirmed
+membership catalog entries are synthetic setup, not account data. All seven exact
+packages applied, the current 134-check authorization matrix passed, drift was denied,
+and the inverse restored the exact catalog fingerprint while preserving a synthetic
+profile row. Thirteen rehearsal assertions passed, in addition to 134 matrix checks.
 
-1. Capture fresh before state and an access-restricted durable operational backup.
-2. In an appropriate isolated clone/rollback rehearsal, apply the exact approved scope,
-   capture after state, generate the inverse, execute it and prove exact restoration.
-   Include current Supabase role/Storage/extension constraints and complete authorization
-   regression. Preserve the verified 134-check historical result; do not label it new.
-3. Verify no unknown new dependencies/grant chains and record any unsupported object.
-4. Prepare a low-traffic transactional rollout with lock/statement timeouts, exact
-   version/hash, abort conditions and on-call owner. Obtain explicit A6 approval.
-5. Only after approval: apply the one reviewed scope, rerun advisors and role/workflow
-   matrix, verify Stripe server grants, and store immutable deployment evidence.
+This is isolated current-schema replay, NOT a hosted managed-Supabase inverse test.
+No Storage service, managed-role restriction, extension upgrade or hosted session API
+is emulated. Raw definitions, snapshots and diagnostic output stay outside Git, 0600.
+Name-based ACL/default ordering fixes cross-cluster role-OID portability; old snapshots
+must be recaptured using the current query before preparing an inverse.
 
-Native multi-session PostgreSQL could not run in this container: only UID 0 is mapped,
-non-root ownership setup failed, and nested UID mapping was denied. No host user was
-created, no production connection was used for concurrency and no workaround bypassed
-this restriction. Real concurrency and full hosted inverse qualification remain open.
+Remaining engineering prerequisites before execution: fresh durable private backup;
+qualify managed role/Storage/extension rollback constraints in an appropriate isolated
+Supabase environment; review unsupported dependencies; confirm maintenance window and
+operator; rerun current matrix/advisors after approved deployment. Native PostgreSQL
+CI now has a dedicated disposable service for financial/gig multi-session tests; those
+results are independent of managed Supabase deployment qualification.
+
+## Narrow future approval wording
+
+A6 would authorize ONLY the canonical 464-statement authorization file at SHA-256
+`da9d19e45419c99187976caeb289d1abd2fa722ec12155541607ec8ec477bc56`, or the seven
+byte-identical ordered packages in LAUNCH_RELEASE_MANIFEST.json, applied once to the
+existing sandbox project after the remaining preflight. Do not apply both forms.
+Use one transaction, lock_timeout 5s, statement_timeout 60s; abort on any drift,
+unsupported grant chain, failed statement or authorization regression. Preserve the
+before/after fingerprints, inverse and postdeployment matrix/advisor evidence privately.
+No evidence/refund/gig deployment, Pages publication, refunds/transfers or live payments
+are included. A6 has NOT been granted. This is a concrete review scope, not a claim
+that outstanding managed-environment preflight has passed.

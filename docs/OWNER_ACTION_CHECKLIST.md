@@ -156,3 +156,28 @@ bank/identity details. Engineer verifies synchronization after that status is re
 Read-only reconciliation finds one existing sandbox refund with unresolved component
 allocation. It remains held; D2 and financial reconciliation must specify the actual
 professional/fee split rather than an automated guess. D1–D4 are unchanged.
+
+## Launch blocker elimination checkpoint — October 15
+
+Current-schema empty-clone replay now passes all seven packages, 134 authorization
+checks and 13 metadata/drift/data-preservation assertions. This resolves the isolated
+current-schema rehearsal work, not managed Supabase rollback qualification or A6.
+Native finance/gig concurrency is being moved to disposable GitHub CI; no paid
+provisioning is required. A10 and A8 now have exact file/hash manifests and separate
+packages: A10_SANDBOX_ROLLOUT_APPROVAL.md and A8_FRONTEND_RELEASE_APPROVAL.md.
+
+Read-only provider facts establish the previously unallocated payment was fully
+refunded: $11.20+$100.80=$112, final components $100 professional/$12 Korvo.
+Individual refund splits remain unknown. The database correction is still unwritten;
+engineering must prepare a reviewed, auditable reconciliation write. This is not an
+owner decision about the aggregate arithmetic and does not reopen confirmed pricing.
+D2 still governs future partial refunds/remedies. All payment holds remain intact.
+
+Admin ledger preparation/monitoring is staged and default-off. D4 owner/admin identity
+and MFA, D1–D3 money policy, D6 categories, D7 actual support/policy/retention destinations,
+D11 cohort and D12 legal/entity/insurance remain. Nine frontend routes/17 placeholders
+still block A8; unsupported static badges were removed and examples labeled.
+A6/A8/A10 remain unapproved; no actual refund, transfer or live payment is authorized.
+M1/M2 exact existing manual steps remain, with no request for identity/bank credentials.
+
+Current authoritative counts after this sprint: 144 tasks: 21 Complete, 36 In Progress, 32 Blocked, 17 Not Started, 38 Needs Verification.
