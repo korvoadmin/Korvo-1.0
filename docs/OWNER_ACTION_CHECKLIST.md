@@ -1,5 +1,9 @@
 # Korvo 1.0 Owner Action & Testing Checklist
 
+Authoritative engineering/task statuses: [KORVO_MASTER_LAUNCH_CHECKLIST.md](KORVO_MASTER_LAUNCH_CHECKLIST.md).
+This file owns stable owner decisions, manual tests and approvals; it is not a second
+engineering backlog. Counts and phase readiness come from the master checklist.
+
 Updated during the October 15, 2026 publication/control sprint. Active items below require
 owner judgment, account access, or explicit authorization. Development and tests
 that the engineer can run are tracked separately and must not be assigned to Chris.
@@ -39,6 +43,13 @@ Do not ask Chris to reconfirm H1, H3 or H9. No processing-fee payer has been sel
 | D9 / P0 for hospitality | Which shift categories/locations and age range may launch after legal and insurance clearance? Options: approved adult general gigs first, cleared hospitality roles next, or defer all shifts. | Defer public shift booking until written category/model/insurance clearance. It slows expansion but avoids implying alcohol/minor eligibility or unverified coverage. Bartending/minor work stays disabled. | Category allowlist, alcohol-role permits/training, youth restrictions, insurance and local registrations. See `HOSPITALITY_COMPLIANCE_REVIEW.md`. |
 | D10 / P0 for employee shifts | How are employer payroll/insurance costs charged and what reviewed overtime/tip/time-correction arrangement applies? Options depend on D8: host payroll, partner payroll or Korvo payroll with separately disclosed business costs. | Show known costs separately and unknown costs as unresolved; preserve full gross and tips. Use the selected employer's reviewed payroll/time process. Extra business costs require transparency and assent; no wage deductions are inferred. | Final shift receipts, payable-time/payroll integration and employee cancellation handling. Processing costs remain the separate D1 decision. |
 
+Additional owner decisions identified by the master launch audit:
+
+| ID / priority | Question and options | Recommendation and tradeoffs | Development dependency |
+| --- | --- | --- | --- |
+| D11 / P0 | What exact beta geography, cleared categories, invite cap, sandbox-only vs money cohort and success/stop criteria are approved? | Start with a small, explicitly cleared project cohort after technical/privacy/support gates. This does not select a cap or authorize invitations, payments or a public launch. | Master BETA-002/BETA-008 and eventual expansion. |
+| D12 / P0 | Confirm authoritative operator/entity/tax and insurance arrangements/budget with qualified advisers. | Verify existing records and actual coverage; do not assume an entity, legal clearance or bound insurance. No personal/tax/bank document should be pasted into the checklist. | Master LEG-003/LEG-007/LEG-009 and public operating readiness. |
+
 ## B. Manual tests that automation could not finish reliably
 
 | ID / priority | Page, steps and expected result | Return information | Sandbox safety / dependency |
@@ -63,6 +74,12 @@ documents, SSNs, bank details, or payment methods to a synthetic sandbox rehears
 | A7 / P0 | Enabling actual contractor transfers, even in sandbox | Chris explicitly requires approval. Verify owner/admin authorization, payment, completion evidence, fresh Connect status, issue/refund/dispute holds, balance/reserve, durable idempotency and reconciliation first. Current evaluator cannot execute transfers. |
 | A8 / P0 | Merge/publish the development payment/recovery frontend to main/Pages | Reviewable development changes, passing checks and final linked policy/error copy. No main merge or Pages publication is implied by a development push. |
 | A9 / P0 for shifts | Apply the isolated gig schema or enable any public shift booking/payroll/payment feature | Review `supabase/proposals/20261013002039_gig_foundation_disabled.sql`, real concurrent PostgreSQL tests, authenticated endpoint/privacy tests and D8–D10 legal/insurance/payroll clearance. Current preview/schema are development-only and all gates stay disabled. |
+
+Separate proposal deployment approval:
+
+| ID / priority | Approval | Concrete prerequisite |
+| --- | --- | --- |
+| A10 / P0 | Completion-evidence and administrative refund schema/Edge/storage rollout; distinct from A6 | Integrated trusted Edge decoder, UI, current session/ownership/privacy tests, existing-job rollout and reviewed rollback. No photo trigger, private bucket or refund proposal may be deployed merely because isolated tests pass. |
 
 ## Dependencies and engineering status
 
@@ -105,3 +122,12 @@ Update this file with each development commit. Move completed owner items into
 history with evidence. Keep decision IDs stable, record dependencies, and remove
 manual tests whenever reliable automation covers them. This is maintained during
 active development sessions; no unattended background execution is promised.
+
+## Master launch audit synchronization — October 15
+
+The master checklist contains all 14 requested workstreams, status counts and evidence
+layers. Live read-only checks found zero active admins, both mapped Connect accounts
+incomplete, blank live recovery and unapplied evidence/refund/security/gig proposals.
+Five Stripe sandbox accounts exist; two ready accounts are unmapped and do not clear M1.
+The new refund prototype's support-role gap was corrected and tested locally; it remains
+undeployed. D11/D12 and A10 clarify real owner gates; no engineering tests were reassigned.

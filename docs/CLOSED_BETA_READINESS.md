@@ -1,6 +1,9 @@
 # Korvo controlled Atlanta beta gates
 
-October 13, 2026: **not ready for money-handling closed beta**. Safe sandbox rehearsal
+Authoritative itemized task/status register: [KORVO_MASTER_LAUNCH_CHECKLIST.md](KORVO_MASTER_LAUNCH_CHECKLIST.md).
+This file is a phase-gate summary; task counts and detailed evidence belong to the master.
+
+October 15, 2026: **not ready for money-handling closed beta**. Safe sandbox rehearsal
 is possible. Pricing is full professional quote plus 12% on top; no fee-payer choice
 or live/transfer enablement is inferred.
 
@@ -95,3 +98,17 @@ checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessi
 storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
 Connect completion, financial policy and transfer gates remain unchanged. Details:
 `SPRINT_REPORT_2026-10-15_PUBLICATION.md`.
+
+## Master audit reconciliation — October 15
+
+Money-handling closed beta and public launch remain NO-GO. Actual live asset hashes
+match main: recovery request is empty, reset page absent and new workflow/payment
+frontend fixes unpublished. All 43 public tables have RLS, but hardened authorization
+is unapplied; zero active admins exist. All three payment records remain release-held.
+Both mapped Stripe accounts are incomplete; two other ready accounts are unmapped.
+Only the private issue-evidence bucket exists. Evidence/refund/gig proposal schemas
+are absent. There is no complete hosted evidence/refund/release acceptance chain.
+
+Do not infer readiness from the number of passing tests or Completed audit rows.
+A cleared project cohort can precede separately cleared shifts only with D11 scope
+and explicit release approvals. D1–D4/D6/D7 and relevant legal/insurance checks remain.

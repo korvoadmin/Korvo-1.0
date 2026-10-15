@@ -153,3 +153,15 @@ Sharp is a test adapter, not an Edge-compatible deployment choice. The server co
 requires a trusted full decoder and fails closed without one. A JWT-authenticated
 Edge adapter, actual hosted uploads, UI integration and postdeployment regression
 checks remain unfinished. No proposal is in automatic migrations.
+
+## Authoritative master launch register
+
+```sh
+python scripts/check_launch_checklist.py
+python scripts/check_launch_checklist.py --sync-counts
+node --test tests/launch-checklist.test.mjs
+```
+
+Markdown is the sole task/status register. The checker validates 14 sections, IDs,
+counts, evidence/dependencies and stable owner links; count synchronization writes only
+when the full register is valid. These documentation tests are not product acceptance.

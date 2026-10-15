@@ -16,7 +16,7 @@ const assert=require('node:assert/strict');
    create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
    create table public.profiles(id uuid primary key,account_type text,is_active boolean default true);
    insert into public.profiles(id,account_type) values('${c}','customer'),('${w}','professional'),('${other}','professional'),('${admin}','customer');
-   create table public.platform_admins(user_id uuid primary key,is_active boolean);insert into public.platform_admins values('${admin}',true);
+   create table public.platform_admins(user_id uuid primary key,is_active boolean,role text);insert into public.platform_admins values('${admin}',true,'owner');
    create table public.active_jobs(id uuid primary key,customer_id uuid,professional_id uuid,status text);
    insert into public.active_jobs values('${j}','${c}','${w}','active');
    create function korvo_payments_private.actor() returns uuid language plpgsql security definer set search_path='' as $$
@@ -82,6 +82,11 @@ const assert=require('node:assert/strict');
   await db.exec('reset role');await db.exec(`update public.active_jobs set status='completed' where id='${j}'`);ok(true,'reviewed evidence allows customer completion');
   const request=(pro=50000,fee=6000,k=key,reason='Customer cancellation review')=>`select public.admin_request_marketplace_refund_review('${pay}','${k}',${pro},${fee},'${reason}') result`;
   for(const uid of [c,w,other]){await as(uid);await denied(request(),'ordinary '+uid.slice(-1)+' cannot request refund review','42501');await denied('select public.admin_marketplace_refund_queue()','ordinary '+uid.slice(-1)+' cannot read financial queue','42501');}
+  await db.exec('reset role');await db.exec(`insert into public.platform_admins values('${other}',true,'support')`);await as(other);
+  await denied(request(),'support cannot request financial review','42501');
+  await denied('select public.admin_marketplace_refund_queue()','support cannot read financial queue','42501');
+  await denied(`select public.admin_review_marketplace_refund(gen_random_uuid(),'recommended','Support must not move financial state')`,'support cannot recommend financial adjustment','42501');
+  await db.exec('reset role');await db.exec(`delete from public.platform_admins where user_id='${other}'`);
   await as('','anon');await denied(request(),'anonymous financial access denied','42501');
   await as(admin);await denied(request(50001),'professional refund cannot exceed quote');await denied(request(50000,6001),'fee refund cannot exceed fee');await denied(request(0,0),'zero refund rejected');await denied(request(-1),'negative refund rejected');
   const review=(await row(request())).result;ok(review.execution_enabled===false,'review cannot execute refund');

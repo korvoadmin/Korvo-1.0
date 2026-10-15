@@ -255,3 +255,17 @@ checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessi
 storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
 Connect completion, financial policy and transfer gates remain unchanged. Details:
 `SPRINT_REPORT_2026-10-15_PUBLICATION.md`.
+
+## Master audit follow-up — October 15
+
+Authoritative remaining work: `KORVO_MASTER_LAUNCH_CHECKLIST.md`, especially SEC/AUTH,
+ADM and TEST sections. Read-only recheck: 43 RLS public tables, zero active admins,
+all three payment releases held, proposed schemas absent. Advisor counts unchanged:
+7 RLS INFO, 1 anon/52 authenticated definer WARN, leaked-password WARN; performance
+33 initplan/62 unused-index separately. Mapped Stripe accounts remain incomplete.
+
+The undeployed administrative refund proposal lacked the canonical owner/admin role
+restriction. Added it and support-role request/read/recommendation denials; 94 isolated
+SQL checks now pass. This fixes the development prototype, not live permissions.
+126 unit/source/document checks pass locally. Actual hosted session/Storage and true
+concurrency are still unverified. No production state changed for this audit.
