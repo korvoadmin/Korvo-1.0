@@ -141,7 +141,7 @@ approved rollout. A10 must approve that cohort boundary, compatible UI-first rel
 legacy paid-job support review and hosted acceptance; no transfer is implied.
 
 A6 now has read-only snapshot/inverse tooling, a protected current catalog snapshot
-and seven isolated metadata recovery assertions. The full current-Supabase inverse
+and 11 isolated metadata recovery/writer assertions. The full current-Supabase inverse
 rehearsal is still engineering work, not a manual task for Chris; A6 is not deployed.
 Actual multi-session testing is blocked by the container UID restrictions. No paid
 provisioning decision is requested while other independent work remains available.

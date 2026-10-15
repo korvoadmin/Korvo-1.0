@@ -53,7 +53,7 @@ automatic refund or live payment occurred.
 | New completion evidence browser | 16 passed | Upload/retry/private display/acknowledgment/legacy/mobile fixtures |
 | New admin refund browser | 10 passed | Financial access, cents, injection, ambiguous save, same-key retry, no-execution/mobile |
 | Evidence/refund SQL | 100 passed | Actual proposal SQL, PGlite with simulated actor/Storage |
-| Recovery inverse | 7 passed | Isolated metadata round trip, drift refusal, preserved row/original function |
+| Recovery inverse/writer | 11 passed | Isolated metadata round trip, drift refusal, preserved row/original function |
 | Production WASM decoder adapter | 6 passed | Genuine JPEG/PNG/WebP and corrupt versions, identical adapter binary |
 | Original decoder checks | Preserved 7-check suite in CI | Sharp test adapter remains separate from Edge |
 | Deno 2.5.6 | Type-check passed | Staged entrypoint + pinned dependencies; not hosted execution |
@@ -117,3 +117,13 @@ restart the endpoint/UI work, recreate accounts or repeat unchanged provider cha
 Actual durable refund/transfer ledger, provider refund execution, monitoring scheduling,
 full hosted acceptance and public/employee bookings remain unfinished. Money-handling
 closed beta is still NO-GO. The verified local work is reviewable development progress.
+
+## Publication checkpoint
+
+Execution commit d31d8add is published in draft PR #7 and independently passed
+GitHub CI run 38760874270, including all nine browser suites, Deno type-check, SQL,
+WASM and recovery gates. Fetched published tree matched local source exactly.
+A final writer hardening adds canonical-parent path checks and private-directory
+ownership/mode requirements, with 11 passing recovery/writer assertions (including
+symlink-parent, public-directory and overwrite denials). Its separate CI result is
+recorded in the PR. Protected snapshots stayed outside Git; no secret/record upload.

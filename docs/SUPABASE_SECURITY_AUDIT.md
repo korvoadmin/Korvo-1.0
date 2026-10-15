@@ -276,7 +276,7 @@ Read-only live catalog snapshot: 105 functions, 44 relations, 48 policies and 40
 no non-owner ACL grant chains found. Protected mode-0600 snapshot is outside Git and
 must be regenerated/stored securely before any approved rollout. No live DDL applied.
 The new inverse tool restored original metadata/behavior and retained fixture rows in
-seven isolated assertions, refusing drift/repeat execution. Full current-hosted-schema
+11 isolated assertions, refusing drift/repeat execution. Full current-hosted-schema
 inverse qualification remains open, so A6 deployment is still blocked.
 
 New completion Edge handler bounds requests, validates caller/ownership, uses a pinned

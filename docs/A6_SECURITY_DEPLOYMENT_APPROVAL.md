@@ -46,7 +46,7 @@ current-role default privileges are intentionally scoped, not a cluster-wide bac
 
 ## Verified / still required
 
-Seven isolated PostgreSQL recovery checks passed: capture, no-CASCADE inverse,
+Eleven isolated PostgreSQL recovery/writer checks passed: capture, no-CASCADE inverse,
 prechange drift refusal, exact metadata restoration, row preservation, original RPC
 behavior and repeat-rollback refusal. Test changes cover wrappers, private functions,
 policy edits, triggers, table grants and global function defaults.
