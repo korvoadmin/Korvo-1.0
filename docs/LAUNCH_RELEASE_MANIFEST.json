@@ -35,6 +35,40 @@
       "sha256": "db3167a383a4a1db98002d4426f208063148b3c84117e51576f15ff64e6199fb"
     }
   ],
+  "A6_alternate": [
+    {
+      "path": "supabase/proposals/harden_korvo_api_permissions_managed_candidate.sql",
+      "sha256": "8ae18c0f4fdfb16fc8ca6d6b7d6c94c95b9003f9b7b37e831d8f1eae84552f1c"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174905_review_security_foundation.sql",
+      "sha256": "8114ecfcab63c2431f9e20dab3d22be57415dc69c9449235f8766924d2518aae"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174912_review_security_administrative_apis.sql",
+      "sha256": "804a69e5ce8d7c9de6721ef5550edf4363e07b73d79f5f1978142c89e88beb28"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174919_review_security_customer_and_discovery_apis.sql",
+      "sha256": "3de09040d2c1bf510aa0e9af735f453b93fba9ed4a2ea9f90c010e20d74e3513"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174929_review_security_professional_and_trust_apis.sql",
+      "sha256": "104f82159e94058f2789496feb3407df071b5eab651ec590494e56a5d15bd3b3"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174936_review_security_quotes_messages_and_private_details.sql",
+      "sha256": "cefd4677011001fccbc864cbcd56ae395c35405af6ae44dd1f28cfbbf588f2a6"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174944_review_security_backend_permissions_and_rls.sql",
+      "sha256": "7632f0d22584999906af410dcd5e9d77d8aeb74dc998d29e039d5501093f4493"
+    },
+    {
+      "path": "supabase/proposals/security-review-managed/20261013174951_review_security_profile_job_and_transfer_guards.sql",
+      "sha256": "db3167a383a4a1db98002d4426f208063148b3c84117e51576f15ff64e6199fb"
+    }
+  ],
   "A10": [
     {
       "path": "supabase/proposals/20261013174432_private_completion_evidence.sql",
@@ -55,6 +89,14 @@
     {
       "path": "supabase/proposals/completion_release_facts.sql",
       "sha256": "0436788e9f393ff239db61dca101048709af9bfea53f2506696d4664d06dba43"
+    },
+    {
+      "path": "supabase/proposals/a10_containment.sql",
+      "sha256": "6128a898f48339e42843420b8070dc04861bcf315843327f767c00b4c3ca2ede"
+    },
+    {
+      "path": "scripts/a10-recovery.mjs",
+      "sha256": "1160c9f6ff02f0d1e9dee3bc17be8d67791d27a96fe163282d2317ffb999cbea"
     },
     {
       "path": "supabase/functions/verify-completion-photo/decoder.mjs",
@@ -94,7 +136,7 @@
     },
     {
       "path": "supabase/functions/_shared/founder-policy.mjs",
-      "sha256": "eefb0521aa67df42e9d5058498321209dd66064d7c13b59696d583b91a1ed64b"
+      "sha256": "7a1749380f5a0141617755c049542ea840814b623afb6d7971a2de1bd85082c0"
     },
     {
       "path": "supabase/functions/_shared/payment-observations.mjs",
@@ -117,6 +159,16 @@
       "sha256": "34ee1f3de79768cf815d2b0ffb520a96e1836c77f11e3013e5d883e0057cba0a"
     }
   ],
+  "A11": [
+    {
+      "path": "supabase/proposals/non_money_beta.sql",
+      "sha256": "5fddfc0fe93f960611e8b5d1627aa9a141fc2c87efda8507317bec1a798f5e58"
+    },
+    {
+      "path": "supabase/functions/create-booking-checkout/handler.mjs",
+      "sha256": "c20c0aea6b6de09464a380d240c9607d617a8f0595ee46e437b7b84dd5d5a55c"
+    }
+  ],
   "A8": [
     {
       "path": "admin-refunds.html",
@@ -125,6 +177,18 @@
     {
       "path": "admin-refunds.js",
       "sha256": "feb26d8a967e2979eb85e761436fa70d75b48335b22a1e4f9bfa245f55b6b74e"
+    },
+    {
+      "path": "auth.js",
+      "sha256": "c73be5c2dc76ff7b69933853576249881eb8a669249bff97c2b300dbc279577e"
+    },
+    {
+      "path": "beta.html",
+      "sha256": "6b058f3c55e8c2c00df9884262136e5fe5b526284a058d88cf67761353710d1e"
+    },
+    {
+      "path": "beta.js",
+      "sha256": "24bf8ed36a30a05a9880043f723b41c72a6d66cd8540877fbc3edb1a851e0950"
     },
     {
       "path": "browse.html",
@@ -180,7 +244,7 @@
     },
     {
       "path": "marketplace-payments.js",
-      "sha256": "892232b5a622f6a87517bfced8a75acc276f0b01665e6070c78622dfd67bad80"
+      "sha256": "c67d925068c3a93b3093f148fd5ac39f0b560bc8f3a1518bfc10c03bdf142bf3"
     },
     {
       "path": "messages.html",
@@ -236,7 +300,7 @@
     },
     {
       "path": "signup.html",
-      "sha256": "5b2d7651671e07a859e26b8097421db964bc3526aebb342c5460334b8cda7dd9"
+      "sha256": "566142ec8882398c8af1f0e27fb9353b5e6686ddae562f0f298b255c5fe99fee"
     }
   ],
   "flags_default_off": [
@@ -246,7 +310,9 @@
     "KORVO_FINANCIAL_LEDGER_ENABLED",
     "FINANCIAL_RECONCILIATION_ENABLED",
     "KORVO_FINANCIAL_RECONCILIATION_ENABLED",
-    "KORVO_FULL_REFUND_ACCOUNTING_ENABLED"
+    "KORVO_FULL_REFUND_ACCOUNTING_ENABLED",
+    "KORVO_NON_MONEY_BETA_ENABLED",
+    "KORVO_NON_MONEY_BETA"
   ],
   "money_execution_enabled": false
 }

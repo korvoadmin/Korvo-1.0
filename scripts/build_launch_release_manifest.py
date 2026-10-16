@@ -16,16 +16,18 @@ def build():
                 'supabase/proposals/20261013175001_administrative_refund_review.sql',
                 'supabase/proposals/financial_operation_ledger.sql',
                 'supabase/proposals/financial_reconciliation_observations.sql',
-                'supabase/proposals/completion_release_facts.sql']
+                'supabase/proposals/completion_release_facts.sql','supabase/proposals/a10_containment.sql','scripts/a10-recovery.mjs']
     evidence += [str(p.relative_to(ROOT)) for p in sorted((ROOT / 'supabase/functions/verify-completion-photo').glob('*')) if p.is_file()]
     evidence += [str(p.relative_to(ROOT)) for p in sorted((ROOT / 'supabase/functions/reconcile-marketplace-payment').glob('*')) if p.is_file()]
     evidence += ['supabase/functions/_shared/founder-policy.mjs','supabase/functions/_shared/payment-observations.mjs','supabase/functions/_shared/stripe-readonly.mjs','supabase/functions/_shared/release.mjs','supabase/functions/_shared/completion-evidence.mjs','supabase/functions/_shared/financial-reconciliation.mjs']
     return {'deployment_authorized': False,
             'main_baseline': subprocess.check_output(['git','rev-parse','origin/main'],cwd=ROOT,text=True).strip(),
             'A6': [entry(security['source'])] + [entry('supabase/proposals/security-review/'+p['file']) for p in security['packages']],
+            'A6_alternate': [entry('supabase/proposals/harden_korvo_api_permissions_managed_candidate.sql')] + [entry(str(p.relative_to(ROOT))) for p in sorted((ROOT/'supabase/proposals/security-review-managed').glob('*.sql'))],
             'A10': [entry(p) for p in evidence],
+            'A11': [entry(p) for p in ['supabase/proposals/non_money_beta.sql','supabase/functions/create-booking-checkout/handler.mjs']],
             'A8': [entry(p) for p in frontend],
-            'flags_default_off': ['COMPLETION_EVIDENCE_ENABLED','KORVO_COMPLETION_EVIDENCE_ENABLED','KORVO_REFUND_REVIEW_ENABLED','KORVO_FINANCIAL_LEDGER_ENABLED','FINANCIAL_RECONCILIATION_ENABLED','KORVO_FINANCIAL_RECONCILIATION_ENABLED','KORVO_FULL_REFUND_ACCOUNTING_ENABLED'],
+            'flags_default_off': ['COMPLETION_EVIDENCE_ENABLED','KORVO_COMPLETION_EVIDENCE_ENABLED','KORVO_REFUND_REVIEW_ENABLED','KORVO_FINANCIAL_LEDGER_ENABLED','FINANCIAL_RECONCILIATION_ENABLED','KORVO_FINANCIAL_RECONCILIATION_ENABLED','KORVO_FULL_REFUND_ACCOUNTING_ENABLED','KORVO_NON_MONEY_BETA_ENABLED','KORVO_NON_MONEY_BETA'],
             'money_execution_enabled': False}
 if __name__ == '__main__':
     (ROOT / 'docs/LAUNCH_RELEASE_MANIFEST.json').write_text(json.dumps(build(),indent=2)+'\n')

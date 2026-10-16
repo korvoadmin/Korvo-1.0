@@ -219,3 +219,30 @@ click Restore, change settings or send credentials/backup contents. An owner-cap
 managed method or separately reviewed revised SQL scope and a durable managed restore
 rehearsal are also required. No new paid branch/plan has been provisioned. Existing
 D1–D12 choices stay confirmed; none of these blockers reopen business-policy decisions.
+
+## October 16 remaining launch-readiness continuation
+
+Current engineering evidence: SPRINT_REPORT_2026-10-16_READINESS.md. All earlier evidence
+is retained. Free Supabase plan is now read-only verified; no screenshot is needed to
+establish plan tier. A paid upgrade is neither selected nor authorized. The alternate
+A6 candidate resolves the isolated Storage ownership requirement by retaining its two
+existing policies; protected managed backup/recovery remains an engineering dependency.
+
+| ID / priority | Approval | Concrete prerequisite |
+| --- | --- | --- |
+| A11 / P0 | Disabled non-money cohort, versioned assent/support schema and independent server checkout guard rollout/configuration | NON_MONEY_BETA_APPROVAL.md exact manifest; current-schema and concurrency tests; protected recovery; founder-approved category/city/document configuration; separate hosted acceptance and invitation approval. No invitations, money or legal approval implied. |
+
+Founder attention that cannot be automated: D6 exact low-risk category list and precise
+Atlanta service geography; D7 approved customer/pro terms/privacy and monitored support
+contact/operator coverage; D4 verified sole-founder account/MFA recovery; D11 success/
+stop criteria, consent/roster and explicit invitation/go decision. Engineer can perform
+backup/recovery qualification under separately bounded access without delegating routine
+technical checks or requesting screenshots first. No real credentials, identity documents
+or banking details are requested. M2 genuine signup/reset-email acceptance remains after
+A8; M1 Connect completion is deferred to financial launch, not required for simulation.
+
+A6/A10/A8 are still BLOCKED for execution. A11 is a new separate backend approval scope,
+not an authorization request to deploy now. D2/D3 remaining refund/reserve/timing details,
+D8–D10 employment/commercial rules and D12 legal/insurance remain money/public gates.
+Historical text saying no processing-cost payer was selected is superseded by confirmed
+D1: Korvo absorbs those costs without reducing professional gross.

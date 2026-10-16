@@ -217,6 +217,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function redirectByProfile(
     profile
   ) {
+    if (window.KORVO_NON_MONEY_BETA_ENABLED === true) {
+      window.location.href = "beta.html";
+      return;
+    }
     const accountType =
       profile?.account_type ||
       "customer";
@@ -525,11 +529,14 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
+  let signupBusy = false;
+
   signupForm?.addEventListener(
     "submit",
     async (event) => {
 
       event.preventDefault();
+      if (signupBusy) return;
 
 
       const submitButton =
@@ -582,12 +589,12 @@ document.addEventListener("DOMContentLoaded", () => {
         isValidPhone(phone);
 
       const passwordIsValid =
-        password.length >= 6;
+        password.length >= 12;
 
       const passwordsMatch =
         password ===
           confirmedPassword &&
-        confirmedPassword.length >= 6;
+        confirmedPassword.length >= 12;
 
       const termsAccepted =
         Boolean(
@@ -659,6 +666,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
+        signupBusy = true;
         setButtonLoading(
           submitButton,
           true,
@@ -777,10 +785,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } catch (error) {
 
-        console.error(
-          "Korvo signup error:",
-          error
-        );
+        console.error("Korvo signup was not confirmed.");
 
 
         let message =
@@ -810,6 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       } finally {
+        signupBusy = false;
 
         setButtonLoading(
           submitButton,
@@ -909,7 +915,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (
         signupPassword
           .value
-          .length >= 6
+          .length >= 12
       ) {
 
         setFieldError(
@@ -941,7 +947,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const passwordsMatch =
         confirmPassword
           .value
-          .length >= 6 &&
+          .length >= 12 &&
         confirmPassword.value ===
           signupPassword?.value;
 

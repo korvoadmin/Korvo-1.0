@@ -83,3 +83,32 @@ undoing a proven allocation or clearing a hold as rollback. Stop intake/disable 
 retain reconciliation receipts and use reviewed forward repair; managed populated
 recovery qualification remains a blocker. Review retention/access for operator reasons
 and document hashes. Final exact manifest and commit must be approved separately.
+
+## October 16 populated containment/recovery evidence
+
+`tests/a10-recovery.cjs` now passes 18 checks using actual evidence/refund/ledger/
+reconciliation/release SQL over representative populated Auth/Storage fixtures. It
+preserves verified/abandoned photo metadata, customer acknowledgment, completion,
+refund review, operation observations, reconciliation audits and financial holds.
+Database backup/reload preserves table digests and catalog. `a10_containment.sql`
+revokes private evidence/refund/finance function execution (including service role),
+pauses new job/active-job inserts and completion transitions, and leaves all data,
+buckets and enrollment intact. It does not undo original allocation or issue refunds.
+
+`scripts/a10-recovery.mjs` generates review-only exact changed-function ACL recovery,
+drops only the three temporary containment triggers/guard function and validates the
+precontainment catalog. Unexpected catalog drift and repeat recovery both fail closed.
+No generated SQL executes itself. Protected snapshots are required from the SAME
+qualified environment; snapshots contain operational definitions and must stay private.
+
+This is containment/recovery, NOT an uninstall or a managed restore qualification.
+Fixtures are representative, not the entire current managed schema. No Storage bytes
+are backed up by this test; no actual Edge/Storage upload or signed URL was exercised.
+The existing local Deno decoder, SQL/privacy and browser evidence suites remain separate.
+A10 STILL BLOCKED pending managed recovery/owner permissions, exact composed A6/A10
+rollout compatibility and genuine hosted acceptance under separately approved deployment.
+
+Known provider findings remain UNCHANGED: the $112 full-refund record needs a separately
+approved internal component allocation correction ($100 professional/$12 fee); the $560
+case is held for review with no demonstrated arithmetic mismatch. Neither was modified.
+No fresh Stripe transaction or correction was executed in this continuation.

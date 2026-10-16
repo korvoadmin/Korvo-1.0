@@ -4,7 +4,7 @@ const {PGlite}=require('@electric-sql/pglite'),fs=require('node:fs'),assert=requ
 const {bootstrapCatalog}=require('./security-catalog-fixture.cjs');
 (async()=>{
  const file=process.argv[2];if(!file||path.resolve(file).startsWith(process.cwd()+path.sep))throw Error('Private catalog outside Git required');
- const fixture=JSON.parse(fs.readFileSync(file,'utf8'));
+ const fixture=JSON.parse(fs.readFileSync(file,'utf8'));const managed=process.argv.includes('--managed-candidate');const packageDir=managed?'supabase/proposals/security-review-managed/':'supabase/proposals/security-review/';const manifest=JSON.parse(fs.readFileSync(packageDir+'manifest.json','utf8'));
  const {SNAPSHOT_QUERY,restoreSQL}=await import('../scripts/security-snapshot.mjs');const db=new PGlite();let restored,checks=0;const groups={};
  const ok=(v,label)=>{assert.ok(v,label);checks++;console.log('PASS '+label);};
  const capture=async()=>(await db.query(SNAPSHOT_QUERY)).rows[0];
@@ -60,19 +60,18 @@ const {bootstrapCatalog}=require('./security-catalog-fixture.cjs');
   const backup=await db.dumpDataDir('gzip');restored=await PGlite.create({loadDataDir:backup});
   assert.deepEqual(await digest(restored),rowsBefore);ok(true,'isolated database backup restores every retained table count and row digest');
   ok((await restored.query(SNAPSHOT_QUERY)).rows[0].fingerprint===before.fingerprint,'isolated database backup restores permissions, policies, functions and triggers');await restored.close();restored=null;
-  const source=fs.readFileSync('supabase/proposals/20261012160000_harden_korvo_api_permissions.sql','utf8');
+  const source=fs.readFileSync(manifest.source,'utf8');
   await db.exec('begin;set local role isolated_managed_operator');
   let managedFailure;try{await db.exec(source);}catch(e){managedFailure={code:e.code,message:e.message};}finally{await db.exec('rollback');}
-  ok(managedFailure?.code==='42501'&&/owner.*objects/.test(managedFailure.message),'actual-like non-superuser operator cannot alter managed Storage policies');
-  groups.managed_permission_blocker={sqlstate:managedFailure.code,object:'storage.objects',hosted_role:'postgres',isolated_role:'isolated_managed_operator',operation:'ALTER POLICY',managed_ddl_attempted:false};
-  ok((await capture()).fingerprint===before.fingerprint,'failed non-superuser rollout is atomic and restores prechange permissions');assert.deepEqual(await digest(db),rowsBefore);ok(true,'failed rollout preserves every populated row');
-  const manifest=JSON.parse(fs.readFileSync('supabase/proposals/security-review/manifest.json','utf8'));
-  await db.exec('begin');try{for(const p of manifest.packages.slice(0,3))await db.exec(fs.readFileSync('supabase/proposals/security-review/'+p.file,'utf8'));await db.exec("do $$begin raise exception 'Synthetic interrupted rollout';end$$");}catch(e){assert.match(e.message,/Synthetic interrupted/);}finally{await db.exec('rollback');}
+  if(managed)ok(!managedFailure,'managed-compatible scope applies under non-superuser owner-rights alias');else ok(managedFailure?.code==='42501'&&/owner.*objects/.test(managedFailure.message),'actual-like non-superuser operator cannot alter managed Storage policies');
+  groups.managed_permission_probe={candidate:managed?'managed-compatible':'original',passed:!managedFailure,sqlstate:managedFailure?.code||null,object:'storage.objects',hosted_role:'postgres',isolated_role:'isolated_managed_operator',operation:'ALTER POLICY',managed_ddl_attempted:false};
+  ok((await capture()).fingerprint===before.fingerprint,'non-superuser rollout probe rollback restores prechange permissions');assert.deepEqual(await digest(db),rowsBefore);ok(true,'rollout probe preserves every populated row');
+  await db.exec('begin');try{for(const p of manifest.packages.slice(0,3))await db.exec(fs.readFileSync(packageDir+p.file,'utf8'));await db.exec("do $$begin raise exception 'Synthetic interrupted rollout';end$$");}catch(e){assert.match(e.message,/Synthetic interrupted/);}finally{await db.exec('rollback');}
   ok((await capture()).fingerprint===before.fingerprint,'interruption after third package rolls back all catalog changes');assert.deepEqual(await digest(db),rowsBefore);ok(true,'interrupted deployment preserves all populated rows');
-  await db.exec('begin');for(const p of manifest.packages){await db.exec(fs.readFileSync('supabase/proposals/security-review/'+p.file,'utf8'));ok(true,'populated package '+p.order+' applies under isolated owner-capable harness');}await db.exec('commit');
+  await db.exec(managed?'begin;set local role isolated_managed_operator':'begin');for(const p of manifest.packages){await db.exec(fs.readFileSync(packageDir+p.file,'utf8'));ok(true,'populated package '+p.order+' applies under isolated owner-capable harness');}await db.exec('commit');
   assert.deepEqual(await digest(db),rowsBefore);ok(true,'committed seven-package hardening changes no retained data');
   const after=await capture();const inverse=restoreSQL(before,after);
-  fs.writeFileSync(path.join(path.dirname(file),'populated-inverse.sql'),inverse,{mode:0o600});
+  fs.writeFileSync(path.join(path.dirname(file),managed?'populated-managed-inverse.sql':'populated-inverse.sql'),inverse,{mode:0o600});
   const b=bookings[0];
   await login('customer');ok((await db.query('select id from public.profiles')).rows.length===1,'customer sees own profile only');
   ok((await db.query('select id from public.jobs')).rows.length===1,'customer sees own existing job only');
@@ -90,6 +89,11 @@ const {bootstrapCatalog}=require('./security-catalog-fixture.cjs');
   await login('customer','anon');await denied('select public.admin_issue_queue()','anonymous cannot use financial/support admin RPC');
   await denied('select id from public.messages','anonymous cannot read retained messages');
   await db.exec('reset role');
+  for(const name of ['customer','pro']){await login(name);ok((await db.query("select id from storage.objects where bucket_id='project-issue-evidence'")).rows.length===1,'retained Storage policy isolates '+name+' evidence');
+   await denied(`insert into storage.objects(bucket_id,name,owner_id) values('project-issue-evidence','${bookings[1].issue}/${ids[name]}/forbidden.png','${ids[name]}')`,'cross-pair Storage upload denied for '+name);
+  }
+  for(const name of ['support','owner']){await login(name);ok((await db.query("select id from storage.objects where bucket_id='project-issue-evidence'")).rows.length===2,'authorized '+name+' retains issue evidence read');}
+  await db.exec('reset role');
   // Existing matrix creates independent actors and rolls every additional write back.
   const matrix=await db.exec(fs.readFileSync('supabase/tests/security_hardening.sql','utf8'));
   const matrixResult=matrix.find(r=>r.rows?.[0]?.checks_passed!==undefined)?.rows[0];ok(Number(matrixResult?.checks_passed)===134,'complete 134-check positive/negative matrix passes beside retained populated accounts');groups.authorization_matrix_checks=Number(matrixResult.checks_passed);
@@ -103,14 +107,14 @@ const {bootstrapCatalog}=require('./security-catalog-fixture.cjs');
   // hosted operator name. No generated operational inverse is modified on disk.
   const modeledInverse=inverse.replaceAll('=current_user',"='postgres'");
   try{await db.exec(modeledInverse.replace(/^BEGIN;$/m,'').replace(/^COMMIT;$/m,''));}catch(e){inverseFailure=e;}finally{await db.exec('rollback');}
-  ok(inverseFailure?.code==='42501'&&/owner.*objects/.test(inverseFailure.message),'actual-like operator also lacks ownership required for changed Storage policy inverse');
-  ok((await capture()).fingerprint===after.fingerprint,'failed permission-limited inverse restores hardened catalog atomically');assert.deepEqual(await digest(db),rowsAfterWrites);ok(true,'failed inverse preserves all retained records including post-migration activity');
+  if(managed)ok(!inverseFailure,'managed-compatible inverse runs under non-superuser owner-rights alias');else ok(inverseFailure?.code==='42501'&&/owner.*objects/.test(inverseFailure.message),'actual-like operator also lacks ownership required for changed Storage policy inverse');
+  ok((await capture()).fingerprint===after.fingerprint,'permission-limited inverse probe rollback preserves hardened catalog');assert.deepEqual(await digest(db),rowsAfterWrites);ok(true,'inverse probe preserves all records including post-migration activity');
   await db.exec('alter table public.profiles disable row level security');await assert.rejects(db.exec(inverse),/Catalog drift/);await db.exec('rollback');ok(true,'populated inverse refuses catalog drift');await db.exec('alter table public.profiles enable row level security');
   await db.exec(inverse);ok((await capture()).fingerprint===before.fingerprint,'owner-capable inverse restores exact original catalog after commit');
   assert.deepEqual(await digest(db),rowsAfterWrites);ok(true,'owner-capable inverse preserves every retained row including committed post-migration activity');
   await login('customer');ok((await db.query('select id from public.jobs')).rows.length===1,'restored original permitted customer read still works');await db.exec('reset role');
   await assert.rejects(db.exec(inverse),/Catalog drift/);await db.exec('rollback');ok(true,'replayed inverse fails closed');
-  const result={checks_passed:checks,...groups,layer:'PGlite PostgreSQL populated actual-schema rehearsal',hosted:false,real_user_rows_exported:0,managed_restore_verified:false};
-  fs.writeFileSync(path.join(path.dirname(file),'populated-results.json'),JSON.stringify(result,null,2),{mode:0o600});console.log(JSON.stringify(result));
+  const result={checks_passed:checks,candidate:managed?'managed-compatible':'original',...groups,layer:'PGlite PostgreSQL populated actual-schema rehearsal',hosted:false,real_user_rows_exported:0,managed_restore_verified:false};
+  fs.writeFileSync(path.join(path.dirname(file),managed?'populated-managed-results.json':'populated-results.json'),JSON.stringify(result,null,2),{mode:0o600});console.log(JSON.stringify(result));
  }finally{if(restored)await restored.close();await db.close();}
 })().catch(e=>{console.error({message:e.message,code:e.code});process.exitCode=1;});

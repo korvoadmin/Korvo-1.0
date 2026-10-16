@@ -13,10 +13,10 @@ const payment={...priceQuote(500),id:'payment-fixture',checkout_token:'01234567-
  checkout_started_at:new Date().toISOString(),status:'awaiting_payment'};
 
 test('Stripe signature validates exact raw bytes and either configured signing secret',async()=>{
- const body='{"id":"evt_fixture"}';assert.equal(await verifySignature(body,sign(body),[secret]),true);
- assert.equal(await verifySignature(body,sign(body,now,'whsec_rotated'),[secret,'whsec_rotated']),true);
+ const body='{"id":"evt_fixture"}';assert.equal(await verifySignature(body,sign(body),[secret],now),true);
+ assert.equal(await verifySignature(body,sign(body,now,'whsec_rotated'),[secret,'whsec_rotated'],now),true);
  for(const [b,h] of [[body+' ',sign(body)],[body,sign(body,now-301)],[body,sign(body,now+301)],
-  [body,'t='+now+',v1=invalid'],[body,'t='+now+',t='+now+',v1=abc'],[body,null]])assert.equal(await verifySignature(b,h,[secret]),false);
+  [body,'t='+now+',v1=invalid'],[body,'t='+now+',t='+now+',v1=abc'],[body,null]])assert.equal(await verifySignature(b,h,[secret],now),false);
 });
 test('sandbox provider rejects live keys and live responses',async()=>{
  assert.throws(()=>sandboxStripe('sk_live_fixture'));

@@ -46,3 +46,31 @@ D7 email/in-app support and a one-business-day target are specifications; no mon
 email, approved support calendar or legal content has been fabricated. Final commit
 and CI evidence are recorded in SPRINT_REPORT_2026-10-16_DEVELOPMENT.md. A8 is still
 not ready to execute until these content/assent and backend compatibility gates pass.
+
+## October 16 non-money beta and signup candidate
+
+Additional A8 assets: beta.html/beta.js; auth.js/signup.html duplicate-submission and
+12-character NEW-account password guards; marketplace-payments.js beta-mode refusal.
+Existing login compatibility is retained; signup cannot assign admin metadata. The
+new beta page offers explicit version/hash-bound assent, nonpayment simulation and
+participant/staff support cases only after authenticated server admission. Support
+can reply without consuming a customer/pro seat and receives no financial authority.
+All rendering uses plaintext; signout clears private UI and stale replies cannot restore it.
+
+Local signup/Auth fixtures: six checks. Beta browser fixtures: 18 checks, including two active axe views. Axe coverage:
+16 desktop/mobile views with zero WCAG A/AA violations, including the default-off beta
+page. This is not assistive-device, inbox or deployed verification. Full CI is attached
+to the final PR #7 commit; no browser fixture is evidence of real email delivery.
+
+`KORVO_NON_MONEY_BETA_ENABLED` stays false/unset. It cannot be enabled before separately
+approved A11 backend/admission/terms configuration and actual hosted acceptance. Server
+checkout independently refuses enabled cohorts; browser flags alone never secure beta.
+A8 remains BLOCKED: exact D6 allowlist, approved D7 legal documents/support operation,
+backend compatibility, real signup/recovery acceptance after publication and controlled
+go/no-go remain. Current release manifest pins exact frontend file hashes.
+
+Rollback: revert only reviewed Pages assets to prior main version; keep server money
+prohibition and admission maintenance controls active. Never set an enabled cohort off
+as containment: that would delegate checkout to the legacy path. Use A11 paused=true,
+retain server KORVO_NON_MONEY_BETA=true and preserve assent/support/simulation records.
+No publication, redirect/config change or real email was initiated.

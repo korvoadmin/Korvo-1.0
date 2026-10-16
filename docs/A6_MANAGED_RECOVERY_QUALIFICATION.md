@@ -152,3 +152,39 @@ and never run a broad restore automatically. Restoring baseline also restores it
 security weaknesses; keep intake paused and prefer reviewed forward repair when safer.
 
 A6 alone cannot clear A8, A10, real-money, transfer, hospitality or invitation gates.
+
+## October 16 continuation — revised scope and verified plan
+
+**STILL BLOCKED for execution.** Read-only organization inspection now confirms Free
+(`tier_free`), resolving the earlier plan uncertainty. Available connectors expose no
+retained-backup/PITR listing or restore qualification. Project `waaglkephsbxdlleuutr`
+is healthy; no branches exist. Archive mode is not backup proof. No paid upgrade,
+managed export, restore, settings change or hosted DDL was performed.
+
+An ALTERNATE candidate removes exactly the two Storage policy optimization statements:
+`harden_korvo_api_permissions_managed_candidate.sql`, SHA-256
+`8ae18c0f4fdfb16fc8ca6d6b7d6c94c95b9003f9b7b37e831d8f1eae84552f1c`.
+Its seven ordered packages live in `supabase/proposals/security-review-managed/`.
+462 statements remain; original 464-statement canonical/package bytes are preserved.
+The original is still blocked by Storage ownership. The alternate retains original
+Storage expressions, hardens their referenced public authorization wrappers and needs
+explicit approval of its changed scope; it does not grant Storage-owner membership.
+
+Fresh current-schema catalog fingerprint: `383b3d8392815061e2eeaf11cad3e9dd`.
+50 populated assertions plus the 134-check authorization matrix pass for the alternate.
+The rollout and inverse both run under an isolated NOSUPERUSER/BYPASSRLS alias inheriting
+public postgres-owner rights, without Storage ownership. The model adapts only the
+inverse query's CURRENT_USER default-ACL scope to postgres; the operational inverse
+is not edited. Existing customer/pro issue-photo reads, cross-pair upload denials and
+support/owner issue-photo access pass with the original Storage policies retained.
+The clone includes 72 tables, 144 initial synthetic rows in 25 populated tables,
+seven actors and 146 rows after legitimate committed activity. All retained row digests
+survive package rollout, inverse and isolated backup/reload. No real user rows exported.
+This is PGlite, not a managed recovery rehearsal or genuine hosted JWT matrix.
+
+Remaining prerequisites: protected durable logical database export and tested recovery
+path, separately protected Storage bytes/config/role-secret inventory, approved operator
+and maintenance scope, managed-compatible rehearsal permissions, fresh snapshots and
+explicit A6. Free plan is not permission to buy PITR. An owner may authorize a bounded
+backup/recovery engineering operation separately; a screenshot is not required as the
+first step. Do not deploy either candidate until recoverability is qualified.

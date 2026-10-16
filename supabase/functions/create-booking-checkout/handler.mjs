@@ -22,6 +22,7 @@ export function createCheckoutHandler({createClient,env,fetch=globalThis.fetch,l
    'Access-Control-Allow-Methods':'POST,OPTIONS','Content-Type':'application/json','Cache-Control':'no-store'};
   const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers});
   if(req.method==='OPTIONS')return new Response('ok',{headers});if(req.method!=='POST')return json({code:'METHOD_NOT_ALLOWED'},405);
+  if(env('KORVO_NON_MONEY_BETA')==='true')return json({code:'NON_MONEY_BETA_CHECKOUT_DISABLED'},403);
   const requestId=crypto.randomUUID();let stage='configuration';
   try{
    const stripe=sandboxStripe(env('STRIPE_SECRET_KEY'),fetch);

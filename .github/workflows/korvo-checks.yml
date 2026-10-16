@@ -44,6 +44,8 @@ jobs:
         run: NODE_PATH="$RUNNER_TEMP/korvo-native-tools/node_modules" node tests/financial-concurrency.cjs
       - name: Actual multi-session gig capacity and overlap tests
         run: NODE_PATH="$RUNNER_TEMP/korvo-native-tools/node_modules" node tests/gig-concurrency.cjs
+      - name: Actual 10-customer and 10-professional beta capacity concurrency
+        run: NODE_PATH="$RUNNER_TEMP/korvo-native-tools/node_modules" node tests/beta-concurrency.cjs
   isolated-regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -84,6 +86,8 @@ jobs:
           node tests/evidence-refresh-race.browser.cjs
           node tests/profile.browser.cjs
           node tests/accessibility.browser.cjs
+          node tests/beta.browser.cjs
+          node tests/auth.browser.cjs
       - name: Isolated gig database permissions and scheduling
         run: NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules" node tests/gig-database.cjs
       - name: Isolated completion evidence and refund review
@@ -96,11 +100,14 @@ jobs:
           node tests/financial-ledger.cjs
           node tests/reconciliation-database.cjs
           node tests/membership-restoration.cjs
+          node tests/a10-recovery.cjs
+          node tests/non-money-beta.cjs
       - name: Validate opt-in integration runners
         run: |
           python -m py_compile tests/sandbox-*-acceptance.py
           node --check tests/security-populated-schema.cjs
           node --check tests/security-catalog-fixture.cjs
+          node --check tests/beta-current-schema.cjs
 
 # No deployment, credentials, live Stripe calls or privileged database writes.
 # Actual sandbox integration runners require explicitly provisioned private fixtures.

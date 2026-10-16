@@ -343,3 +343,17 @@ A second isolated instance restores populated backup rows/catalog. This is PGlit
 not managed PITR/restore evidence. Other-role supabase_admin default ACLs remain outside
 the current-role inverse scope; managed backup availability and durable restore remain
 unverified. See A6_OBJECT_INVENTORY.json and A6_QUALIFICATION_EVIDENCE.json.
+
+## October 16 continuation — retained Storage policies and containment
+
+Read-only organization inspection confirms Free plan; current catalog fingerprint remains
+383b3d8392815061e2eeaf11cad3e9dd. No managed mutation occurred. Alternate A6 scope omits
+exactly two Storage ALTER POLICY optimizations and passes 50 populated +134 authorization
+checks under the isolated non-superuser model. Original canonical/inventory retained.
+Managed backup/restore is still unqualified; see A6_MANAGED_RECOVERY_QUALIFICATION.md.
+A10 passes 18 populated representative containment/recovery checks with drift/replay
+refusal and data/audit/hold retention. A11 default-off admission/assent/support proposal
+has 40 isolated SQL +6 actual-schema compilation/rollback checks, no hosted rollout.
+Private source catalogs, inverses and account details remain outside Git. Support never
+gains financial execution. No actual grants, bucket policies, Edge functions or settings
+were changed. A6/A10/A11 require separate scopes and genuine hosted acceptance.

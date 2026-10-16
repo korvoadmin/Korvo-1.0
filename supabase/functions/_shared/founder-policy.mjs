@@ -6,7 +6,7 @@ export const FOUNDER_POLICY=Object.freeze({processing_cost_payer:'korvo',refund_
  release_delay_after_verified_confirmation_ms:0,membership_restoration:'manual_once_only',
  owner_model:'sole_founder_no_automatic_grant',support_target:'one_business_day',
  commercial_wage_payer:'direct_employer',commercial_fee_basis_points:1200,
- beta:Object.freeze({geography:'Atlanta',invite_cap:20,money_enabled:false,invitations_enabled:false}),
+ beta:Object.freeze({geography:'Atlanta',invite_cap:20,customer_cap:10,professional_cap:10,money_enabled:false,invitations_enabled:false}),
  commercial_enabled:false,financial_execution_enabled:false});
 
 // Actual provider cost is an input from trusted accounting, never a guessed rate.

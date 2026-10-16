@@ -1,10 +1,8 @@
-> October 16 current verdict: **STILL BLOCKED — NOT READY FOR DEPLOYMENT APPROVAL**.
-> The 44-assertion populated rehearsal plus 134 authorization checks passes in isolation.
-> Actual hosted postgres lacks ownership for two changed Storage policies. A usable
-> managed backup/restore point and owner-capable method remain unverified.
-> Current evidence: [A6_MANAGED_RECOVERY_QUALIFICATION.md](A6_MANAGED_RECOVERY_QUALIFICATION.md).
-> Exact object inventory: [A6_OBJECT_INVENTORY.json](A6_OBJECT_INVENTORY.json).
-> Earlier checkpoint details below are preserved; this status supersedes readiness wording.
+> October 16 continuation: **STILL BLOCKED — NOT READY FOR DEPLOYMENT APPROVAL**.
+> Alternate 462-statement scope passes 50 populated assertions +134 authorization
+> checks while retaining original Storage policies. Original scope remains owner-blocked.
+> Free plan confirmed; protected backup/managed recovery still unqualified.
+> See A6_MANAGED_RECOVERY_QUALIFICATION.md and A6_MANAGED_CANDIDATE_EVIDENCE.json.
 
 # A6 authorization deployment package — development review only
 
@@ -122,3 +120,28 @@ committed activity), full 134-check matrix, isolated database export/load, exact
 interruption/drift/replay tests; 12 recovery/writer checks and 213 units/source checks.
 Genuine hosted sessions/Storage service/managed recovery are NOT verified. See E21 and
 PR #7 for final development commit/CI. No need to rerun unrelated local payment tests.
+
+## Revised candidate for founder review — not execution-ready
+
+See October 16 continuation in A6_MANAGED_RECOVERY_QUALIFICATION.md and the separately
+hashed managed-candidate manifest. Prefer reviewing the 462-statement alternate that
+leaves both managed-owned Storage policies unchanged. It passes 50 populated assertions
+plus 134 matrix checks under the isolated operator model. Original inventory/history
+remain authoritative for the ORIGINAL 464-statement scope, not the alternate.
+
+Impact otherwise retains the seven existing scopes: owner/admin separation, customer/
+professional boundaries, sensitive RPC grants, private helper schemas, RLS and protected
+profile/job/transfer triggers. Anonymous/support denials and legitimate participant access
+are tested in isolation. No privileges assigned, rows deleted or hosted changes made.
+Free plan confirmed; actual protected backup/managed restore capability remains unqualified.
+A6 is STILL BLOCKED, although the alternate is ready for technical scope review.
+
+Future approved sequence: protected durable backup; current catalog/owner drift check;
+qualified recovery rehearsal; pause intake; apply exactly ONE reviewed candidate in
+manifest order with bounded locks/timeouts; capture after state; run genuine session
+matrix/advisors; resume only on acceptance. On authorization regression pause intake,
+compare current fingerprint and apply the protected changed-object-only inverse through
+the qualified operator. Drift aborts; investigate/forward-repair rather than force it.
+A whole-database restore can discard intervening writes and requires independent approval.
+Residual risks: managed ownership/extension differences, role/default-ACL scope, recovery
+downtime, restoring old security weaknesses, and Storage bytes outside database backups.

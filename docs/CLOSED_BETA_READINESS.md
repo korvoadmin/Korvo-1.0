@@ -179,3 +179,26 @@ mutates only changed metadata. Actual managed postgres lacks Storage ownership f
 two A6 policies; backup/PITR availability, durable backup and managed restore remain
 unverified. No hosted migration/restore or new role grant. This evidence does not
 clear positive hosted JWT/Storage or launch gates. See A6_MANAGED_RECOVERY_QUALIFICATION.md.
+
+## Current October 16 continuation — supersedes older gate descriptions
+
+**NO-GO for invitations and money.** Default-off infrastructure now enforces 10 customers
+plus 10 professionals, empty category/city allowlists, current approved versioned assent,
+private support, no-payment simulations and server-side checkout prohibition. It is staged,
+not deployed. Categories and legal content are not invented. A11 is separately registered
+in OWNER_ACTION_CHECKLIST.md; A6/A10/A8 remain separately blocked.
+
+A6 alternate: 50 populated +134 authorization checks; original managed Storage policies
+retained, ownership requirement removed from alternate only. Organization Free verified;
+actual protected backup/managed recovery not qualified. A10: 18 populated representative
+backup/containment/recovery checks; no actual Storage bytes or managed restore. A11:
+40 SQL, six current-schema compilation/rollback and 18 beta browser checks. Signup: six
+Auth-fixture checks. Axe: 16 views. Final native/full CI is recorded on PR #7. No hosted
+end-to-end journey, real signup/recovery email, evidence upload or new deployed acceptance
+is claimed. Existing Stripe $112 allocation correction and $560 review hold are unchanged.
+
+Owner gates: approved exact D6 scope, approved D7 documents/support operation, verified
+founder/MFA, D11 roster/consent/stop criteria and explicit invitations approval AFTER safe
+backend/frontend rollout and hosted acceptance. Connect/payout/live-money activation is
+not required for this simulated cohort; all real-money paths remain prohibited. Remaining
+legal/insurance duties need qualified owner review. No participant was invited.

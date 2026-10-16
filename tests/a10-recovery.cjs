@@ -1,0 +1,46 @@
+// Exact staged A10 SQL + representative retained state; no network/provider calls.
+const {PGlite}=require('@electric-sql/pglite'),fs=require('node:fs/promises'),assert=require('node:assert/strict');
+const {bootstrapFinancial,payment,job,owner,support,customer,professional}=require('./financial-fixture.cjs');
+(async()=>{const db=new PGlite();let restored,n=0;const ok=(v,m)=>{assert.ok(v,m);n++;console.log('PASS '+m);};const row=async q=>(await db.query(q)).rows[0];const as=async(uid,role='authenticated')=>db.exec(`reset role;select set_config('request.jwt.claim.sub','${uid}',false);set role ${role}`);
+const {A10_SNAPSHOT_QUERY:stateSQL,a10RecoverySQL}=await import('../scripts/a10-recovery.mjs');
+const data=async database=>{const tables=(await database.query("select quote_ident(n.nspname)||'.'||quote_ident(c.relname) name from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.relkind='r' and (n.nspname in('public','storage') or n.nspname like 'korvo%') order by 1")).rows;const rows=[];for(const t of tables)rows.push({table:t.name,...(await database.query(`select count(*)::int n,md5(coalesce(string_agg(to_jsonb(x)::text,E'\n' order by to_jsonb(x)::text),'')) digest from ${t.name} x`)).rows[0]});return rows;};
+try{
+ await bootstrapFinancial(db);await db.exec(`alter table public.profiles add account_type text;update public.profiles set account_type=case when id='${professional}' then 'professional' else 'customer' end;
+ alter table public.active_jobs add customer_id uuid,add professional_id uuid,add status text default 'active';update public.active_jobs set customer_id='${customer}',professional_id='${professional}';
+ create table public.jobs(id uuid primary key default gen_random_uuid(),status text default 'open');insert into public.jobs default values;
+ create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+ create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text,name text,unique(bucket_id,name));alter table storage.objects enable row level security;
+ grant usage on schema storage to anon,authenticated,service_role;grant select,insert,update,delete on storage.objects to authenticated;`);
+ for(const f of ['20261013174432_private_completion_evidence.sql','completion_release_facts.sql','financial_reconciliation_observations.sql'])await db.exec(await fs.readFile('supabase/proposals/'+f,'utf8'));
+ await db.exec(`insert into korvo_evidence_private.requirements(active_job_id) values('${job}')`);
+ await as(professional);const photo=(await row(`select public.completion_reserve_photo('${job}','synthetic.png','image/png',24,'80000000-0000-0000-0000-000000000001') result`)).result;
+ await db.exec(`insert into storage.objects(bucket_id,name) values('project-completion-evidence','${photo.storage_path}')`);
+ const abandoned=(await row(`select public.completion_reserve_photo('${job}','unused.png','image/png',24,'80000000-0000-0000-0000-000000000002') result`)).result;await db.exec(`select public.completion_abandon_photo('${abandoned.id}')`);
+ await as('','service_role');await db.exec(`select public.completion_validate_file('${photo.id}',repeat('a',64),24,'image/png')`);await db.exec('reset role');await db.exec(`update public.active_jobs set status='pending_confirmation' where id='${job}'`);
+ await as(customer);await db.exec(`select public.completion_acknowledge_photos('${job}')`);await db.exec('reset role');await db.exec(`update public.active_jobs set status='completed' where id='${job}'`);
+ await as(owner);const review=(await row(`select public.admin_request_marketplace_refund_review('${payment}','80000000-0000-0000-0000-000000000003',5000,600,'Synthetic recovery review only') result`)).result;
+ await db.exec(`select public.admin_review_marketplace_refund('${review.id}','recommended','Synthetic review of original allocations')`);const op=(await row(`select public.admin_prepare_refund_ledger('${review.id}') result`)).result;
+ const target=(await row(`select public.admin_financial_reconciliation_target('${payment}') result`)).result;
+ await as('','service_role');await db.exec(`select public.finance_record_observation('${op.id}','unused','re_fixture','pending',repeat('b',64))`);
+ // Provider timeout is retained as normalized observation, never a refund instruction.
+ const facts={version:1,sandbox:true,state:'provider_unavailable',provider_status:null,source_matches:false,gross_cents:null,captured_cents:null,refunded_cents:null,pending_refund_cents:null,transferred_cents:null,reversed_cents:null,disputed:null,refunds_complete:false,transfers_complete:false,full_refund_professional_cents:null,full_refund_fee_cents:null,findings:['PROVIDER_UNAVAILABLE']};
+ await db.query('select public.finance_record_reconciliation($1,$2,$3,$4,$5)',[payment,owner,'80000000-0000-0000-0000-000000000004',target.revision,JSON.stringify(facts)]);await db.exec('reset role');
+ const activeFixture='30000000-0000-0000-0000-000000000009';await db.exec(`insert into public.active_jobs(id,customer_id,professional_id,status) values('${activeFixture}','${customer}','${professional}','active')`);
+ const before=await data(db),catalog=(await row(stateSQL));ok(before.filter(r=>r.n>0).length>=10,'A10 retained photo/acknowledgment/review/ledger/observation state populated');
+ const backup=await db.dumpDataDir('gzip');restored=await PGlite.create({loadDataDir:backup});assert.deepEqual(await data(restored),before);ok(true,'populated A10 backup reload preserves every row/column digest');assert.deepEqual((await restored.query(stateSQL)).rows[0],catalog);ok(true,'populated A10 backup reload preserves policies/triggers/functions/grants');await restored.close();restored=null;
+ const containment=await fs.readFile('supabase/proposals/a10_containment.sql','utf8');await db.exec(containment);
+ assert.deepEqual(await data(db),before);ok(true,'containment preserves all enrolled evidence, audits, observations and financial records');
+ const denied=async(q,m)=>{await assert.rejects(db.exec(q),e=>e.code==='42501');ok(true,m);};
+ await as(professional);await denied(`select public.completion_reserve_photo('${job}','new.png','image/png',24)`,'frozen photo mutation RPC denied');await denied(`insert into storage.objects(bucket_id,name) values('project-completion-evidence','${photo.storage_path}x')`,'frozen Storage policy rejects new writes without modifying Storage policy');
+ await as(owner);await denied(`select public.admin_prepare_refund_ledger('${review.id}')`,'frozen financial mutation denied even to owner');
+ await as(support);await denied('select public.admin_financial_reconciliation_queue()','support cannot bypass containment into finance');await db.exec('reset role');
+ await denied('insert into public.jobs default values','new job intake paused');await denied(`insert into public.active_jobs(id,customer_id,professional_id) values(gen_random_uuid(),'${customer}','${professional}')`,'new active enrollment intake paused');
+ await denied(`update public.active_jobs set status='completed' where id='${activeFixture}'`,'completion cannot bypass evidence while frozen');
+ assert.deepEqual(await data(db),before);ok(true,'failed frozen operations leave original row state intact');
+ const frozen=await row(stateSQL),unfreeze=a10RecoverySQL(catalog,frozen);
+ await db.exec('grant execute on function public.completion_evidence_summary(uuid) to anon');await assert.rejects(db.exec(unfreeze),/A10 catalog drift/);await db.exec('rollback');ok(true,'A10 recovery refuses unexpected catalog drift');await db.exec('revoke execute on function public.completion_evidence_summary(uuid) from anon');
+ await db.exec(unfreeze);assert.deepEqual(await row(stateSQL),catalog);ok(true,'isolated controlled recovery restores exact precontainment permissions/triggers/functions');assert.deepEqual(await data(db),before);ok(true,'controlled recovery never deletes enrolled photos, review history or audit');
+ await assert.rejects(db.exec(unfreeze),/A10 catalog drift/);await db.exec('rollback');ok(true,'A10 recovery replay fails closed');
+ await as(professional);ok((await row(`select public.completion_evidence_summary('${job}') result`)).result.photos[0].file_status==='validated','participant evidence read resumes after reviewed recovery');await db.exec('reset role');const p=await row(`select * from public.marketplace_payments where id='${payment}'`);ok(p.release_status==='held'&&p.requires_review&&p.professional_gross_cents===50000&&p.refunded_total_cents===0,'holds, full professional gross and refund totals preserved');
+ console.log(JSON.stringify({checks_passed:n,layer:'isolated populated A10 SQL backup/containment/recovery',hosted:false,storage_bytes_backed_up:false,provider_execution:false}));
+}finally{if(restored)await restored.close();await db.close();}})().catch(e=>{console.error({message:e.message,code:e.code});process.exitCode=1;});

@@ -1,0 +1,32 @@
+{
+  "checks_passed": 50,
+  "candidate": "managed-compatible",
+  "population": {
+    "tables": 72,
+    "populated_tables": 25,
+    "rows": 144,
+    "actor_accounts": 7,
+    "storage_metadata_only": true,
+    "rows_after_committed_activity": 146
+  },
+  "managed_permission_probe": {
+    "candidate": "managed-compatible",
+    "passed": true,
+    "sqlstate": null,
+    "object": "storage.objects",
+    "hosted_role": "postgres",
+    "isolated_role": "isolated_managed_operator",
+    "operation": "apply alternate without Storage ALTER POLICY",
+    "managed_ddl_attempted": false
+  },
+  "authorization_matrix_checks": 134,
+  "layer": "PGlite PostgreSQL populated actual-schema rehearsal",
+  "hosted": false,
+  "real_user_rows_exported": 0,
+  "managed_restore_verified": false,
+  "verdict": "STILL BLOCKED",
+  "organization_plan": "Free",
+  "managed_backup_entitlement_verified": false,
+  "current_catalog_fingerprint": "383b3d8392815061e2eeaf11cad3e9dd",
+  "candidate_sha256": "8ae18c0f4fdfb16fc8ca6d6b7d6c94c95b9003f9b7b37e831d8f1eae84552f1c"
+}
