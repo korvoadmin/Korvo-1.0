@@ -329,3 +329,17 @@ original actor/reason/history. A6 deployment and managed recovery remain gated.
 New reconciliation/correction SQL has 43 isolated checks; support/service cannot
 approve allocations and direct writes are denied. Frontend SDK is pinned 2.117.3.
 See the October 16 sprint report for outgoing scan, native CI and deployment boundaries.
+
+## October 16 A6 actual privilege and populated recovery findings
+
+Critical deployment prerequisite: actual postgres is not superuser and is not a member
+or inheritor of supabase_storage_admin. Two A6 storage.objects ALTER POLICY statements
+and their inverse require unavailable ownership. Isolated non-superuser simulation
+reproduces 42501 and atomic rollback; no hosted DDL attempted. A6 remains blocked.
+Inverse now avoids unchanged policies/triggers/functions/table ACL/RLS mutations while
+retaining full drift guards. Forty-four populated current-schema assertions and the
+134-check matrix pass; post-migration committed messages survive exact inverse.
+A second isolated instance restores populated backup rows/catalog. This is PGlite,
+not managed PITR/restore evidence. Other-role supabase_admin default ACLs remain outside
+the current-role inverse scope; managed backup availability and durable restore remain
+unverified. See A6_OBJECT_INVENTORY.json and A6_QUALIFICATION_EVIDENCE.json.

@@ -28,16 +28,28 @@ export function restoreSQL(before,after){
  const sql=['-- REVIEW ONLY. Separate explicit A6 approval required; no automatic execution.','BEGIN;',"SET LOCAL lock_timeout='5s';","SET LOCAL statement_timeout='60s';"];
  const assertFingerprint=(expected,label)=>`DO $guard$ BEGIN IF (SELECT fingerprint FROM (${SNAPSHOT_QUERY}) observed)<>${literal(expected)} THEN RAISE EXCEPTION '${label}'; END IF; END $guard$;`;
  sql.push(assertFingerprint(after.fingerprint,'Catalog drift: rollback refused'));
- for(const t of a.triggers)sql.push(`DROP TRIGGER ${q(t.name)} ON ${t.table};`);
- for(const p of a.policies)sql.push(`DROP POLICY ${q(p.name)} ON ${q(p.schema)}.${q(p.table)};`);
- for(const f of b.functions){sql.push(f.definition+';',`ALTER FUNCTION ${f.identity} OWNER TO ${q(f.owner)};`);}
- for(const p of b.policies){
+ const changed=(old,now)=>JSON.stringify(old)!==JSON.stringify(now);
+ const triggerKey=t=>[t.table,t.name].join('/');
+ const policyKey=p=>[p.schema,p.table,p.name].join('/');
+ // Do not demand ownership of unchanged managed Storage objects. Exact catalog
+ // drift guards remain global; mutation scope is only the approved rollout delta.
+ for(const t of a.triggers)if(changed(b.triggers.find(old=>triggerKey(old)===triggerKey(t)),t))sql.push(`DROP TRIGGER ${q(t.name)} ON ${t.table};`);
+ for(const p of a.policies)if(changed(b.policies.find(old=>policyKey(old)===policyKey(p)),p))sql.push(`DROP POLICY ${q(p.name)} ON ${q(p.schema)}.${q(p.table)};`);
+ for(const f of b.functions){const current=a.functions.find(x=>x.identity===f.identity);
+  if(!current||f.definition!==current.definition)sql.push(f.definition+';');
+  if(!current||f.owner!==current.owner)sql.push(`ALTER FUNCTION ${f.identity} OWNER TO ${q(f.owner)};`);
+ }
+ for(const p of b.policies.filter(p=>changed(p,a.policies.find(now=>policyKey(now)===policyKey(p))))){
   sql.push(`CREATE POLICY ${q(p.name)} ON ${q(p.schema)}.${q(p.table)} AS ${p.permissive} FOR ${p.cmd} TO ${p.roles.map(role).join(',')}${p.using?' USING ('+p.using+')':''}${p.check?' WITH CHECK ('+p.check+')':''};`);
  }
- for(const t of b.triggers){sql.push(t.definition+';');sql.push(`ALTER TABLE ${t.table} ${t.enabled==='D'?'DISABLE':t.enabled==='A'?'ENABLE ALWAYS':t.enabled==='R'?'ENABLE REPLICA':'ENABLE'} TRIGGER ${q(t.name)};`);}
- for(const r of b.relations){const current=a.relations.find(x=>x.identity===r.identity);if(!current)throw Error('Missing preexisting relation');sql.push(...privileges('TABLE',r.identity,r.acl,current.acl),`ALTER TABLE ${r.identity} ${r.rls?'ENABLE':'DISABLE'} ROW LEVEL SECURITY;`,`ALTER TABLE ${r.identity} ${r.force_rls?'FORCE':'NO FORCE'} ROW LEVEL SECURITY;`);}
- for(const f of b.functions)sql.push(...privileges('FUNCTION',f.identity,f.acl,a.functions.find(x=>x.identity===f.identity)?.acl||[]));
- for(const s of b.schemas)sql.push(...privileges('SCHEMA',q(s.name),s.acl,a.schemas.find(x=>x.name===s.name)?.acl||[]));
+ for(const t of b.triggers.filter(t=>changed(t,a.triggers.find(now=>triggerKey(now)===triggerKey(t))))){sql.push(t.definition+';');sql.push(`ALTER TABLE ${t.table} ${t.enabled==='D'?'DISABLE':t.enabled==='A'?'ENABLE ALWAYS':t.enabled==='R'?'ENABLE REPLICA':'ENABLE'} TRIGGER ${q(t.name)};`);}
+ for(const r of b.relations){const current=a.relations.find(x=>x.identity===r.identity);if(!current)throw Error('Missing preexisting relation');
+  if(changed(r.acl,current.acl))sql.push(...privileges('TABLE',r.identity,r.acl,current.acl));
+  if(r.rls!==current.rls)sql.push(`ALTER TABLE ${r.identity} ${r.rls?'ENABLE':'DISABLE'} ROW LEVEL SECURITY;`);
+  if(r.force_rls!==current.force_rls)sql.push(`ALTER TABLE ${r.identity} ${r.force_rls?'FORCE':'NO FORCE'} ROW LEVEL SECURITY;`);
+ }
+ for(const f of b.functions){const current=a.functions.find(x=>x.identity===f.identity);if(changed(f.acl,current?.acl))sql.push(...privileges('FUNCTION',f.identity,f.acl,current?.acl||[]));}
+ for(const s of b.schemas){const current=a.schemas.find(x=>x.name===s.name);if(changed(s.acl,current?.acl))sql.push(...privileges('SCHEMA',q(s.name),s.acl,current?.acl||[]));}
  const defaultKey=d=>[d.owner,d.schema,d.type].join('/');const defaults=new Map([...b.defaults,...a.defaults].map(d=>[defaultKey(d),d]));
  for(const [key,d] of defaults){
   const old=b.defaults.find(x=>defaultKey(x)===key),now=a.defaults.find(x=>defaultKey(x)===key);

@@ -97,7 +97,10 @@ jobs:
           node tests/reconciliation-database.cjs
           node tests/membership-restoration.cjs
       - name: Validate opt-in integration runners
-        run: python -m py_compile tests/sandbox-*-acceptance.py
+        run: |
+          python -m py_compile tests/sandbox-*-acceptance.py
+          node --check tests/security-populated-schema.cjs
+          node --check tests/security-catalog-fixture.cjs
 
 # No deployment, credentials, live Stripe calls or privileged database writes.
 # Actual sandbox integration runners require explicitly provisioned private fixtures.

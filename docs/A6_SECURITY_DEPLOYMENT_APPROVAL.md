@@ -1,3 +1,11 @@
+> October 16 current verdict: **STILL BLOCKED — NOT READY FOR DEPLOYMENT APPROVAL**.
+> The 44-assertion populated rehearsal plus 134 authorization checks passes in isolation.
+> Actual hosted postgres lacks ownership for two changed Storage policies. A usable
+> managed backup/restore point and owner-capable method remain unverified.
+> Current evidence: [A6_MANAGED_RECOVERY_QUALIFICATION.md](A6_MANAGED_RECOVERY_QUALIFICATION.md).
+> Exact object inventory: [A6_OBJECT_INVENTORY.json](A6_OBJECT_INVENTORY.json).
+> Earlier checkpoint details below are preserved; this status supersedes readiness wording.
+
 # A6 authorization deployment package — development review only
 
 Not authorized for deployment. No SQL in this package runs automatically.
@@ -84,3 +92,33 @@ before/after fingerprints, inverse and postdeployment matrix/advisor evidence pr
 No evidence/refund/gig deployment, Pages publication, refunds/transfers or live payments
 are included. A6 has NOT been granted. This is a concrete review scope, not a claim
 that outstanding managed-environment preflight has passed.
+
+## October 16 narrowly scoped founder review package
+
+Impact: retain exact canonical SHA and seven-package order above; 464 statements,
+103 function definitions, 43 ALTER FUNCTIONs, 39 altered/seven new policies, three
+triggers, 257 grant/revoke statements, three default-ACL changes, six policy comments
+and three other statements. No user data migration, app-admin assignment or feature
+activation. Full identities and SQL appear in A6_OBJECT_INVENTORY.json.
+
+**Do not approve execution yet.** Required evidence is actual backup/PITR availability,
+durable protected backups and managed restore rehearsal, plus a Storage owner-capable
+execution/recovery method or a separately reviewed narrower candidate. The current
+postgres role cannot ALTER either Issue evidence read/upload policy on storage.objects.
+No privilege grant or scope reduction has been made to bypass this restriction.
+
+Rollback: private fresh before/after capture and pinned revised inverse generator;
+stop intake; run one reviewed transaction with 5-second lock and 60-second statement
+limits only after ownership and drift checks. Changed objects alone are restored;
+unchanged managed objects are not rewritten. Keep data and post-migration activity.
+Abort on fingerprint/privilege/lock/assertion failure. After inverse, confirm exact
+baseline catalog, protected row totals/digests and permitted/denied workflows. Baseline
+recovery restores known vulnerabilities too: do not reopen intake without disposition.
+A broad database restore is a separate outage/data-loss/provider-reconciliation action,
+not an automatic A6 fallback. No restore or migration is authorized by this package.
+
+Local evidence: 44 populated assertions (144 initial synthetic rows/25 tables, 146 after
+committed activity), full 134-check matrix, isolated database export/load, exact inverse,
+interruption/drift/replay tests; 12 recovery/writer checks and 213 units/source checks.
+Genuine hosted sessions/Storage service/managed recovery are NOT verified. See E21 and
+PR #7 for final development commit/CI. No need to rerun unrelated local payment tests.

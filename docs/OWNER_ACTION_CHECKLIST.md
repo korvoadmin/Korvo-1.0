@@ -203,3 +203,19 @@ SQL are now written and isolated-tested, not deployed or applied. The $560 case 
 no demonstrated amount mismatch but remains on review hold. Do not clear either
 review merely because a read-only observer ran. In-app support/email service and the
 one-business-day target are not operational promises until configured and approved.
+
+## October 16 A6 recovery qualification — current blocker
+
+A6 is STILL BLOCKED, not ready for execution approval. Canonical SQL is unchanged.
+The populated isolated backup/inverse and 134-role matrix pass, but managed postgres
+is non-superuser and cannot manage storage.objects owned by supabase_storage_admin.
+Two Storage policies prevent both rollout and changed-policy inverse with this role.
+No hosted DDL or privilege grant was attempted. See A6_MANAGED_RECOVERY_QUALIFICATION.md.
+
+Next access/evidence needed (not a request to deploy): read-only scheduled/PITR backup
+status and retained timestamps/plan/restore path from the Supabase dashboard or an
+approved backup metadata reader. The installed connector cannot list these; do not
+click Restore, change settings or send credentials/backup contents. An owner-capable
+managed method or separately reviewed revised SQL scope and a durable managed restore
+rehearsal are also required. No new paid branch/plan has been provisioned. Existing
+D1–D12 choices stay confirmed; none of these blockers reopen business-policy decisions.

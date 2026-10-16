@@ -169,3 +169,13 @@ Unresolved legal, category, policy timing, reserves, actual support operation an
 operator identity remain separate. A6 needs managed recovery qualification/durable
 backup; A8 needs approved copy/assent and served-version acceptance; A10 needs
 populated recovery and actual hosted evidence/finance acceptance. A1/A7/A9 stay closed.
+
+## October 16 A6 populated recovery follow-up
+
+A6 STILL BLOCKED: isolated rehearsal now preserves 144 initial synthetic rows across
+25 populated tables and post-migration committed activity across all 72 dependency
+tables. Forty-four recovery assertions plus the 134-check matrix pass; inverse now
+mutates only changed metadata. Actual managed postgres lacks Storage ownership for
+two A6 policies; backup/PITR availability, durable backup and managed restore remain
+unverified. No hosted migration/restore or new role grant. This evidence does not
+clear positive hosted JWT/Storage or launch gates. See A6_MANAGED_RECOVERY_QUALIFICATION.md.

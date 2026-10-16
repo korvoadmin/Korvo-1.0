@@ -1,0 +1,41 @@
+{
+  "checks_passed": 44,
+  "population": {
+    "tables": 72,
+    "populated_tables": 25,
+    "rows": 144,
+    "actor_accounts": 7,
+    "storage_metadata_only": true,
+    "rows_after_committed_activity": 146
+  },
+  "managed_permission_blocker": {
+    "sqlstate": "42501",
+    "object": "storage.objects",
+    "hosted_role": "postgres",
+    "isolated_role": "isolated_managed_operator",
+    "operation": "ALTER POLICY",
+    "managed_ddl_attempted": false
+  },
+  "authorization_matrix_checks": 134,
+  "layer": "PGlite PostgreSQL populated actual-schema rehearsal",
+  "hosted": false,
+  "real_user_rows_exported": 0,
+  "managed_restore_verified": false,
+  "verdict": "STILL BLOCKED",
+  "canonical_sha256": "da9d19e45419c99187976caeb289d1abd2fa722ec12155541607ec8ec477bc56",
+  "current_catalog_fingerprint": "383b3d8392815061e2eeaf11cad3e9dd",
+  "backup_list_available_in_connector": false,
+  "managed_backup_entitlement_verified": false,
+  "managed_ownership": {
+    "role": "postgres",
+    "superuser": false,
+    "storage_owner": "supabase_storage_admin",
+    "storage_owner_membership": false
+  },
+  "qualified_tool_hashes": {
+    "scripts/security-snapshot.mjs": "990296ddbd036a2f165fe19c148091c2e7e4dd52e1d83e79b37fcecf3707c61c",
+    "scripts/write-security-recovery.mjs": "4c52fe8db8d0d6185e83609ae1daebadcffba3aa5a5362c22b806d7ca74c72bb",
+    "tests/security-populated-schema.cjs": "b23b453d490b5cc88f12ae12c1a26a055efe3dc4546520f0315bbf2048c7880a",
+    "tests/security-catalog-fixture.cjs": "fe9a0f282a609aaa5377701b1055857cade63311192fe879dba02a5dcaeae021"
+  }
+}

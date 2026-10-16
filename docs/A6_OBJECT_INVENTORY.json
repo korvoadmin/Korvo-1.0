@@ -1,0 +1,1170 @@
+{
+  "source": "supabase/proposals/20261012160000_harden_korvo_api_permissions.sql",
+  "source_sha256": "da9d19e45419c99187976caeb289d1abd2fa722ec12155541607ec8ec477bc56",
+  "deployment_authorized": false,
+  "statement_count": 464,
+  "statement_types": {
+    "VariableSetStmt": 1,
+    "CreateSchemaStmt": 1,
+    "GrantStmt": 257,
+    "AlterDefaultPrivilegesStmt": 3,
+    "CreateFunctionStmt": 103,
+    "AlterFunctionStmt": 43,
+    "CreatePolicyStmt": 7,
+    "CommentStmt": 6,
+    "AlterPolicyStmt": 39,
+    "CreateTrigStmt": 3,
+    "NotifyStmt": 1
+  },
+  "functions": [
+    {
+      "identity": "korvo_api_private.admin_add_account_restriction(uuid,text,text,timestamp with time zone,uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_add_account_restriction(uuid,text,text,timestamp with time zone,uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_add_account_strike(uuid,text,text,integer,uuid,uuid,timestamp with time zone)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_add_account_strike(uuid,text,text,integer,uuid,uuid,timestamp with time zone)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_add_issue_note(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_add_issue_note(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_claim_project_issue(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_claim_project_issue(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_claim_safety_report(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_claim_safety_report(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_decide_payment_review(uuid,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_decide_payment_review(uuid,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_issue_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_issue_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_lift_account_restriction(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_lift_account_restriction(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_message_moderation_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_message_moderation_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_professional_verification_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_professional_verification_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_release_professional_job_usage(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_release_professional_job_usage(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_resolve_message_moderation(uuid,text,text,integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_resolve_message_moderation(uuid,text,text,integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_resolve_project_issue(uuid,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_resolve_project_issue(uuid,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_resolve_safety_report(uuid,text,text,integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_resolve_safety_report(uuid,text,text,integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_review_professional_verification(uuid,text,text,text,text,timestamp with time zone)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_review_professional_verification(uuid,text,text,text,text,timestamp with time zone)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_set_professional_badge(uuid,text,text,text,timestamp with time zone)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_set_professional_badge(uuid,text,text,text,timestamp with time zone)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_set_professional_membership(uuid,text,text,timestamp with time zone,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_set_professional_membership(uuid,text,text,timestamp with time zone,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.admin_trust_safety_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.admin_trust_safety_queue()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.block_korvo_user(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.block_korvo_user(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.cancel_professional_membership_change()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.cancel_professional_membership_change()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.customer_cancel_job(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.customer_cancel_job(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.customer_confirm_job_completion(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.customer_confirm_job_completion(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.customer_past_projects()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.customer_past_projects()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.customer_resolve_completion_issue(uuid,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.customer_resolve_completion_issue(uuid,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.get_job_private_details(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.get_job_private_details(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.get_professional_trust_summary(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.get_professional_trust_summary(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.is_korvo_admin()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.is_korvo_admin()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.job_recommended_professionals(uuid,integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.job_recommended_professionals(uuid,integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.mark_all_notifications_read()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.mark_all_notifications_read()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.mark_conversation_read(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.mark_conversation_read(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.mark_notification_read(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.mark_notification_read(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.my_job_match_feed(integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.my_job_match_feed(integer)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.my_professional_membership()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.my_professional_membership()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.my_professional_verifications()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.my_professional_verifications()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.open_project_issue(uuid,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.open_project_issue(uuid,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.professional_cancel_job(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.professional_cancel_job(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.professional_past_projects()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.professional_past_projects()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.professional_request_job_completion(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.professional_request_job_completion(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.professional_withdraw_quote(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.professional_withdraw_quote(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.register_project_issue_evidence(uuid,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.register_project_issue_evidence(uuid,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.report_korvo_user(uuid,text,text,uuid,uuid,uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.report_korvo_user(uuid,text,text,uuid,uuid,uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.request_professional_membership_cancellation()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.request_professional_membership_cancellation()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.request_professional_membership_change(text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.request_professional_membership_change(text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.request_professional_verification(text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.request_professional_verification(text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.respond_to_quote(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.respond_to_quote(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.send_korvo_message(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.send_korvo_message(uuid,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.submit_job_review(uuid,integer,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.submit_job_review(uuid,integer,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.unblock_korvo_user(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.unblock_korvo_user(uuid)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.update_open_job(uuid,text,text,text,text,text,numeric,numeric,date,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.update_open_job(uuid,text,text,text,text,text,numeric,numeric,date,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.upsert_job_private_details(uuid,text,text,text,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "public.upsert_job_private_details(uuid,text,text,text,text,text,text)",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.protect_profile_security_fields()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.protect_professional_profile_owner()",
+      "definition_in_canonical": true
+    },
+    {
+      "identity": "korvo_api_private.protect_new_job_state()",
+      "definition_in_canonical": true
+    }
+  ],
+  "altered_functions": [
+    "ALTER FUNCTION public.assert_professional_job_capacity (p_professional_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.audit_issue_evidence_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_message_moderation_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_payment_review_changes () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_professional_subscription_change () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_professional_verification_change () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_project_issue_changes () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_restriction_change () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_safety_report_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_safety_report_update () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_strike_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.audit_user_block_change () SET search_path TO ''",
+    "ALTER FUNCTION public.bump_conversation_on_message () SET search_path TO ''",
+    "ALTER FUNCTION public.classify_message_safety (p_body text) SET search_path TO ''",
+    "ALTER FUNCTION public.create_conversation_for_quote () SET search_path TO ''",
+    "ALTER FUNCTION public.create_issue_from_paid_cancellation () SET search_path TO ''",
+    "ALTER FUNCTION public.current_professional_verification_status (p_professional_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.enforce_job_posting_safety () SET search_path TO ''",
+    "ALTER FUNCTION public.enforce_quote_safety () SET search_path TO ''",
+    "ALTER FUNCTION public.ensure_payment_review_for_issue () SET search_path TO ''",
+    "ALTER FUNCTION public.ensure_professional_subscription_row () SET search_path TO ''",
+    "ALTER FUNCTION public.is_blocked_between (p_user_a uuid, p_user_b uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.is_korvo_action_allowed (p_user_id uuid, p_action text) SET search_path TO ''",
+    "ALTER FUNCTION public.link_conversation_to_active_job () SET search_path TO ''",
+    "ALTER FUNCTION public.normalize_admin_issue_resolution_actor () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_active_job_status_change () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_booking_payment_status_change () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_issue_message_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_message_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_quote_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_quote_status_change () SET search_path TO ''",
+    "ALTER FUNCTION public.notify_on_review_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.prepare_booking_payment (p_active_job_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.prepare_quote_insert () SET search_path TO ''",
+    "ALTER FUNCTION public.professional_has_job_capacity (p_professional_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.professional_job_match_details (p_professional_id uuid, p_job_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.professional_membership_snapshot_internal (p_professional_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.protect_professional_verification_status () SET search_path TO ''",
+    "ALTER FUNCTION public.record_professional_job_usage (p_professional_id uuid, p_active_job_id uuid, p_job_id uuid, p_quote_id uuid, p_snapshot jsonb) SET search_path TO ''",
+    "ALTER FUNCTION public.refresh_professional_verification_state (p_professional_id uuid) SET search_path TO ''",
+    "ALTER FUNCTION public.rls_auto_enable () SET search_path TO ''",
+    "ALTER FUNCTION public.sync_payment_review_from_booking_payment () SET search_path TO ''",
+    "ALTER FUNCTION public.sync_verification_badges () SET search_path TO ''"
+  ],
+  "policies": [
+    {
+      "operation": "CREATE",
+      "table": "public.job_matching_config",
+      "policy": "backend_only_deny_clients",
+      "sql": "CREATE POLICY backend_only_deny_clients ON public.job_matching_config AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    },
+    {
+      "operation": "CREATE",
+      "table": "public.payment_webhook_events",
+      "policy": "backend_only_deny_clients",
+      "sql": "CREATE POLICY backend_only_deny_clients ON public.payment_webhook_events AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    },
+    {
+      "operation": "CREATE",
+      "table": "public.platform_admins",
+      "policy": "backend_only_deny_clients",
+      "sql": "CREATE POLICY backend_only_deny_clients ON public.platform_admins AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    },
+    {
+      "operation": "CREATE",
+      "table": "public.professional_badges",
+      "policy": "backend_only_deny_clients",
+      "sql": "CREATE POLICY backend_only_deny_clients ON public.professional_badges AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    },
+    {
+      "operation": "CREATE",
+      "table": "public.professional_verification_history",
+      "policy": "backend_only_deny_clients",
+      "sql": "CREATE POLICY backend_only_deny_clients ON public.professional_verification_history AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    },
+    {
+      "operation": "CREATE",
+      "table": "public.professional_verifications",
+      "policy": "backend_only_deny_clients",
+      "sql": "CREATE POLICY backend_only_deny_clients ON public.professional_verifications AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.professional_subscriptions",
+      "policy": "Professionals can view own subscription",
+      "sql": "ALTER POLICY \"Professionals can view own subscription\" ON public.professional_subscriptions USING (professional_id = (SELECT auth.uid()) OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.professional_job_usage",
+      "policy": "Professionals can view own job usage",
+      "sql": "ALTER POLICY \"Professionals can view own job usage\" ON public.professional_job_usage USING (professional_id = (SELECT auth.uid()) OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.professional_subscription_history",
+      "policy": "Professionals can view own subscription history",
+      "sql": "ALTER POLICY \"Professionals can view own subscription history\" ON public.professional_subscription_history USING (professional_id = (SELECT auth.uid()) OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "storage.objects",
+      "policy": "Issue evidence read",
+      "sql": "ALTER POLICY \"Issue evidence read\" ON storage.objects USING (bucket_id = CAST('project-issue-evidence' AS text) AND ((SELECT public.is_korvo_admin()) OR EXISTS (SELECT 1 FROM project_issues AS pi WHERE CAST(pi.id AS text) = ((storage.foldername(objects.name)))[1] AND (pi.customer_id = (SELECT auth.uid()) OR pi.professional_id = (SELECT auth.uid())))))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "storage.objects",
+      "policy": "Issue evidence upload",
+      "sql": "ALTER POLICY \"Issue evidence upload\" ON storage.objects WITH CHECK (bucket_id = CAST('project-issue-evidence' AS text) AND ((storage.foldername(name)))[2] = CAST((SELECT auth.uid()) AS text) AND EXISTS (SELECT 1 FROM project_issues AS pi WHERE CAST(pi.id AS text) = ((storage.foldername(objects.name)))[1] AND pi.status = ANY(ARRAY[CAST('open' AS text), CAST('under_review' AS text)]) AND (pi.customer_id = (SELECT auth.uid()) OR pi.professional_id = (SELECT auth.uid()))))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.booking_payments",
+      "policy": "Booking participants can view payment status",
+      "sql": "ALTER POLICY \"Booking participants can view payment status\" ON public.booking_payments USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.messages",
+      "policy": "Participants can view messages",
+      "sql": "ALTER POLICY \"Participants can view messages\" ON public.messages USING (EXISTS (SELECT 1 FROM conversations AS c WHERE c.id = messages.conversation_id AND (c.customer_id = (SELECT auth.uid()) OR c.professional_id = (SELECT auth.uid()))))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.reviews",
+      "policy": "Customers and professionals can view relevant reviews",
+      "sql": "ALTER POLICY \"Customers and professionals can view relevant reviews\" ON public.reviews USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.conversations",
+      "policy": "Participants can view conversations",
+      "sql": "ALTER POLICY \"Participants can view conversations\" ON public.conversations USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.active_jobs",
+      "policy": "Customers and professionals can view active jobs",
+      "sql": "ALTER POLICY \"Customers and professionals can view active jobs\" ON public.active_jobs USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.profiles",
+      "policy": "Users can create own profile",
+      "sql": "ALTER POLICY \"Users can create own profile\" ON public.profiles WITH CHECK ((SELECT auth.uid()) = id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.profiles",
+      "policy": "Users can update own profile",
+      "sql": "ALTER POLICY \"Users can update own profile\" ON public.profiles USING ((SELECT auth.uid()) = id) WITH CHECK ((SELECT auth.uid()) = id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.profiles",
+      "policy": "Users can view own profile",
+      "sql": "ALTER POLICY \"Users can view own profile\" ON public.profiles USING ((SELECT auth.uid()) = id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.jobs",
+      "policy": "Customers and professionals can view jobs",
+      "sql": "ALTER POLICY \"Customers and professionals can view jobs\" ON public.jobs USING ((SELECT auth.uid()) = customer_id OR (status = CAST('open' AS text) AND EXISTS (SELECT 1 FROM profiles WHERE profiles.id = (SELECT auth.uid()) AND profiles.account_type = CAST('professional' AS text) AND profiles.is_active = TRUE)))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.jobs",
+      "policy": "Customers can create their own jobs",
+      "sql": "ALTER POLICY \"Customers can create their own jobs\" ON public.jobs WITH CHECK ((SELECT auth.uid()) = customer_id AND EXISTS (SELECT 1 FROM profiles WHERE profiles.id = (SELECT auth.uid()) AND profiles.account_type = CAST('customer' AS text)))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.quotes",
+      "policy": "Customers and professionals can view relevant quotes",
+      "sql": "ALTER POLICY \"Customers and professionals can view relevant quotes\" ON public.quotes USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.quotes",
+      "policy": "Professionals can submit their own quotes",
+      "sql": "ALTER POLICY \"Professionals can submit their own quotes\" ON public.quotes WITH CHECK ((SELECT auth.uid()) = professional_id AND EXISTS (SELECT 1 FROM profiles AS p WHERE p.id = (SELECT auth.uid()) AND p.account_type = CAST('professional' AS text) AND p.is_active = TRUE) AND EXISTS (SELECT 1 FROM jobs AS j WHERE j.id = quotes.job_id AND j.customer_id = quotes.customer_id AND j.status = CAST('open' AS text)))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.professional_profiles",
+      "policy": "Professionals can create own profile",
+      "sql": "ALTER POLICY \"Professionals can create own profile\" ON public.professional_profiles WITH CHECK ((SELECT auth.uid()) = id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.professional_profiles",
+      "policy": "Professionals can update own profile",
+      "sql": "ALTER POLICY \"Professionals can update own profile\" ON public.professional_profiles USING ((SELECT auth.uid()) = id) WITH CHECK ((SELECT auth.uid()) = id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.professional_profiles",
+      "policy": "Professionals can view own profile",
+      "sql": "ALTER POLICY \"Professionals can view own profile\" ON public.professional_profiles USING ((SELECT auth.uid()) = id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.job_private_details",
+      "policy": "Customers can insert own private job details",
+      "sql": "ALTER POLICY \"Customers can insert own private job details\" ON public.job_private_details WITH CHECK ((SELECT auth.uid()) = customer_id AND EXISTS (SELECT 1 FROM jobs AS j WHERE j.id = job_private_details.job_id AND j.customer_id = (SELECT auth.uid())))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.job_private_details",
+      "policy": "Customers can update own private job details",
+      "sql": "ALTER POLICY \"Customers can update own private job details\" ON public.job_private_details USING ((SELECT auth.uid()) = customer_id) WITH CHECK ((SELECT auth.uid()) = customer_id AND EXISTS (SELECT 1 FROM jobs AS j WHERE j.id = job_private_details.job_id AND j.customer_id = (SELECT auth.uid())))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.job_private_details",
+      "policy": "Customers can view own private job details",
+      "sql": "ALTER POLICY \"Customers can view own private job details\" ON public.job_private_details USING ((SELECT auth.uid()) = customer_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.project_closures",
+      "policy": "Project participants can view closures",
+      "sql": "ALTER POLICY \"Project participants can view closures\" ON public.project_closures USING (EXISTS (SELECT 1 FROM jobs AS j WHERE j.id = project_closures.job_id AND j.customer_id = (SELECT auth.uid())) OR EXISTS (SELECT 1 FROM active_jobs AS aj WHERE aj.id = project_closures.active_job_id AND aj.professional_id = (SELECT auth.uid())))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.notifications",
+      "policy": "Users can update own notifications",
+      "sql": "ALTER POLICY \"Users can update own notifications\" ON public.notifications USING ((SELECT auth.uid()) = user_id) WITH CHECK ((SELECT auth.uid()) = user_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.notifications",
+      "policy": "Users can view own notifications",
+      "sql": "ALTER POLICY \"Users can view own notifications\" ON public.notifications USING ((SELECT auth.uid()) = user_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.project_issues",
+      "policy": "Project participants and admins can view issues",
+      "sql": "ALTER POLICY \"Project participants and admins can view issues\" ON public.project_issues USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.project_issue_messages",
+      "policy": "Project participants and admins can view issue messages",
+      "sql": "ALTER POLICY \"Project participants and admins can view issue messages\" ON public.project_issue_messages USING ((SELECT public.is_korvo_admin()) OR EXISTS (SELECT 1 FROM project_issues AS pi WHERE pi.id = project_issue_messages.issue_id AND (pi.customer_id = (SELECT auth.uid()) OR pi.professional_id = (SELECT auth.uid()))))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.project_issue_messages",
+      "policy": "Project participants can send issue messages",
+      "sql": "ALTER POLICY \"Project participants can send issue messages\" ON public.project_issue_messages WITH CHECK (sender_id = (SELECT auth.uid()) AND EXISTS (SELECT 1 FROM project_issues AS pi WHERE pi.id = project_issue_messages.issue_id AND pi.status = ANY(ARRAY[CAST('open' AS text), CAST('under_review' AS text)]) AND (pi.customer_id = (SELECT auth.uid()) OR pi.professional_id = (SELECT auth.uid()))))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.account_restrictions",
+      "policy": "Users and admins can view restrictions",
+      "sql": "ALTER POLICY \"Users and admins can view restrictions\" ON public.account_restrictions USING (user_id = (SELECT auth.uid()) OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.project_issue_evidence",
+      "policy": "Issue participants and admins can view evidence",
+      "sql": "ALTER POLICY \"Issue participants and admins can view evidence\" ON public.project_issue_evidence USING ((SELECT public.is_korvo_admin()) OR EXISTS (SELECT 1 FROM project_issues AS pi WHERE pi.id = project_issue_evidence.issue_id AND (pi.customer_id = (SELECT auth.uid()) OR pi.professional_id = (SELECT auth.uid()))))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.user_blocks",
+      "policy": "Users can view own blocks",
+      "sql": "ALTER POLICY \"Users can view own blocks\" ON public.user_blocks USING ((SELECT auth.uid()) = blocker_id)"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.project_issue_admin_notes",
+      "policy": "Admins can view issue admin notes",
+      "sql": "ALTER POLICY \"Admins can view issue admin notes\" ON public.project_issue_admin_notes USING ((SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.case_audit_log",
+      "policy": "Admins can view case audit log",
+      "sql": "ALTER POLICY \"Admins can view case audit log\" ON public.case_audit_log USING ((SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.payment_reviews",
+      "policy": "Payment review participants and admins can view",
+      "sql": "ALTER POLICY \"Payment review participants and admins can view\" ON public.payment_reviews USING ((SELECT auth.uid()) = customer_id OR (SELECT auth.uid()) = professional_id OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.trust_safety_reports",
+      "policy": "Reporters can view own reports",
+      "sql": "ALTER POLICY \"Reporters can view own reports\" ON public.trust_safety_reports USING (reporter_id = (SELECT auth.uid()) OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.message_moderation_events",
+      "policy": "Admins can view moderation events",
+      "sql": "ALTER POLICY \"Admins can view moderation events\" ON public.message_moderation_events USING ((SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.account_strikes",
+      "policy": "Users and admins can view strikes",
+      "sql": "ALTER POLICY \"Users and admins can view strikes\" ON public.account_strikes USING (user_id = (SELECT auth.uid()) OR (SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "ALTER",
+      "table": "public.trust_safety_audit_log",
+      "policy": "Admins can view trust safety audit",
+      "sql": "ALTER POLICY \"Admins can view trust safety audit\" ON public.trust_safety_audit_log USING ((SELECT public.is_korvo_admin()))"
+    },
+    {
+      "operation": "CREATE",
+      "table": "public.job_payment_transfers",
+      "policy": "transfer_tracking_backend_only",
+      "sql": "CREATE POLICY transfer_tracking_backend_only ON public.job_payment_transfers AS RESTRICTIVE FOR all TO anon, authenticated USING (FALSE) WITH CHECK (FALSE)"
+    }
+  ],
+  "triggers": [
+    {
+      "table": "public.profiles",
+      "trigger": "protect_profile_security_fields",
+      "function": "korvo_api_private.protect_profile_security_fields",
+      "sql": "CREATE TRIGGER protect_profile_security_fields BEFORE INSERT OR UPDATE ON public.profiles FOR EACH ROW EXECUTE PROCEDURE korvo_api_private.protect_profile_security_fields()"
+    },
+    {
+      "table": "public.professional_profiles",
+      "trigger": "protect_professional_profile_owner",
+      "function": "korvo_api_private.protect_professional_profile_owner",
+      "sql": "CREATE TRIGGER protect_professional_profile_owner BEFORE INSERT OR UPDATE ON public.professional_profiles FOR EACH ROW EXECUTE PROCEDURE korvo_api_private.protect_professional_profile_owner()"
+    },
+    {
+      "table": "public.jobs",
+      "trigger": "protect_new_job_state",
+      "function": "korvo_api_private.protect_new_job_state",
+      "sql": "CREATE TRIGGER protect_new_job_state BEFORE INSERT ON public.jobs FOR EACH ROW EXECUTE PROCEDURE korvo_api_private.protect_new_job_state()"
+    }
+  ],
+  "grants": [
+    "REVOKE ALL PRIVILEGES ON SCHEMA korvo_api_private FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT USAGE ON SCHEMA korvo_api_private TO authenticated",
+    "REVOKE CREATE ON SCHEMA public FROM PUBLIC, anon, authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_add_account_restriction (p_user_id uuid, p_restriction_type text, p_reason text, p_expires_at timestamp with time zone, p_source_strike_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_add_account_restriction (p_user_id uuid, p_restriction_type text, p_reason text, p_expires_at timestamp with time zone, p_source_strike_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_add_account_restriction (p_user_id uuid, p_restriction_type text, p_reason text, p_expires_at timestamp with time zone, p_source_strike_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_add_account_restriction (p_user_id uuid, p_restriction_type text, p_reason text, p_expires_at timestamp with time zone, p_source_strike_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_add_account_strike (p_user_id uuid, p_category text, p_reason text, p_points integer, p_source_report_id uuid, p_source_moderation_event_id uuid, p_expires_at timestamp with time zone) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_add_account_strike (p_user_id uuid, p_category text, p_reason text, p_points integer, p_source_report_id uuid, p_source_moderation_event_id uuid, p_expires_at timestamp with time zone) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_add_account_strike (p_user_id uuid, p_category text, p_reason text, p_points integer, p_source_report_id uuid, p_source_moderation_event_id uuid, p_expires_at timestamp with time zone) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_add_account_strike (p_user_id uuid, p_category text, p_reason text, p_points integer, p_source_report_id uuid, p_source_moderation_event_id uuid, p_expires_at timestamp with time zone) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_add_issue_note (p_issue_id uuid, p_note text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_add_issue_note (p_issue_id uuid, p_note text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_add_issue_note (p_issue_id uuid, p_note text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_add_issue_note (p_issue_id uuid, p_note text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_claim_project_issue (p_issue_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_claim_project_issue (p_issue_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_claim_project_issue (p_issue_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_claim_project_issue (p_issue_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_claim_safety_report (p_report_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_claim_safety_report (p_report_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_claim_safety_report (p_report_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_claim_safety_report (p_report_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_decide_payment_review (p_payment_review_id uuid, p_decision text, p_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_decide_payment_review (p_payment_review_id uuid, p_decision text, p_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_decide_payment_review (p_payment_review_id uuid, p_decision text, p_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_decide_payment_review (p_payment_review_id uuid, p_decision text, p_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_issue_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_issue_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_issue_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_issue_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_lift_account_restriction (p_restriction_id uuid, p_note text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_lift_account_restriction (p_restriction_id uuid, p_note text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_lift_account_restriction (p_restriction_id uuid, p_note text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_lift_account_restriction (p_restriction_id uuid, p_note text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_message_moderation_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_message_moderation_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_message_moderation_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_message_moderation_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_professional_verification_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_professional_verification_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_professional_verification_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_professional_verification_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_release_professional_job_usage (p_active_job_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_release_professional_job_usage (p_active_job_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_release_professional_job_usage (p_active_job_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_release_professional_job_usage (p_active_job_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_resolve_message_moderation (p_moderation_event_id uuid, p_action text, p_notes text, p_strike_points integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_resolve_message_moderation (p_moderation_event_id uuid, p_action text, p_notes text, p_strike_points integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_resolve_message_moderation (p_moderation_event_id uuid, p_action text, p_notes text, p_strike_points integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_resolve_message_moderation (p_moderation_event_id uuid, p_action text, p_notes text, p_strike_points integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_resolve_project_issue (p_issue_id uuid, p_action text, p_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_resolve_project_issue (p_issue_id uuid, p_action text, p_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_resolve_project_issue (p_issue_id uuid, p_action text, p_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_resolve_project_issue (p_issue_id uuid, p_action text, p_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_resolve_safety_report (p_report_id uuid, p_action text, p_notes text, p_strike_points integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_resolve_safety_report (p_report_id uuid, p_action text, p_notes text, p_strike_points integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_resolve_safety_report (p_report_id uuid, p_action text, p_notes text, p_strike_points integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_resolve_safety_report (p_report_id uuid, p_action text, p_notes text, p_strike_points integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_review_professional_verification (p_verification_id uuid, p_action text, p_user_status_message text, p_provider text, p_provider_reference text, p_expires_at timestamp with time zone) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_review_professional_verification (p_verification_id uuid, p_action text, p_user_status_message text, p_provider text, p_provider_reference text, p_expires_at timestamp with time zone) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_review_professional_verification (p_verification_id uuid, p_action text, p_user_status_message text, p_provider text, p_provider_reference text, p_expires_at timestamp with time zone) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_review_professional_verification (p_verification_id uuid, p_action text, p_user_status_message text, p_provider text, p_provider_reference text, p_expires_at timestamp with time zone) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_set_professional_badge (p_professional_id uuid, p_badge_code text, p_action text, p_reason text, p_expires_at timestamp with time zone) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_set_professional_badge (p_professional_id uuid, p_badge_code text, p_action text, p_reason text, p_expires_at timestamp with time zone) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_set_professional_badge (p_professional_id uuid, p_badge_code text, p_action text, p_reason text, p_expires_at timestamp with time zone) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_set_professional_badge (p_professional_id uuid, p_badge_code text, p_action text, p_reason text, p_expires_at timestamp with time zone) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_set_professional_membership (p_professional_id uuid, p_plan_code text, p_status text, p_current_period_end timestamp with time zone, p_processor text, p_processor_customer_id text, p_processor_subscription_id text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_set_professional_membership (p_professional_id uuid, p_plan_code text, p_status text, p_current_period_end timestamp with time zone, p_processor text, p_processor_customer_id text, p_processor_subscription_id text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_set_professional_membership (p_professional_id uuid, p_plan_code text, p_status text, p_current_period_end timestamp with time zone, p_processor text, p_processor_customer_id text, p_processor_subscription_id text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_set_professional_membership (p_professional_id uuid, p_plan_code text, p_status text, p_current_period_end timestamp with time zone, p_processor text, p_processor_customer_id text, p_processor_subscription_id text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.admin_trust_safety_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.admin_trust_safety_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.admin_trust_safety_queue () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.admin_trust_safety_queue () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.assert_professional_job_capacity (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_issue_evidence_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_message_moderation_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_payment_review_changes () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_professional_subscription_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_professional_verification_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_project_issue_changes () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_restriction_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_safety_report_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_safety_report_update () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_strike_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.audit_user_block_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.block_korvo_user (p_blocked_user_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.block_korvo_user (p_blocked_user_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.block_korvo_user (p_blocked_user_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.block_korvo_user (p_blocked_user_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.bump_conversation_on_message () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.cancel_professional_membership_change () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.cancel_professional_membership_change () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.cancel_professional_membership_change () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.cancel_professional_membership_change () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.classify_message_safety (p_body text) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.create_conversation_for_quote () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.create_issue_from_paid_cancellation () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.current_professional_verification_status (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.customer_cancel_job (p_job_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.customer_cancel_job (p_job_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.customer_cancel_job (p_job_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.customer_cancel_job (p_job_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.customer_confirm_job_completion (p_active_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.customer_confirm_job_completion (p_active_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.customer_confirm_job_completion (p_active_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.customer_confirm_job_completion (p_active_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.customer_past_projects () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.customer_past_projects () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.customer_past_projects () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.customer_past_projects () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.customer_resolve_completion_issue (p_issue_id uuid, p_action text, p_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.customer_resolve_completion_issue (p_issue_id uuid, p_action text, p_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.customer_resolve_completion_issue (p_issue_id uuid, p_action text, p_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.customer_resolve_completion_issue (p_issue_id uuid, p_action text, p_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.enforce_job_posting_safety () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.enforce_quote_safety () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.ensure_payment_review_for_issue () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.ensure_professional_subscription_row () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.get_job_private_details (p_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.get_job_private_details (p_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.get_job_private_details (p_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.get_job_private_details (p_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.get_professional_trust_summary (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.get_professional_trust_summary (p_professional_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.get_professional_trust_summary (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.get_professional_trust_summary (p_professional_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.is_blocked_between (p_user_a uuid, p_user_b uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.is_korvo_action_allowed (p_user_id uuid, p_action text) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.is_korvo_admin () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.is_korvo_admin () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.is_korvo_admin () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.is_korvo_admin () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.job_recommended_professionals (p_job_id uuid, p_limit integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.job_recommended_professionals (p_job_id uuid, p_limit integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.job_recommended_professionals (p_job_id uuid, p_limit integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.job_recommended_professionals (p_job_id uuid, p_limit integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.link_conversation_to_active_job () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.mark_all_notifications_read () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.mark_all_notifications_read () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.mark_all_notifications_read () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.mark_all_notifications_read () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.mark_conversation_read (p_conversation_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.mark_conversation_read (p_conversation_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.mark_conversation_read (p_conversation_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.mark_conversation_read (p_conversation_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.mark_notification_read (p_notification_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.mark_notification_read (p_notification_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.mark_notification_read (p_notification_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.mark_notification_read (p_notification_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.my_job_match_feed (p_limit integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.my_job_match_feed (p_limit integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.my_job_match_feed (p_limit integer) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.my_job_match_feed (p_limit integer) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.my_professional_membership () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.my_professional_membership () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.my_professional_membership () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.my_professional_membership () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.my_professional_verifications () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.my_professional_verifications () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.my_professional_verifications () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.my_professional_verifications () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.normalize_admin_issue_resolution_actor () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_active_job_status_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_booking_payment_status_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_issue_message_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_message_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_quote_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_quote_status_change () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.notify_on_review_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.open_project_issue (p_active_job_id uuid, p_issue_type text, p_description text, p_requested_resolution text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.open_project_issue (p_active_job_id uuid, p_issue_type text, p_description text, p_requested_resolution text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.open_project_issue (p_active_job_id uuid, p_issue_type text, p_description text, p_requested_resolution text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.open_project_issue (p_active_job_id uuid, p_issue_type text, p_description text, p_requested_resolution text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.prepare_booking_payment (p_active_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.prepare_quote_insert () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.professional_cancel_job (p_active_job_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.professional_cancel_job (p_active_job_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_cancel_job (p_active_job_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.professional_cancel_job (p_active_job_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_has_job_capacity (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_job_match_details (p_professional_id uuid, p_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_membership_snapshot_internal (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.professional_past_projects () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.professional_past_projects () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_past_projects () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.professional_past_projects () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.professional_request_job_completion (p_active_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.professional_request_job_completion (p_active_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_request_job_completion (p_active_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.professional_request_job_completion (p_active_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.professional_withdraw_quote (p_quote_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.professional_withdraw_quote (p_quote_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.professional_withdraw_quote (p_quote_id uuid, p_reason text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.professional_withdraw_quote (p_quote_id uuid, p_reason text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.protect_professional_verification_status () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.record_professional_job_usage (p_professional_id uuid, p_active_job_id uuid, p_job_id uuid, p_quote_id uuid, p_snapshot jsonb) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.refresh_professional_verification_state (p_professional_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.register_project_issue_evidence (p_issue_id uuid, p_storage_path text, p_file_name text, p_caption text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.register_project_issue_evidence (p_issue_id uuid, p_storage_path text, p_file_name text, p_caption text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.register_project_issue_evidence (p_issue_id uuid, p_storage_path text, p_file_name text, p_caption text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.register_project_issue_evidence (p_issue_id uuid, p_storage_path text, p_file_name text, p_caption text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.report_korvo_user (p_reported_user_id uuid, p_category text, p_details text, p_message_id uuid, p_conversation_id uuid, p_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.report_korvo_user (p_reported_user_id uuid, p_category text, p_details text, p_message_id uuid, p_conversation_id uuid, p_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.report_korvo_user (p_reported_user_id uuid, p_category text, p_details text, p_message_id uuid, p_conversation_id uuid, p_job_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.report_korvo_user (p_reported_user_id uuid, p_category text, p_details text, p_message_id uuid, p_conversation_id uuid, p_job_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.request_professional_membership_cancellation () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.request_professional_membership_cancellation () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.request_professional_membership_cancellation () FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.request_professional_membership_cancellation () TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.request_professional_membership_change (p_plan_code text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.request_professional_membership_change (p_plan_code text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.request_professional_membership_change (p_plan_code text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.request_professional_membership_change (p_plan_code text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.request_professional_verification (p_verification_type text, p_jurisdiction text, p_credential_last4 text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.request_professional_verification (p_verification_type text, p_jurisdiction text, p_credential_last4 text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.request_professional_verification (p_verification_type text, p_jurisdiction text, p_credential_last4 text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.request_professional_verification (p_verification_type text, p_jurisdiction text, p_credential_last4 text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.respond_to_quote (p_quote_id uuid, p_action text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.respond_to_quote (p_quote_id uuid, p_action text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.respond_to_quote (p_quote_id uuid, p_action text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.respond_to_quote (p_quote_id uuid, p_action text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.rls_auto_enable () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.send_korvo_message (p_conversation_id uuid, p_body text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.send_korvo_message (p_conversation_id uuid, p_body text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.send_korvo_message (p_conversation_id uuid, p_body text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.send_korvo_message (p_conversation_id uuid, p_body text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.submit_job_review (p_job_id uuid, p_rating integer, p_comment text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.submit_job_review (p_job_id uuid, p_rating integer, p_comment text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.submit_job_review (p_job_id uuid, p_rating integer, p_comment text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.submit_job_review (p_job_id uuid, p_rating integer, p_comment text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.sync_payment_review_from_booking_payment () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.sync_verification_badges () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.unblock_korvo_user (p_blocked_user_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.unblock_korvo_user (p_blocked_user_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.unblock_korvo_user (p_blocked_user_id uuid) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.unblock_korvo_user (p_blocked_user_id uuid) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.update_open_job (p_job_id uuid, p_title text, p_description text, p_category text, p_city text, p_state text, p_budget_min numeric, p_budget_max numeric, p_preferred_date date, p_timeframe text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.update_open_job (p_job_id uuid, p_title text, p_description text, p_category text, p_city text, p_state text, p_budget_min numeric, p_budget_max numeric, p_preferred_date date, p_timeframe text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.update_open_job (p_job_id uuid, p_title text, p_description text, p_category text, p_city text, p_state text, p_budget_min numeric, p_budget_max numeric, p_preferred_date date, p_timeframe text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.update_open_job (p_job_id uuid, p_title text, p_description text, p_category text, p_city text, p_state text, p_budget_min numeric, p_budget_max numeric, p_preferred_date date, p_timeframe text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.upsert_job_private_details (p_job_id uuid, p_service_address_line1 text, p_service_address_line2 text, p_service_city text, p_service_state text, p_service_postal_code text, p_access_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION korvo_api_private.upsert_job_private_details (p_job_id uuid, p_service_address_line1 text, p_service_address_line2 text, p_service_city text, p_service_state text, p_service_postal_code text, p_access_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON FUNCTION public.upsert_job_private_details (p_job_id uuid, p_service_address_line1 text, p_service_address_line2 text, p_service_city text, p_service_state text, p_service_postal_code text, p_access_notes text) FROM PUBLIC, anon, authenticated, service_role",
+    "GRANT EXECUTE ON FUNCTION public.upsert_job_private_details (p_job_id uuid, p_service_address_line1 text, p_service_address_line2 text, p_service_city text, p_service_state text, p_service_postal_code text, p_access_notes text) TO authenticated",
+    "REVOKE ALL PRIVILEGES ON TABLE public.job_matching_config FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON TABLE public.payment_webhook_events FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON TABLE public.platform_admins FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON TABLE public.professional_badges FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON TABLE public.professional_verification_history FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON TABLE public.professional_verifications FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.protect_profile_security_fields () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.protect_professional_profile_owner () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE ALL PRIVILEGES ON FUNCTION korvo_api_private.protect_new_job_state () FROM PUBLIC, anon, authenticated, service_role",
+    "REVOKE INSERT, UPDATE ON TABLE public.job_private_details FROM authenticated",
+    "REVOKE ALL PRIVILEGES ON TABLE public.job_payment_transfers FROM PUBLIC, anon, authenticated, service_role"
+  ],
+  "other_statements": [
+    "SET lock_timeout TO '5s'",
+    "CREATE SCHEMA IF NOT EXISTS korvo_api_private",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM anon, authenticated, service_role",
+    "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA korvo_api_private REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC, anon, authenticated, service_role",
+    "COMMENT ON POLICY backend_only_deny_clients ON public.job_matching_config IS 'Intentionally backend-only. Audited private functions authorize access; clients have no direct grants.'",
+    "COMMENT ON POLICY backend_only_deny_clients ON public.payment_webhook_events IS 'Intentionally backend-only. Audited private functions authorize access; clients have no direct grants.'",
+    "COMMENT ON POLICY backend_only_deny_clients ON public.platform_admins IS 'Intentionally backend-only. Audited private functions authorize access; clients have no direct grants.'",
+    "COMMENT ON POLICY backend_only_deny_clients ON public.professional_badges IS 'Intentionally backend-only. Audited private functions authorize access; clients have no direct grants.'",
+    "COMMENT ON POLICY backend_only_deny_clients ON public.professional_verification_history IS 'Intentionally backend-only. Audited private functions authorize access; clients have no direct grants.'",
+    "COMMENT ON POLICY backend_only_deny_clients ON public.professional_verifications IS 'Intentionally backend-only. Audited private functions authorize access; clients have no direct grants.'",
+    "NOTIFY pgrst, 'reload schema'"
+  ],
+  "packages": [
+    {
+      "order": 1,
+      "name": "foundation",
+      "file": "20261013174905_review_security_foundation.sql",
+      "statements": 8,
+      "sha256": "8114ecfcab63c2431f9e20dab3d22be57415dc69c9449235f8766924d2518aae",
+      "statement_types": {
+        "VariableSetStmt": 1,
+        "CreateSchemaStmt": 1,
+        "GrantStmt": 3,
+        "AlterDefaultPrivilegesStmt": 3
+      }
+    },
+    {
+      "order": 2,
+      "name": "administrative_apis",
+      "file": "20261013174912_review_security_administrative_apis.sql",
+      "statements": 132,
+      "sha256": "804a69e5ce8d7c9de6721ef5550edf4363e07b73d79f5f1978142c89e88beb28",
+      "statement_types": {
+        "CreateFunctionStmt": 36,
+        "GrantStmt": 84,
+        "AlterFunctionStmt": 12
+      }
+    },
+    {
+      "order": 3,
+      "name": "customer_and_discovery_apis",
+      "file": "20261013174919_review_security_customer_and_discovery_apis.sql",
+      "statements": 146,
+      "sha256": "3de09040d2c1bf510aa0e9af735f453b93fba9ed4a2ea9f90c010e20d74e3513",
+      "statement_types": {
+        "CreateFunctionStmt": 34,
+        "GrantStmt": 90,
+        "AlterFunctionStmt": 22
+      }
+    },
+    {
+      "order": 4,
+      "name": "professional_and_trust_apis",
+      "file": "20261013174929_review_security_professional_and_trust_apis.sql",
+      "statements": 66,
+      "sha256": "104f82159e94058f2789496feb3407df071b5eab651ec590494e56a5d15bd3b3",
+      "statement_types": {
+        "CreateFunctionStmt": 18,
+        "GrantStmt": 42,
+        "AlterFunctionStmt": 6
+      }
+    },
+    {
+      "order": 5,
+      "name": "quotes_messages_and_private_details",
+      "file": "20261013174936_review_security_quotes_messages_and_private_details.sql",
+      "statements": 42,
+      "sha256": "cefd4677011001fccbc864cbcd56ae395c35405af6ae44dd1f28cfbbf588f2a6",
+      "statement_types": {
+        "CreateFunctionStmt": 12,
+        "GrantStmt": 27,
+        "AlterFunctionStmt": 3
+      }
+    },
+    {
+      "order": 6,
+      "name": "backend_permissions_and_rls",
+      "file": "20261013174944_review_security_backend_permissions_and_rls.sql",
+      "statements": 57,
+      "sha256": "697debd19ac8331680dffc045519ed94ddea67f686377d373aebc63e3f94ae57",
+      "statement_types": {
+        "GrantStmt": 6,
+        "CreatePolicyStmt": 6,
+        "CommentStmt": 6,
+        "AlterPolicyStmt": 39
+      }
+    },
+    {
+      "order": 7,
+      "name": "profile_job_and_transfer_guards",
+      "file": "20261013174951_review_security_profile_job_and_transfer_guards.sql",
+      "statements": 13,
+      "sha256": "db3167a383a4a1db98002d4426f208063148b3c84117e51576f15ff64e6199fb",
+      "statement_types": {
+        "CreateFunctionStmt": 3,
+        "GrantStmt": 5,
+        "CreateTrigStmt": 3,
+        "NotifyStmt": 1,
+        "CreatePolicyStmt": 1
+      }
+    }
+  ],
+  "roles_affected": [
+    "PUBLIC",
+    "anon",
+    "authenticated",
+    "service_role",
+    "postgres (default function privileges)"
+  ],
+  "application_roles_tested": [
+    "customer",
+    "professional",
+    "unrelated customer/professional",
+    "support",
+    "owner/admin",
+    "inactive/revoked",
+    "anonymous",
+    "service backend"
+  ],
+  "managed_blockers": [
+    {
+      "table": "storage.objects",
+      "owner": "supabase_storage_admin",
+      "policy": "Issue evidence read",
+      "operation": "ALTER"
+    },
+    {
+      "table": "storage.objects",
+      "owner": "supabase_storage_admin",
+      "policy": "Issue evidence upload",
+      "operation": "ALTER"
+    }
+  ]
+}
