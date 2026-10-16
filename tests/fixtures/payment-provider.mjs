@@ -1,0 +1,4 @@
+export const payment={id:'10000000-0000-0000-0000-000000000001',pricing_version:'quote_plus_12_percent_v1',currency:'usd',quote_cents:10000,professional_gross_cents:10000,platform_fee_cents:1200,customer_total_cents:11200,
+ stripe_payment_intent_id:'pi_fixture',stripe_charge_id:'ch_fixture',status:'paid',release_status:'held',requires_review:false,refunded_total_cents:0,professional_refunded_cents:0,platform_fee_refunded_cents:0};
+export const intent={id:'pi_fixture',livemode:false,currency:'usd',amount:11200,amount_received:11200,status:'succeeded',latest_charge:'ch_fixture',metadata:{korvo_payment_id:payment.id,korvo_pricing_version:payment.pricing_version}};
+export const charge={id:'ch_fixture',livemode:false,currency:'usd',amount:11200,amount_captured:11200,paid:true,payment_intent:'pi_fixture',amount_refunded:0,disputed:false};

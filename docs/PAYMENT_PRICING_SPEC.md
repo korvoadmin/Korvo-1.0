@@ -33,18 +33,20 @@ Persist separate original amounts: `quote_cents`, `platform_fee_cents`,
 `customer_total_cents`, and `professional_gross_cents`. Preserve those original
 amounts when recording refunds, reversals, disputes or processor costs.
 
-## Processing costs: owner decision required
+## Processing costs: confirmed founder policy
 
-No payer has been selected. Do not silently deduct Stripe processing costs from
-the professional's price, add another customer fee, or describe the gross Korvo fee
-as net profit. Sandbox tests exercise the gross allocations; they do not establish
-who absorbs costs for real payments. This decision is a live-payment launch gate.
+Korvo absorbs Stripe processing costs from its 12% gross fee. Do not deduct them
+from professional gross or add another customer charge. Actual provider costs must
+be observed, not guessed; the tested founder-policy accounting helper can represent
+negative Korvo margin. Provider-cost ingestion/net reporting remains unfinished.
+This specification does not enable payments or change Stripe configuration.
 
 ## Refunds and completion release
 
-Cancellation deadlines, refundable/nonrefundable fee rules, no-show consequences,
-and the customer issue-report window remain undecided. No automatic refund schedule
-is authorized by this specification.
+Manual review is the beta default. Professional cancellation/no-show calls for a full
+customer refund recommendation; execution remains separately gated. Other cancellation
+deadlines, partial-work remedies and issue-report/non-confirmation timing remain
+unresolved. No automatic refund schedule is authorized.
 
 An authorized refund instruction must specify professional-price cents and platform
 fee cents separately. A complete refund of an untouched $500 quote plus its fee is
@@ -53,8 +55,9 @@ amounts are an example of a reviewed adjustment, not an automatic policy. A prev
 professional transfer requires reversal/recovery of the approved professional-price
 component before the refund is treated as safely settled.
 
-Customer confirmation and documented professional completion make a paid job a
-candidate for release. Outstanding issues, a chargeback, ambiguous operations,
+Verified customer confirmation and documented professional completion make a paid job
+immediately eligible for evaluation without an added delay. This is eligibility, not
+authorization to execute a transfer. Outstanding issues, a chargeback, ambiguous operations,
 unreconciled adjustments or incomplete Stripe onboarding must hold release. Moving
 funds to the professional's Stripe balance is a **transfer**, not confirmation that
 their bank has received a payout. No escrow or indefinite holding promise is made.

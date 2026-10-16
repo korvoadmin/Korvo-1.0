@@ -34,6 +34,7 @@ const assert=require('node:assert/strict');
   await db.exec(`insert into public.marketplace_payments(id,active_job_id,customer_id,professional_id,quote_cents,professional_gross_cents,platform_fee_cents,customer_total_cents,status)
    values('${pay}','${j}','${c}','${w}',50000,50000,6000,56000,'paid')`);
   await db.exec(await fs.readFile('supabase/proposals/20261013174432_private_completion_evidence.sql','utf8'));
+  await db.exec(await fs.readFile('supabase/proposals/completion_release_facts.sql','utf8'));
   await db.exec(await fs.readFile('supabase/proposals/20261013175001_administrative_refund_review.sql','utf8'));
   ok((await row(`select public.completion_evidence_summary('${j}') result`).catch(()=>({result:null}))).result===null,'unsigned evidence summary denied');
   await as(w);ok((await row(`select public.completion_evidence_summary('${j}') result`)).result.required===false,'preexisting job is explicitly legacy');await db.exec('reset role');
@@ -84,12 +85,17 @@ const assert=require('node:assert/strict');
   for(const extra of extras)await db.exec(`select public.completion_abandon_photo('${extra.id}')`);
   await db.exec('reset role');await denied(`update public.active_jobs set status='completed' where id='${j}'`,'direct completion bypass rejected');
   await db.exec(`update public.active_jobs set status='pending_confirmation' where id='${j}'`);ok(true,'verified evidence allows completion submission');
+  await as('','service_role');ok((await row(`select public.completion_release_evidence('${j}') result`)).result.evidence_verified===false,'photo upload alone cannot satisfy release evidence');await db.exec('reset role');
   await denied(`update public.active_jobs set status='completed' where id='${j}'`,'customer review required');
   await as(w);await denied(`select public.completion_acknowledge_photos('${j}')`,'professional cannot acknowledge for customer','42501');
   ok((await row(stableReserve)).result.file_status==='validated','retry recovers validated reservation after submission');
   await denied(reserve(),'new photo cannot be reserved after submission','42501');
   await as(c);await db.exec(`select public.completion_acknowledge_photos('${j}')`);ok(true,'customer acknowledges verified evidence');
   await db.exec('reset role');await db.exec(`update public.active_jobs set status='completed' where id='${j}'`);ok(true,'reviewed evidence allows customer completion');
+  for(const uid of [c,w,other,admin]){await as(uid);await denied(`select public.completion_release_evidence('${j}')`,'client cannot forge/read service release attestation','42501');}
+  await as('','service_role');const releaseFacts=(await row(`select public.completion_release_evidence('${j}') result`)).result;
+  ok(releaseFacts.evidence_verified&&releaseFacts.customer_acknowledged&&releaseFacts.execution_enabled===false,'service derives completed customer-reviewed evidence without release');
+  await db.exec('reset role');
   const request=(pro=50000,fee=6000,k=key,reason='Customer cancellation review')=>`select public.admin_request_marketplace_refund_review('${pay}','${k}',${pro},${fee},'${reason}') result`;
   for(const uid of [c,w,other]){await as(uid);await denied(request(),'ordinary '+uid.slice(-1)+' cannot request refund review','42501');await denied('select public.admin_marketplace_refund_queue()','ordinary '+uid.slice(-1)+' cannot read financial queue','42501');}
   await db.exec('reset role');await db.exec(`insert into public.platform_admins values('${other}',true,'support')`);await as(other);

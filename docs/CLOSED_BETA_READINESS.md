@@ -3,9 +3,11 @@
 Authoritative itemized task/status register: [KORVO_MASTER_LAUNCH_CHECKLIST.md](KORVO_MASTER_LAUNCH_CHECKLIST.md).
 This file is a phase-gate summary; task counts and detailed evidence belong to the master.
 
-October 15, 2026: **not ready for money-handling closed beta**. Safe sandbox rehearsal
-is possible. Pricing is full professional quote plus 12% on top; no fee-payer choice
-or live/transfer enablement is inferred.
+October 16, 2026: **NO-GO for money handling; invitation-only non-money beta also
+awaits its operational gates.** Founder scope is 20 people in Atlanta, with no
+invitations authorized. Korvo absorbs project processing costs; professional gross
+and quote + 12% remain unchanged. See FOUNDER_POLICY_BASELINE.md. Historical sections
+below preserve prior checkpoints; this current statement supersedes undecided policy descriptions.
 
 | Priority | Gate | Current state / evidence |
 | --- | --- | --- |
@@ -150,3 +152,20 @@ Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
 receipts, capacity and worker conflict protection, and transaction rollback. This
 resolves the container-local environment blocker for these cases. Broader crash/
 deadlock and managed Supabase endpoint tests remain; no hosted settings changed.
+
+## October 16 current integration checkpoint
+
+See SPRINT_REPORT_2026-10-16_DEVELOPMENT.md and the master E20 evidence. The nine
+previously missing navigation references now resolve to truthful contact/own-profile
+pages in development; 17 policy/demo placeholders remain. No Pages publication.
+Reconciliation observations and a reviewed full-refund component correction are
+implemented in unapplied SQL/default-off UI; neither sandbox review flag was cleared.
+Trusted evidence release facts and stale-photo handling are staged; hosted upload,
+signed URL, actual Edge runtime and full customer journey remain unverified.
+
+D1–D12 working decisions are recorded; do not ask again for selected fee payer,
+manual allowance restoration, employer-pay direction or 20-person non-money scope.
+Unresolved legal, category, policy timing, reserves, actual support operation and
+operator identity remain separate. A6 needs managed recovery qualification/durable
+backup; A8 needs approved copy/assent and served-version acceptance; A10 needs
+populated recovery and actual hosted evidence/finance acceptance. A1/A7/A9 stay closed.

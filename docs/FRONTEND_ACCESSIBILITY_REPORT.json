@@ -1,0 +1,77 @@
+{
+  "layer": "local Chromium axe WCAG 2/2.1 A/AA, unauthenticated/default-off pages",
+  "hosted": false,
+  "views": 14,
+  "results": [
+    {
+      "file": "contact.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "contact.html",
+      "width": 1280,
+      "violations": []
+    },
+    {
+      "file": "profile.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "profile.html",
+      "width": 1280,
+      "violations": []
+    },
+    {
+      "file": "forgot-password.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "forgot-password.html",
+      "width": 1280,
+      "violations": []
+    },
+    {
+      "file": "reset-password.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "reset-password.html",
+      "width": 1280,
+      "violations": []
+    },
+    {
+      "file": "login.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "login.html",
+      "width": 1280,
+      "violations": []
+    },
+    {
+      "file": "signup.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "signup.html",
+      "width": 1280,
+      "violations": []
+    },
+    {
+      "file": "admin-refunds.html",
+      "width": 375,
+      "violations": []
+    },
+    {
+      "file": "admin-refunds.html",
+      "width": 1280,
+      "violations": []
+    }
+  ]
+}

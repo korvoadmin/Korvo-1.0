@@ -49,6 +49,14 @@
       "sha256": "fdd7a80db357eaf1dc48a2d8cb2d70032a2189b2ec9780fc04e40307e2f0395a"
     },
     {
+      "path": "supabase/proposals/financial_reconciliation_observations.sql",
+      "sha256": "e545602fccbb3034b061fd137d2e59fe1dcbcf4f58bd38a304aa50a298b8db08"
+    },
+    {
+      "path": "supabase/proposals/completion_release_facts.sql",
+      "sha256": "0436788e9f393ff239db61dca101048709af9bfea53f2506696d4664d06dba43"
+    },
+    {
       "path": "supabase/functions/verify-completion-photo/decoder.mjs",
       "sha256": "8286d61b127f63cf5ad460f1da3de6759e6a6f3aabf56ac49e8574665bda919a"
     },
@@ -69,6 +77,38 @@
       "sha256": "16b05e40420bdcebfd0e90c4848fdba41c9444ca1ed9abb7e7dac462e1d49ed0"
     },
     {
+      "path": "supabase/functions/reconcile-marketplace-payment/handler.mjs",
+      "sha256": "44ad8efea39c42bdd3a90e6067d199d15a5e5fce7abaaa7aa573a6065ef04fd3"
+    },
+    {
+      "path": "supabase/functions/reconcile-marketplace-payment/index.ts",
+      "sha256": "3982100f20cb7611e8b0612b6f0e89811ccfd6f81e20c2e8917e303554597c9b"
+    },
+    {
+      "path": "supabase/functions/reconcile-marketplace-payment/package-lock.json",
+      "sha256": "42632389884e3594d934ac662d842f021d3f18d15ca0b5553ea0f7e05b7a1aec"
+    },
+    {
+      "path": "supabase/functions/reconcile-marketplace-payment/package.json",
+      "sha256": "db6b822d6d6ee8e1970c765ba07efcca664b95fde9e5f9770e41f50084036d0a"
+    },
+    {
+      "path": "supabase/functions/_shared/founder-policy.mjs",
+      "sha256": "eefb0521aa67df42e9d5058498321209dd66064d7c13b59696d583b91a1ed64b"
+    },
+    {
+      "path": "supabase/functions/_shared/payment-observations.mjs",
+      "sha256": "5ba9523c982b07395ffb852a64497606122e7fe4aadb9b39241948263d97df03"
+    },
+    {
+      "path": "supabase/functions/_shared/stripe-readonly.mjs",
+      "sha256": "74a446f2f255201ad8ed3ddac3001f6f13e4bd7dfc75838eb2fbdc25f6fd486f"
+    },
+    {
+      "path": "supabase/functions/_shared/release.mjs",
+      "sha256": "f130d3523e361c873218335f6a35d95c409b0b73a47552b4ee47b781a6bf1423"
+    },
+    {
       "path": "supabase/functions/_shared/completion-evidence.mjs",
       "sha256": "2cbb71b2144ef9199714c467eb736d108b4476e76e8192ac33b6121bbfe83a09"
     },
@@ -84,7 +124,7 @@
     },
     {
       "path": "admin-refunds.js",
-      "sha256": "709352258cc83d6fc3fb3a10d8cbc0842722f6046eac81047769ac268c9021e3"
+      "sha256": "feb26d8a967e2979eb85e761436fa70d75b48335b22a1e4f9bfa245f55b6b74e"
     },
     {
       "path": "browse.html",
@@ -100,11 +140,15 @@
     },
     {
       "path": "completion-evidence.js",
-      "sha256": "525aa854d842c9a9dfebb5971767e989e785da6a401f1037f9e1e10254ffb37b"
+      "sha256": "dabf29b629e67244ac78f943e4b7912a7af6cd1e0b25d0c596dab4f6766398e0"
+    },
+    {
+      "path": "contact.html",
+      "sha256": "cdcd72886d5189731d359cda880882ae3de67d71a24d9e3be9aac6eb5a46e759"
     },
     {
       "path": "customer-dashboard.html",
-      "sha256": "a43eaa1b788640107432076edb528d27d0a0ba3dc591d238be536efe543fe9e8"
+      "sha256": "13ebaead9213faf7ae7281c4c43c860e5aeb7d9fa6213aa8ee45122abf3e4e13"
     },
     {
       "path": "customer-dashboard.js",
@@ -116,7 +160,7 @@
     },
     {
       "path": "forgot-password.html",
-      "sha256": "ee28a597b9853ee1c26a64827899ceb847a6d196075990e053e524f68a91fe31"
+      "sha256": "a0a0395cbfd9c9ef1100996f4a3b8b5fbc20e5231fed4bfd46adec89b483fc0d"
     },
     {
       "path": "gig-foundation.html",
@@ -131,8 +175,16 @@
       "sha256": "dee5abc8aafc1c3ad83db397782e548d9dedd483488d801a5e958a4403cd9fe6"
     },
     {
+      "path": "login.html",
+      "sha256": "25ce14397bb0cd0e7926249c55ceff75758acd860c1833136c46fbd226d8b2bd"
+    },
+    {
       "path": "marketplace-payments.js",
       "sha256": "892232b5a622f6a87517bfced8a75acc276f0b01665e6070c78622dfd67bad80"
+    },
+    {
+      "path": "messages.html",
+      "sha256": "ed8ef9e42c59122fc22c64178c6e00e832c72c413cb32b23c0c086dc8de526f4"
     },
     {
       "path": "messages.js",
@@ -148,7 +200,7 @@
     },
     {
       "path": "post-a-job.html",
-      "sha256": "aa762127fc0e1bbc3aa6fcea3001578efd3efd0513b0e0b43fa384e922f135ce"
+      "sha256": "54d79f1191b93305f8501234c0e15f7f616d5fd1e9fc17e57aeacbda13d6780c"
     },
     {
       "path": "post-a-job.js",
@@ -156,26 +208,45 @@
     },
     {
       "path": "professional-dashboard.html",
-      "sha256": "aa9aaf4e9ddbaa928a05039b114eab7da1047e981f546e76d6d05651e8d6e8cb"
+      "sha256": "8d7ecf352a410a162df62927c3b6707049b8f9201fa393fd2cf8c48b24edd772"
     },
     {
       "path": "professional-dashboard.js",
       "sha256": "15577ae19f2860d394b859552f0b601d68141a1ddae29b7c02268a031683ffa6"
     },
     {
+      "path": "professional-onboarding.html",
+      "sha256": "bb8317b9b962d007fb534fb33462379db5b8e806ecdfabf7d12ddf33c7c8f876"
+    },
+    {
       "path": "professional-onboarding.js",
       "sha256": "2b031e0c6895f007fc91cbbc987d23dafc24ab7b9e520a6e5a1fa2c31980cda2"
     },
     {
+      "path": "profile.html",
+      "sha256": "b508d8a10bca101c885220e0188d31cb27cd531de778e36c108fb45cedf8b3fe"
+    },
+    {
+      "path": "profile.js",
+      "sha256": "b7dc503132cc26e7923edda7f13fb655f223dde1ece781931817ed40b4875629"
+    },
+    {
       "path": "reset-password.html",
-      "sha256": "1731a3cfeca608f9ddcfdab058b0bda835cd0c2ba60a6d1970a11284fad645c7"
+      "sha256": "de048e8a42adda747b1c7f794271fa6777ba875df0eb3209e696745ebeee2326"
+    },
+    {
+      "path": "signup.html",
+      "sha256": "5b2d7651671e07a859e26b8097421db964bc3526aebb342c5460334b8cda7dd9"
     }
   ],
   "flags_default_off": [
     "COMPLETION_EVIDENCE_ENABLED",
     "KORVO_COMPLETION_EVIDENCE_ENABLED",
     "KORVO_REFUND_REVIEW_ENABLED",
-    "KORVO_FINANCIAL_LEDGER_ENABLED"
+    "KORVO_FINANCIAL_LEDGER_ENABLED",
+    "FINANCIAL_RECONCILIATION_ENABLED",
+    "KORVO_FINANCIAL_RECONCILIATION_ENABLED",
+    "KORVO_FULL_REFUND_ACCOUNTING_ENABLED"
   ],
   "money_execution_enabled": false
 }

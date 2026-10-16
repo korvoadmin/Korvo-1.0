@@ -46,3 +46,40 @@ are still engineering prerequisites; this candidate is not a deployment-ready cl
 No refunds, transfers, live payments, release automation, gig activation, production
 settings or authorization migration are included. Refund/transfer execution is absent
 from the ledger; `execution_enabled` remains false regardless of client input.
+
+## October 16 expanded candidate — separate approval still required
+
+Additional exact objects are enumerated by financial_reconciliation_observations.sql:
+private reconciliation_reports, reconciliation_checks and allocation_corrections;
+private reconciliation_target, record_reconciliation, reconciliation_queue and
+apply_full_refund implementations; public admin_financial_reconciliation_target,
+finance_record_reconciliation, admin_financial_reconciliation_queue and
+admin_record_verified_full_refund_allocation invoker wrappers. The new
+reconcile-marketplace-payment Edge entrypoint only reads Stripe sandbox with GET,
+then persists normalized observations through service-only SQL after active financial
+actor/payment-revision rechecks. It has no refund or transfer API.
+
+An explicit financial owner/admin request can record only the proven existing FULL
+refund component allocation with a fresh immutable provider report, reason, stable
+request key and audit receipt. This internal accounting mutation is DISTINCT from
+read-only provider checks. Service/support cannot approve it; no original amounts,
+refund totals or holds change. It has NOT corrected the actual $112 record. The $560
+held case has no demonstrated amount mismatch and still needs case disposition.
+Enabling this RPC or making an actual correction needs separately reviewed scope.
+
+completion_release_facts.sql adds service-only completion_release_evidence and private
+release_facts: enrollment, assigned-professional evidence, current customer ack and
+completion must agree. Legacy jobs stay manual-review candidates. New SQL depends on
+existing evidence/refund/ledger proposals, applied in manifest dependency order after
+A6 compatibility review. New policy helpers provide no privilege assignment or money
+execution. No financial dispatcher/scheduler is added.
+
+Required hosted tests include actual owner/support/anonymous sessions, revoked roles,
+provider failures/late responses, duplicate checks, stale payment revisions and once-only
+accounting receipts; source permissions must deny direct table writes. Actual Stripe
+refunds/transfers are excluded even from acceptance. Preserve observations/corrections
+and evidence during recovery; no DROP populated schema/bucket, DELETE accounting audit,
+undoing a proven allocation or clearing a hold as rollback. Stop intake/disable flags,
+retain reconciliation receipts and use reviewed forward repair; managed populated
+recovery qualification remains a blocker. Review retention/access for operator reasons
+and document hashes. Final exact manifest and commit must be approved separately.

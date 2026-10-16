@@ -63,3 +63,13 @@ actual transfers remain disabled. No escrow or indefinite funds-holding promise 
 
 See `PAYMENT_PRICING_SPEC.md`, `HOSPITALITY_COMPLIANCE_REVIEW.md`,
 `GIG_MARKETPLACE_FOUNDATION.md` and `OWNER_ACTION_CHECKLIST.md`.
+
+## October 16 founder-policy alignment
+
+D1 now selects Korvo as project processing-cost payer. D8 selects direct employer
+payroll plus a separate 12% Korvo commercial fee; employee wages never enter Connect.
+The legacy generic gig estimator remains a disabled estimate, not an employer invoice.
+`commercialEmployerQuote` in `founder-policy.mjs` separates wages from the Korvo invoice.
+Commercial fee timing/refund terms and employer costs remain unresolved. There is no
+unconditional nonrefundable commercial fee. Attendance/rebooking contracts are disabled
+and cannot adjust wages. See FOUNDER_POLICY_BASELINE.md; D8–D10 do not grant A9.

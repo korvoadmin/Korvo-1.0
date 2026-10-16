@@ -313,3 +313,19 @@ Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
 receipts, capacity and worker conflict protection, and transaction rollback. This
 resolves the container-local environment blocker for these cases. Broader crash/
 deadlock and managed Supabase endpoint tests remain; no hosted settings changed.
+
+## October 16 read-only boundary and development follow-up
+
+Managed inspection reconfirms migration 20261012153716; checkout/webhook v5 and
+Connect v6 are the only deployed functions. Neither photo verification nor payment
+reconciliation Edge entrypoint is deployed. No new managed SQL/Storage/Auth settings,
+role grant or user deletion occurred. The integration checkpoint's 14 managed
+read-only negative checks remain a subset, not the positive JWT/session matrix.
+
+A6 canonical bytes and seven-package equivalence remain unchanged. Ten new isolated
+checks exercise the actual hardened manual membership restoration implementation:
+support/customer/pro denial, reason requirement, once-only update and preserved
+original actor/reason/history. A6 deployment and managed recovery remain gated.
+New reconciliation/correction SQL has 43 isolated checks; support/service cannot
+approve allocations and direct writes are denied. Frontend SDK is pinned 2.117.3.
+See the October 16 sprint report for outgoing scan, native CI and deployment boundaries.

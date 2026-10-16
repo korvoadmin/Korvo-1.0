@@ -2,7 +2,7 @@
  'use strict';
  const MAX=10*1024*1024,types=['image/jpeg','image/png','image/webp'];
  const element=(tag,text)=>{const e=document.createElement(tag);if(text)e.textContent=text;return e;};
- global.KorvoEvidence={attach({container,client,activeJobId,role,enabled=global.KORVO_COMPLETION_EVIDENCE_ENABLED===true}){
+ global.KorvoEvidence={attach({container,client,activeJobId,role,enabled=global.KORVO_COMPLETION_EVIDENCE_ENABLED===true,imageTimeoutMs=10000}){
   if(!enabled)return {ready:Promise.resolve(),beforeComplete:async()=>{},dispose(){}};
   const panel=element('section');panel.className='completion-evidence';panel.setAttribute('aria-label','Completion photos');
   panel.style.cssText='padding:12px;border:1px solid #d5dbe4;border-radius:12px;margin:12px 0;max-width:100%';
@@ -14,6 +14,7 @@
   const storage=()=>client.storage.from('project-completion-evidence');
   async function refresh(){
    const run=++generation;summary=null;accepted=false;viewed=false;clearURLs();photos.replaceChildren();controls.replaceChildren();
+   const again=element('button','Refresh photos');again.type='button';again.onclick=()=>{if(!busy)refresh().catch(e=>setError(e.message));};controls.append(again);
    const response=await client.rpc('completion_evidence_summary',{p_active_job_id:activeJobId});
    if(disposed||run!==generation)return;
    if(response.error||response.data?.active_job_id!==activeJobId||response.data.role!==role||typeof response.data.required!=='boolean'||!Array.isArray(response.data.photos))throw Error('Photos could not be loaded. Refresh and try again.');
@@ -28,7 +29,9 @@
      if(disposed||run!==generation)return;
      if(file.error||!file.data){allViewed=false;card.append(element('p','Photo unavailable. Refresh to retry.'));continue;}
      const url=URL.createObjectURL(file.data);urls.push(url);const img=element('img');img.alt='Completion photo: '+photo.file_name;img.style.cssText='max-width:100%;height:auto';
-     const loaded=new Promise(resolve=>{img.onload=()=>resolve(true);img.onerror=()=>resolve(false);});img.src=url;card.append(img);if(!await loaded)allViewed=false;
+     const loaded=new Promise(resolve=>{const finish=value=>{clearTimeout(timer);img.onload=null;img.onerror=null;resolve(value);};const timer=setTimeout(()=>finish(false),imageTimeoutMs);img.onload=()=>finish(true);img.onerror=()=>finish(false);});img.src=url;card.append(img);if(!await loaded){allViewed=false;card.append(element('p','Photo did not load. Refresh to retry.'));}
+     // An old image event must never authorize the newer summary or a disposed panel.
+     if(disposed||run!==generation)return;
     }else{
      allViewed=false;card.append(element('p','Upload not yet verified. Retry the same file or remove this reservation.'));
      if(role==='professional'&&summary.status==='active'){
@@ -40,6 +43,7 @@
      }
     }
    }
+   if(disposed||run!==generation)return;
    viewed=allViewed&&summary.photos.some(p=>p.file_status==='validated');
    if(role==='customer'&&summary.status==='pending_confirmation'){
     const label=element('label'),checkbox=element('input');checkbox.type='checkbox';checkbox.disabled=!viewed;
@@ -49,7 +53,6 @@
     const input=element('input');input.type='file';input.accept=types.join(',');input.setAttribute('aria-label','Choose completion photo');
     input.onchange=()=>{const file=input.files[0];if(file)upload(file).catch(error=>setError(error.message));};controls.append(input);
    }
-   const again=element('button','Refresh photos');again.type='button';again.onclick=()=>{if(!busy)refresh().catch(e=>setError(e.message));};controls.append(again);
   }
   async function upload(file){
    if(busy)return;if(!types.includes(file.type)||!file.size||file.size>MAX)throw Error('Choose a JPG, PNG or WEBP photo up to 10 MB.');

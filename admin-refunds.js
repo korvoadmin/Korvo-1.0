@@ -1,5 +1,5 @@
 (function(global){'use strict';const el=(tag,text)=>{const x=document.createElement(tag);if(text)x.textContent=text;return x;};
- global.KorvoRefundReview={attach({container,client,enabled=global.KORVO_REFUND_REVIEW_ENABLED===true,ledgerEnabled=global.KORVO_FINANCIAL_LEDGER_ENABLED===true}){
+ global.KorvoRefundReview={attach({container,client,enabled=global.KORVO_REFUND_REVIEW_ENABLED===true,ledgerEnabled=global.KORVO_FINANCIAL_LEDGER_ENABLED===true,reconciliationEnabled=global.KORVO_FINANCIAL_RECONCILIATION_ENABLED===true,accountingEnabled=global.KORVO_FULL_REFUND_ACCOUNTING_ENABLED===true}){
   const status=el('p',enabled?'Checking financial access…':'Refund review is not enabled.');status.setAttribute('role','status');container.append(status);const content=el('section');container.append(content);let authorized=false,busy=false;const keys=new Map();
   const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(value);
   const money=c=>Number.isSafeInteger(c)&&c>=0?'$'+(c/100).toFixed(2):'Unavailable';
@@ -8,6 +8,8 @@
    const response=await client.rpc('admin_marketplace_refund_queue');if(response.error||!Array.isArray(response.data))throw Error('Financial access denied or review queue unavailable.');
    let operations=[];
    if(ledgerEnabled){const ledger=await client.rpc('admin_financial_operation_queue');if(ledger.error||!Array.isArray(ledger.data))throw Error('Financial operation queue unavailable. Refresh to reconcile.');operations=ledger.data;}
+   let payments=[];
+   if(reconciliationEnabled){const reconciliation=await client.rpc('admin_financial_reconciliation_queue');if(reconciliation.error||!Array.isArray(reconciliation.data))throw Error('Provider reconciliation queue unavailable. Refresh to retry.');payments=reconciliation.data;}
    authorized=true;status.textContent='Financial review queue. All recommendations require separate authorized processing.';
    const refresh=el('button','Refresh reviews');refresh.type='button';refresh.onclick=()=>{if(!busy)load().catch(e=>{status.textContent=e.message;});};content.append(refresh);
    const form=el('form');const fields={};
@@ -52,6 +54,39 @@
    if(ledgerEnabled){const section=el('section');section.append(el('h2','Financial operations requiring reconciliation'));
     for(const operation of operations){const card=el('article');card.append(el('h3','Operation '+operation.id),el('p','State: '+operation.state),el('p','Attention: '+operation.attention_reason),el('p','Professional: '+money(operation.professional_cents)+'; Korvo fee: '+money(operation.platform_fee_cents)));section.append(card);}
     content.append(section);
+   }
+   if(reconciliationEnabled){const section=el('section');section.append(el('h2','Provider reconciliation'),el('p','Read-only provider checks record observations. They do not execute refunds, correct allocations or release held payments.'));
+    for(const payment of payments){const card=el('article');card.append(el('h3','Payment '+payment.payment_id),el('p','Attention: '+payment.attention_reason),el('p','Database state: '+payment.status+'; release: '+payment.release_status),el('p','Last check: '+(payment.checked_at||'Never')));
+     for(const finding of payment.facts?.findings||[])card.append(el('p',finding));
+     const check=el('button','Check provider status');check.type='button';check.onclick=async()=>{
+      if(!authorized||busy)return;busy=true;check.disabled=true;const journal='korvoReconciliation:'+payment.payment_id;
+      try{
+       let key=keys.get(journal);try{key=key||sessionStorage.getItem(journal);}catch{}
+       if(!key){key=crypto.randomUUID();keys.set(journal,key);try{sessionStorage.setItem(journal,key);}catch{}}
+       const r=await client.functions.invoke('reconcile-marketplace-payment',{body:{payment_id:payment.payment_id,request_key:key}});
+       if(r.error||!uuid(r.data?.report_id)||!['consistent','needs_review','provider_unavailable'].includes(r.data.state)||!Number.isFinite(Date.parse(r.data.checked_at))||r.data.execution_enabled!==false)throw Error('Provider observation was not confirmed. Retry the same check.');
+       keys.delete(journal);try{sessionStorage.removeItem(journal);}catch{}
+       let failed=false;try{await load();}catch{failed=true;}status.textContent='Observation saved at '+r.data.checked_at+'. No money moved.'+(failed?' Refresh to reload.':'');
+      }catch(e){status.textContent=e.message;}finally{busy=false;check.disabled=false;}
+     };card.append(check);
+     if(accountingEnabled&&uuid(payment.report_id)&&payment.attention_reason==='needs_review'&&payment.refunded_total_cents===payment.customer_total_cents
+      &&payment.refunded_total_cents!==payment.professional_refunded_cents+payment.platform_fee_refunded_cents
+      &&payment.facts?.full_refund_professional_cents===payment.professional_gross_cents&&payment.facts?.full_refund_fee_cents===payment.platform_fee_cents){
+      const note=el('textarea');note.setAttribute('aria-label','Full-refund accounting review note');card.append(el('p','This records the proven aggregate allocation of an existing full refund. It does not issue another refund or clear the payment hold.'),note);
+      const record=el('button','Record existing full-refund allocation');record.type='button';record.onclick=async()=>{
+       if(!authorized||busy)return;const reason=note.value.trim();if(reason.length<10||reason.length>2000){status.textContent='Enter an accounting review note of 10–2000 characters.';return;}
+       busy=true;record.disabled=true;
+       try{
+        const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify([payment.report_id,reason])))),v=>v.toString(16).padStart(2,'0')).join('');const journal='korvoFullRefundAllocation:'+digest;
+        let key=keys.get(journal);try{key=key||sessionStorage.getItem(journal);}catch{}if(!key){key=crypto.randomUUID();keys.set(journal,key);try{sessionStorage.setItem(journal,key);}catch{}}
+        const r=await client.rpc('admin_record_verified_full_refund_allocation',{p_report_id:payment.report_id,p_request_key:key,p_reason:reason});
+        if(r.error||!uuid(r.data?.id)||r.data.state!=='allocation_recorded'||r.data.execution_enabled!==false)throw Error('Accounting update not confirmed. Refresh to reconcile before changing the request.');
+        let failed=false;try{await load();}catch{failed=true;}status.textContent='Existing full-refund allocation recorded. Holds preserved. No money moved.'+(failed?' Refresh to reload.':'');
+       }catch(e){status.textContent=e.message;}finally{busy=false;record.disabled=false;}
+      };card.append(record);
+     }
+     section.append(card);
+    }content.append(section);
    }
   }
   return {ready:enabled?load().catch(e=>{authorized=false;content.replaceChildren();status.textContent=e.message;}):Promise.resolve(),refresh:load};

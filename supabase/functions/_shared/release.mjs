@@ -1,4 +1,27 @@
 import {validatePricingSnapshot} from './pricing.mjs';
+import {FOUNDER_POLICY,FOUNDER_POLICY_VERSION} from './founder-policy.mjs';
+
+// Approved product eligibility timing; reserve/aging and operator authorization
+// remain explicit inputs. A policy baseline never enables financial execution.
+export async function evaluateFounderReleaseWithEvidence(input,serverClient){
+ const policy={...input.policy,release_delay_ms:FOUNDER_POLICY.release_delay_after_verified_confirmation_ms,
+  processing_fee_decision_confirmed:FOUNDER_POLICY.processing_cost_payer==='korvo'};
+ const result=await evaluateReleaseWithEvidence({...input,policy},serverClient);
+ return {...result,policy_version:FOUNDER_POLICY_VERSION};
+}
+
+// The server fetches attested evidence/acknowledgment from the database; an uploaded
+// photo or browser-provided evidence_verified flag cannot satisfy this integration.
+export async function evaluateReleaseWithEvidence(input,serverClient){
+ let evidence;
+ try{const result=await serverClient.rpc('completion_release_evidence',{p_active_job_id:input.job?.id});if(!result.error)evidence=result.data;}catch{}
+ const verified=evidence?.active_job_id===input.job?.id&&evidence?.active_job_id===input.payment?.active_job_id
+  &&evidence?.enrolled===true&&evidence?.evidence_verified===true&&evidence?.customer_acknowledged===true
+  &&Number.isSafeInteger(evidence?.validated_count)&&evidence.validated_count>0&&evidence?.pending_count===0;
+ const result=evaluateRelease({...input,job:{...input.job,evidence_verified:verified}});
+ if(!verified){result.eligible=false;result.reasons.push(evidence?.legacy_manual_review_required?'LEGACY_EVIDENCE_MANUAL_REVIEW_REQUIRED':'TRUSTED_EVIDENCE_FACTS_REQUIRED');}
+ return result;
+}
 
 // Readiness evaluation only. This module cannot call Stripe or move funds.
 // Transfer execution is deliberately absent until the owner approves enabling it.
