@@ -112,3 +112,32 @@ Known provider findings remain UNCHANGED: the $112 full-refund record needs a se
 approved internal component allocation correction ($100 professional/$12 fee); the $560
 case is held for review with no demonstrated arithmetic mismatch. Neither was modified.
 No fresh Stripe transaction or correction was executed in this continuation.
+
+## Closed-beta minimum versus later finance
+
+The first non-money cohort does not require activating refund/transfer execution,
+Connect completion or financial aggregate corrections. If evidence upload/acknowledgment
+is in the admitted test journey, review a separately bounded A10 evidence-only scope:
+private_completion_evidence.sql, verify-completion-photo Edge and its exact shared decoder/
+verification dependencies; optional read-only completion_release_facts.sql. Final composed
+permission/recovery review remains mandatory. Do not deploy the full manifest blindly.
+Full reconciliation/refund/ledger scope remains separately reviewable for later money work.
+
+New 31-check composed current-schema rehearsal covers real staged A6/A10/A11 objects,
+booking/evidence/acknowledgment/support/zero-payment states and populated backup/recovery.
+The new 12-check mixed UI/database rehearsal covers actual posting, messaging, simulation
+and support; quote/accept steps are browser API calls. Neither test validates hosted JWTs,
+image bytes/private signed URLs or managed recovery. Prior 18 representative financial
+recovery checks remain valid and are retained in CI.
+
+A10 STILL BLOCKED: creating policies on managed-owned storage.objects needs a qualified
+owner-capable execution and recovery path, in addition to protected backups and actual
+Edge/Storage acceptance. The A6 alternate does not solve this distinct A10 requirement.
+No Storage grants, policies, buckets, provider records or settings were changed.
+
+Evidence-only minimum now has a separate exact `A10_non_money_evidence` manifest list.
+Conditional containment revokes only namespaces that exist, retaining bounded locks,
+all data and fingerprint-guarded recovery. A 31-check actual-current-schema evidence-only
+journey/backup/containment/recovery passes without new refund/ledger/reconciliation schemas;
+full representative financial recovery still passes 18 checks. These are distinct local
+compositions. No managed Storage-owner method or backup has thereby been qualified.

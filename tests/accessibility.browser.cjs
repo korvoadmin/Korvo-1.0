@@ -1,6 +1,6 @@
 const {chromium}=require('playwright'),{default:AxeBuilder}=require('@axe-core/playwright'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 (async()=>{const browser=await chromium.launch({headless:true});const results=[];
-try{for(const file of ['contact.html','profile.html','forgot-password.html','reset-password.html','login.html','signup.html','admin-refunds.html','beta.html'])for(const width of [375,1280]){
+try{for(const file of ['contact.html','profile.html','forgot-password.html','reset-password.html','login.html','signup.html','admin-refunds.html','beta.html','verify-email.html'])for(const width of [375,1280]){
  const context=await browser.newContext({viewport:{width,height:900}});const page=await context.newPage();
  await page.route('**/*',r=>{const url=new URL(r.request().url());if(url.hostname!=='fixture.invalid')return r.abort();const file=path.join(process.cwd(),url.pathname);try{return r.fulfill({body:fs.readFileSync(file),contentType:file.endsWith('.html')?'text/html':file.endsWith('.css')?'text/css':'application/javascript'});}catch{return r.fulfill({status:404,body:''});}});
  await page.goto('https://fixture.invalid/'+file);const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();

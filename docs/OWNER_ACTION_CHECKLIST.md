@@ -26,7 +26,7 @@ that the engineer can run are tracked separately and must not be assigned to Chr
 | H12 | Project UI workflow reliability improved and tested | 39 posting/onboarding/messaging browser checks; nine new dashboard completion checks and three quote-response checks; 20 deployed lifecycle checks rolled back. No production publication. |
 
 The earlier 88/12 deduction instruction and fee-only deposit flow are superseded.
-Do not ask Chris to reconfirm H1, H3 or H9. No processing-fee payer has been selected.
+Do not ask Chris to reconfirm H1, H3 or H9. Confirmed D1: Korvo absorbs processing costs from its 12% fee.
 
 ## A. Decisions required
 
@@ -39,9 +39,9 @@ Do not ask Chris to reconfirm H1, H3 or H9. No processing-fee payer has been sel
 | D5 / P1 | Confirmed: manual once-only membership allowance restoration during beta. | Preserve tiers; existing hardened restoration SQL now has ten isolated checks. | A6 and operator acceptance; paid Billing lifecycle remains. |
 | D6 / P0 | Confirmed: limited lower-risk projects and lawful identity/broader verification direction. | Choose exact categories, evidence thresholds, lawful consent/review and badge language. No automated offense-based exclusion. | Public eligibility, trust copy and qualified screening review. |
 | D7 / P0 | Confirmed: email plus in-app support; one-business-day target and approved policies. | Provide monitored email, staffing/calendar, approved terms/privacy/retention and actual service promises. | Published support/policies, durable assent and invitations. |
-| D8 / P0 for shifts | Confirmed direction: hiring business employs and directly pays workers; separate 12% Korvo service fee. | Obtain classification/contracts/insurance review; confirm commercial fee timing/refund details. | Commercial billing and employer clearance; no wage collection through Connect. |
-| D9 / P0 for hospitality | Confirmed mission: broad hospitality with category-by-category clearance and experience verification. | Approve cleared categories, ages, geography, permits and actual insurance requirements after qualified review. | Public hospitality remains disabled; A9 separate. |
-| D10 / P0 for employee shifts | Confirmed: employer payroll; Korvo scheduling, attendance and rebooking. | Resolve workweek/overtime/tips/time-correction/employer-cost agreements and reviewed commercial terms. | Authenticated commercial persistence and A9; no wage penalties or automatic booking. |
+| D8 / P2 future 2.0 | Employee staffing/direct-employer-pay commercial research deferred by founder. | Preserve plans and disabled code; no new agency/EOR/payroll work for Korvo 1.0 beta. | Future 2.0 scope/legal approval only; independent project classification remains separate. |
+| D9 / P2 future 2.0 | Hospitality employee-shift placement deferred to potential Korvo 2.0. | No beta activation or new staffing engineering. | A9 future expansion; not a 20-person beta prerequisite. |
+| D10 / P2 future 2.0 | Payroll, withholding, whole staffing invoices/wage distribution and agency/EOR integrations deferred. | Preserve research; never use contractor Connect for employee wages. | Future qualified commercial/employment review; no beta decision needed. |
 
 Additional owner decisions identified by the master launch audit:
 
@@ -246,3 +246,35 @@ not an authorization request to deploy now. D2/D3 remaining refund/reserve/timin
 D8–D10 employment/commercial rules and D12 legal/insurance remain money/public gates.
 Historical text saying no processing-cost payer was selected is superseded by confirmed
 D1: Korvo absorbs those costs without reducing professional gross.
+
+## October 17 UTC — founder closed-beta focus
+
+Founder has deferred employee staffing to potential Korvo 2.0. D8–D10/A9 payroll,
+hospitality employee-shift and agency/EOR work is no longer a first-beta dependency.
+Independent project classification/category obligations remain; no legal clearance is
+inferred. See KORVO_2_0_STAFFING_ARCHIVE.md and CLOSED_BETA_MINIMUM_GATES.md.
+
+No new manual screenshots assigned. Available tools still have no retained-backup/PITR
+reader, secure full-backup connection or managed recovery rehearsal interface. A restore
+mutation endpoint is not evidence of a backup and was not invoked. Current schema-only
+fingerprint is unchanged; no real records exported. Qualify protected backup/restore and
+Storage-owner execution through a separately bounded, reviewed access/operation plan.
+A10 Storage policy creation also needs owner-capable managed qualification; the A6
+alternate's omission of two policy optimizations does not clear A10 Storage ownership.
+
+A11 exact review scope now also includes non_money_beta_discovery.sql: two legacy feeds,
+project-opportunity actions/invitations, recommendations and matched notification guards.
+A8 adds confirmation-resend UI and login safety; fixed existing login callback unchanged.
+Both require actual approved rollout and hosted acceptance, not a broad permission grant.
+
+Founder decisions still needed: exact lower-risk categories and geographic allowlist;
+approved versioned legal/privacy/retention text and monitored support operation; verified
+sole-owner account/MFA/recovery; roster/consent, test activity limits and success/stop
+criteria. Specify whether the beta is simulated usability only or involves physical
+services so legal/insurance review matches actual activity; engineering makes no choice.
+Only after deployed acceptance may explicit invitations/go approval be considered.
+
+Not first-beta gates: completed Connect/bank onboarding, live charges/refunds/transfers,
+paid membership Billing, reserve/aging rules for real money, $112 allocation correction,
+$560 case disposition or any staffing/payroll integration. They remain real-money/future
+release work. No financial correction, transaction, email or invitation was executed.

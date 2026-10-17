@@ -88,6 +88,7 @@ jobs:
           node tests/accessibility.browser.cjs
           node tests/beta.browser.cjs
           node tests/auth.browser.cjs
+          node tests/login-verification.browser.cjs
       - name: Isolated gig database permissions and scheduling
         run: NODE_PATH="$RUNNER_TEMP/korvo-tools/node_modules" node tests/gig-database.cjs
       - name: Isolated completion evidence and refund review
@@ -102,12 +103,15 @@ jobs:
           node tests/membership-restoration.cjs
           node tests/a10-recovery.cjs
           node tests/non-money-beta.cjs
+          node tests/beta-discovery.cjs
       - name: Validate opt-in integration runners
         run: |
           python -m py_compile tests/sandbox-*-acceptance.py
           node --check tests/security-populated-schema.cjs
           node --check tests/security-catalog-fixture.cjs
           node --check tests/beta-current-schema.cjs
+          node --check tests/beta-journey-current-schema.cjs
+          node --check tests/beta-ui-database.browser.cjs
 
 # No deployment, credentials, live Stripe calls or privileged database writes.
 # Actual sandbox integration runners require explicitly provisioned private fixtures.

@@ -9,7 +9,7 @@
     if(window.KORVO_NON_MONEY_BETA_ENABLED===true){
       const panel=document.createElement('section'),note=document.createElement('p'),link=document.createElement('a');
       panel.setAttribute('aria-label','Non-money beta payment');note.textContent='Non-money beta: no payment is collected. Simulations never confirm payment or authorize release.';
-      link.href='beta.html';link.textContent='Open beta simulation and support';panel.append(note,link);container.append(panel);
+      link.href='beta.html#job='+encodeURIComponent(activeJobId);link.textContent='Open beta simulation and support';panel.append(note,link);container.append(panel);
       return {ready:Promise.resolve()};
     }
     const panel=document.createElement('section'); panel.className='marketplace-payment'; panel.setAttribute('aria-label','Job payment');

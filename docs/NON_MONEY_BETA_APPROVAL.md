@@ -46,3 +46,28 @@ A8 frontend, exact approved categories/geography, approved terms/privacy/support
 controlled founder administration/MFA, final hosted negative/positive acceptance and
 separate explicit invitation/go approval. Connect completion and live payout rules are
 money-launch gates, not reasons to collect banking details for this non-money cohort.
+
+## Revised A11 scope — discovery privacy qualification
+
+Also apply/review non_money_beta_discovery.sql AFTER core A11 in a qualified isolated
+rehearsal. It adds seven private helpers, replaces five public invoker wrappers, adds two
+restrictive policies and changes the existing jobs policy, adds two opportunity/notification
+generation triggers, and grants only required helper execution. It preserves core A11 ACLs.
+
+Reason: an actual uninvited professional could read a beta job via my_job_match_feed and
+retained my_job_opportunities even when jobs-table RLS hid it. Both feeds now filter
+admission, current terms, customer eligibility and category/city. Direct retained
+opportunities/matched notifications are hidden; new outside-cohort notices/opportunities
+are suppressed. Project recommendations/invitations and retained opportunity actions are
+also gated. No records are deleted. Paused/revoked admission closes discovery.
+
+Jobs policy evaluates supplied row columns rather than self-reading an uncommitted new
+row; this preserves INSERT RETURNING. That regression was found by actual browser/database
+integration and now has dedicated positive coverage. Default-off behavior delegates to
+the prior API. Evidence: 18 representative SQL, 31 composed actual-schema SQL, 12 mixed
+browser/database checks. No managed permission change or hosted acceptance occurred.
+
+Scope count correction: seven PRIVATE helpers in this new file (including row_visible),
+five replaced PUBLIC wrappers, two added triggers; core A11's earlier counts remain
+separate. Exact files/hashes are pinned by LAUNCH_RELEASE_MANIFEST.json. A11 execution
+remains BLOCKED by recovery, owner-approved configuration/content and hosted gates.

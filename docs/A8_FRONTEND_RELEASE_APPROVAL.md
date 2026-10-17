@@ -74,3 +74,24 @@ prohibition and admission maintenance controls active. Never set an enabled coho
 as containment: that would delegate checkout to the legacy path. Use A11 paused=true,
 retain server KORVO_NON_MONEY_BETA=true and preserve assent/support/simulation records.
 No publication, redirect/config change or real email was initiated.
+
+## Closed-beta focus candidate addition
+
+Exact manifest adds verify-email.html/js and login.html/auth.js changes: documented
+signup-confirmation resend, generic account-nondisclosing result, duplicate/in-flight
+protection, fixed existing login callback, failure retry and inactive-profile session
+clearance. Zero real emails sent. New login/confirmation fixture suite: 20 checks.
+Default-off axe coverage now 18 desktop/mobile views; beta suite includes two additional
+active views. Actual mobile hardware/assistive behavior remains unverified.
+
+Payment dashboard beta links preselect the active job via fragment; beta UI consumes and
+removes the fragment, without automatic simulation or payment. 20 beta and 22 payment
+browser checks pass. Offline audit: 20 pages, zero missing/empty linked targets and 17
+policy/demo placeholders. The gig pricing preview now explicitly says archived Korvo
+2.0 staffing research. No working code was deleted or feature activated.
+
+12 mixed browser/database checks use actual posting/messaging/beta pages against the
+isolated current-schema clone. Auth identities are fixtures; quote/accept use browser
+API calls. Do not label this complete production-UI E2E. Complete quote forms, real email
+confirmation/reset delivery/reuse, hosted permissions, deployed bytes and actual mobile
+behavior remain acceptance gaps. A8 is STILL BLOCKED, not ready to publish.

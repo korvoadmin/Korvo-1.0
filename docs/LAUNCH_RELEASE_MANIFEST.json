@@ -92,7 +92,7 @@
     },
     {
       "path": "supabase/proposals/a10_containment.sql",
-      "sha256": "6128a898f48339e42843420b8070dc04861bcf315843327f767c00b4c3ca2ede"
+      "sha256": "91439f26898a4653a65dcbba63704c4ab166d2e9217d4e6162591c98f2a7bb67"
     },
     {
       "path": "scripts/a10-recovery.mjs",
@@ -136,7 +136,7 @@
     },
     {
       "path": "supabase/functions/_shared/founder-policy.mjs",
-      "sha256": "7a1749380f5a0141617755c049542ea840814b623afb6d7971a2de1bd85082c0"
+      "sha256": "d4c8ba58e793e348258c70708dea2a8c4fc8db6d49275717fcf11b6a1c4992ad"
     },
     {
       "path": "supabase/functions/_shared/payment-observations.mjs",
@@ -159,14 +159,72 @@
       "sha256": "34ee1f3de79768cf815d2b0ffb520a96e1836c77f11e3013e5d883e0057cba0a"
     }
   ],
+  "A10_non_money_evidence": [
+    {
+      "path": "supabase/proposals/20261013174432_private_completion_evidence.sql",
+      "sha256": "6743c175399f3d29c8f5b55aee6a351d5f7cf38737c35b313f20be2711226285"
+    },
+    {
+      "path": "supabase/proposals/completion_release_facts.sql",
+      "sha256": "0436788e9f393ff239db61dca101048709af9bfea53f2506696d4664d06dba43"
+    },
+    {
+      "path": "supabase/proposals/a10_containment.sql",
+      "sha256": "91439f26898a4653a65dcbba63704c4ab166d2e9217d4e6162591c98f2a7bb67"
+    },
+    {
+      "path": "scripts/a10-recovery.mjs",
+      "sha256": "1160c9f6ff02f0d1e9dee3bc17be8d67791d27a96fe163282d2317ffb999cbea"
+    },
+    {
+      "path": "supabase/functions/_shared/completion-evidence.mjs",
+      "sha256": "2cbb71b2144ef9199714c467eb736d108b4476e76e8192ac33b6121bbfe83a09"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/decoder.mjs",
+      "sha256": "8286d61b127f63cf5ad460f1da3de6759e6a6f3aabf56ac49e8574665bda919a"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/handler.mjs",
+      "sha256": "ea9d6cac3966ead5d6efa9d270b1dfa6d24b7304f1e1b05d17dc7df00c4fe9e9"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/index.ts",
+      "sha256": "57433981ff4b2dd3cb386890ef3df2c75670fb10bd41c10e67b365fc98390b3c"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/package-lock.json",
+      "sha256": "f8ac1dca7b9135a2a2bf0c862f3c6f72c46a428b133ae2ff3ff03563d6c1af77"
+    },
+    {
+      "path": "supabase/functions/verify-completion-photo/package.json",
+      "sha256": "16b05e40420bdcebfd0e90c4848fdba41c9444ca1ed9abb7e7dac462e1d49ed0"
+    }
+  ],
   "A11": [
     {
       "path": "supabase/proposals/non_money_beta.sql",
       "sha256": "5fddfc0fe93f960611e8b5d1627aa9a141fc2c87efda8507317bec1a798f5e58"
     },
     {
+      "path": "supabase/proposals/non_money_beta_discovery.sql",
+      "sha256": "8f1f3206d6ba9a09a946576da4b6027846f90489184f9b0dbd4af3a7053c0c1a"
+    },
+    {
       "path": "supabase/functions/create-booking-checkout/handler.mjs",
       "sha256": "c20c0aea6b6de09464a380d240c9607d617a8f0595ee46e437b7b84dd5d5a55c"
+    },
+    {
+      "path": "supabase/functions/create-booking-checkout/index.ts",
+      "sha256": "32b7a5d27ed93a5fd3be5165f0a3de7de69d34f358729e38a95d599a89152dde"
+    },
+    {
+      "path": "supabase/functions/_shared/pricing.mjs",
+      "sha256": "52d6461abe26c4944b1a7c33b1ad55d9f91f69ab8b7e34dad1df4c5ab952e5da"
+    },
+    {
+      "path": "supabase/functions/_shared/stripe.mjs",
+      "sha256": "3805e5ea24b1f07f35b03364e45d8c1d02ad68d14a543501aec4c4121c44ca43"
     }
   ],
   "A8": [
@@ -180,7 +238,7 @@
     },
     {
       "path": "auth.js",
-      "sha256": "c73be5c2dc76ff7b69933853576249881eb8a669249bff97c2b300dbc279577e"
+      "sha256": "2b2a0b12917217998974b7e885e20a83580d0578f33a3e7e2e9acd7295d51b31"
     },
     {
       "path": "beta.html",
@@ -188,7 +246,7 @@
     },
     {
       "path": "beta.js",
-      "sha256": "24bf8ed36a30a05a9880043f723b41c72a6d66cd8540877fbc3edb1a851e0950"
+      "sha256": "2eac4b82eb3451b24a8770f9154ce551a2fd34ec54dcd83e0daf79b1a34069b8"
     },
     {
       "path": "browse.html",
@@ -228,7 +286,7 @@
     },
     {
       "path": "gig-foundation.html",
-      "sha256": "f74ff1442ee1fe990855a47fecf3bfe9f74fa7c1c95cb2069a7a6fd13156ce5c"
+      "sha256": "ee695d0dcdeb70d241c4fc3182e9bb4a90e353f5993dbb12029d8b2adfe5e8c6"
     },
     {
       "path": "gig-foundation.js",
@@ -240,11 +298,11 @@
     },
     {
       "path": "login.html",
-      "sha256": "25ce14397bb0cd0e7926249c55ceff75758acd860c1833136c46fbd226d8b2bd"
+      "sha256": "c1c3eb23c165437ce5df32f9a1de6f1219fa66136c82827f008caaf140473209"
     },
     {
       "path": "marketplace-payments.js",
-      "sha256": "c67d925068c3a93b3093f148fd5ac39f0b560bc8f3a1518bfc10c03bdf142bf3"
+      "sha256": "e1447ccbccb365319da20954cf5ba07a9bebd5e45071bfbb49dd4066d3b1cf5c"
     },
     {
       "path": "messages.html",
@@ -301,6 +359,14 @@
     {
       "path": "signup.html",
       "sha256": "566142ec8882398c8af1f0e27fb9353b5e6686ddae562f0f298b255c5fe99fee"
+    },
+    {
+      "path": "verify-email.html",
+      "sha256": "e6ee30673e2a78f9c19f4c375e228c2bea7a5b4ecdb2435e3e9df3e376330c96"
+    },
+    {
+      "path": "verify-email.js",
+      "sha256": "0ece38e60fa8137c4cc1feb2f8b2536563f89e4ee2c15f9f50357d4dd185020d"
     }
   ],
   "flags_default_off": [

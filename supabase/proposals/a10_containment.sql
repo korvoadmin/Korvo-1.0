@@ -1,10 +1,15 @@
 -- REVIEW ONLY / A10 APPROVAL REQUIRED. Data-preserving emergency containment.
--- Requires all A10 schemas. Never drops a bucket, table, enrollment, audit or hold.
+-- Handles evidence-only or full A10 schemas. Never drops a bucket, table, enrollment, audit or hold.
 -- This freezes interfaces; it is NOT an uninstall or a managed database restore.
 begin;
 set local lock_timeout='5s';
 set local statement_timeout='60s';
-revoke execute on all functions in schema korvo_evidence_private,korvo_refunds_private,korvo_finance_private from public,anon,authenticated,service_role;
+do $contain$ declare s text;begin
+ foreach s in array array['korvo_evidence_private','korvo_refunds_private','korvo_finance_private'] loop
+  if to_regnamespace(s) is not null then
+   execute format('revoke execute on all functions in schema %I from public,anon,authenticated,service_role',s);
+  end if;
+ end loop;end;$contain$;
 create function public.korvo_a10_containment_guard() returns trigger
 language plpgsql security invoker set search_path='' as $$
 begin

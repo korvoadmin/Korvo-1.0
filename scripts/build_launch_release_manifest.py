@@ -25,7 +25,8 @@ def build():
             'A6': [entry(security['source'])] + [entry('supabase/proposals/security-review/'+p['file']) for p in security['packages']],
             'A6_alternate': [entry('supabase/proposals/harden_korvo_api_permissions_managed_candidate.sql')] + [entry(str(p.relative_to(ROOT))) for p in sorted((ROOT/'supabase/proposals/security-review-managed').glob('*.sql'))],
             'A10': [entry(p) for p in evidence],
-            'A11': [entry(p) for p in ['supabase/proposals/non_money_beta.sql','supabase/functions/create-booking-checkout/handler.mjs']],
+            'A10_non_money_evidence': [entry(p) for p in ['supabase/proposals/20261013174432_private_completion_evidence.sql','supabase/proposals/completion_release_facts.sql','supabase/proposals/a10_containment.sql','scripts/a10-recovery.mjs','supabase/functions/_shared/completion-evidence.mjs']] + [entry(str(p.relative_to(ROOT))) for p in sorted((ROOT/'supabase/functions/verify-completion-photo').glob('*')) if p.is_file()],
+            'A11': [entry(p) for p in ['supabase/proposals/non_money_beta.sql','supabase/proposals/non_money_beta_discovery.sql','supabase/functions/create-booking-checkout/handler.mjs','supabase/functions/create-booking-checkout/index.ts','supabase/functions/_shared/pricing.mjs','supabase/functions/_shared/stripe.mjs']],
             'A8': [entry(p) for p in frontend],
             'flags_default_off': ['COMPLETION_EVIDENCE_ENABLED','KORVO_COMPLETION_EVIDENCE_ENABLED','KORVO_REFUND_REVIEW_ENABLED','KORVO_FINANCIAL_LEDGER_ENABLED','FINANCIAL_RECONCILIATION_ENABLED','KORVO_FINANCIAL_RECONCILIATION_ENABLED','KORVO_FULL_REFUND_ACCOUNTING_ENABLED','KORVO_NON_MONEY_BETA_ENABLED','KORVO_NON_MONEY_BETA'],
             'money_execution_enabled': False}

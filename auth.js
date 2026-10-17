@@ -291,11 +291,14 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
+  let loginBusy = false;
+
   loginForm?.addEventListener(
     "submit",
     async (event) => {
 
       event.preventDefault();
+      if (loginBusy) return;
 
       const submitButton =
         loginForm.querySelector(
@@ -337,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       try {
+        loginBusy = true;
 
         setButtonLoading(
           submitButton,
@@ -375,16 +379,18 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
 
+        if (profile?.is_active !== true || !['customer','professional'].includes(profile.account_type)) {
+          await korvoSupabase.auth.signOut({scope:'local'});
+          throw new Error('Account access could not be verified. Contact support.');
+        }
+        loginPassword.value = '';
         redirectByProfile(
           profile
         );
 
       } catch (error) {
 
-        console.error(
-          "Korvo login error:",
-          error
-        );
+        console.error("Korvo login was not confirmed.");
 
         alert(
           error.message ||
@@ -392,6 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
       } finally {
+        loginBusy = false;
 
         setButtonLoading(
           submitButton,
@@ -775,12 +782,12 @@ document.addEventListener("DOMContentLoaded", () => {
         */
 
         alert(
-          `Welcome to Korvo, ${firstName}! Check your email to confirm your account. After confirming it, log in to continue.`
+          "Check your email to confirm your account. If you already registered, sign in or recover your password."
         );
 
 
         window.location.href =
-          "login.html";
+          "verify-email.html";
 
 
       } catch (error) {

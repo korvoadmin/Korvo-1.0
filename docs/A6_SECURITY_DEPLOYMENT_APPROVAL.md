@@ -145,3 +145,12 @@ the qualified operator. Drift aborts; investigate/forward-repair rather than for
 A whole-database restore can discard intervening writes and requires independent approval.
 Residual risks: managed ownership/extension differences, role/default-ACL scope, recovery
 downtime, restoring old security weaknesses, and Storage bytes outside database backups.
+
+## Closed-beta focus continuation
+
+Current read-only catalog fingerprint remains 383b3d8392815061e2eeaf11cad3e9dd; unchanged
+A6 candidate/50+134 evidence reused rather than needlessly rerun. New composed A6/A10/A11
+current-schema journey passes 31 checks, plus 12 mixed browser/database checks. Synthetic
+session rows satisfy existing actor session checks; they are not genuine managed Auth/JWT
+verification. A6 is STILL BLOCKED for execution by protected managed backup/recovery.
+No A6 SQL changed this sprint. Staffing deferral does not remove security/recovery gates.

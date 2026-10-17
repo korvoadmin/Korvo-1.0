@@ -28,3 +28,5 @@ test('unapproved legal copy, role mismatch and client-only assent cannot be acce
  assert.throws(()=>termsAcceptanceReceipt({...doc,approved:false},business));assert.throws(()=>termsAcceptanceReceipt(doc,business));assert.throws(()=>termsAcceptanceReceipt(doc,{id:'customer',active:true,account_type:'customer'}));
 });
 test('founder baseline cannot activate money, invitations or hospitality',()=>{assert.equal(FOUNDER_POLICY.beta.invite_cap,20);assert.equal(FOUNDER_POLICY.beta.money_enabled,false);assert.equal(FOUNDER_POLICY.beta.invitations_enabled,false);assert.equal(FOUNDER_POLICY.commercial_enabled,false);assert.equal(FOUNDER_POLICY.release_delay_after_verified_confirmation_ms,0);assert.ok(Object.isFrozen(FOUNDER_POLICY.beta));});
+
+test('founder defers employee staffing to 2.0 while preserving independent project scope',()=>{assert.equal(FOUNDER_POLICY.staffing_scope,'korvo_2_0_deferred');assert.equal(FOUNDER_POLICY.korvo_1_business_scope,'independent_project_services');assert.equal(FOUNDER_POLICY.commercial_enabled,false);assert.equal(FOUNDER_POLICY.beta.customer_cap,10);assert.equal(FOUNDER_POLICY.beta.professional_cap,10);});

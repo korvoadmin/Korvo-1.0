@@ -1,13 +1,13 @@
 import {validatePricingSnapshot,priceQuoteCents} from './pricing.mjs';
 
 // Working product specifications, not feature activation or legal clearance.
-export const FOUNDER_POLICY_VERSION='founder_baseline_2026_10_16_v1';
+export const FOUNDER_POLICY_VERSION='founder_baseline_2026_10_16_closed_beta_v2';
 export const FOUNDER_POLICY=Object.freeze({processing_cost_payer:'korvo',refund_mode:'manual_review',
  release_delay_after_verified_confirmation_ms:0,membership_restoration:'manual_once_only',
  owner_model:'sole_founder_no_automatic_grant',support_target:'one_business_day',
  commercial_wage_payer:'direct_employer',commercial_fee_basis_points:1200,
  beta:Object.freeze({geography:'Atlanta',invite_cap:20,customer_cap:10,professional_cap:10,money_enabled:false,invitations_enabled:false}),
- commercial_enabled:false,financial_execution_enabled:false});
+ staffing_scope:'korvo_2_0_deferred',korvo_1_business_scope:'independent_project_services',commercial_enabled:false,financial_execution_enabled:false});
 
 // Actual provider cost is an input from trusted accounting, never a guessed rate.
 export function projectProcessingAllocation(payment,actualProcessingCents){
@@ -28,6 +28,7 @@ export function founderRefundReview(payment,event){
   original_customer_total_cents:payment.customer_total_cents,execution_enabled:false});
 }
 
+// Archived Korvo 2.0 research contract; no additional 1.0 staffing development.
 // Separate commercial invoice architecture: Korvo never collects employee wages.
 // Final fee/refund/attendance terms still need reviewed agreements before activation.
 export function commercialEmployerQuote(agreedGrossCents){
@@ -56,7 +57,7 @@ export function commercialAttendance(assignment,actor,action){
 }
 
 // Receipt construction only. Approved documents and authenticated actor must be
-// resolved by a future server endpoint; persistence/version revocation remain gates.
+// resolved server-side; staged A11 supplies persistence/version checks but is not deployed.
 export function termsAcceptanceReceipt(document,actor){
  if(document?.approved!==true||!['customer','professional'].includes(document.audience)
   ||typeof document.version!=='string'||!document.version.trim()||document.version.length>100

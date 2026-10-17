@@ -357,3 +357,18 @@ has 40 isolated SQL +6 actual-schema compilation/rollback checks, no hosted roll
 Private source catalogs, inverses and account details remain outside Git. Support never
 gains financial execution. No actual grants, bucket policies, Edge functions or settings
 were changed. A6/A10/A11 require separate scopes and genuine hosted acceptance.
+
+## October 17 UTC closed-beta admission findings
+
+Fixed staged beta bypass: legacy definer discovery RPCs bypass jobs-table RLS and exposed
+an admitted customer's job to an uninvited active professional. Current-schema reproduction
+and after-fix denial pass. New A11 guards also cover matched notification metadata,
+opportunity generation/actions and project invitations/recommendations. A second regression
+(new INSERT RETURNING rejected by policy self-lookup) was found in actual page/database
+integration and fixed with row-column predicates. No hosted disclosure test or real data
+was used; all actors/session rows/jobs are synthetic. No production finding is silently
+claimed fixed by staging code. Details: NON_MONEY_BETA_APPROVAL.md.
+
+Current schema metadata fingerprint unchanged. 31 composed actual-schema SQL +12 mixed
+browser/database checks pass; genuine Auth/JWT/Edge/Storage/managed backup recovery remain
+separate. A10 still needs managed Storage ownership qualification. No new hosted DDL.

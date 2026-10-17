@@ -9,6 +9,10 @@ invitations authorized. Korvo absorbs project processing costs; professional gro
 and quote + 12% remain unchanged. See FOUNDER_POLICY_BASELINE.md. Historical sections
 below preserve prior checkpoints; this current statement supersedes undecided policy descriptions.
 
+The table below preserves historical **money-release** coverage. The current first
+non-money cohort uses [CLOSED_BETA_MINIMUM_GATES.md](CLOSED_BETA_MINIMUM_GATES.md);
+Connect, financial execution and staffing are not prerequisites to that cohort.
+
 | Priority | Gate | Current state / evidence |
 | --- | --- | --- |
 | P0 | Verified authorization deployment and advisor follow-up | 134-check complete rollback regression passed; broad proposal still requires explicit approval |
@@ -202,3 +206,24 @@ founder/MFA, D11 roster/consent/stop criteria and explicit invitations approval 
 backend/frontend rollout and hosted acceptance. Connect/payout/live-money activation is
 not required for this simulated cohort; all real-money paths remain prohibited. Remaining
 legal/insurance duties need qualified owner review. No participant was invited.
+
+## October 17 UTC founder closed-beta directive — current phase map
+
+**NO-GO remains.** Staffing, payroll, hospitality employee shifts and agency/EOR integrations
+are deferred to potential Korvo 2.0, with research/code preserved. They are not first-beta
+blockers. Independent project classification/category review remains. The minimum 10+10
+non-money gate list is CLOSED_BETA_MINIMUM_GATES.md; 144 IDs/counts remain authoritative in
+KORVO_MASTER_LAUNCH_CHECKLIST.md. Owner D1–D12 baseline is preserved with D8–D10 deferral.
+
+New staged discovery guards fix actual uninvited-professional feed bypass; 18 representative
+SQL checks and actual-current-schema before/after reproduce it. Both full and evidence-only
+compositions pass 31 local checks each; 12 mixed browser/database checks cover actual pages,
+with quote/accept via browser API. Login/resend 20 checks; beta 20/payment22; axe18 default
+views +two active beta views. Genuine hosted email/full quote UI/private Storage and managed
+recovery remain unverified. Zero real emails or invitations; no hosted deployment or finance.
+
+A10 can be reviewed as a narrowly scoped evidence-only package without new financial
+schemas; conditional containment passes both compositions. Managed Storage ownership and
+protected backup/recovery remain blockers. A6/A8/A10/A11 all remain separately approval-
+gated. Real money/Connect/paid Billing/refund corrections/reserves/staffing do not delay
+simulated-cohort qualification, but none is cleared for later activation.
