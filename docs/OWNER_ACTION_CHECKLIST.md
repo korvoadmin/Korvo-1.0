@@ -1,5 +1,9 @@
 # Korvo 1.0 Owner Action & Testing Checklist
 
+Authoritative engineering/task statuses: [KORVO_MASTER_LAUNCH_CHECKLIST.md](KORVO_MASTER_LAUNCH_CHECKLIST.md).
+This file owns stable owner decisions, manual tests and approvals; it is not a second
+engineering backlog. Counts and phase readiness come from the master checklist.
+
 Updated during the October 15, 2026 publication/control sprint. Active items below require
 owner judgment, account access, or explicit authorization. Development and tests
 that the engineer can run are tracked separately and must not be assigned to Chris.
@@ -22,22 +26,29 @@ that the engineer can run are tracked separately and must not be assigned to Chr
 | H12 | Project UI workflow reliability improved and tested | 39 posting/onboarding/messaging browser checks; nine new dashboard completion checks and three quote-response checks; 20 deployed lifecycle checks rolled back. No production publication. |
 
 The earlier 88/12 deduction instruction and fee-only deposit flow are superseded.
-Do not ask Chris to reconfirm H1, H3 or H9. No processing-fee payer has been selected.
+Do not ask Chris to reconfirm H1, H3 or H9. Confirmed D1: Korvo absorbs processing costs from its 12% fee.
 
 ## A. Decisions required
 
 | ID / priority | Question and options | Recommendation and tradeoffs | Development dependency |
 | --- | --- | --- | --- |
-| D1 / P0 | Who economically absorbs Stripe processing costs: Korvo from its 12% fee, customer via a separately disclosed charge, or a separately agreed professional adjustment? | Recommend Korvo absorbs costs from its fee for beta: keeps the confirmed customer total and full professional quote clear; lowers Korvo net margin and needs a reserve. Extra customer charges need disclosure and legal/provider review; professional deductions require explicit agreement. | Live financial policy, final receipts and net-revenue reporting. Gross sandbox amounts remain quote + 12%. |
-| D2 / P0 | Cancellation/refund rules: full refund before work, staged cancellation charges, or case-by-case support decisions? Should the Korvo fee be refundable when the pro cancels/no-shows? | Recommend full customer refund for pro cancellation/no-show and support-reviewed customer cancellations during beta. Protects trust; costs/refund exposure remain. Staged penalties need defined timing, exceptions and assent. | Automatic refund/cancellation rules and customer terms. No nonrefundable fee or penalty will be silently enabled. |
-| D3 / P0 | Release after customer confirmation: immediate, defined issue-report window, or manual support review during beta? | Recommend manual support review during the small beta, then a clearly disclosed window. More operator work and slower transfers, but catches unresolved issues. Immediate release increases recovery risk; a window delays professional access. | Automatic transfer release and customer issue deadline. Verified payment/completion and onboarding remain mandatory. |
-| D4 / P0 | Which existing Korvo user should be the owner/admin for financial/support operations? | Use Chris's verified account; do not guess the UUID or grant privilege from editable user metadata. Least-privilege support accounts should not move money. | Admin operations and genuine owner acceptance testing. No owner account was found in the initial database inspection. |
-| D5 / P1 | When should reserved membership usage be restored after an approved pre-work cancellation: support review or automatic once-only restoration? | Recommend support review for initial beta: catches repeated cancellations, but requires operator work. Automatic restoration is simpler but needs explicit eligibility/replay rules. Prices and job allowances are already confirmed in H6; existing reservation at acceptance remains unchanged. | Automated allowance restoration and final membership cancellation terms; Stripe Billing integration can proceed independently with the existing catalog. |
-| D6 / P0 | Which trade categories require license/identity/background verification in Atlanta beta? | Start with explicitly approved categories and documented requirements; avoid labeling unverified providers as verified. More verification narrows launch supply and introduces review cost. | Public beta eligibility, trust badges, verification policy. |
-| D7 / P0 | Which support contact/channel and final customer/professional terms should beta users receive? | Recommend one monitored support route and clearly published payment/cancellation/privacy terms. Simple to operate, but Chris must approve contact details and customer promises; no address or guarantee will be invented. | Published policy pages, support escalation and closed-beta invitations. |
-| D8 / P0 for shifts | Employment model: host business employs/pays workers, qualified staffing partner employs them, or Korvo becomes an employer/staffing operator? | Keep the initial beta limited to cleared project categories while reviewing a host-employer or qualified-partner arrangement. These can reduce implementation scope; contracts do not eliminate joint-employer obligations. Korvo-employer operation adds payroll, insurance, tax and staffing responsibilities. Obtain Georgia employment/payroll review before selecting. | Employee shift booking, payroll adapter, employer contracts and tax responsibilities. No arrangement is selected by the engineer. |
-| D9 / P0 for hospitality | Which shift categories/locations and age range may launch after legal and insurance clearance? Options: approved adult general gigs first, cleared hospitality roles next, or defer all shifts. | Defer public shift booking until written category/model/insurance clearance. It slows expansion but avoids implying alcohol/minor eligibility or unverified coverage. Bartending/minor work stays disabled. | Category allowlist, alcohol-role permits/training, youth restrictions, insurance and local registrations. See `HOSPITALITY_COMPLIANCE_REVIEW.md`. |
-| D10 / P0 for employee shifts | How are employer payroll/insurance costs charged and what reviewed overtime/tip/time-correction arrangement applies? Options depend on D8: host payroll, partner payroll or Korvo payroll with separately disclosed business costs. | Show known costs separately and unknown costs as unresolved; preserve full gross and tips. Use the selected employer's reviewed payroll/time process. Extra business costs require transparency and assent; no wage deductions are inferred. | Final shift receipts, payable-time/payroll integration and employee cancellation handling. Processing costs remain the separate D1 decision. |
+| D1 / P0 | Confirmed: Korvo absorbs project Stripe processing costs from its 12% fee. | Keep professional gross and customer quote + 12% unchanged; actual provider-cost ingestion and margin reporting remain. | Live-money readiness; not another fee-payer decision. |
+| D2 / P0 | Confirmed: manual review; full refund direction for professional cancellation/no-show. | Define unresolved customer cancellation, partial-work, timing and remedy details; do not invent automatic penalties. | Terms, execution controls and case-specific disposition. |
+| D3 / P0 | Confirmed: immediate eligibility after verified confirmation, subject to payment/evidence/dispute/Stripe checks. | Specify non-confirmation timing, reserves, maximum funds age and operating review; eligibility does not authorize transfers. | Financial readiness and A7; no fixed extra delay is inferred. |
+| D4 / P0 | Confirmed: founder is sole owner/admin. | Identify verified account and complete controlled privilege approval, MFA and recovery; no UUID or authority inferred from metadata. | Hosted owner acceptance; zero active admins at inspection. |
+| D5 / P1 | Confirmed: manual once-only membership allowance restoration during beta. | Preserve tiers; existing hardened restoration SQL now has ten isolated checks. | A6 and operator acceptance; paid Billing lifecycle remains. |
+| D6 / P0 | Confirmed: limited lower-risk projects and lawful identity/broader verification direction. | Choose exact categories, evidence thresholds, lawful consent/review and badge language. No automated offense-based exclusion. | Public eligibility, trust copy and qualified screening review. |
+| D7 / P0 | Confirmed: email plus in-app support; one-business-day target and approved policies. | Provide monitored email, staffing/calendar, approved terms/privacy/retention and actual service promises. | Published support/policies, durable assent and invitations. |
+| D8 / P2 future 2.0 | Employee staffing/direct-employer-pay commercial research deferred by founder. | Preserve plans and disabled code; no new agency/EOR/payroll work for Korvo 1.0 beta. | Future 2.0 scope/legal approval only; independent project classification remains separate. |
+| D9 / P2 future 2.0 | Hospitality employee-shift placement deferred to potential Korvo 2.0. | No beta activation or new staffing engineering. | A9 future expansion; not a 20-person beta prerequisite. |
+| D10 / P2 future 2.0 | Payroll, withholding, whole staffing invoices/wage distribution and agency/EOR integrations deferred. | Preserve research; never use contractor Connect for employee wages. | Future qualified commercial/employment review; no beta decision needed. |
+
+Additional owner decisions identified by the master launch audit:
+
+| ID / priority | Question and options | Recommendation and tradeoffs | Development dependency |
+| --- | --- | --- | --- |
+| D11 / P0 | Confirmed: 20-person invitation-only non-money Atlanta beta. | Finalize categories, roster/consent, success/stop criteria, operating ownership and invitation approval. | BETA-002/BETA-008; no invitations or money authorized. |
+| D12 / P0 | Confirmed direction: Georgia single-member LLC; 100% founder ownership initially; research insurance. | Registration unverified; tax details, insurance requirements/quotes and qualified review remain. | Entity/tax/insurance clearance before real money; no formation/purchase authorized. |
 
 ## B. Manual tests that automation could not finish reliably
 
@@ -63,6 +74,12 @@ documents, SSNs, bank details, or payment methods to a synthetic sandbox rehears
 | A7 / P0 | Enabling actual contractor transfers, even in sandbox | Chris explicitly requires approval. Verify owner/admin authorization, payment, completion evidence, fresh Connect status, issue/refund/dispute holds, balance/reserve, durable idempotency and reconciliation first. Current evaluator cannot execute transfers. |
 | A8 / P0 | Merge/publish the development payment/recovery frontend to main/Pages | Reviewable development changes, passing checks and final linked policy/error copy. No main merge or Pages publication is implied by a development push. |
 | A9 / P0 for shifts | Apply the isolated gig schema or enable any public shift booking/payroll/payment feature | Review `supabase/proposals/20261013002039_gig_foundation_disabled.sql`, real concurrent PostgreSQL tests, authenticated endpoint/privacy tests and D8–D10 legal/insurance/payroll clearance. Current preview/schema are development-only and all gates stay disabled. |
+
+Separate proposal deployment approval:
+
+| ID / priority | Approval | Concrete prerequisite |
+| --- | --- | --- |
+| A10 / P0 | Completion-evidence and administrative refund schema/Edge/storage rollout; distinct from A6 | Integrated trusted Edge decoder, UI, current session/ownership/privacy tests, existing-job rollout and reviewed rollback. No photo trigger, private bucket or refund proposal may be deployed merely because isolated tests pass. |
 
 ## Dependencies and engineering status
 
@@ -105,3 +122,159 @@ Update this file with each development commit. Move completed owner items into
 history with evidence. Keep decision IDs stable, record dependencies, and remove
 manual tests whenever reliable automation covers them. This is maintained during
 active development sessions; no unattended background execution is promised.
+
+## Master launch audit synchronization — October 15
+
+The master checklist contains all 14 requested workstreams, status counts and evidence
+layers. Live read-only checks found zero active admins, both mapped Connect accounts
+incomplete, blank live recovery and unapplied evidence/refund/security/gig proposals.
+Five Stripe sandbox accounts exist; two ready accounts are unmapped and do not clear M1.
+The new refund prototype's support-role gap was corrected and tested locally; it remains
+undeployed. D11/D12 and A10 clarify real owner gates; no engineering tests were reassigned.
+
+## Execution sprint — October 15
+
+Master IDs unchanged. Completion photo Edge/dashboard code and refund-review UI are
+now locally tested and default-off, with no production publication or schema deployment.
+The tested EVI-009 design preserves existing active jobs and enrolls new ones after
+approved rollout. A10 must approve that cohort boundary, compatible UI-first release,
+legacy paid-job support review and hosted acceptance; no transfer is implied.
+
+A6 now has read-only snapshot/inverse tooling, a protected current catalog snapshot
+and 11 isolated metadata recovery/writer assertions. The full current-Supabase inverse
+rehearsal is still engineering work, not a manual task for Chris; A6 is not deployed.
+Actual multi-session testing is blocked by the container UID restrictions. No paid
+provisioning decision is requested while other independent work remains available.
+
+M1 remains the existing exact hosted setup test: both mapped account-owner metadata
+values match, but payouts/transfers remain disabled. No active signed-in synthetic
+professional fixture/valid hosted link is available in this checkpoint, so hosted
+completion was not rerun by manufacturing more users or changing existing mappings.
+Use sandbox test data only and provide the final Korvo/Stripe completion status, not
+bank/identity details. Engineer verifies synchronization after that status is reached.
+
+Read-only reconciliation finds one existing sandbox refund with unresolved component
+allocation. It remains held; D2 and financial reconciliation must specify the actual
+professional/fee split rather than an automated guess. D1–D4 are unchanged.
+
+## Launch blocker elimination checkpoint — October 15
+
+Current-schema empty-clone replay now passes all seven packages, 134 authorization
+checks and 13 metadata/drift/data-preservation assertions. This resolves the isolated
+current-schema rehearsal work, not managed Supabase rollback qualification or A6.
+Native finance/gig concurrency is being moved to disposable GitHub CI; no paid
+provisioning is required. A10 and A8 now have exact file/hash manifests and separate
+packages: A10_SANDBOX_ROLLOUT_APPROVAL.md and A8_FRONTEND_RELEASE_APPROVAL.md.
+
+Read-only provider facts establish the previously unallocated payment was fully
+refunded: $11.20+$100.80=$112, final components $100 professional/$12 Korvo.
+Individual refund splits remain unknown. The database correction is still unwritten;
+engineering must prepare a reviewed, auditable reconciliation write. This is not an
+owner decision about the aggregate arithmetic and does not reopen confirmed pricing.
+D2 still governs future partial refunds/remedies. All payment holds remain intact.
+
+Admin ledger preparation/monitoring is staged and default-off. D4 owner/admin identity
+and MFA, D1–D3 money policy, D6 categories, D7 actual support/policy/retention destinations,
+D11 cohort and D12 legal/entity/insurance remain. Nine frontend routes/17 placeholders
+still block A8; unsupported static badges were removed and examples labeled.
+A6/A8/A10 remain unapproved; no actual refund, transfer or live payment is authorized.
+M1/M2 exact existing manual steps remain, with no request for identity/bank credentials.
+
+Current authoritative counts after this sprint: 144 tasks: 21 Complete, 36 In Progress, 32 Blocked, 17 Not Started, 38 Needs Verification.
+
+Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
+(10 financial + 7 gig), including observed blocked overlap, once-only reservation/
+receipts, capacity and worker conflict protection, and transaction rollback. This
+resolves the container-local environment blocker for these cases. Broader crash/
+deadlock and managed Supabase endpoint tests remain; no hosted settings changed.
+
+## October 16 effective development authorization and policy alignment
+
+Founder explicitly authorized development-branch work, isolated/local tests, safe
+read-only verification and nondeploying CI/publication to the existing PR #7 branch.
+This resolves development permission only; A6/A8/A10 and all financial execution
+remain unapproved. Current D1–D12 rows supersede the older undecided descriptions;
+see FOUNDER_POLICY_BASELINE.md for complete/partial/blocked implementation boundaries.
+Historical sprint evidence below/above is preserved and is not a current activation.
+
+The $112 full refund still needs the reviewed aggregate accounting correction; its
+$100/$12 total split is arithmetic, not a new D2 decision. Correction code and audit
+SQL are now written and isolated-tested, not deployed or applied. The $560 case has
+no demonstrated amount mismatch but remains on review hold. Do not clear either
+review merely because a read-only observer ran. In-app support/email service and the
+one-business-day target are not operational promises until configured and approved.
+
+## October 16 A6 recovery qualification — current blocker
+
+A6 is STILL BLOCKED, not ready for execution approval. Canonical SQL is unchanged.
+The populated isolated backup/inverse and 134-role matrix pass, but managed postgres
+is non-superuser and cannot manage storage.objects owned by supabase_storage_admin.
+Two Storage policies prevent both rollout and changed-policy inverse with this role.
+No hosted DDL or privilege grant was attempted. See A6_MANAGED_RECOVERY_QUALIFICATION.md.
+
+Next access/evidence needed (not a request to deploy): read-only scheduled/PITR backup
+status and retained timestamps/plan/restore path from the Supabase dashboard or an
+approved backup metadata reader. The installed connector cannot list these; do not
+click Restore, change settings or send credentials/backup contents. An owner-capable
+managed method or separately reviewed revised SQL scope and a durable managed restore
+rehearsal are also required. No new paid branch/plan has been provisioned. Existing
+D1–D12 choices stay confirmed; none of these blockers reopen business-policy decisions.
+
+## October 16 remaining launch-readiness continuation
+
+Current engineering evidence: SPRINT_REPORT_2026-10-16_READINESS.md. All earlier evidence
+is retained. Free Supabase plan is now read-only verified; no screenshot is needed to
+establish plan tier. A paid upgrade is neither selected nor authorized. The alternate
+A6 candidate resolves the isolated Storage ownership requirement by retaining its two
+existing policies; protected managed backup/recovery remains an engineering dependency.
+
+| ID / priority | Approval | Concrete prerequisite |
+| --- | --- | --- |
+| A11 / P0 | Disabled non-money cohort, versioned assent/support schema and independent server checkout guard rollout/configuration | NON_MONEY_BETA_APPROVAL.md exact manifest; current-schema and concurrency tests; protected recovery; founder-approved category/city/document configuration; separate hosted acceptance and invitation approval. No invitations, money or legal approval implied. |
+
+Founder attention that cannot be automated: D6 exact low-risk category list and precise
+Atlanta service geography; D7 approved customer/pro terms/privacy and monitored support
+contact/operator coverage; D4 verified sole-founder account/MFA recovery; D11 success/
+stop criteria, consent/roster and explicit invitation/go decision. Engineer can perform
+backup/recovery qualification under separately bounded access without delegating routine
+technical checks or requesting screenshots first. No real credentials, identity documents
+or banking details are requested. M2 genuine signup/reset-email acceptance remains after
+A8; M1 Connect completion is deferred to financial launch, not required for simulation.
+
+A6/A10/A8 are still BLOCKED for execution. A11 is a new separate backend approval scope,
+not an authorization request to deploy now. D2/D3 remaining refund/reserve/timing details,
+D8–D10 employment/commercial rules and D12 legal/insurance remain money/public gates.
+Historical text saying no processing-cost payer was selected is superseded by confirmed
+D1: Korvo absorbs those costs without reducing professional gross.
+
+## October 17 UTC — founder closed-beta focus
+
+Founder has deferred employee staffing to potential Korvo 2.0. D8–D10/A9 payroll,
+hospitality employee-shift and agency/EOR work is no longer a first-beta dependency.
+Independent project classification/category obligations remain; no legal clearance is
+inferred. See KORVO_2_0_STAFFING_ARCHIVE.md and CLOSED_BETA_MINIMUM_GATES.md.
+
+No new manual screenshots assigned. Available tools still have no retained-backup/PITR
+reader, secure full-backup connection or managed recovery rehearsal interface. A restore
+mutation endpoint is not evidence of a backup and was not invoked. Current schema-only
+fingerprint is unchanged; no real records exported. Qualify protected backup/restore and
+Storage-owner execution through a separately bounded, reviewed access/operation plan.
+A10 Storage policy creation also needs owner-capable managed qualification; the A6
+alternate's omission of two policy optimizations does not clear A10 Storage ownership.
+
+A11 exact review scope now also includes non_money_beta_discovery.sql: two legacy feeds,
+project-opportunity actions/invitations, recommendations and matched notification guards.
+A8 adds confirmation-resend UI and login safety; fixed existing login callback unchanged.
+Both require actual approved rollout and hosted acceptance, not a broad permission grant.
+
+Founder decisions still needed: exact lower-risk categories and geographic allowlist;
+approved versioned legal/privacy/retention text and monitored support operation; verified
+sole-owner account/MFA/recovery; roster/consent, test activity limits and success/stop
+criteria. Specify whether the beta is simulated usability only or involves physical
+services so legal/insurance review matches actual activity; engineering makes no choice.
+Only after deployed acceptance may explicit invitations/go approval be considered.
+
+Not first-beta gates: completed Connect/bank onboarding, live charges/refunds/transfers,
+paid membership Billing, reserve/aging rules for real money, $112 allocation correction,
+$560 case disposition or any staffing/payroll integration. They remain real-money/future
+release work. No financial correction, transaction, email or invitation was executed.

@@ -1,0 +1,205 @@
+{
+  "observed_at_utc": "2026-10-15T06:29:40.361640+00:00",
+  "user_timezone": "America/New_York",
+  "mode": "read-only audit; no configuration or financial mutation",
+  "source_commit_inspected": "3d3ebface8413ff520544d23044f49935076f4d8",
+  "main_commit_inspected": "46e226a89272cbc32dd5dffb8b68ca0e6f72f348",
+  "live_base_url": "https://korvoadmin.github.io/Korvo-1.0/",
+  "live_assets": [
+    {
+      "path": "index.html",
+      "http": 200,
+      "bytes": 55542,
+      "sha256": "d11712567e817a76ee2159d718b674605581c50535f68e32aac2db781eca8a8b",
+      "matches_main": true,
+      "matches_dev": true
+    },
+    {
+      "path": "forgot-password.html",
+      "http": 200,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "reset-password.html",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "path": "privacy.html",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "path": "terms.html",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "path": "customer-dashboard.js",
+      "http": 200,
+      "bytes": 65433,
+      "sha256": "f3e6d9e336d4bc7250a98a7d7b3676262ae1cc32290f3e70110a009377661fd7",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "professional-dashboard.js",
+      "http": 200,
+      "bytes": 59480,
+      "sha256": "911e05bf163b9c0b948322c22bf19bb15d334a6fe4a418e2b7fd580a2f3c63b2",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "messages.js",
+      "http": 200,
+      "bytes": 33081,
+      "sha256": "58d17109385e29ec992791e881df5e4294812bf75a8cfe4e478a0c2f46601379",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "professional-onboarding.js",
+      "http": 200,
+      "bytes": 37010,
+      "sha256": "76652a91976e4573d8e338210b460acefbba6bd311b1f666b7cac153b808684a",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "auth.js",
+      "http": 200,
+      "bytes": 16057,
+      "sha256": "92a62571f0d136e0c1eb40aace51a2a07907f8c63c22f3a3874dc7cc5cf45ef9",
+      "matches_main": true,
+      "matches_dev": true
+    },
+    {
+      "path": "supabase.js",
+      "http": 200,
+      "bytes": 289,
+      "sha256": "954d194a685ef0c19024d8a450a9eee3c1e9e22cb949694922f7ac259696e3e5",
+      "matches_main": true,
+      "matches_dev": true
+    },
+    {
+      "path": "post-a-job.js",
+      "http": 200,
+      "bytes": 22421,
+      "sha256": "df8fe15a8e1bad2a4f49a44761b78f5165b2801f2ddb41532d3f0652ee06fc4a",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "signup.html",
+      "http": 200,
+      "bytes": 9360,
+      "sha256": "925d213d864f44d595e52c8a6bc83d685d9faf3f5334db9286a6c6812d09d41d",
+      "matches_main": true,
+      "matches_dev": true
+    },
+    {
+      "path": "login.html",
+      "http": 200,
+      "bytes": 5293,
+      "sha256": "1c295536a77252f4879addc8f97fd19e84e75bb482990954b58de8fff1a882cd",
+      "matches_main": true,
+      "matches_dev": true
+    },
+    {
+      "path": "post-a-job.html",
+      "http": 200,
+      "bytes": 36470,
+      "sha256": "ef6ddd8b788caca84aba4b95a95fd777cc968eb5215cde7d5fec12819cf334b2",
+      "matches_main": true,
+      "matches_dev": true
+    },
+    {
+      "path": "professional-dashboard.html",
+      "http": 200,
+      "bytes": 20181,
+      "sha256": "620febbce7444df0ae60c16c098166d2830cfcedddb15ec94b51ea1f795b8194",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "customer-dashboard.html",
+      "http": 200,
+      "bytes": 34576,
+      "sha256": "dd172e12fd26ef9d455451ff9dcf8d406d4beabb6280951210205b5d06b0b1d5",
+      "matches_main": true,
+      "matches_dev": false
+    },
+    {
+      "path": "messages.html",
+      "http": 200,
+      "bytes": 10783,
+      "sha256": "f68c24390d4eb46a25be515c7d90eaa588b5fcece54bf64c3f312435c6208143",
+      "matches_main": true,
+      "matches_dev": true
+    }
+  ],
+  "noncanonical_probes_excluded": [
+    {
+      "path": "post-job.js",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ],
+  "backend": {
+    "last_migration": "20261012153716",
+    "edge_versions": {
+      "create-booking-checkout": 5,
+      "stripe-webhook": 5,
+      "create-connect-onboarding": 6
+    },
+    "public_tables": 43,
+    "public_tables_without_rls": 0,
+    "active_admins": 0,
+    "all_three_payment_release_statuses": "held",
+    "private_buckets": [
+      "project-issue-evidence"
+    ],
+    "proposed_schemas_present": {
+      "korvo_api_private": false,
+      "korvo_evidence_private": false,
+      "korvo_refunds_private": false,
+      "korvo_gigs_private": false
+    }
+  },
+  "stripe_sandbox": {
+    "listed_accounts": 5,
+    "mapped_accounts": 2,
+    "mapped_ready": 0,
+    "mapped_details_submitted": false,
+    "mapped_payouts_enabled": false,
+    "mapped_transfers": "inactive",
+    "ready_but_unmapped": 2,
+    "ownership_reassignment_performed": false
+  },
+  "security_advisor": {
+    "rls_enabled_no_policy": 7,
+    "anon_definer_executable": 1,
+    "authenticated_definer_executable": 52,
+    "leaked_password_protection": 1
+  },
+  "performance_advisor": {
+    "auth_rls_initplan": 33,
+    "unused_index": 62
+  },
+  "prior_verified_ci": {
+    "commit": "3d3ebfac",
+    "run_id": 38684295134,
+    "status": "success",
+    "unit_source": 117,
+    "browser": 166,
+    "gig_db": 45,
+    "evidence_refund_db": 91,
+    "decoder": 7
+  },
+  "audit_local_followup": {
+    "unit_source": 126,
+    "evidence_refund_db": 94,
+    "hosted_auth_storage_or_concurrency": false
+  },
+  "sensitive_data_policy": "Aggregated state and public source hashes only. No account IDs, fixture credentials, customer rows, identity documents, keys or tokens."
+}

@@ -6,6 +6,12 @@
   const money = cents => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(cents/100);
   window.KorvoPayments = {attach({container,client,activeJobId,role,jobStatus,navigate=url=>window.location.assign(url)}) {
     if (!container || !activeJobId || !['customer','professional'].includes(role)) return;
+    if(window.KORVO_NON_MONEY_BETA_ENABLED===true){
+      const panel=document.createElement('section'),note=document.createElement('p'),link=document.createElement('a');
+      panel.setAttribute('aria-label','Non-money beta payment');note.textContent='Non-money beta: no payment is collected. Simulations never confirm payment or authorize release.';
+      link.href='beta.html#job='+encodeURIComponent(activeJobId);link.textContent='Open beta simulation and support';panel.append(note,link);container.append(panel);
+      return {ready:Promise.resolve()};
+    }
     const panel=document.createElement('section'); panel.className='marketplace-payment'; panel.setAttribute('aria-label','Job payment');
     const status=document.createElement('p'); status.setAttribute('role','status');
     const amounts=document.createElement('p'), note=document.createElement('p');

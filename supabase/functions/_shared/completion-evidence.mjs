@@ -33,5 +33,5 @@ export async function verifyStoredCompletionPhoto({photoId,actorClient,serverCli
   const checked=await inspectCompletionPhoto(new Uint8Array(await stored.data.arrayBuffer()),photo,decode);
   const saved=await serverClient.rpc('completion_validate_file',{p_photo_id:photoId,p_sha256:checked.sha256,p_bytes:checked.bytes,p_mime:checked.mime});
   if(saved.error||saved.data?.id!==photoId||saved.data?.file_status!=='validated')throw new Error('Photo attestation was not confirmed');
-  return {id:photoId,file_status:'validated'};
+  return {id:photoId,file_status:'validated',sha256:checked.sha256};
 }

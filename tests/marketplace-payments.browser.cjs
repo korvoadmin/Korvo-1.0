@@ -42,6 +42,8 @@ const assert=require('node:assert/strict');
   check((await page.locator('#card').innerText()).includes('$560.00'),'refresh recovers after read failure');
   await page.setViewportSize({width:375,height:812});
   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'payment controls fit mobile width');
+  await page.evaluate(()=>window.KORVO_NON_MONEY_BETA_ENABLED=true);await mount();check(await page.evaluate(()=>calls.length===0),'non-money beta refuses checkout without RPC fallback');check(await page.getByRole('button',{name:'Pay in sandbox'}).count()===0,'non-money beta offers no provider checkout');
+  check((await page.locator('#card a').getAttribute('href'))==='beta.html#job=fixture-job','beta dashboard link carries current job in fragment only');
   console.log(checks+' payment browser checks passed.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

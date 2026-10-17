@@ -255,3 +255,120 @@ checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessi
 storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
 Connect completion, financial policy and transfer gates remain unchanged. Details:
 `SPRINT_REPORT_2026-10-15_PUBLICATION.md`.
+
+## Master audit follow-up — October 15
+
+Authoritative remaining work: `KORVO_MASTER_LAUNCH_CHECKLIST.md`, especially SEC/AUTH,
+ADM and TEST sections. Read-only recheck: 43 RLS public tables, zero active admins,
+all three payment releases held, proposed schemas absent. Advisor counts unchanged:
+7 RLS INFO, 1 anon/52 authenticated definer WARN, leaked-password WARN; performance
+33 initplan/62 unused-index separately. Mapped Stripe accounts remain incomplete.
+
+The undeployed administrative refund proposal lacked the canonical owner/admin role
+restriction. Added it and support-role request/read/recommendation denials; 94 isolated
+SQL checks now pass. This fixes the development prototype, not live permissions.
+126 unit/source/document checks pass locally. Actual hosted session/Storage and true
+concurrency are still unverified. No production state changed for this audit.
+
+## Execution checkpoint — October 15
+
+Read-only live catalog snapshot: 105 functions, 44 relations, 48 policies and 40 triggers;
+no non-owner ACL grant chains found. Protected mode-0600 snapshot is outside Git and
+must be regenerated/stored securely before any approved rollout. No live DDL applied.
+The new inverse tool restored original metadata/behavior and retained fixture rows in
+11 isolated assertions, refusing drift/repeat execution. Full current-hosted-schema
+inverse qualification remains open, so A6 deployment is still blocked.
+
+New completion Edge handler bounds requests, validates caller/ownership, uses a pinned
+integrity-checked WASM decoder, and requires service-only attestation. Nine request
+security checks, six actual WASM decode checks and Deno type-check pass locally.
+The proposed new-job enrollment gate denies client opt-out and preserves legacy jobs;
+100 isolated SQL checks pass. Hosted limits, dependency outage/cold-start and real
+Auth/Storage acceptance remain unverified. Approval A10 is separate from A6.
+
+Server-backed refund UI uses owner/admin queue authorization, stable request keys,
+explicit notes and nonexecuting recommendations; support remains denied. Read-only
+monitoring found one unresolved refund allocation (held), zero pricing invariant
+failures and no ambiguous transfer state. No refund allocation was guessed or mutated.
+See A6_SECURITY_DEPLOYMENT_APPROVAL.md, COMPLETION_EVIDENCE_ROLLOUT.md and the execution report.
+
+## Current-schema isolated qualification — October 15 launch blocker sprint
+
+Read-only current catalog export contains no customer rows. Empty isolated replay
+reconstructs 72 dependency tables/26 helpers plus all 105 scoped functions, 44 relations,
+48 policies and 40 triggers. Seven exact packages, 134 authorization checks and 13
+recovery/drift/row-preservation assertions pass. Fixed OID-dependent ACL/default
+fingerprint ordering; stable names now allow identical snapshots across clusters.
+Existing 11 recovery/writer checks also pass. Raw snapshots remain outside Git, 0600.
+
+This does not qualify managed Supabase roles, Storage service, extension behavior,
+network JWT/session access or production rollback. Fresh durable backup and managed
+preflight remain before A6. No hosted DDL was run. New ledger RPCs are staged: owner/
+admin only for reservation/read; service only for observations; no money execution or
+client write grants, support financial authority, hold clearance or automatic counters.
+Actual local Deno/WASM HTTP decoding passes six cases; hosted A10 remains open.
+
+Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
+(10 financial + 7 gig), including observed blocked overlap, once-only reservation/
+receipts, capacity and worker conflict protection, and transaction rollback. This
+resolves the container-local environment blocker for these cases. Broader crash/
+deadlock and managed Supabase endpoint tests remain; no hosted settings changed.
+
+## October 16 read-only boundary and development follow-up
+
+Managed inspection reconfirms migration 20261012153716; checkout/webhook v5 and
+Connect v6 are the only deployed functions. Neither photo verification nor payment
+reconciliation Edge entrypoint is deployed. No new managed SQL/Storage/Auth settings,
+role grant or user deletion occurred. The integration checkpoint's 14 managed
+read-only negative checks remain a subset, not the positive JWT/session matrix.
+
+A6 canonical bytes and seven-package equivalence remain unchanged. Ten new isolated
+checks exercise the actual hardened manual membership restoration implementation:
+support/customer/pro denial, reason requirement, once-only update and preserved
+original actor/reason/history. A6 deployment and managed recovery remain gated.
+New reconciliation/correction SQL has 43 isolated checks; support/service cannot
+approve allocations and direct writes are denied. Frontend SDK is pinned 2.117.3.
+See the October 16 sprint report for outgoing scan, native CI and deployment boundaries.
+
+## October 16 A6 actual privilege and populated recovery findings
+
+Critical deployment prerequisite: actual postgres is not superuser and is not a member
+or inheritor of supabase_storage_admin. Two A6 storage.objects ALTER POLICY statements
+and their inverse require unavailable ownership. Isolated non-superuser simulation
+reproduces 42501 and atomic rollback; no hosted DDL attempted. A6 remains blocked.
+Inverse now avoids unchanged policies/triggers/functions/table ACL/RLS mutations while
+retaining full drift guards. Forty-four populated current-schema assertions and the
+134-check matrix pass; post-migration committed messages survive exact inverse.
+A second isolated instance restores populated backup rows/catalog. This is PGlite,
+not managed PITR/restore evidence. Other-role supabase_admin default ACLs remain outside
+the current-role inverse scope; managed backup availability and durable restore remain
+unverified. See A6_OBJECT_INVENTORY.json and A6_QUALIFICATION_EVIDENCE.json.
+
+## October 16 continuation — retained Storage policies and containment
+
+Read-only organization inspection confirms Free plan; current catalog fingerprint remains
+383b3d8392815061e2eeaf11cad3e9dd. No managed mutation occurred. Alternate A6 scope omits
+exactly two Storage ALTER POLICY optimizations and passes 50 populated +134 authorization
+checks under the isolated non-superuser model. Original canonical/inventory retained.
+Managed backup/restore is still unqualified; see A6_MANAGED_RECOVERY_QUALIFICATION.md.
+A10 passes 18 populated representative containment/recovery checks with drift/replay
+refusal and data/audit/hold retention. A11 default-off admission/assent/support proposal
+has 40 isolated SQL +6 actual-schema compilation/rollback checks, no hosted rollout.
+Private source catalogs, inverses and account details remain outside Git. Support never
+gains financial execution. No actual grants, bucket policies, Edge functions or settings
+were changed. A6/A10/A11 require separate scopes and genuine hosted acceptance.
+
+## October 17 UTC closed-beta admission findings
+
+Fixed staged beta bypass: legacy definer discovery RPCs bypass jobs-table RLS and exposed
+an admitted customer's job to an uninvited active professional. Current-schema reproduction
+and after-fix denial pass. New A11 guards also cover matched notification metadata,
+opportunity generation/actions and project invitations/recommendations. A second regression
+(new INSERT RETURNING rejected by policy self-lookup) was found in actual page/database
+integration and fixed with row-column predicates. No hosted disclosure test or real data
+was used; all actors/session rows/jobs are synthetic. No production finding is silently
+claimed fixed by staging code. Details: NON_MONEY_BETA_APPROVAL.md.
+
+Current schema metadata fingerprint unchanged. 31 composed actual-schema SQL +12 mixed
+browser/database checks pass; genuine Auth/JWT/Edge/Storage/managed backup recovery remain
+separate. A10 still needs managed Storage ownership qualification. No new hosted DDL.

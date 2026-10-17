@@ -217,6 +217,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function redirectByProfile(
     profile
   ) {
+    if (window.KORVO_NON_MONEY_BETA_ENABLED === true) {
+      window.location.href = "beta.html";
+      return;
+    }
     const accountType =
       profile?.account_type ||
       "customer";
@@ -287,11 +291,14 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
+  let loginBusy = false;
+
   loginForm?.addEventListener(
     "submit",
     async (event) => {
 
       event.preventDefault();
+      if (loginBusy) return;
 
       const submitButton =
         loginForm.querySelector(
@@ -333,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       try {
+        loginBusy = true;
 
         setButtonLoading(
           submitButton,
@@ -371,16 +379,18 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
 
+        if (profile?.is_active !== true || !['customer','professional'].includes(profile.account_type)) {
+          await korvoSupabase.auth.signOut({scope:'local'});
+          throw new Error('Account access could not be verified. Contact support.');
+        }
+        loginPassword.value = '';
         redirectByProfile(
           profile
         );
 
       } catch (error) {
 
-        console.error(
-          "Korvo login error:",
-          error
-        );
+        console.error("Korvo login was not confirmed.");
 
         alert(
           error.message ||
@@ -388,6 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
       } finally {
+        loginBusy = false;
 
         setButtonLoading(
           submitButton,
@@ -525,11 +536,14 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
+  let signupBusy = false;
+
   signupForm?.addEventListener(
     "submit",
     async (event) => {
 
       event.preventDefault();
+      if (signupBusy) return;
 
 
       const submitButton =
@@ -582,12 +596,12 @@ document.addEventListener("DOMContentLoaded", () => {
         isValidPhone(phone);
 
       const passwordIsValid =
-        password.length >= 6;
+        password.length >= 12;
 
       const passwordsMatch =
         password ===
           confirmedPassword &&
-        confirmedPassword.length >= 6;
+        confirmedPassword.length >= 12;
 
       const termsAccepted =
         Boolean(
@@ -659,6 +673,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
+        signupBusy = true;
         setButtonLoading(
           submitButton,
           true,
@@ -767,20 +782,17 @@ document.addEventListener("DOMContentLoaded", () => {
         */
 
         alert(
-          `Welcome to Korvo, ${firstName}! Check your email to confirm your account. After confirming it, log in to continue.`
+          "Check your email to confirm your account. If you already registered, sign in or recover your password."
         );
 
 
         window.location.href =
-          "login.html";
+          "verify-email.html";
 
 
       } catch (error) {
 
-        console.error(
-          "Korvo signup error:",
-          error
-        );
+        console.error("Korvo signup was not confirmed.");
 
 
         let message =
@@ -810,6 +822,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       } finally {
+        signupBusy = false;
 
         setButtonLoading(
           submitButton,
@@ -909,7 +922,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (
         signupPassword
           .value
-          .length >= 6
+          .length >= 12
       ) {
 
         setFieldError(
@@ -941,7 +954,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const passwordsMatch =
         confirmPassword
           .value
-          .length >= 6 &&
+          .length >= 12 &&
         confirmPassword.value ===
           signupPassword?.value;
 

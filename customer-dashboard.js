@@ -3304,6 +3304,7 @@ const reference =
 
 
     window.KorvoPayments?.attach({container: article.querySelector('.job-main') || article, client: korvoSupabase, activeJobId: job.id, role: 'customer', jobStatus: rawStatus});
+    const evidencePanel = window.KorvoEvidence?.attach({container: article.querySelector('.job-main') || article, client: korvoSupabase, activeJobId: job.id, role: 'customer'});
 
     article
       .querySelector(
@@ -3398,6 +3399,7 @@ const reference =
 
           try {
 
+            await evidencePanel?.beforeComplete();
             await confirmCustomerJobCompletion(
               job.id
             );

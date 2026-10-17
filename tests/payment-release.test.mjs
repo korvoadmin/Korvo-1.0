@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {evaluateRelease} from '../supabase/functions/_shared/release.mjs';
+import {evaluateRelease,evaluateReleaseWithEvidence,evaluateFounderReleaseWithEvidence} from '../supabase/functions/_shared/release.mjs';
 import {priceQuote} from '../supabase/functions/_shared/pricing.mjs';
 const now=Date.parse('2026-10-12T16:00:00Z');
 const fixture=()=>({now,payment:{...priceQuote(500),id:'p',active_job_id:'job',customer_id:'c',professional_id:'pro',livemode:false,status:'paid',
@@ -10,6 +10,15 @@ const fixture=()=>({now,payment:{...priceQuote(500),id:'p',active_job_id:'job',c
  actor:{server_verified:true,active:true,database_role:'owner'},policy:{owner_approved:true,processing_fee_decision_confirmed:true,release_delay_ms:0,maximum_age_ms:86400000},ledger:{state:'never_attempted'},
  funds:{server_verified:true,currency:'usd',available_cents:56000,platform_reserve_sufficient:true,verified_at:'2026-10-12T15:59:00Z'}});
 test('eligible sandbox release retains full $500 gross and cannot execute',()=>{const r=evaluateRelease(fixture());assert.equal(r.eligible,true);assert.equal(r.execution_enabled,false);assert.equal(r.professional_gross_cents,50000);assert.equal(r.platform_gross_cents,6000);});
+test('release integration obtains trusted reviewed database evidence',async()=>{let name;const r=await evaluateReleaseWithEvidence(fixture(),{rpc:async n=>{name=n;return {data:{active_job_id:'job',enrolled:true,evidence_verified:true,customer_acknowledged:true,validated_count:1,pending_count:0}};}});assert.equal(name,'completion_release_evidence');assert.equal(r.eligible,true);assert.equal(r.execution_enabled,false);});
+for(const [label,data] of [['unacknowledged upload',{active_job_id:'job',enrolled:true,evidence_verified:true,customer_acknowledged:false,validated_count:1,pending_count:0}],['legacy',{active_job_id:'job',enrolled:false,legacy_manual_review_required:true}],['cross-job',{active_job_id:'other',enrolled:true,evidence_verified:true,customer_acknowledged:true,validated_count:1,pending_count:0}]])test('browser evidence flag cannot override '+label,async()=>{const r=await evaluateReleaseWithEvidence(fixture(),{rpc:async()=>({data})});assert.equal(r.eligible,false);assert.equal(r.execution_enabled,false);});
+test('failed trusted evidence lookup preserves financial hold',async()=>{const r=await evaluateReleaseWithEvidence(fixture(),{rpc:async()=>{throw Error('unavailable');}});assert.equal(r.eligible,false);assert.ok(r.reasons.includes('TRUSTED_EVIDENCE_FACTS_REQUIRED'));});
+test('founder policy permits immediate verified eligibility without authorizing execution',async()=>{
+ const f=fixture();f.job.customer_confirmed_at=new Date(now).toISOString();f.policy.release_delay_ms=7200000;f.policy.processing_fee_decision_confirmed=false;
+ const server={rpc:async()=>({data:{active_job_id:'job',enrolled:true,evidence_verified:true,customer_acknowledged:true,validated_count:1,pending_count:0}})};
+ const r=await evaluateFounderReleaseWithEvidence(f,server);assert.equal(r.eligible,true);assert.equal(r.execution_enabled,false);
+ delete f.policy.maximum_age_ms;assert.equal((await evaluateFounderReleaseWithEvidence(f,server)).eligible,false);
+});
 const cases=[
  ['customer authorization',f=>f.actor.database_role='customer','FINANCIAL_ADMIN_REQUIRED'],
  ['support cannot release',f=>f.actor.database_role='support','FINANCIAL_ADMIN_REQUIRED'],

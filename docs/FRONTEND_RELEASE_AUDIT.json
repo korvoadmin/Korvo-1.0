@@ -1,0 +1,112 @@
+{
+  "layer": "offline development route and asset inventory",
+  "pages": 18,
+  "missing": 0,
+  "empty": 0,
+  "placeholders": 17,
+  "published": false,
+  "findings": [
+    {
+      "source": "chris-profile.html",
+      "line": 40,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "chris-profile.html",
+      "line": 42,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "chris-profile.html",
+      "line": 666,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "chris-profile.html",
+      "line": 667,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "chris-profile.html",
+      "line": 668,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "customer-dashboard.html",
+      "line": 1284,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "index.html",
+      "line": 1802,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "index.html",
+      "line": 1852,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "login.html",
+      "line": 234,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "login.html",
+      "line": 235,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "post-a-job.html",
+      "line": 1341,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "post-a-job.html",
+      "line": 1353,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "post-a-job.html",
+      "line": 1354,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "signup.html",
+      "line": 345,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "signup.html",
+      "line": 347,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "signup.html",
+      "line": 388,
+      "target": "#",
+      "reason": "placeholder"
+    },
+    {
+      "source": "signup.html",
+      "line": 389,
+      "target": "#",
+      "reason": "placeholder"
+    }
+  ]
+}

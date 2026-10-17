@@ -1,3 +1,9 @@
+> Current October 16 verdict: **A6 STILL BLOCKED**. Populated isolated backup/inverse
+> passes (44 + 134 checks), but actual managed postgres lacks ownership of two changed
+> Storage policies; backup/managed restore evidence is unavailable. No deployment.
+> See ../../../docs/A6_MANAGED_RECOVERY_QUALIFICATION.md. Historical steps below do
+> not override this blocker; scope and canonical bytes remain unchanged.
+
 # Authorization hardening: ordered review package
 
 Review only. Chris has not authorized deployment. Nothing here is an automatic

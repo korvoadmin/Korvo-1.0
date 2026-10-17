@@ -395,27 +395,9 @@ function createProfessionalCard(professional) {
 
   card.dataset.professionalId = String(professional.id);
 
-  const verifiedBadge = professional.verified
-    ? `
-      <span
-        class="verified-badge"
-        title="Verified professional"
-        aria-label="Verified professional"
-      >
-        ✓
-      </span>
-    `
-    : "";
-
-  const onlineDot = professional.online
-    ? `
-      <span
-        class="online-dot"
-        title="Recently active"
-        aria-label="Recently active"
-      ></span>
-    `
-    : "";
+  // Static examples must never claim verified standing or real online activity.
+  const verifiedBadge = "";
+  const onlineDot = "";
 
   const serviceTags = professional.services
     .map(
@@ -427,18 +409,10 @@ function createProfessionalCard(professional) {
     )
     .join("");
 
-  const trustBadges = professional.trustBadges
-    .map(
-      (badge) => `
-        <span class="trust-badge">
-          ${badge}
-        </span>
-      `
-    )
-    .join("");
+  const trustBadges = '<span class="trust-badge">Illustrative profile only</span>';
 
   /*
-    Chris has a real profile page.
+    Chris has a static illustrative profile page.
 
     Other professionals use "#" until their
     profile pages are created.

@@ -1,8 +1,17 @@
 # Korvo controlled Atlanta beta gates
 
-October 13, 2026: **not ready for money-handling closed beta**. Safe sandbox rehearsal
-is possible. Pricing is full professional quote plus 12% on top; no fee-payer choice
-or live/transfer enablement is inferred.
+Authoritative itemized task/status register: [KORVO_MASTER_LAUNCH_CHECKLIST.md](KORVO_MASTER_LAUNCH_CHECKLIST.md).
+This file is a phase-gate summary; task counts and detailed evidence belong to the master.
+
+October 16, 2026: **NO-GO for money handling; invitation-only non-money beta also
+awaits its operational gates.** Founder scope is 20 people in Atlanta, with no
+invitations authorized. Korvo absorbs project processing costs; professional gross
+and quote + 12% remain unchanged. See FOUNDER_POLICY_BASELINE.md. Historical sections
+below preserve prior checkpoints; this current statement supersedes undecided policy descriptions.
+
+The table below preserves historical **money-release** coverage. The current first
+non-money cohort uses [CLOSED_BETA_MINIMUM_GATES.md](CLOSED_BETA_MINIMUM_GATES.md);
+Connect, financial execution and staffing are not prerequisites to that cohort.
 
 | Priority | Gate | Current state / evidence |
 | --- | --- | --- |
@@ -95,3 +104,126 @@ checks expanded the isolated SQL suite to 91 passing checks. Actual hosted sessi
 storage, Edge decoder/UI and concurrent transactions remain unverified. Authorization,
 Connect completion, financial policy and transfer gates remain unchanged. Details:
 `SPRINT_REPORT_2026-10-15_PUBLICATION.md`.
+
+## Master audit reconciliation — October 15
+
+Money-handling closed beta and public launch remain NO-GO. Actual live asset hashes
+match main: recovery request is empty, reset page absent and new workflow/payment
+frontend fixes unpublished. All 43 public tables have RLS, but hardened authorization
+is unapplied; zero active admins exist. All three payment records remain release-held.
+Both mapped Stripe accounts are incomplete; two other ready accounts are unmapped.
+Only the private issue-evidence bucket exists. Evidence/refund/gig proposal schemas
+are absent. There is no complete hosted evidence/refund/release acceptance chain.
+
+Do not infer readiness from the number of passing tests or Completed audit rows.
+A cleared project cohort can precede separately cleared shifts only with D11 scope
+and explicit release approvals. D1–D4/D6/D7 and relevant legal/insurance checks remain.
+
+## Execution checkpoint — October 15
+
+Master now: 144 tasks; 21 Complete, 31 In Progress, 35 Blocked, 18 Not Started,
+39 Needs Verification. The newly completed item is the narrowly scoped legacy-job
+rollout DESIGN (EVI-009), not an enabled evidence/payment feature.
+
+Staged photo endpoint, real WASM decoder, dashboard upload/customer-review controls,
+refund-review page, read-only reconciliation inventory and drift-guarded security
+inverse are tested locally. UI/server flags stay off. Actual hosted Edge/Storage/JWT
+acceptance, full Supabase inverse and native concurrent PostgreSQL remain unverified.
+The native test environment cannot map a non-root user; fixtures do not replace that proof.
+No A6/A8/A10 rollout, actual transfer, automatic refund or live payment occurred.
+Money-handling beta remains NO-GO; see the master history and execution sprint report.
+
+## Launch blocker elimination — October 15
+
+See SPRINT_REPORT_2026-10-15_LAUNCH_BLOCKERS.md for current implementation/evidence.
+Current-schema isolated security packages/inverse and 134-role matrix pass; this is
+not a managed hosted rollback. Disabled durable refund ledger, read-only provider
+reconciliation and admin operation queue are locally tested. Full sandbox refund
+aggregate is proven, but database component correction remains unapplied. Actual
+local Deno decoder HTTP passes; hosted Supabase Auth/Storage/runtime is still pending.
+Native multi-session finance/gig CI is a separate layer, never deployed proof.
+
+A6/A8/A10 review scopes are pinned in LAUNCH_RELEASE_MANIFEST.json. Frontend has nine
+missing links and 17 placeholders; support/policies and real recovery/email remain
+launch gates despite truthful sample labels. No new complete hosted journey or money
+feature is claimed. Money-handling beta/public launch remain NO-GO. Updated master
+counts below are synchronized after the final sprint checks.
+
+Current authoritative counts after this sprint: 144 tasks: 21 Complete, 36 In Progress, 32 Blocked, 17 Not Started, 38 Needs Verification.
+
+Native CI now VERIFIED at db28fb6/run 38778541325: 17 multi-session checks pass
+(10 financial + 7 gig), including observed blocked overlap, once-only reservation/
+receipts, capacity and worker conflict protection, and transaction rollback. This
+resolves the container-local environment blocker for these cases. Broader crash/
+deadlock and managed Supabase endpoint tests remain; no hosted settings changed.
+
+## October 16 current integration checkpoint
+
+See SPRINT_REPORT_2026-10-16_DEVELOPMENT.md and the master E20 evidence. The nine
+previously missing navigation references now resolve to truthful contact/own-profile
+pages in development; 17 policy/demo placeholders remain. No Pages publication.
+Reconciliation observations and a reviewed full-refund component correction are
+implemented in unapplied SQL/default-off UI; neither sandbox review flag was cleared.
+Trusted evidence release facts and stale-photo handling are staged; hosted upload,
+signed URL, actual Edge runtime and full customer journey remain unverified.
+
+D1–D12 working decisions are recorded; do not ask again for selected fee payer,
+manual allowance restoration, employer-pay direction or 20-person non-money scope.
+Unresolved legal, category, policy timing, reserves, actual support operation and
+operator identity remain separate. A6 needs managed recovery qualification/durable
+backup; A8 needs approved copy/assent and served-version acceptance; A10 needs
+populated recovery and actual hosted evidence/finance acceptance. A1/A7/A9 stay closed.
+
+## October 16 A6 populated recovery follow-up
+
+A6 STILL BLOCKED: isolated rehearsal now preserves 144 initial synthetic rows across
+25 populated tables and post-migration committed activity across all 72 dependency
+tables. Forty-four recovery assertions plus the 134-check matrix pass; inverse now
+mutates only changed metadata. Actual managed postgres lacks Storage ownership for
+two A6 policies; backup/PITR availability, durable backup and managed restore remain
+unverified. No hosted migration/restore or new role grant. This evidence does not
+clear positive hosted JWT/Storage or launch gates. See A6_MANAGED_RECOVERY_QUALIFICATION.md.
+
+## Current October 16 continuation — supersedes older gate descriptions
+
+**NO-GO for invitations and money.** Default-off infrastructure now enforces 10 customers
+plus 10 professionals, empty category/city allowlists, current approved versioned assent,
+private support, no-payment simulations and server-side checkout prohibition. It is staged,
+not deployed. Categories and legal content are not invented. A11 is separately registered
+in OWNER_ACTION_CHECKLIST.md; A6/A10/A8 remain separately blocked.
+
+A6 alternate: 50 populated +134 authorization checks; original managed Storage policies
+retained, ownership requirement removed from alternate only. Organization Free verified;
+actual protected backup/managed recovery not qualified. A10: 18 populated representative
+backup/containment/recovery checks; no actual Storage bytes or managed restore. A11:
+40 SQL, six current-schema compilation/rollback and 18 beta browser checks. Signup: six
+Auth-fixture checks. Axe: 16 views. Final native/full CI is recorded on PR #7. No hosted
+end-to-end journey, real signup/recovery email, evidence upload or new deployed acceptance
+is claimed. Existing Stripe $112 allocation correction and $560 review hold are unchanged.
+
+Owner gates: approved exact D6 scope, approved D7 documents/support operation, verified
+founder/MFA, D11 roster/consent/stop criteria and explicit invitations approval AFTER safe
+backend/frontend rollout and hosted acceptance. Connect/payout/live-money activation is
+not required for this simulated cohort; all real-money paths remain prohibited. Remaining
+legal/insurance duties need qualified owner review. No participant was invited.
+
+## October 17 UTC founder closed-beta directive — current phase map
+
+**NO-GO remains.** Staffing, payroll, hospitality employee shifts and agency/EOR integrations
+are deferred to potential Korvo 2.0, with research/code preserved. They are not first-beta
+blockers. Independent project classification/category review remains. The minimum 10+10
+non-money gate list is CLOSED_BETA_MINIMUM_GATES.md; 144 IDs/counts remain authoritative in
+KORVO_MASTER_LAUNCH_CHECKLIST.md. Owner D1–D12 baseline is preserved with D8–D10 deferral.
+
+New staged discovery guards fix actual uninvited-professional feed bypass; 18 representative
+SQL checks and actual-current-schema before/after reproduce it. Both full and evidence-only
+compositions pass 31 local checks each; 12 mixed browser/database checks cover actual pages,
+with quote/accept via browser API. Login/resend 20 checks; beta 20/payment22; axe18 default
+views +two active beta views. Genuine hosted email/full quote UI/private Storage and managed
+recovery remain unverified. Zero real emails or invitations; no hosted deployment or finance.
+
+A10 can be reviewed as a narrowly scoped evidence-only package without new financial
+schemas; conditional containment passes both compositions. Managed Storage ownership and
+protected backup/recovery remain blockers. A6/A8/A10/A11 all remain separately approval-
+gated. Real money/Connect/paid Billing/refund corrections/reserves/staffing do not delay
+simulated-cohort qualification, but none is cleared for later activation.

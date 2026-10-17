@@ -39,7 +39,7 @@ create function korvo_refunds_private.admin_actor() returns uuid
 language plpgsql security definer set search_path='' as $$
 declare uid uuid:=korvo_payments_private.actor();
 begin
- if not exists(select 1 from public.platform_admins where user_id=uid and is_active) then
+ if not exists(select 1 from public.platform_admins where user_id=uid and is_active and role in('owner','admin')) then
   raise exception 'Active financial administrator required' using errcode='42501';end if;
  return uid;
 end;$$;
